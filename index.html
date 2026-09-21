@@ -61,6 +61,12 @@
     cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'%3E%3Cpolygon points='12,2 21,7 21,17 12,22 3,17 3,7' fill='%23121212' stroke='%23d15632' stroke-width='2'/%3E%3C/svg%3E") 7 7, auto !important;
   }
 
+  /* Suppress the custom cursor until the loading screen has finished */
+  body.loading-active,
+  body.loading-active * {
+    cursor: default !important;
+  }
+
   /* Hide default scrollbar for IE, Edge and Firefox */
   html {
     background-color: var(--bg-color);
@@ -815,6 +821,7 @@
   .wf-cell .sub-title {
     margin: 0 0 0.75rem 0;
     font-size: 0.9rem;
+    font-weight: 500;
     color: var(--text-secondary);
     display: block;
     transition: color 0.4s ease;
@@ -822,6 +829,7 @@
   .wf-cell p {
     margin: 0;
     font-size: 0.9rem;
+    font-weight: 500;
     line-height: 1.4;
     color: var(--text-primary);
     transition: font-weight 0.2s ease;
@@ -1147,7 +1155,7 @@
         <p>Based on a review of the literature within the <em>PARA-academic sphere</em> – the Progress (studies), AI alignment, Rationalist and Effective Altruist research communities – <em>meta-utopia</em>, as originally envisioned by Nozick, has arguably become the closest to a consensus view on what form a desirable <em>post-AGI society</em> should take and what a positive AI future would look like. Major materials representative of this consensus include<span class="dot-accent">:</span></p>
         <ul class="abstract-list">
           <li>Alexander’s <a href="https://slatestarcodex.com/2014/06/07/archipelago-and-atomic-communitarianism/" class="inline-link" target="_blank"><em>Archipelago & Atomic Communitarianism</em></a> (2014)</li>
-          <li>Duettmann’s <a href="https://www.lesswrong.com/s/9SJM9cdgapDybPksi" class="inline-link" target="_blank"><em>Gaming the Future<span class="dot-accent">:</span> Technologies for Intelligent Voluntary Cooperation</em></a> (2022)</li>
+          <li>Duettmann’s <a href="https://www.lesswrong.com/s/9SJM9cdgapDybPksi" class="inline-link" target="_blank"><em>Gaming the Future<span class="dot-accent">:</span> Technologies for Intelligent Voluntary Cooperation</em></a>&nbsp;(2022)</li>
           <li>Tang’s <a href="https://www.plurality.institute/blog-posts/book-launch-plurality-the-future-of-collaborative-technology-and-democracy-by-e-glen-weyl-audrey-tang-and-the-plurality-community" class="inline-link" target="_blank"><em>Plurality<span class="dot-accent">:</span> The Future of Collaborative Technology and Democracy</em></a> (2024).</li>
           <li>Butlerin’s <a href="https://vitalik.eth.limo/general/2025/12/17/societies.html" class="inline-link" target="_blank"><em>Let a Thousand Societies Bloom</em></a> (2025)</li>
           <li>Agnew’s <a href="https://youtu.be/BdBviVWhar8?si=jhwHIX1sFcsAn0wE" class="inline-link" target="_blank"><em>Experimental Societies<span class="dot-accent">:</span> Prototyping Social Structures for the Future</em></a> (2019)</li>
