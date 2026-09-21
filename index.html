@@ -1508,6 +1508,14 @@
   // The first dividing line is the title box's border-bottom, just above
   // the Abstract heading - titleBottom (above) already marks its position.
   const researchSidebar = document.getElementById('research-sidebar');
+  const abstractHeading = document.querySelector('#abstract h2');
+  let abstractTop = 0;
+
+  function updateAbstractTop() {
+    if (abstractHeading) {
+      abstractTop = abstractHeading.getBoundingClientRect().top + window.pageYOffset;
+    }
+  }
 
   function updateSidebarEntrance() {
     if (!researchSidebar) return;
@@ -1517,9 +1525,9 @@
     }
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const progress = titleBottom > 0 ? Math.min(1, Math.max(0, scrollTop / titleBottom)) : 1;
-    const bottomMargin = 48; // matches the spacing convention of other fixed-position elements
     const restingCenter = window.innerHeight / 2; // from the top:50% + translateY(-50%) sticky setup
-    const bottomCornerCenter = window.innerHeight - bottomMargin - (researchSidebar.offsetHeight / 2);
+    // At scrollTop 0 (progress 0), the sidebar's bottom edge should align with the top of the Abstract heading
+    const bottomCornerCenter = abstractTop - (researchSidebar.offsetHeight / 2);
     const extraOffset = (bottomCornerCenter - restingCenter) * (1 - progress);
     researchSidebar.style.setProperty('transform', `translateY(calc(-50% + ${extraOffset}px))`, 'important');
   }
@@ -1527,13 +1535,16 @@
   // Calculate accurately when loaded and if window is resized
   window.addEventListener('load', () => {
     updateTitleBottom();
+    updateAbstractTop();
     updateSidebarEntrance();
   });
   window.addEventListener('resize', () => {
     updateTitleBottom();
+    updateAbstractTop();
     updateSidebarEntrance();
   });
   updateTitleBottom();
+  updateAbstractTop();
   updateSidebarEntrance();
 
   // Fade out the bottom-left corner triangle as the page is scrolled
