@@ -1146,7 +1146,7 @@
         </ul>
       </section>
       
-      <hr class="section-divider">
+      <hr class="section-divider" id="firstDivider">
       
       <section id="intro" class="scroll-section">
         <h2>0<span class="dot-accent">.</span> Introduction<span class="dot-accent">:</span> The Utopian Turn</h2>
@@ -1505,10 +1505,47 @@
     }
   }
 
+  // Calculate the scroll position of the first section divider, used to
+  // bring the sidebar up from the bottom corner into its resting position
+  let firstDividerTop = 0;
+  const firstDivider = document.getElementById('firstDivider');
+  const researchSidebar = document.getElementById('research-sidebar');
+
+  function updateFirstDividerTop() {
+    if (firstDivider) {
+      firstDividerTop = firstDivider.getBoundingClientRect().top + window.pageYOffset;
+    }
+  }
+
+  function updateSidebarEntrance() {
+    if (!researchSidebar || !firstDivider) return;
+    if (window.innerWidth <= 1024) {
+      researchSidebar.style.removeProperty('transform');
+      return;
+    }
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const progress = firstDividerTop > 0 ? Math.min(1, Math.max(0, scrollTop / firstDividerTop)) : 1;
+    const bottomMargin = 48; // matches the spacing convention of other fixed-position elements
+    const restingCenter = window.innerHeight / 2; // from the top:50% + translateY(-50%) sticky setup
+    const bottomCornerCenter = window.innerHeight - bottomMargin - (researchSidebar.offsetHeight / 2);
+    const extraOffset = (bottomCornerCenter - restingCenter) * (1 - progress);
+    researchSidebar.style.setProperty('transform', `translateY(calc(-50% + ${extraOffset}px))`, 'important');
+  }
+
   // Calculate accurately when loaded and if window is resized
-  window.addEventListener('load', updateTitleBottom);
-  window.addEventListener('resize', updateTitleBottom);
+  window.addEventListener('load', () => {
+    updateTitleBottom();
+    updateFirstDividerTop();
+    updateSidebarEntrance();
+  });
+  window.addEventListener('resize', () => {
+    updateTitleBottom();
+    updateFirstDividerTop();
+    updateSidebarEntrance();
+  });
   updateTitleBottom();
+  updateFirstDividerTop();
+  updateSidebarEntrance();
 
   // Fade out the bottom-left corner triangle as the page is scrolled
   const cornerBottom = document.querySelector('.corner-bottom');
@@ -1527,6 +1564,9 @@
       const fadeOpacity = Math.max(0, 1 - (scrollTop / CORNER_FADE_DISTANCE));
       cornerBottom.style.opacity = fadeOpacity;
     }
+
+    // 1c. Move the sidebar up from the bottom corner into position, in sync with scroll
+    updateSidebarEntrance();
 
     // 2. Track when scrolled past the title section for back-to-top button
     const scrollTopBtn = document.getElementById('scrollTopBtn');
