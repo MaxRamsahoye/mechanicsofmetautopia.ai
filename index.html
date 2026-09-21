@@ -154,7 +154,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 6px;
+    width: 9.75px;
     height: 0%;
     background-color: var(--accent-color);
     z-index: 9999;
@@ -180,7 +180,7 @@
     top: 0;
     left: 0;
     width: 50vw;
-    height: 100px;
+    height: 140px;
     background-color: var(--header-triangle);
     clip-path: polygon(0 0, 100% 0, 0 100%, 0 100%);
     z-index: 0;
@@ -307,30 +307,6 @@
     transition: opacity 0.1s ease, visibility 0.1s ease;
   }
 
-  .sidebar-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    min-height: 24px;
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s ease 0.3s, visibility 0.3s ease 0.3s;
-  }
-  .locked-sidebar.collapsed .sidebar-header {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.1s ease, visibility 0.1s ease;
-  }
-  
-  .sidebar-title {
-    font-weight: 600;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--text-secondary);
-    transition: color 0.4s ease;
-  }
-  
   .sidebar-toggle {
     position: absolute;
     right: -48px; 
@@ -597,7 +573,7 @@
     font-weight: 600;
     color: var(--text-primary);
   }
-  #abstract h2, #mobile-contents h2 {
+  #abstract h2 {
     font-size: 1.1rem;
   }
   .content p {
@@ -685,8 +661,8 @@
     transform: translateY(-4px);
   }
   .scroll-to-top svg {
-    width: 34px;
-    height: 34px;
+    width: 29px;
+    height: 29px;
     transition: width 0.3s ease, height 0.3s ease;
   }
   .dot-accent {
@@ -1099,13 +1075,9 @@
     
     <div class="sidebar-mini-title" id="sidebarMiniTitle"><span style="white-space: nowrap;">The Mechanics of Meta-Utopia<span class="dot-accent">?</span></span> Civilisation Design for Desirable Multi-Cultural Equilibria</div>
     
-    <div class="sidebar-header">
-      <span class="sidebar-title">Contents</span>
-    </div>
-    
     <div class="sidebar-inner">
       <ul id="toc-list">
-        <li><a href="#intro" data-target="intro">0<span class="dot-accent">.</span> The Utopian Turn</a></li>
+        <li><a href="#intro" data-target="intro">0<span class="dot-accent">.</span> Introduction</a></li>
         <li><a href="#mechanics" data-target="mechanics">1<span class="dot-accent">.</span> The Mechanics of Meta-Utopia</a></li>
         <li><a href="#clash" data-target="clash">2<span class="dot-accent">.</span> The Clash of Civilisations</a></li>
         <li><a href="#takeover" data-target="takeover">3<span class="dot-accent">.</span> Mono-Cultural Takeover</a></li>
@@ -1153,9 +1125,8 @@
       </section>
 
       <section id="mobile-contents" class="mobile-only">
-        <h2>Contents</h2>
         <ul class="mobile-toc-list abstract-list">
-          <li><a href="#intro" data-target="intro">0<span class="dot-accent">.</span> The Utopian Turn</a></li>
+          <li><a href="#intro" data-target="intro">0<span class="dot-accent">.</span> Introduction</a></li>
           <li><a href="#mechanics" data-target="mechanics">1<span class="dot-accent">.</span> The Mechanics of Meta-Utopia</a></li>
           <li><a href="#clash" data-target="clash">2<span class="dot-accent">.</span> The Clash of Civilisations</a></li>
           <li><a href="#takeover" data-target="takeover">3<span class="dot-accent">.</span> Mono-Cultural Takeover</a></li>
