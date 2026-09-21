@@ -1178,6 +1178,8 @@
           <li>Alexander’s <a href="https://slatestarcodex.com/2014/06/07/archipelago-and-atomic-communitarianism/" class="inline-link" target="_blank"><em>Archipelago & Atomic Communitarianism</em></a> (2014)</li>
           <li>Duettmann’s <a href="https://www.lesswrong.com/s/9SJM9cdgapDybPksi" class="inline-link" target="_blank"><em>Gaming the Future<span class="dot-accent">:</span> Technologies for Intelligent Voluntary Cooperation</em></a> (2022)</li>
           <li>Tang’s <a href="https://www.plurality.institute/blog-posts/book-launch-plurality-the-future-of-collaborative-technology-and-democracy-by-e-glen-weyl-audrey-tang-and-the-plurality-community" class="inline-link" target="_blank"><em>Plurality<span class="dot-accent">:</span> The Future of Collaborative Technology and Democracy</em></a> (2024).</li>
+          <li>Butlerin’s <a href="https://vitalik.eth.limo/general/2025/12/17/societies.html" class="inline-link" target="_blank"><em>Let a Thousand Societies Bloom</em></a> (2025)</li>
+          <li>Agnew’s <a href="https://youtu.be/BdBviVWhar8?si=jhwHIX1sFcsAn0wE" class="inline-link" target="_blank"><em>Experimental Societies<span class="dot-accent">:</span> Prototyping Social Structures for the Future</em></a> (2019)</li>
         </ul>
         <p>Despite this there has been minimal research to critically and systematically examine the <em>mechanics of meta-utopia</em><span class="dot-accent">:</span> how a future post-AGI world-system, as a sociotechnical architecture, functions to mediate the interaction between multiple cultures (epistemologies, ontologies, axiologies) and translate the <em><a href="https://www.lesswrong.com/w/complexity-of-value" class="inline-link" target="_blank">complexity of values</a></em> into a dynamic, <em><a href="https://plato.stanford.edu/entries/rawls/#StaOveCon" class="inline-link" target="_blank">overlapping consensus</a></em>. In other words, how (post-)humanity can sustain a <em>progressive form of pluralism</em> at a civilisational-scale, over long-term time horizons (ge geopolitically and spatio-temporally).</p>
         <p>As we see it, this is the ultimate project of steering towards <em>desirable civilisational equilibria</em> – and as such, it will inevitably be beyond the scope of this material to provide a sufficient answer. Nonetheless, we aim to formulate the primary constraints, criteria and catastrophes for such a world-system and in doing so formalise an ambitious paradigm for future <em><a href="https://civilizationemerging.com/category/civilization-design/" class="inline-link" target="_blank">civilisation design</a></em> and <em><a href="https://gradual-disempowerment.ai/mitigating-the-risk" class="inline-link" target="_blank">civilisation alignment</a></em> research. The most useful starting point for our purposes is Hanson’s short essay <a href="https://www.overcomingbias.com/p/utopias-garden-world-and-wallhtml" class="inline-link" target="_blank"><em>Utopia’s Garden, World, and Wall</em></a> (2020), which we turn to next.</p>
@@ -1484,6 +1486,15 @@
 
   const themeToggle = document.getElementById('themeToggle');
   themeToggle.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark-theme');
+  });
+
+  // Keyboard shortcut: press "t" to toggle light/dark theme
+  document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() !== 't') return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const tag = document.activeElement ? document.activeElement.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
     document.documentElement.classList.toggle('dark-theme');
   });
 
