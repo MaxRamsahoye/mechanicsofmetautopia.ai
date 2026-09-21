@@ -140,20 +140,21 @@
     position: fixed;
     bottom: 0;
     left: 0;
-    width: calc(4vw + var(--sidebar-width) + 2rem); 
-    height: 2vw; 
-    background-color: var(--bottom-bar-bg); 
+    width: calc(4vw + var(--sidebar-width) + 2rem);
+    height: 2vw;
+    background-color: var(--bottom-bar-bg);
     clip-path: polygon(0 0, 100% 100%, 0 100%);
     z-index: 100;
     pointer-events: none;
-    transition: background-color 0.4s ease;
+    opacity: 1;
+    transition: background-color 0.4s ease, opacity 0.3s ease-out;
   }
   /* Scroll Progress Bar */
   .scroll-progress {
     position: fixed;
     top: 0;
     right: 0;
-    width: 13.5px; 
+    width: 6px;
     height: 0%;
     background-color: var(--accent-color);
     z-index: 9999;
@@ -178,9 +179,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 50vw; 
-    height: 180px; 
-    background-color: var(--header-triangle); 
+    width: 50vw;
+    height: 100px;
+    background-color: var(--header-triangle);
     clip-path: polygon(0 0, 100% 0, 0 100%, 0 100%);
     z-index: 0;
     pointer-events: none;
@@ -600,9 +601,9 @@
     font-size: 1.1rem;
   }
   .content p {
-    font-size: 1.3rem; 
-    margin-top: 15px; 
-    margin-bottom: 15px; 
+    font-size: 1.45rem;
+    margin-top: 15px;
+    margin-bottom: 15px;
     color: var(--text-primary);
   }
   .abstract-list {
@@ -613,7 +614,7 @@
   }
   .abstract-list li {
     position: relative;
-    font-size: 1.3rem; 
+    font-size: 1.45rem;
     color: var(--text-primary);
     margin-bottom: 0.5rem;
     padding-left: 1.5rem;
@@ -684,8 +685,8 @@
     transform: translateY(-4px);
   }
   .scroll-to-top svg {
-    width: 24px; 
-    height: 24px;
+    width: 34px;
+    height: 34px;
     transition: width 0.3s ease, height 0.3s ease;
   }
   .dot-accent {
@@ -1519,13 +1520,23 @@
   window.addEventListener('resize', updateTitleBottom);
   updateTitleBottom();
 
+  // Fade out the bottom-left corner triangle as the page is scrolled
+  const cornerBottom = document.querySelector('.corner-bottom');
+  const CORNER_FADE_DISTANCE = 400; // px of scroll over which it fully fades out
+
   window.addEventListener('scroll', function() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
+
     // 1. Update Scroll Progress Bar Height
     const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
     const scrollPercent = (scrollTop / scrollHeight) * 100;
     document.getElementById('scrollProgress').style.height = scrollPercent + '%';
+
+    // 1b. Fade the bottom-left corner triangle out with scroll
+    if (cornerBottom) {
+      const fadeOpacity = Math.max(0, 1 - (scrollTop / CORNER_FADE_DISTANCE));
+      cornerBottom.style.opacity = fadeOpacity;
+    }
 
     // 2. Track when scrolled past the title section for back-to-top button
     const scrollTopBtn = document.getElementById('scrollTopBtn');
@@ -1611,6 +1622,15 @@
   // Intersection Observer to Auto-Close Sidebar when Matrix is in View
   const matrixEl = document.getElementById('matrix-wrapper');
   const sidebar = document.getElementById('research-sidebar');
+
+  // Manual Sidebar Toggle (Contents arrow)
+  const sidebarToggleBtn = document.getElementById('toggle-btn');
+  if (sidebarToggleBtn && sidebar) {
+    sidebarToggleBtn.addEventListener('click', function() {
+      sidebar.classList.toggle('collapsed');
+      document.body.classList.toggle('sidebar-collapsed');
+    });
+  }
 
   const matrixObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
