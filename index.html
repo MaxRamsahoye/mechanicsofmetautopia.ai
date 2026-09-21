@@ -1106,7 +1106,7 @@
         <h1>The Mechanics of Meta-Utopia<span class="dot-accent">?</span> Civilisation Design for Desirable Multi-Cultural Equilibria</h1>
         <div class="subtitle">Revisiting the libertarian political philosophy of <em>Anarchy, State and Utopia</em> in light of post-AGI cultural dynamics, defensive accelerationism and pluralistic alignment</div>
         <div class="meta">
-          <span class="author-name">Max Ramsahoye 
+          <span class="author-name"><a href="https://maxramsahoye.github.io/max/" class="inline-link" target="_blank">Max Ramsahoye</a>
             <span class="info-wrapper">
               <span class="info-icon">i</span>
               <span class="hoverbox">Contribution: The subsection <em>The Symmetry Problem: Monocultural Takeover vs Meta-Dystopian Enclosure</em> was authored by Aaron Aggarwal.</span>
@@ -1542,8 +1542,18 @@
   });
 
   // Scroll to Top action
-  document.getElementById('scrollTopBtn').addEventListener('click', function() {
+  function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.getElementById('scrollTopBtn').addEventListener('click', scrollToTop);
+
+  // Keyboard shortcut: press Backspace to scroll to top
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Backspace') return;
+    const tag = document.activeElement ? document.activeElement.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+    e.preventDefault(); // prevent the browser's back navigation
+    scrollToTop();
   });
 
   // Intersection Observer for Active Sidebar Links & Mobile Contents Links
@@ -1615,10 +1625,12 @@
 
   // Manual Sidebar Toggle (Contents arrow)
   const sidebarToggleBtn = document.getElementById('toggle-btn');
+  let sidebarManuallyClosed = false;
   if (sidebarToggleBtn && sidebar) {
     sidebarToggleBtn.addEventListener('click', function() {
       sidebar.classList.toggle('collapsed');
       document.body.classList.toggle('sidebar-collapsed');
+      sidebarManuallyClosed = sidebar.classList.contains('collapsed');
     });
   }
 
@@ -1629,7 +1641,8 @@
         if (entry.isIntersecting) {
           sidebar.classList.add('collapsed');
           document.body.classList.add('sidebar-collapsed');
-        } else {
+        } else if (!sidebarManuallyClosed) {
+          // Only auto-reopen if the user hasn't manually closed the sidebar
           sidebar.classList.remove('collapsed');
           document.body.classList.remove('sidebar-collapsed');
         }
