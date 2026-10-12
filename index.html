@@ -20,7 +20,7 @@
     --accent-color: #e36843; 
     --bottom-bar-bg: #dc5e35;
     --sidebar-width: 310px; 
-    --font-serif: 'Cormorant Garamond', serif;
+    --font-serif: 'ET Bembo', serif;
     --font-sans: 'IBM Plex Sans Arabic', sans-serif;
     
     /* Wireframe Diagram Variables */
@@ -61,8 +61,8 @@
     font-display: swap;
   }
 
-  html.font-bembo {
-    --font-serif: 'ET Bembo', serif;
+  html.font-cormorant {
+    --font-serif: 'Cormorant Garamond', serif;
   }
 
   /* Applied to HTML to ensure entire page background updates properly */
@@ -629,8 +629,8 @@
     color: var(--text-primary);
   }
   /* ET Bembo has no medium weight, so only Cormorant Garamond body text goes to 500 */
-  html:not(.font-bembo) .content p,
-  html:not(.font-bembo) .abstract-list li {
+  html.font-cormorant .content p,
+  html.font-cormorant .abstract-list li {
     font-weight: 500;
   }
   .abstract-list {
@@ -1522,13 +1522,13 @@
     document.documentElement.classList.toggle('dark-theme');
   });
 
-  // Keyboard shortcut: press "f" to toggle between Cormorant Garamond and ET Bembo
+  // Keyboard shortcut: press "f" to toggle between ET Bembo and Cormorant Garamond
   document.addEventListener('keydown', (e) => {
     if (e.key.toLowerCase() !== 'f') return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const tag = document.activeElement ? document.activeElement.tagName : '';
     if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
-    document.documentElement.classList.toggle('font-bembo');
+    document.documentElement.classList.toggle('font-cormorant');
   });
 
   // Make Info Icon functional on touch devices
