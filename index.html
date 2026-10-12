@@ -31,6 +31,40 @@
     --wf-br-hover: #f5f6f7;
   }
 
+  /* ET Bembo (ET Book, MIT licensed via tufte-css), self-hosted for the font toggle */
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book/et-book-roman-line-figures.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book/et-book-display-italic-old-style-figures.woff') format('woff');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book/et-book-semi-bold-old-style-figures.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ET Bembo';
+    src: url('fonts/et-book/et-book-bold-line-figures.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  html.font-bembo {
+    --font-serif: 'ET Bembo', serif;
+  }
+
   /* Applied to HTML to ensure entire page background updates properly */
   html.dark-theme {
     --bg-color: #121212;
@@ -1481,6 +1515,15 @@
     const tag = document.activeElement ? document.activeElement.tagName : '';
     if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
     document.documentElement.classList.toggle('dark-theme');
+  });
+
+  // Keyboard shortcut: press "f" to toggle between Cormorant Garamond and ET Bembo
+  document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() !== 'f') return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const tag = document.activeElement ? document.activeElement.tagName : '';
+    if (tag === 'INPUT' || tag === 'TEXTAREA' || (document.activeElement && document.activeElement.isContentEditable)) return;
+    document.documentElement.classList.toggle('font-bembo');
   });
 
   // Make Info Icon functional on touch devices
