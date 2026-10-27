@@ -516,11 +516,14 @@
     height: 15px;
     border-radius: 50%;
     border: 1px solid var(--text-secondary);
-    font-family: var(--font-sans);
-    font-size: 10px;
-    font-weight: 600;
     color: var(--text-secondary);
     transition: color 0.4s ease, border-color 0.4s ease;
+  }
+  /* Drawn as a vector glyph so the "i" sits exactly centred whatever font loads */
+  .info-icon svg {
+    display: block;
+    width: 9px;
+    height: 9px;
   }
   
   /* Updated to support both hover and JS toggle (.active) for mobile */
@@ -536,7 +539,8 @@
     left: 0;
     transform: translateY(10px);
     margin-bottom: 0.75rem;
-    width: 480px; 
+    width: max-content;
+    max-width: 480px;
     padding: 1rem;
     background-color: var(--bg-color);
     color: var(--text-primary);
@@ -1088,7 +1092,7 @@
     
     /* Safely align author hover box */
     .hoverbox {
-      width: 280px;
+      max-width: 280px;
       right: -10px;
       left: auto;
     }
@@ -1165,8 +1169,8 @@
         <div class="meta">
           <span class="author-name"><a href="https://maxramsahoye.github.io/max/" class="inline-link" target="_blank">Max Ramsahoye</a>
             <span class="info-wrapper">
-              <span class="info-icon">i</span>
-              <span class="hoverbox">Contribution: The subsection <em>The Symmetry Problem: Monocultural Takeover vs Meta-Dystopian Enclosure</em> was authored by Aaron Aggarwal.</span>
+              <span class="info-icon"><svg viewBox="0 0 10 10" aria-hidden="true"><circle cx="5" cy="1.6" r="0.85" fill="currentColor"/><path d="M5 4.25v4.25" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" fill="none"/></svg></span>
+              <span class="hoverbox">Co-authored with Aaron Aggarwal.</span>
             </span>
           </span>
           <span>2026</span>
