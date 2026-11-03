@@ -574,6 +574,19 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   }
 
+  /* Desktop: show the info box in the empty left column, level with the author line.
+     9rem = .container gap (5rem) + .content left margin (4rem), so it lines up with the sidebar column. */
+  @media (min-width: 1025px) {
+    .hoverbox {
+      bottom: 0;
+      left: auto;
+      right: calc(100% + 9rem);
+      margin-bottom: 0;
+      width: var(--sidebar-width);
+      max-width: none;
+    }
+  }
+
   /* ========================================== */
   /* Content Styling & Wrapper Structures       */
   /* ========================================== */
