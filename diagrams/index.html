@@ -278,12 +278,13 @@
     .risk-figure {
       min-width: 860px;
       margin: 0;
-      font-family: var(--sans);
+      padding-right: 24px;
+      font-family: 'IBM Plex Sans', sans-serif;
     }
 
     .risk-grid {
       display: grid;
-      grid-template-columns: 104px repeat(4, minmax(0, 1fr)) 84px;
+      grid-template-columns: 104px repeat(4, minmax(0, 1fr)) 124px;
       grid-template-rows: auto repeat(4, auto) auto;
     }
 
@@ -295,14 +296,14 @@
     .risk-axis-y {
       grid-column: 1;
       grid-row: 1;
-      padding: 0 0 22px;
+      padding: 0 0 52px;
     }
 
     .risk-axis-x {
       grid-column: 6;
       grid-row: 5;
       align-self: end;
-      padding: 0 0 0 16px;
+      padding: 0 0 0 52px;
       transform: translateY(50%);
     }
 
@@ -331,6 +332,7 @@
       min-height: 140px;
       box-sizing: border-box;
       padding: 22px 20px;
+      position: relative;
       border-right: 1px solid var(--canvas-ink);
       border-bottom: 1px solid var(--canvas-ink);
       text-align: center;
@@ -338,11 +340,56 @@
       line-height: 1.45;
     }
 
-    /* the grid's outer edge is a little heavier */
-    .risk-cell.c1 { border-left: 1.5px solid var(--canvas-ink); }
+    /* the outer edge closes the grid; the two axes, left and bottom, are
+       heavier still and run on past it to an arrowhead */
     .risk-cell.c4 { border-right-width: 1.5px; }
     .risk-cell.r1 { border-top: 1.5px solid var(--canvas-ink); }
-    .risk-cell.r4 { border-bottom-width: 1.5px; }
+    .risk-cell.c1 { border-left: 3px solid var(--canvas-ink); }
+    .risk-cell.r4 { border-bottom-width: 3px; }
+
+    /* Scope: the left axis runs up past the top */
+    .risk-cell.r1.c1::before,
+    .risk-cell.r4.c4::before {
+      content: '';
+      position: absolute;
+      background: var(--canvas-ink);
+    }
+
+    .risk-cell.r1.c1::before {
+      left: -3px;
+      bottom: 100%;
+      width: 3px;
+      height: 26px;
+    }
+
+    /* Severity: the bottom axis runs on past the right */
+    .risk-cell.r4.c4::before {
+      left: 100%;
+      top: 100%;
+      width: 26px;
+      height: 3px;
+    }
+
+    .risk-cell.r1.c1::after,
+    .risk-cell.r4.c4::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: var(--canvas-ink);
+    }
+
+    .risk-cell.r1.c1::after {
+      left: -8.5px;
+      bottom: calc(100% + 24px);
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .risk-cell.r4.c4::after {
+      left: calc(100% + 24px);
+      top: calc(100% - 4.5px);
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
 
     .risk-cell h3 {
       margin: 0 0 6px;
@@ -373,7 +420,7 @@
 
     .risk-caption {
       margin: 48px 0 0;
-      font-family: var(--sans);
+      font-family: 'IBM Plex Sans', sans-serif;
       font-size: 15px;
     }
 
