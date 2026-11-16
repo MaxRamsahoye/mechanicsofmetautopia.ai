@@ -790,6 +790,248 @@
 
     .ov-thumb .tc { stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1; fill: none; }
 
+    /* ---------- Typology 5: monoculture, polyculture and the corridor ---------- */
+    .mono-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      animation: view-in 0.4s ease;
+    }
+
+    body[data-show="mono-main"] .mono-view {
+      display: block;
+    }
+
+    /* tree diagrams: a parent, joined by lines to its branches */
+    .tree {
+      --tree-line: 1.5px;
+      margin: 72px 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      text-align: center;
+    }
+
+    .tree-root {
+      position: relative;
+      width: fit-content;
+      max-width: 340px;
+      margin: 0 auto 48px;
+      padding: 14px 22px;
+      border: var(--tree-line) solid var(--canvas-ink);
+    }
+
+    /* the stem down from the parent */
+    .tree-root::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      width: var(--tree-line);
+      height: 24px;
+      margin-left: calc(var(--tree-line) / -2);
+      background: var(--canvas-ink);
+    }
+
+    .tree-kids {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+      gap: 24px;
+    }
+
+    /* the bar across, from the first branch to the last */
+    .tree-kids::before {
+      content: '';
+      position: absolute;
+      top: -24px;
+      left: calc((100% - (var(--n) - 1) * 24px) / var(--n) / 2);
+      right: calc((100% - (var(--n) - 1) * 24px) / var(--n) / 2);
+      height: var(--tree-line);
+      background: var(--canvas-ink);
+    }
+
+    .tree-kid {
+      position: relative;
+      padding: 14px 16px;
+      border: var(--tree-line) solid var(--canvas-ink);
+    }
+
+    /* each branch's own line up to the bar */
+    .tree-kid::before {
+      content: '';
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      width: var(--tree-line);
+      height: 24px;
+      margin-left: calc(var(--tree-line) / -2);
+      background: var(--canvas-ink);
+    }
+
+    .tn-kicker {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tn-title {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .tree-root .tn-title {
+      font-size: 19px;
+    }
+
+    .tn-sub {
+      display: block;
+      margin-top: 2px;
+      font-size: 15px;
+      line-height: 1.35;
+    }
+
+    .tn-note {
+      display: block;
+      margin-top: 8px;
+      font-size: 14px;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--muted);
+    }
+
+    .tn-leviathan {
+      display: block;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 700px) {
+      .tree-kids {
+        gap: 10px;
+      }
+
+      .tree-kids::before {
+        left: calc((100% - (var(--n) - 1) * 10px) / var(--n) / 2);
+        right: calc((100% - (var(--n) - 1) * 10px) / var(--n) / 2);
+      }
+
+      .tree-kid {
+        padding: 10px 6px;
+      }
+
+      .tn-title { font-size: 14px; }
+      .tree-root .tn-title { font-size: 16px; }
+      .tn-sub, .tn-note, .tn-leviathan { font-size: 12px; }
+    }
+
+    /* the writing between the diagrams */
+    .mono-prose {
+      max-width: 860px;
+      font-family: var(--serif);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    .mono-prose p {
+      margin: 0 0 16px;
+    }
+
+    .mono-prose h2 {
+      margin: 0 0 16px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .mono-prose h3 {
+      margin: 32px 0 10px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .mono-prose ul {
+      margin: 0 0 16px;
+      padding-left: 1.2em;
+    }
+
+    .mono-prose li {
+      margin: 0 0 12px;
+    }
+
+    .mono-prose li b,
+    .mono-prose p b {
+      font-weight: 700;
+    }
+
+    /* C-ER, defined: Bostrom's x-risk, its cultural restatement, and the working definition */
+    .mono-def {
+      margin: 0 0 24px;
+    }
+
+    .mono-def .def-quote {
+      margin: 0 0 12px;
+      padding-left: 16px;
+      border-left: 2px solid color-mix(in srgb, currentColor 30%, transparent);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .mono-def .def-quote cite {
+      font-style: normal;
+      color: var(--muted);
+    }
+
+    .mono-def .def-main {
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .mono-quote {
+      margin: 40px 0;
+      padding-left: 20px;
+      border-left: 2px solid #cc0000;
+    }
+
+    .mono-quote p {
+      margin: 0 0 10px;
+    }
+
+    .mono-quote cite {
+      font-style: italic;
+    }
+
+    .mono-rule {
+      margin: 96px 0;
+      border: none;
+      border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    }
+
+    .mono-source {
+      margin: 72px 0 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+    }
+
+    .mono-source a {
+      font-style: italic;
+    }
+
+    .ov-thumb .tt { fill: none; stroke: currentColor; stroke-width: 1.5; }
+
     @keyframes view-in {
       from { opacity: 0; }
     }
@@ -1256,6 +1498,9 @@
       <div class="tab-group" role="tablist" aria-label="A Typology of Technological Capabilities">
         <button type="button" role="tab" aria-selected="false" data-show="tech-main">Capabilities</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="A Typology of Cultural Existential Risk (C-ER) Scenarios">
+        <button type="button" role="tab" aria-selected="false" data-show="mono-main">Mono &amp; Polyculture</button>
+      </div>
     </div>
     </div>
 
@@ -1357,6 +1602,21 @@
           <h2 class="ov-title">A Typology of Technological Capabilities</h2>
           <p class="ov-desc">Spear, shield, counter-shield and counter-spear: four classes of capability, by their function in the engagement sequence.</p>
         </button>
+        <button type="button" class="ov-card" data-go="mono-main">
+          <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
+            <rect class="tt" x="118" y="14" width="64" height="30"/>
+            <path class="tt" d="M150,44 V62 M80,62 H220 M80,62 V80 M150,62 V80 M220,62 V80"/>
+            <rect class="tt" x="52" y="80" width="56" height="30"/>
+            <rect class="tt" x="122" y="80" width="56" height="30"/>
+            <rect class="tt" x="192" y="80" width="56" height="30"/>
+            <path class="tt" d="M80,110 V128 M54,128 H106 M54,128 V140 M106,128 V140"/>
+            <rect class="tt" x="34" y="140" width="40" height="26"/>
+            <rect class="tt" x="86" y="140" width="40" height="26"/>
+          </svg>
+          <p class="ov-kicker">Typology 5</p>
+          <h2 class="ov-title">A Typology of Cultural Existential Risk (C-ER) Scenarios</h2>
+          <p class="ov-desc">Global monoculture and global polyculture, the two failure modes of cultural existential risk, and the narrow corridor between them.</p>
+        </button>
       </div>
     </section>
 
@@ -1451,8 +1711,8 @@
               </tr>
               <tr class="g-civilisations">
                 <th scope="row">Western Civilisation<small>(US/UK)</small></th>
-                <td><b>Capitalist Cultural Hegemony:</b> A future &lsquo;Pax Americana&rsquo; where individualism (amoral familialism), materialism (consumer culture) and egoism/nihilism (self-interest without self-social narrative) become the world value-system.</td>
                 <td><b>Illiberalism:</b> A future where the sovereignty of the individual &ndash; freedom of thought, speech and action &ndash; as the foundational cultural principle of modernity is lost.</td>
+                <td><b>Capitalist Cultural Hegemony:</b> A future &lsquo;Pax Americana&rsquo; where individualism (amoral familialism), materialism (consumer culture) and egoism/nihilism (self-interest without self-social narrative) become the world value-system.</td>
               </tr>
               <tr class="g-civilisations">
                 <th scope="row">Eastern Civilisation<small>(China)</small></th>
@@ -1582,6 +1842,189 @@
         </div>
       </div>
     </section>
+
+    <section class="mono-view" aria-label="A Typology of Cultural Existential Risk (C-ER) Scenarios">
+      <div class="mono-prose">
+        <p>Three mechanisms of monoculture and polyculture are detailed:</p>
+        <ul>
+          <li><b>Monoculture:</b> out-of-control replication, a unipolar world-order and a utopian society (realising a single vision of the good society)</li>
+          <li><b>Polyculture:</b> cultural isolationism, pluralism without selection and cosmic expansion</li>
+        </ul>
+        <p>After mapping these mechanisms, the Narrow Cultural Corridor &ndash; the goldilocks zone between these extreme poles &ndash; is presented as a framework for archetypal approaches to managing culture post-AGI: a hands-off approach (Pluralistic Libertarianism), a hands-on approach (Benevolent Paternalism), and a proposed middle ground of decentralised, self-correcting systems (Autopoetic Alignment).</p>
+      </div>
+
+      <figure class="tree" aria-label="Cultural existential risk and its two failure modes">
+        <div class="tree-root"><span class="tn-title">Cultural Existential Risk</span></div>
+        <div class="tree-kids" style="--n: 2">
+          <div class="tree-kid"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(Extreme Homogenisation)</span></div>
+          <div class="tree-kid"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(Extreme Heterogenisation)</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="c-er-defined">Cultural Existential Risk (C-ER)</h2>
+        <div class="mono-def">
+          <p class="def-quote">A risk where an adverse outcome would either annihilate Earth-originating intelligent life or permanently and drastically curtail its potential. <cite>&ndash; Nick Bostrom (2013)</cite></p>
+          <p class="def-quote">A risk where an adverse outcome would either annihilate Earth-originating culture or permanently and drastically curtail its potential for future cultural evolution and moral progress.</p>
+          <p class="def-main">A risk that leads to the permanent and drastic reduction in the variety, depth or resilience of human culture, potentially locking society into a suboptimal or stagnant state, or eliminating the potential for future cultural evolution and moral progress.</p>
+        </div>
+        <ul>
+          <li><b>Global Monoculture (Extreme Homogenisation):</b> Risk scenarios where the global cultural landscape collapses into a single, dominant, homogeneous culture. Diversity is lost.</li>
+          <li><b>Global Polyculture (Extreme Heterogenisation):</b> Risk scenarios where cultural differences become so fragmented and locked in that global cooperation, understanding or large-scale progress becomes impossible. Unity is lost.</li>
+        </ul>
+      </div>
+
+      <figure class="tree" aria-label="Global monoculture scenarios">
+        <div class="tree-root"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(Homogenisation)</span></div>
+        <div class="tree-kids" style="--n: 3">
+          <div class="tree-kid"><span class="tn-title">Runaway Replicators</span><span class="tn-sub">(Memetic Explosion)</span><span class="tn-note">d/acc spears win</span></div>
+          <div class="tree-kid"><span class="tn-title">Nationalistic Superpower Hegemony</span><span class="tn-sub">(US or China Takeover)</span><span class="tn-note">Western/Eastern cultural imperialism</span></div>
+          <div class="tree-kid"><span class="tn-title">Utopian Society</span><span class="tn-sub">(Flawed Realisation)</span><span class="tn-note">single-culture world</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="global-monoculture">Global Monoculture (Homogenisation) Scenarios</h2>
+        <p>Three distinct pathways to C-ER through extreme cultural homogenisation:</p>
+        <ul>
+          <li><b>Runaway Replicators (Memetic Explosion), d/acc spears win:</b> Homogenisation driven by viral, self-replicating cultural units (memes, ideologies, technologies) that rapidly overwrite all competing forms. This is framed as a &lsquo;d/acc spears win&rsquo; &ndash; referencing accelerationist forces that favour rapid, penetrative propagation, potentially leading to cultural sterility through saturation.</li>
+          <li><b>Nationalistic Superpower Hegemony (US or China Takeover), Western/Eastern cultural imperialism:</b> Homogenisation driven by geopolitical dominance, where the culture, values and institutions of a single superpower are imposed globally, replacing local cultures through hard or soft power.</li>
+          <li><b>Utopian Society (Flawed Realisation), single-culture world:</b> Homogenisation resulting from a successful, but flawed, global project (e.g. an AGI-governed system or a universal ethical framework) that optimises for a single definition of &lsquo;good&rsquo; or &lsquo;utopia&rsquo;, eliminating cultural difference as unnecessary variance.</li>
+        </ul>
+      </div>
+
+      <figure class="tree" aria-label="Global polyculture scenarios">
+        <div class="tree-root"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(Heterogenisation)</span></div>
+        <div class="tree-kids" style="--n: 3">
+          <div class="tree-kid"><span class="tn-title">Localised Lock-ins / Meta-Dystopia</span><span class="tn-sub">(Local Stable Dystopias)</span><span class="tn-note">d/acc shields win</span></div>
+          <div class="tree-kid"><span class="tn-title">Perpetual Pluralism</span><span class="tn-sub">(Evolutionary Stage 1: Variation &gt; Selection)</span><span class="tn-note">libertarian universalism</span></div>
+          <div class="tree-kid"><span class="tn-title">Cosmic Drift</span><span class="tn-sub">(Alien Accessible Universes, Distance-Secure Diversity)</span><span class="tn-note">multi-cultures universe</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="global-polyculture">Global Polyculture (Heterogenisation) Scenarios</h2>
+        <p>Three distinct pathways to C-ER through extreme cultural heterogenisation:</p>
+        <ul>
+          <li><b>Localised Lock-ins / Meta-Dystopia (Local Stable Dystopias), d/acc shields win:</b> Heterogenisation driven by defensive, isolationist measures (often enabled by advanced technology) that create numerous self-contained, stable and locally optimised cultures that never interact or exchange ideas. This is framed as a &lsquo;d/acc shields win&rsquo; &ndash; referencing decelerationist or defensive forces that prioritise cultural protection and rigidity, leading to global stagnation.</li>
+          <li><b>Perpetual Pluralism (Evolutionary Stage 1: Variation &gt; Selection), libertarian universalism:</b> A state of maximal, unregulated cultural liberty where new ideas and groups constantly emerge (variation) but no societal mechanism is strong enough to enforce consensus, select or integrate them (selection). This results in an overwhelming and paralysing diversity, often associated with radical libertarian ideals.</li>
+          <li><b>Cosmic Drift (Alien Accessible Universes, Distance-Secure Diversity), multi-cultures universe:</b> Heterogenisation on a vast, potentially interplanetary or interstellar scale. Cultures are separated beyond the accessible universes of each, ensuring maximal diversity but eliminating any chance of shared identity or cohesion.</li>
+        </ul>
+        <blockquote class="mono-quote">
+          <p>Is There a Fix? Eventually, when our descendants spread across the stars, long communication delays will ensure cultural fragmentation, and thus more selection. (Fast or easily copied minds might also work, as in my book <em>Age of Em</em>.) Before then, I see only three fixes: conservative, totalitarian, and multicultural. And none seems likely to work (though we should try).</p>
+          <cite>&ndash; Robin Hanson, <a href="https://quillette.com/2024/04/11/beware-cultural-drift/" target="_blank" rel="noopener">Beware Cultural Drift</a></cite>
+        </blockquote>
+      </div>
+
+      <hr class="mono-rule">
+
+      <figure class="tree" aria-label="The narrow cultural corridor">
+        <div class="tree-root"><span class="tn-title">The Narrow Cultural Corridor</span></div>
+        <div class="tree-kids" style="--n: 3">
+          <div class="tree-kid"><span class="tn-title">Pluralistic Libertarianism</span><span class="tn-sub">Invisible Hand</span><span class="tn-note">Laissez-faire</span><span class="tn-leviathan">The Absentee Leviathan</span></div>
+          <div class="tree-kid"><span class="tn-title">Autopoetic Alignment</span><span class="tn-sub">Many Hands (Goddess Durga)</span><span class="tn-note">Concert&eacute;e</span><span class="tn-leviathan">The Self-Regulating Leviathan</span></div>
+          <div class="tree-kid"><span class="tn-title">Benevolent Paternalism</span><span class="tn-sub">Guiding Hand</span><span class="tn-note">&Eacute;tatiste</span><span class="tn-leviathan">The Despotic Leviathan</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="narrow-cultural-corridor">The Narrow Cultural Corridor</h2>
+        <p>This corridor represents the optimal (or at least, sustainable) zone for cultural flourishing &ndash; a dynamic balance that preserves necessary diversity and resilience while maintaining enough cohesion for cooperation and progress.</p>
+        <p>These three models act as poles defining the possible approaches to managing post-AGI cultural dynamics: from minimal intervention (Libertarianism) to maximal intervention (Paternalism), with Autopoetic Alignment representing a complex, decentralised and iterative middle path.</p>
+        <ul>
+          <li><b>Pluralistic Libertarianism:</b> Maximise individual liberty and cultural variation, relying on decentralised emergent order.</li>
+          <li><b>Benevolent Paternalism:</b> Enforce a globally optimal culture through centralised authority to prevent divergence.</li>
+          <li><b>Autopoetic Alignment:</b> Achieve cultural equilibrium through continuous, decentralised self-correction.</li>
+        </ul>
+      </div>
+
+      <figure class="tree" aria-label="The motivations of pluralistic libertarianism">
+        <div class="tree-root"><span class="tn-kicker">Motivations</span><span class="tn-title">Pluralistic Libertarianism</span></div>
+        <div class="tree-kids" style="--n: 2">
+          <div class="tree-kid"><span class="tn-title">Moral Pluralism</span><span class="tn-sub">Ideal Theory</span><span class="tn-note">multiple legitimate moralities exist and are equal in moral status</span></div>
+          <div class="tree-kid"><span class="tn-title">Political Realism</span><span class="tn-sub">Realpolitik</span><span class="tn-note">cooperation and compromise are preferable to competition and conflict</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="pluralistic-libertarianism">Pluralistic Libertarianism</h2>
+        <p>Pluralistic Libertarianism represents the governance model positioned toward minimal intervention, characterised by the &lsquo;Invisible Hand&rsquo; or &lsquo;Laissez-faire&rsquo; approach: the Absentee Leviathan. It risks sliding into a Global Polyculture (Perpetual Pluralism) due to a lack of cohesive selection mechanisms.</p>
+        <ul>
+          <li><b>Moral Pluralism (Ideal Theory):</b> The core ethical assumption is that there is no single, ultimate moral truth. Instead, many distinct, equally valid and sometimes conflicting moral frameworks exist. This necessitates a hands-off approach, allowing all cultures and ethical systems to coexist without a centralised authority prioritising one over the others.</li>
+          <li><b>Political Realism (Realpolitik):</b> The practical justification argues that any attempt to enforce a single moral or cultural system is doomed to fail and will inevitably lead to conflict. Therefore, allowing cultural entities maximal autonomy and relying on decentralised self-interest for necessary cooperation is the most stable path, even if it sacrifices deep unity.</li>
+        </ul>
+      </div>
+
+      <figure class="tree" aria-label="The motivations of benevolent paternalism">
+        <div class="tree-root"><span class="tn-kicker">Motivations</span><span class="tn-title">Benevolent Paternalism</span></div>
+        <div class="tree-kids" style="--n: 2">
+          <div class="tree-kid"><span class="tn-title">Moral Realism</span><span class="tn-sub">Ideal Theory</span><span class="tn-note">one true morality exists</span></div>
+          <div class="tree-kid"><span class="tn-title">Political Idealism</span><span class="tn-sub">Utopian Social Engineering</span><span class="tn-note">the state has the moral imperative to create the good society</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="benevolent-paternalism">Benevolent Paternalism</h2>
+        <p>Benevolent Paternalism represents the governance model positioned toward maximal intervention, characterised by the &lsquo;Guiding Hand&rsquo; or &lsquo;&Eacute;tatiste&rsquo; approach: the Despotic Leviathan. It risks sliding into a Global Monoculture (Utopian Society &ndash; Flawed Realisation) due to its centralised enforcement of a single standard.</p>
+        <ul>
+          <li><b>Moral Realism (Ideal Theory):</b> The core ethical assumption is that a single, objectively &lsquo;true&rsquo; or &lsquo;best&rsquo; moral system exists. The central authority (the Leviathan) is presumed to have access to this truth, or to be capable of identifying the globally optimal cultural state (especially in a post-AGI world). This mandates the enforcement of this singular truth for the ultimate benefit of all.</li>
+          <li><b>Political Idealism (Utopian Social Engineering):</b> The practical justification argues that relying on emergent, decentralised systems (Libertarianism) or iterative self-correction (Autopoetic Alignment) is too slow, too risky or too inefficient. The state (or a central governing AGI) therefore has the moral imperative to actively engineer and enforce the &lsquo;good society&rsquo;, eliminating cultural variance deemed detrimental or suboptimal to the overall, universally defined well-being.</li>
+        </ul>
+      </div>
+
+      <hr class="mono-rule">
+
+      <figure class="tree" aria-label="Value alignment">
+        <div class="tree-root"><span class="tn-title">Value Alignment</span></div>
+        <div class="tree-kids" style="--n: 2">
+          <div class="tree-kid"><span class="tn-title">Pluralistic Alignment</span><span class="tn-note">pluralism</span></div>
+          <div class="tree-kid"><span class="tn-title">Monolithic Alignment</span><span class="tn-note">monism</span></div>
+        </div>
+      </figure>
+
+      <figure class="tree" aria-label="Monolithic alignment">
+        <div class="tree-root"><span class="tn-title">Monolithic Alignment</span></div>
+        <div class="tree-kids" style="--n: 3">
+          <div class="tree-kid"><span class="tn-title">Human Alignment</span><span class="tn-note">biological humans</span></div>
+          <div class="tree-kid"><span class="tn-title">Post-human Alignment</span><span class="tn-note">digital minds, ems</span></div>
+          <div class="tree-kid"><span class="tn-title">Non-human Animal Alignment</span><span class="tn-note">shrimp, insects, industrialised animals, wild animals</span></div>
+        </div>
+      </figure>
+
+      <figure class="tree" aria-label="Pluralistic alignment">
+        <div class="tree-root"><span class="tn-title">Pluralistic Alignment</span></div>
+        <div class="tree-kids" style="--n: 3">
+          <div class="tree-kid"><span class="tn-title">Multi-Substrate (Sentiocentric) Alignment</span><span class="tn-note">all forms of sentient minds: &lsquo;beings&rsquo;</span></div>
+          <div class="tree-kid"><span class="tn-title">Multi-Cultural Alignment</span><span class="tn-note">all world-cultures (epistemology, ontology, axiology): &lsquo;ideas&rsquo;</span></div>
+          <div class="tree-kid"><span class="tn-title">Multi-Principal Alignment</span><span class="tn-note">all groups and individuals: &lsquo;actors&rsquo;</span></div>
+        </div>
+      </figure>
+
+      <div class="mono-prose">
+        <h2 id="value-alignment">Value Alignment</h2>
+        <p>The preceding diagrams detail different approaches to value alignment &ndash; the process of ensuring that advanced systems of intelligence, from civilisation as superintelligence to actual ASI, act in accordance with desirable values. This taxonomy breaks down the challenge based on whether a single, universal set of values is targeted (Monolithic Alignment) or whether diverse, often conflicting values are incorporated (Pluralistic Alignment).</p>
+        <ul>
+          <li><b>Monolithic Alignment (Monism):</b> Assumes there is one ultimate, correct value set, or that a single set of values must be enforced for stability (aligned with the Benevolent Paternalism approach).</li>
+          <li><b>Pluralistic Alignment (Pluralism):</b> Acknowledges and attempts to integrate multiple, potentially conflicting value systems (necessary for the Autopoetic Alignment and Pluralistic Libertarianism approaches).</li>
+        </ul>
+        <h3>Monolithic Alignment (Mono)</h3>
+        <p>The second diagram maps who or what is the target of a singular, universally enforced value system under Monolithic Alignment. The categories define the scope of the entities whose welfare and values are prioritised:</p>
+        <ul>
+          <li><b>Human Alignment:</b> Focuses solely on the values and well-being of biological humans.</li>
+          <li><b>Post-human Alignment:</b> Extends the focus to future digital minds, uploaded consciousnesses (ems), or other non-biological successors to humanity.</li>
+          <li><b>Non-human Animal Alignment:</b> Broadens the moral circle further to include all forms of sentient life, from domesticated to industrial and wild animals.</li>
+        </ul>
+        <h3>Pluralistic Alignment (Poly)</h3>
+        <p>The third diagram breaks down the sources of value diversity that need to be managed under Pluralistic Alignment. Instead of asking who is aligned, it asks what elements of culture and existence must be balanced:</p>
+        <ul>
+          <li><b>Multi-Substrate (Sentiocentric) Alignment:</b> Pluralism based on the form of the beings involved. Acknowledges the distinct, irreducible values held by different types of minds (biological, digital, animal) and seeks to align the system to the totality of sentient experience. Focuses on &lsquo;beings&rsquo;.</li>
+          <li><b>Multi-Cultural Alignment:</b> Pluralism based on human-created systems. Recognises the deep variation in cultural frameworks &ndash; different ways of knowing (epistemology), ways of being (ontology) and systems of value (axiology) across global human cultures &ndash; and seeks to honour them. Focuses on &lsquo;ideas&rsquo;.</li>
+          <li><b>Multi-Principal Alignment:</b> Pluralism based on political or social representation. Focuses on balancing the distinct and often competing interests, goals and values of all individual agents, groups and organisations within society. Focuses on &lsquo;actors&rsquo;.</li>
+        </ul>
+      </div>
+
+      <p class="mono-source">See also the graphic taxonomy of x-risks from <a href="https://www.are.na/block/41292921" target="_blank" rel="noopener">The Precipice</a> by Toby Ord (2020).</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -1624,6 +2067,7 @@
         risks: { title: 'A Typology of Cultural Risks: From Minor to Existential', slug: 'cultural-risks', desc: 'Cultural extinction is the ultimate threat faced by a civilisation that would wish to preserve cultural diversity, and by cultures that would wish to see their belief and value systems held by future generations. Along the way are many intermediate scenarios of increasing scope and severity. This matrix maps that landscape of cultural harms: from the loss of a single word to the loss of all world-cultures.' },
         cer: { title: 'A Typology of Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures', slug: 'c-er-scenarios', desc: 'This table outlines potential maximal futures, the best and worst of possible worlds, according to different cultural perspectives. These perspectives are categorised into three primary axes of contention over civilisation&rsquo;s cultural trajectory and the governance mechanisms to steer it.' },
         tech: { title: 'A Typology of Technological Capabilities', slug: 'technological-capabilities', desc: '<span class="desc-sub">Offensive, Defensive, Counter-Offensive, Counter-Defensive</span>We can think through how political and cultural units will interact within a civilisational architecture &ndash; across physical, digital and memetic domains &ndash; using <b>four classes of technological capabilities</b> defined by their <b>function in the engagement sequence</b>. Ultimately, the future of (post-AGI) technological politics and cultural dynamics will be downstream of whether we live in an <em>offense</em> or <em>defense</em> dominant world.' },
+        mono: { title: 'A Typology of Cultural Existential Risk (C-ER) Scenarios', slug: 'monoculture-polyculture', desc: 'This page attempts to systematically conceptualise the landscape of cultural existential risk (C-ER) by breaking down its two attractor states and failure modes: Global Monoculture (where everything becomes the same and diversity dies out) and Global Polyculture (where things become so fragmented that we lose all sense of shared experience).' },
         attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
       };
       var show = 'overview-main';
