@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Key terms used in The Mechanics of Meta-Utopia.">
+  <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png">
+  <script>
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Concepts — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Concepts — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Key terms used in The Mechanics of Meta-Utopia.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/2.0/lexicon/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../assets/site.css?v=b826485e" rel="stylesheet">
+  <style>
+    .lexicon {
+      margin: 0;
+    }
+
+    /* light sepia band from the top of the window to just below the index */
+    /* as wide as the three-column index and centred on the page; the title,
+       intro and count share the index's left edge */
+    .lexicon-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 192px;
+      width: var(--wide-col);
+      max-width: calc(100vw - 48px);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* the subtitle on a single line wherever the top section is wide enough */
+    @media (min-width: 1181px) {
+      .lexicon-top .page-intro {
+        white-space: nowrap;
+      }
+    }
+
+    .lexicon-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -128px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    @media (max-width: 600px) {
+      .lexicon-top::before {
+        top: -140px;
+      }
+    }
+
+    /* index of concepts, in two columns */
+    /* the intro sits closer; the count has room above and below */
+    .lexicon-top .page-intro {
+      margin-bottom: 36px;
+    }
+
+    .concept-count {
+      margin: 0 0 44px;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* A–Z down the left column, once past the top band */
+    .az-index {
+      position: fixed;
+      z-index: 5;
+      top: 50%;
+      left: 40px;
+      transform: translateY(-50%);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+    }
+
+    body.past-start .az-index {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* out of the way of the footer */
+    body.footer-in-view .az-index {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .az-index li + li {
+      margin-top: 12px;
+    }
+
+    .az-index a,
+    .az-index span {
+      display: block;
+      width: 22px;
+      text-align: center;
+      color: inherit;
+      text-decoration: none;
+      transform-origin: left center;
+      transition: transform 0.25s ease, font-weight 0.25s ease;
+    }
+
+    .az-index span {
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    .az-index a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* the letter being read swells, and its neighbours a little */
+    .az-index a.current {
+      font-weight: 700;
+      transform: scale(1.7);
+    }
+
+    .az-index a.near {
+      transform: scale(1.2);
+    }
+
+    /* room around the swollen letter so it clears its neighbours */
+    .az-index li {
+      transition: margin 0.25s ease;
+    }
+
+    .az-index li:has(a.current) {
+      margin-top: 14px;
+      margin-bottom: 6px;
+    }
+
+    @media (max-width: 1000px), (max-height: 760px) {
+      .az-index {
+        display: none;
+      }
+    }
+
+    .lexicon-index {
+      margin: 0;
+      scroll-margin-top: 48px;
+    }
+
+    .lexicon-index ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      /* three columns, filled top to bottom (the script sets the row count
+         from --cols); two on narrower screens, one on phones */
+      --cols: 3;
+      display: grid;
+      grid-template-columns: repeat(var(--cols), max-content);
+      grid-auto-flow: column;
+      column-gap: 56px;
+    }
+
+    @media (max-width: 1180px) {
+      .lexicon-index ol {
+        --cols: 2;
+        column-gap: 104px;
+      }
+    }
+
+    /* outline circle bullets, indented */
+    .lexicon-index ol {
+      padding-left: 24px;
+    }
+
+    /* every row of the two menus on a 23px line */
+    .lexicon-index li,
+    .curated-menu li {
+      position: relative;
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 23px;
+    }
+
+    .lexicon-index li {
+      padding: 6px 0;
+    }
+
+
+    /* grouped by letter: each letter heads its run of concepts, and the
+       script deals the runs into balanced columns, never splitting one */
+    .lexicon-index ol.by-letter {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .lexicon-index li.index-col,
+    .lexicon-index li.index-group {
+      padding: 0;
+    }
+
+    .lexicon-index li.index-group + li.index-group {
+      padding-top: 36px;
+    }
+
+    .lexicon-index li.index-col::before,
+    .lexicon-index li.index-group::before {
+      content: none;
+    }
+
+    .lexicon-index li.index-col > ol,
+    .lexicon-index li.index-group > ol {
+      display: block;
+      padding-left: 0;
+    }
+
+    .index-letter {
+      display: block;
+      padding-bottom: 6px;
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 23px;
+    }
+
+    .lexicon-index a,
+    .term dt a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .lexicon-index a {
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: inherit;
+    }
+
+    @media (min-width: 1181px) {
+      .lexicon-index a {
+        white-space: nowrap;
+      }
+
+      .lexicon-index li.index-col {
+        flex: none;
+      }
+    }
+
+    .lexicon-index a:hover,
+    .term dt a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* heading lands 48px below the top of the window */
+    .term {
+      scroll-margin-top: 20px;
+    }
+
+    @media (max-width: 480px) {
+      .lexicon-index ol {
+        --cols: 1;
+        padding-left: 4px;
+        grid-template-columns: 1fr;
+        grid-auto-flow: row;
+      }
+    }
+
+    /* no dividers; on hover a rule appears to the left and the entry grows */
+    .term {
+      position: relative;
+      padding: 28px 0;
+      transform-origin: left center;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .term::before {
+      content: '';
+      position: absolute;
+      top: 28px;
+      bottom: 28px;
+      left: -28px;
+      width: 2px;
+      background: var(--canvas-ink);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .lexicon-curated:not(.hover-locked) .term:hover,
+    .lexicon:not(.hover-locked) .term:hover,
+    .term.is-clicked {
+      transform: scale(1.05);
+    }
+
+    .lexicon-curated:not(.hover-locked) .term:hover::before,
+    .lexicon:not(.hover-locked) .term:hover::before,
+    .term.is-clicked::before {
+      transform: scaleY(1);
+    }
+
+    /* a concept reached by its link takes the hover look once the scroll has
+       mostly arrived; for a second no other entry reacts to hover, then it
+       eases back (see the script below) */
+    .term.is-clicked,
+    .term.is-clicked::before {
+      transition-delay: 0.45s;
+    }
+
+    @media (max-width: 600px) {
+      .term::before {
+        left: -14px;
+      }
+    }
+
+    /* curated terms: above the A to Z, a menu of the key terms (each with
+       the terms that belong to it), then their entries, the belonging terms
+       set in under their head term */
+    .curated {
+      margin: 0;
+    }
+
+    .curated-heading {
+      margin: 0;
+      padding-top: 0;
+    }
+
+    /* set in like the A to Z index */
+    .curated-menu {
+      margin: 0;
+      padding-left: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .curated-menu {
+        padding-left: 4px;
+      }
+    }
+
+    .curated-menu ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .curated-menu > ol {
+      columns: 3;
+      column-gap: 40px;
+    }
+
+
+    @media (max-width: 1180px) {
+      .curated-menu > ol {
+        columns: 2;
+      }
+    }
+
+    .curated-menu > ol > li {
+      break-inside: avoid;
+      padding-bottom: 36px;
+    }
+
+    .curated-menu a {
+      color: inherit;
+      text-decoration: none;
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: inherit;
+    }
+
+    .curated-menu > ol > li > a {
+      font-weight: 600;
+    }
+
+    /* rows spaced as in the A to Z: 6px above and below each 23px line */
+    .curated-menu li li {
+      padding: 6px 0 6px 22px;
+    }
+
+    /* a term with terms of its own: they follow on its rows' spacing */
+    .curated-menu li li:has(> ol) {
+      padding-bottom: 0;
+    }
+
+    .curated-menu li ol {
+      margin-top: 6px;
+    }
+
+    .curated-menu a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
+    @media (max-width: 600px) {
+      .curated-menu > ol {
+        columns: 1;
+      }
+    }
+
+    .lexicon-curated {
+      margin: 28px 0 0;
+    }
+
+    /* the two tabs: the curated terms (their menu and entries), or the A
+       to Z (its index, entries and letter bar) */
+    body:not(.view-az) .lexicon-index,
+    body:not(.view-az) dl.lexicon,
+    body:not(.view-az) .az-index,
+    body.view-az .curated-menu,
+    body.view-az .curated {
+      display: none;
+    }
+
+    .curated,
+    dl.lexicon {
+      animation: view-in 0.4s ease;
+    }
+
+    .lexicon-index,
+    .curated-menu {
+      animation: view-in 0.4s ease;
+    }
+
+    @keyframes view-in {
+      from { opacity: 0; }
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 40px;
+      margin: 48px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    /* on wide windows, the tabs one above the other at the left of the band,
+       at the same height whichever is showing */
+    @media (min-width: 1280px) {
+      .view-tabs {
+        position: absolute;
+        top: 360px;
+        left: calc(40px - (100vw - 100%) / 2);
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        margin: 0;
+        transform: translateY(-50%);
+      }
+    }
+
+    .view-tabs button {
+      padding: 0 0 6px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .view-tabs button:hover,
+    .view-tabs button[aria-selected="true"] {
+      color: var(--canvas-ink);
+    }
+
+    .view-tabs button[aria-selected="true"] {
+      border-bottom-color: currentColor;
+    }
+
+    .lexicon-curated .term-sub {
+      margin-left: 40px;
+    }
+
+    .lexicon-curated .term-sub2 {
+      margin-left: 80px;
+    }
+
+    /* the second section, Constraints vs Affordances: its heading and
+       introduction, then the pairs under a subheading for each revolution */
+    .curated-section {
+      padding-top: 136px;
+      font-size: 26px;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .curated-intro {
+      margin: 28px 0 0;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    .lexicon-pairs .pairs-era {
+      padding-top: 56px;
+    }
+
+    .lexicon-curated.lexicon-pairs .term:not(.term-sub):not(:first-child) {
+      margin-top: 0;
+    }
+
+    .curated-menu-section {
+      margin: 20px 0 28px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 23px;
+    }
+
+    .curated-menu-section a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .curated-menu-section a:hover {
+      text-decoration: underline;
+      text-decoration-thickness: 1.5px;
+      text-underline-offset: 4px;
+    }
+
+    /* more room above each head term, setting its group apart */
+    .lexicon-curated .term:not(.term-sub):not(:first-child) {
+      margin-top: 72px;
+    }
+
+    @media (max-width: 600px) {
+      .lexicon-curated .term-sub {
+        margin-left: 20px;
+      }
+
+      .lexicon-curated .term-sub2 {
+        margin-left: 40px;
+      }
+    }
+
+    /* curated view: the head terms as a plain list in the top-left corner
+       once the top section has gone, the one being read in the text colour
+       (as the domain menu on the timeline) */
+    .curated-side {
+      position: fixed;
+      z-index: 20;
+      top: 34px;
+      left: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .curated-side.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.view-az .curated-side {
+      display: none;
+    }
+
+    .curated-side ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .curated-side a {
+      display: block;
+      height: 26px;
+      line-height: 26px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.3s ease;
+    }
+
+    .curated-side a:hover,
+    .curated-side li.current a {
+      color: var(--canvas-ink);
+    }
+
+    @media (max-width: 1279px) {
+      .curated-side {
+        display: none;
+      }
+    }
+
+    /* a letter heading each letter's subsection of the lexicon */
+    .lexicon-letter {
+      padding: 64px 0 4px;
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+      scroll-margin-top: 20px;
+    }
+
+    .lexicon-letter:first-child {
+      padding-top: 0;
+    }
+
+    .term dt {
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 24px;
+      line-height: 1.2;
+      margin: 0 0 10px;
+    }
+
+    .term dd {
+      margin: 0;
+      font-size: 23px;
+      line-height: 1.3;
+    }
+
+    @media (max-width: 600px) {
+      .term dt {
+        font-size: 21px;
+      }
+
+      .term dd {
+        font-size: 20px;
+      }
+    }
+
+    /* the site name sits in the top-right corner, at every width */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="lexicon-top on-band">
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Concepts</a></h1>
+    <p class="page-intro">Key terms used in <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>.</p>
+
+    <p class="concept-count">Concepts Count: <span data-concept-count>22 / 35</span></p>
+
+    <nav class="lexicon-index" id="concepts" aria-label="Concepts">
+      <ol>
+      <li><a href="#autopoetic-alignment">Autopoetic Alignment</a></li>
+      <li><a href="#benevolent-paternalism">Benevolent Paternalism</a></li>
+      <li><a href="#boundaries">Boundaries</a></li>
+      <li><a href="#civilisation-alignment">Civilisation Alignment</a></li>
+      <li><a href="#civilisation-design">Civilisation Design</a></li>
+      <li><a href="#clash-of-civilisations">Clash of Civilisations</a></li>
+      <li><a href="#coherent-blended-volition">Coherent Blended Volition</a></li>
+      <li><a href="#cultural-collapse">Cultural Collapse</a></li>
+      <li><a href="#cultural-existential-risk">Cultural Existential Risk</a></li>
+      <li><a href="#cultural-integrity">Cultural Integrity</a></li>
+      <li><a href="#distance-secure-diversity">Distance-Secure Diversity</a></li>
+      <li><a href="#evolutionary-stable-strategy">Evolutionary Stable Strategy</a></li>
+      <li><a href="#four-futures">Four Futures</a></li>
+      <li><a href="#membrane-permeability">Membrane Permeability</a></li>
+      <li><a href="#memetic-shields">Memetic Shields</a></li>
+      <li><a href="#meta-dystopian-enclosure">Meta-Dystopian Enclosure</a></li>
+      <li><a href="#meta-utopia">Meta-Utopia</a></li>
+      <li><a href="#meta-utopian-enclosure">Meta-Utopian Enclosure</a></li>
+      <li><a href="#meta-utopian-uplift">Meta-Utopian Uplift</a></li>
+      <li><a href="#metautopia">Metautopia</a></li>
+      <li><a href="#mono-cultural-takeover">Mono-Cultural Takeover</a></li>
+      <li><a href="#narrow-cultural-corridor">Narrow Cultural Corridor</a></li>
+      <li><a href="#perpetual-pluralism">Perpetual Pluralism</a></li>
+      <li><a href="#pluralistic-libertarianism">Pluralistic Libertarianism</a></li>
+      <li><a href="#recoverable-collapse">Recoverable Collapse</a></li>
+      <li><a href="#recurrent-collapse">Recurrent Collapse</a></li>
+      <li><a href="#runaway-replicators">Runaway Replicators</a></li>
+      <li><a href="#soft-superpower">Soft Superpower</a></li>
+      <li><a href="#stadial-transition">Stadial Transition</a></li>
+      <li><a href="#sub-topias">Sub-topias</a></li>
+      <li><a href="#symmetry-problem">Symmetry Problem</a></li>
+      <li><a href="#syntopia">Syntopia</a></li>
+      <li><a href="#unidimensional-utopia">Unidimensional Utopia</a></li>
+      <li><a href="#unrecoverable-collapse">Unrecoverable Collapse</a></li>
+      <li><a href="#viatopia">Viatopia</a></li>
+      </ol>
+    </nav>
+    <nav class="curated-menu" id="curated-menu" aria-label="Curated terms">
+      <ol>
+        <li><a href="#curated-meta-utopia">Meta-Utopia</a>
+          <ol>
+            <li><a href="#curated-sub-topias">Sub-topias</a></li>
+            <li><a href="#curated-boundaries">Boundaries</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-civilisation-design">Civilisation Design</a>
+          <ol>
+            <li><a href="#curated-cultural-integrity">Cultural Integrity</a></li>
+            <li><a href="#curated-membrane-permeability">Membrane Permeability</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-four-futures">Four Futures</a>
+          <ol>
+            <li><a href="#curated-meta-utopian-uplift">Meta-Utopian Uplift</a></li>
+            <li><a href="#curated-mono-cultural-takeover">Mono-Cultural Takeover</a></li>
+            <li><a href="#curated-meta-dystopian-enclosure">Meta-Dystopian Enclosure</a></li>
+            <li><a href="#curated-cultural-collapse">Cultural Collapse</a></li>
+            <li><a href="#curated-clash-of-civilisations">Clash of Civilisations</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-narrow-cultural-corridor">Narrow Cultural Corridor</a>
+          <ol>
+            <li><a href="#curated-pluralistic-libertarianism">Pluralistic Libertarianism</a></li>
+            <li><a href="#curated-benevolent-paternalism">Benevolent Paternalism</a></li>
+            <li><a href="#curated-autopoetic-alignment">Autopoetic Alignment</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-symmetry-problem">Symmetry Problem</a>
+          <ol>
+            <li><a href="#curated-memetic-shields">Memetic Shields</a></li>
+          </ol>
+        </li>
+        <li><a href="#curated-stadial-transition">Stadial Transition</a>
+          <ol>
+            <li><a href="#curated-viatopia">Viatopia</a></li>
+            <li><a href="#curated-metautopia">Metautopia</a></li>
+            <li><a href="#curated-syntopia">Syntopia</a></li>
+          </ol>
+        </li>
+      </ol>
+    </nav>
+    <div class="view-tabs" role="tablist" aria-label="Views">
+      <button type="button" role="tab" aria-selected="true" data-view="curated">Curated terms</button>
+      <button type="button" role="tab" aria-selected="false" data-view="az">A to Z</button>
+    </div>
+    </div>
+
+    <section class="curated" id="curated" aria-labelledby="curated-heading">
+      <h2 class="lexicon-letter curated-heading" id="curated-heading">Curated Terms</h2>
+      <dl class="lexicon-curated">
+      <div class="term" id="curated-meta-utopia">
+        <dt><a href="#curated-meta-utopia">Meta-Utopia</a></dt>
+        <dd>Nozick&rsquo;s ideal world-society according to libertarian political philosophy, which proposes that &lsquo;utopia will consist of utopias, of many different and divergent communities&rsquo;.</dd>
+      </div>
+      <div class="term term-sub" id="curated-sub-topias">
+        <dt><a href="#curated-sub-topias">Sub-topias</a></dt>
+        <dd>The communities within a meta-utopia &ndash; Hanson&rsquo;s &lsquo;gardens&rsquo; &ndash; each with its own culture and way of life.</dd>
+      </div>
+      <div class="term term-sub" id="curated-boundaries">
+        <dt><a href="#curated-boundaries">Boundaries</a></dt>
+        <dd>The &lsquo;walls&rsquo; between sub-topias, in Hanson&rsquo;s terms: the physical, legal and digital borders through which people and ideas pass, or are kept out.</dd>
+      </div>
+      <div class="term" id="curated-civilisation-design">
+        <dt><a href="#curated-civilisation-design">Civilisation Design</a></dt>
+        <dd>The design of a world-system as a sociotechnical architecture: here, through its two variables, cultural integrity and membrane permeability, to steer towards desirable civilisational equilibria.</dd>
+      </div>
+      <div class="term term-sub" id="curated-cultural-integrity">
+        <dt><a href="#curated-cultural-integrity">Cultural Integrity</a></dt>
+        <dd>The persistence of a sub-topia&rsquo;s collective cultural identity across time, through inter-topian immigration and inter-generational transmission: how well it maintains cultural continuity and resists cultural change, the strength of its memetic immune system.</dd>
+      </div>
+      <div class="term term-sub" id="curated-membrane-permeability">
+        <dt><a href="#curated-membrane-permeability">Membrane Permeability</a></dt>
+        <dd>The degree to which the boundaries between sub-topias are open or closed to novel information from digital communication or physical migration, set by their border control and migration policy: how easily citizens can move to another community, or a meme spread across sub-topias.</dd>
+      </div>
+      <div class="term" id="curated-four-futures">
+        <dt><a href="#curated-four-futures">Four Futures</a></dt>
+        <dd>A typology of post-AGI cultural attractor states, from maximal and minimal levels of cultural integrity and membrane permeability: a desired multi-cultural equilibrium threatened by three cultural existential risks.</dd>
+      </div>
+      <div class="term term-sub" id="curated-meta-utopian-uplift">
+        <dt><a href="#curated-meta-utopian-uplift">Meta-Utopian Uplift</a></dt>
+        <dd>The transition to a semi-compartmentalised world-system with boundaries open enough for multi-culturalism, freedom of movement and moral progress, but sufficiently protected to prevent hostile cultural takeover: epistemic equilibria.</dd>
+      </div>
+      <div class="term term-sub" id="curated-mono-cultural-takeover">
+        <dt><a href="#curated-mono-cultural-takeover">Mono-Cultural Takeover</a></dt>
+        <dd>An expansionist culture or an invasive memetic replicator breaks out of one sub-topia and colonises all others, proliferating to the point of extreme cultural homogeneity across the entire civilisation: gray goo.</dd>
+      </div>
+      <div class="term term-sub" id="curated-meta-dystopian-enclosure">
+        <dt><a href="#curated-meta-dystopian-enclosure">Meta-Dystopian Enclosure</a></dt>
+        <dd>A defense-dominant, maximally decentralised world-system where every sub-topia is a completely closed system, with memetic transmission and physical migration rendered functionally impossible: localised lock-ins.</dd>
+      </div>
+      <div class="term term-sub" id="curated-cultural-collapse">
+        <dt><a href="#curated-cultural-collapse">Cultural Collapse</a></dt>
+        <dd>A null state where all sub-topias have lost their coherent, collective, cultural identity and localised lock-downs prevent the creation of new sub-topias, leading to civilisational stagnation by default: a permanent plateau.</dd>
+      </div>
+      <div class="term term-sub" id="curated-clash-of-civilisations">
+        <dt><a href="#curated-clash-of-civilisations">Clash of Civilisations</a></dt>
+        <dd>An underdetermined, hybrid condition &ndash; exhibiting proto-characteristics of mono-culture, meta-dystopia and cultural collapse &ndash; where multiple cultures compete for survival, sovereignty and supremacy. After Huntington: the condition of world politics since the end of the Cold War.</dd>
+      </div>
+      <div class="term" id="curated-narrow-cultural-corridor">
+        <dt><a href="#curated-narrow-cultural-corridor">Narrow Cultural Corridor</a></dt>
+        <dd>The path the governance of cultural evolution must navigate between pluralistic libertarianism and benevolent paternalism, both of which lead to moral stagnation and the flawed realisation of civilisation&rsquo;s potential.</dd>
+      </div>
+      <div class="term term-sub" id="curated-pluralistic-libertarianism">
+        <dt><a href="#curated-pluralistic-libertarianism">Pluralistic Libertarianism</a></dt>
+        <dd>A minimalist, laissez-faire approach to the governance of cultural evolution, which maximises individual liberty and cultural variation and relies on decentralised emergent order &ndash; a global poly-culture that persists without progress.</dd>
+      </div>
+      <div class="term term-sub" id="curated-benevolent-paternalism">
+        <dt><a href="#curated-benevolent-paternalism">Benevolent Paternalism</a></dt>
+        <dd>A maximalist, interventionist approach to the governance of cultural evolution, which enforces a globally optimal culture through centralised authority &ndash; a global monoculture that ends multi-cultural diversity.</dd>
+      </div>
+      <div class="term term-sub" id="curated-autopoetic-alignment">
+        <dt><a href="#curated-autopoetic-alignment">Autopoetic Alignment</a></dt>
+        <dd>The middle path between pluralistic libertarianism and benevolent paternalism: sustaining multi-cultural equilibria through continuous, holarchical self-correction.</dd>
+      </div>
+      <div class="term" id="curated-symmetry-problem">
+        <dt><a href="#curated-symmetry-problem">Symmetry Problem</a></dt>
+        <dd>The core design problem: mechanisms that mitigate against monocultural takeover risk producing lock-ins, and mechanisms that mitigate against lock-ins risk enabling monocultural takeover.</dd>
+      </div>
+      <div class="term term-sub" id="curated-memetic-shields">
+        <dt><a href="#curated-memetic-shields">Memetic Shields</a></dt>
+        <dd>Defensive technologies that protect a community&rsquo;s cultural integrity by limiting exposure to external influence: closing borders, filtering information, controlling what members encounter from outside.</dd>
+      </div>
+      <div class="term" id="curated-stadial-transition">
+        <dt><a href="#curated-stadial-transition">Stadial Transition</a></dt>
+        <dd>Cultural transition viewed in stages: from the current world-system, both good and bad, to a stable viatopia, then metautopia and, potentially, syntopia.</dd>
+      </div>
+      <div class="term term-sub" id="curated-viatopia">
+        <dt><a href="#curated-viatopia">Viatopia</a></dt>
+        <dd>MacAskill&rsquo;s frame for the transition to a post-AGI society: a stable state of minimum necessary coordination to achieve existential security, &lsquo;where many different moral points of view can flourish&rsquo;.</dd>
+      </div>
+      <div class="term term-sub" id="curated-metautopia">
+        <dt><a href="#curated-metautopia">Metautopia</a></dt>
+        <dd>The second stage of cultural transition: an equilibrium between political and cultural groups, and a more realistic and desirable vision than full synthesis.</dd>
+      </div>
+      <div class="term term-sub" id="curated-syntopia">
+        <dt><a href="#curated-syntopia">Syntopia</a></dt>
+        <dd>An ideal civilisational endstate in which humanity has converged on a universal morality, &lsquo;perennial philosophy&rsquo; and syncretic culture, transcending and including all worldviews from history.</dd>
+      </div>
+      </dl>
+    </section>
+
+    <dl class="lexicon">
+      <div class="term" id="autopoetic-alignment">
+        <dt><a href="#autopoetic-alignment">Autopoetic Alignment</a></dt>
+        <dd>The middle path between pluralistic libertarianism and benevolent paternalism: sustaining multi-cultural equilibria through continuous, holarchical self-correction.</dd>
+      </div>
+      <div class="term" id="benevolent-paternalism">
+        <dt><a href="#benevolent-paternalism">Benevolent Paternalism</a></dt>
+        <dd>A maximalist, interventionist approach to the governance of cultural evolution, which enforces a globally optimal culture through centralised authority &ndash; a global monoculture that ends multi-cultural diversity.</dd>
+      </div>
+      <div class="term" id="boundaries">
+        <dt><a href="#boundaries">Boundaries</a></dt>
+        <dd>The &lsquo;walls&rsquo; between sub-topias, in Hanson&rsquo;s terms: the physical, legal and digital borders through which people and ideas pass, or are kept out.</dd>
+      </div>
+      <div class="term" id="civilisation-alignment">
+        <dt><a href="#civilisation-alignment">Civilisation Alignment</a></dt>
+        <dd>At the governance level, aligning civilisation to an ecosystem of multiple sovereign cultures rather than to a single conception of the perfect world-society.</dd>
+      </div>
+      <div class="term" id="civilisation-design">
+        <dt><a href="#civilisation-design">Civilisation Design</a></dt>
+        <dd>The design of a world-system as a sociotechnical architecture: here, through its two variables, cultural integrity and membrane permeability, to steer towards desirable civilisational equilibria.</dd>
+      </div>
+      <div class="term" id="clash-of-civilisations">
+        <dt><a href="#clash-of-civilisations">Clash of Civilisations</a></dt>
+        <dd>An underdetermined, hybrid condition &ndash; exhibiting proto-characteristics of mono-culture, meta-dystopia and cultural collapse &ndash; where multiple cultures compete for survival, sovereignty and supremacy. After Huntington: the condition of world politics since the end of the Cold War.</dd>
+      </div>
+      <div class="term" id="coherent-blended-volition">
+        <dt><a href="#coherent-blended-volition">Coherent Blended Volition</a></dt>
+        <dd>A creative blending process that produces new, harmonious value systems that all participants would recognise as adequately representing their contributions.</dd>
+      </div>
+      <div class="term" id="cultural-collapse">
+        <dt><a href="#cultural-collapse">Cultural Collapse</a></dt>
+        <dd>A null state where all sub-topias have lost their coherent, collective, cultural identity and localised lock-downs prevent the creation of new sub-topias, leading to civilisational stagnation by default: a permanent plateau.</dd>
+      </div>
+      <div class="term" id="cultural-existential-risk">
+        <dt><a href="#cultural-existential-risk">Cultural Existential Risk</a></dt>
+        <dd>A threat to the desired multi-cultural equilibrium of meta-utopia. The article names three: mono-cultural takeover, meta-dystopian enclosure and cultural collapse.</dd>
+      </div>
+      <div class="term" id="cultural-integrity">
+        <dt><a href="#cultural-integrity">Cultural Integrity</a></dt>
+        <dd>The persistence of a sub-topia&rsquo;s collective cultural identity across time, through inter-topian immigration and inter-generational transmission: how well it maintains cultural continuity and resists cultural change, the strength of its memetic immune system.</dd>
+      </div>
+      <div class="term" id="distance-secure-diversity">
+        <dt><a href="#distance-secure-diversity">Distance-Secure Diversity</a></dt>
+        <dd>Diversity by default, from physical distance: isolation from outsiders, by mountain ranges, remote islands or interstellar space, that lets local value lock-ins persist for thousands of years.</dd>
+      </div>
+      <div class="term" id="evolutionary-stable-strategy">
+        <dt><a href="#evolutionary-stable-strategy">Evolutionary Stable Strategy</a></dt>
+        <dd>A transitional strategy resistant to invading strategies that would default to monocultural takeover or meta-dystopian lock-in, so that maintaining the meta-utopian structure is every sub-state&rsquo;s best local strategy.</dd>
+      </div>
+      <div class="term" id="four-futures">
+        <dt><a href="#four-futures">Four Futures</a></dt>
+        <dd>A typology of post-AGI cultural attractor states, from maximal and minimal levels of cultural integrity and membrane permeability: a desired multi-cultural equilibrium threatened by three cultural existential risks.</dd>
+      </div>
+      <div class="term" id="membrane-permeability">
+        <dt><a href="#membrane-permeability">Membrane Permeability</a></dt>
+        <dd>The degree to which the boundaries between sub-topias are open or closed to novel information from digital communication or physical migration, set by their border control and migration policy: how easily citizens can move to another community, or a meme spread across sub-topias.</dd>
+      </div>
+      <div class="term" id="memetic-shields">
+        <dt><a href="#memetic-shields">Memetic Shields</a></dt>
+        <dd>Defensive technologies that protect a community&rsquo;s cultural integrity by limiting exposure to external influence: closing borders, filtering information, controlling what members encounter from outside.</dd>
+      </div>
+      <div class="term" id="meta-dystopian-enclosure">
+        <dt><a href="#meta-dystopian-enclosure">Meta-Dystopian Enclosure</a></dt>
+        <dd>A defense-dominant, maximally decentralised world-system where every sub-topia is a completely closed system, with memetic transmission and physical migration rendered functionally impossible: localised lock-ins.</dd>
+      </div>
+      <div class="term" id="meta-utopia">
+        <dt><a href="#meta-utopia">Meta-Utopia</a></dt>
+        <dd>Nozick&rsquo;s ideal world-society according to libertarian political philosophy, which proposes that &lsquo;utopia will consist of utopias, of many different and divergent communities&rsquo;.</dd>
+      </div>
+      <div class="term" id="meta-utopian-enclosure">
+        <dt><a href="#meta-utopian-enclosure">Meta-Utopian Enclosure</a></dt>
+        <dd>A subtle meta-dystopia: every sub-topia is a sub-utopia and everyone is in the one they want, yet no one can move to another, through hyper-defensive governance against memetic competition.</dd>
+      </div>
+      <div class="term" id="meta-utopian-uplift">
+        <dt><a href="#meta-utopian-uplift">Meta-Utopian Uplift</a></dt>
+        <dd>The transition to a semi-compartmentalised world-system with boundaries open enough for multi-culturalism, freedom of movement and moral progress, but sufficiently protected to prevent hostile cultural takeover: epistemic equilibria.</dd>
+      </div>
+      <div class="term" id="metautopia">
+        <dt><a href="#metautopia">Metautopia</a></dt>
+        <dd>The second stage of cultural transition: an equilibrium between political and cultural groups, and a more realistic and desirable vision than full synthesis.</dd>
+      </div>
+      <div class="term" id="mono-cultural-takeover">
+        <dt><a href="#mono-cultural-takeover">Mono-Cultural Takeover</a></dt>
+        <dd>An expansionist culture or an invasive memetic replicator breaks out of one sub-topia and colonises all others, proliferating to the point of extreme cultural homogeneity across the entire civilisation: gray goo.</dd>
+      </div>
+      <div class="term" id="narrow-cultural-corridor">
+        <dt><a href="#narrow-cultural-corridor">Narrow Cultural Corridor</a></dt>
+        <dd>The path the governance of cultural evolution must navigate between pluralistic libertarianism and benevolent paternalism, both of which lead to moral stagnation and the flawed realisation of civilisation&rsquo;s potential.</dd>
+      </div>
+      <div class="term" id="perpetual-pluralism">
+        <dt><a href="#perpetual-pluralism">Perpetual Pluralism</a></dt>
+        <dd>A lesser moral catastrophe: cultural variation persisting indefinitely, with no reflective selection process to refine the set of sub-utopias towards the most morally advanced.</dd>
+      </div>
+      <div class="term" id="pluralistic-libertarianism">
+        <dt><a href="#pluralistic-libertarianism">Pluralistic Libertarianism</a></dt>
+        <dd>A minimalist, laissez-faire approach to the governance of cultural evolution, which maximises individual liberty and cultural variation and relies on decentralised emergent order &ndash; a global poly-culture that persists without progress.</dd>
+      </div>
+      <div class="term" id="recoverable-collapse">
+        <dt><a href="#recoverable-collapse">Recoverable Collapse</a></dt>
+        <dd>Collapse that is partial or localised, so that the capacity for cultural pattern maintenance survives and a later stimulus can bring a new renaissance.</dd>
+      </div>
+      <div class="term" id="recurrent-collapse">
+        <dt><a href="#recurrent-collapse">Recurrent Collapse</a></dt>
+        <dd>A cyclical condition in which civilisation repeatedly achieves a level of cultural progress, only to collapse before achieving stability: an eternal return.</dd>
+      </div>
+      <div class="term" id="runaway-replicators">
+        <dt><a href="#runaway-replicators">Runaway Replicators</a></dt>
+        <dd>Monocultural takeover by selection: an adaptive memeplex proliferates to the point of extreme cultural homogeneity, the memetic equivalent in mind-space of a &lsquo;grey goo&rsquo; scenario.</dd>
+      </div>
+      <div class="term" id="soft-superpower">
+        <dt><a href="#soft-superpower">Soft Superpower</a></dt>
+        <dd>Monocultural takeover by force: a single nation-state wins the arms race in AI and uses its decisive advantage to secure control of the world-system, its belief and value-systems taking over.</dd>
+      </div>
+      <div class="term" id="stadial-transition">
+        <dt><a href="#stadial-transition">Stadial Transition</a></dt>
+        <dd>Cultural transition viewed in stages: from the current world-system, both good and bad, to a stable viatopia, then metautopia and, potentially, syntopia.</dd>
+      </div>
+      <div class="term" id="sub-topias">
+        <dt><a href="#sub-topias">Sub-topias</a></dt>
+        <dd>The communities within a meta-utopia &ndash; Hanson&rsquo;s &lsquo;gardens&rsquo; &ndash; each with its own culture and way of life.</dd>
+      </div>
+      <div class="term" id="symmetry-problem">
+        <dt><a href="#symmetry-problem">Symmetry Problem</a></dt>
+        <dd>The core design problem: mechanisms that mitigate against monocultural takeover risk producing lock-ins, and mechanisms that mitigate against lock-ins risk enabling monocultural takeover.</dd>
+      </div>
+      <div class="term" id="syntopia">
+        <dt><a href="#syntopia">Syntopia</a></dt>
+        <dd>An ideal civilisational endstate in which humanity has converged on a universal morality, &lsquo;perennial philosophy&rsquo; and syncretic culture, transcending and including all worldviews from history.</dd>
+      </div>
+      <div class="term" id="unidimensional-utopia">
+        <dt><a href="#unidimensional-utopia">Unidimensional Utopia</a></dt>
+        <dd>Monocultural takeover by hyperstition: a single utopian vision of the good society becomes universally adopted and brings itself into existence, a flawed realisation of civilisation&rsquo;s cultural potential.</dd>
+      </div>
+      <div class="term" id="unrecoverable-collapse">
+        <dt><a href="#unrecoverable-collapse">Unrecoverable Collapse</a></dt>
+        <dd>A permanent null state where the institutions of cultural pattern maintenance fail so completely that the knowledge, values or ambition for cultural experimentation are lost, and enclosure keeps out any restorative influence.</dd>
+      </div>
+      <div class="term" id="viatopia">
+        <dt><a href="#viatopia">Viatopia</a></dt>
+        <dd>MacAskill&rsquo;s frame for the transition to a post-AGI society: a stable state of minimum necessary coordination to achieve existential security, &lsquo;where many different moral points of view can flourish&rsquo;.</dd>
+      </div>
+    </dl>
+  </main>
+
+  <nav class="curated-side" aria-label="Curated terms"><ol></ol></nav>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>Utopia will consist of utopias”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../">Article</a></li>
+        <li><a href="../lexicon/">Concepts</a></li>
+        <li><a href="../sources/">Sources</a></li>
+        <li><a href="../../">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+
+  <a class="site-title" href="../">Meta-<br>Utopia</a>
+
+
+  <div class="progress-pill progress-edge" data-start=".lexicon-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".lexicon-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    (function () {
+      var lexicons = Array.prototype.slice.call(document.querySelectorAll('.lexicon, .lexicon-curated'));
+      var ARRIVE_MS = 450;   // matches the transition-delay above
+      var HOLD_MS = 1000;
+      var timer = null;
+
+      function highlight(id) {
+        var term = id && document.getElementById(id);
+        if (!term || !term.classList.contains('term')) return;
+        clearTimeout(timer);
+        Array.prototype.forEach.call(document.querySelectorAll('.term.is-clicked'), function (t) {
+          t.classList.remove('is-clicked');
+        });
+        lexicons.forEach(function (l) { l.classList.add('hover-locked'); });
+        term.classList.add('is-clicked');
+        timer = setTimeout(function () {
+          term.classList.remove('is-clicked');
+          lexicons.forEach(function (l) { l.classList.remove('hover-locked'); });
+        }, ARRIVE_MS + HOLD_MS);
+      }
+
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (a) highlight(a.getAttribute('href').slice(1));
+      });
+
+      if (location.hash) highlight(location.hash.slice(1));
+    })();
+  </script>
+  <script>
+    // the tabs: the curated terms, or the A to Z; each shows its own menu,
+    // entries and count (the curated count out of the whole lexicon)
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.view-tabs button'));
+      var count = document.querySelector('[data-concept-count]');
+      var total = document.querySelectorAll('dl.lexicon .term').length;
+      var curated = document.querySelectorAll('.lexicon-curated .term').length;
+      function setView(view) {
+        document.body.classList.toggle('view-az', view === 'az');
+        tabs.forEach(function (t) { t.setAttribute('aria-selected', t.dataset.view === view ? 'true' : 'false'); });
+        count.textContent = view === 'az' ? total : curated + ' / ' + total;
+        window.dispatchEvent(new Event('resize'));
+      }
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () { setView(tab.dataset.view); });
+      });
+      // a link to a term opens the tab it is in
+      function fromHash() {
+        var target = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (target && target.closest('dl.lexicon')) setView('az');
+        else if (target && target.closest('.curated, .curated-menu')) setView('curated');
+      }
+      window.addEventListener('hashchange', fromHash);
+      setView('curated');
+      fromHash();
+      if (location.hash) {
+        var t = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+        if (t) t.scrollIntoView();
+      }
+    })();
+  </script>
+  <nav class="curated-side" aria-label="Curated terms"><ol></ol></nav>
+  <script>
+    // the curated view's corner menu: one link per head term, the one being
+    // read marked as the page scrolls
+    (function () {
+      var side = document.querySelector('.curated-side');
+      var list = side.querySelector('ol');
+      var band = document.querySelector('.lexicon-top');
+      var footer = document.querySelector('.site-footer');
+      var heads = Array.prototype.slice.call(document.querySelectorAll('.lexicon-curated:not(.lexicon-pairs) .term:not(.term-sub), .curated-section'));
+      var items = heads.map(function (term) {
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + term.id;
+        a.textContent = (term.querySelector('dt') || term).textContent;
+        li.appendChild(a);
+        list.appendChild(li);
+        return li;
+      });
+      function track() {
+        // gone the moment the band (which runs on below the section) or the
+        // footer reaches it
+        var bandBottom = band.getBoundingClientRect().bottom - (parseFloat(getComputedStyle(band, '::before').bottom) || 0);
+        var box = side.getBoundingClientRect();
+        var past = bandBottom < box.top &&
+          !(footer && footer.getBoundingClientRect().top < box.bottom);
+        side.classList.toggle('visible', past);
+        var line = window.innerHeight * 0.45, at = -1;
+        heads.forEach(function (t, i) { if (t.getBoundingClientRect().top <= line) at = i; });
+        items.forEach(function (li, i) { li.classList.toggle('current', i === at); });
+      }
+      window.addEventListener('scroll', track, { passive: true });
+      window.addEventListener('resize', track);
+      track();
+    })();
+  </script>
+  <ol class="az-index" aria-label="A to Z"></ol>
+
+  <script>
+    // concept count, and the A–Z: each letter jumps to its first term
+    (function () {
+      var terms = Array.prototype.slice.call(document.querySelectorAll('.lexicon .term'));
+
+      // the index grouped by letter, each group headed by its letter
+      var indexList = document.querySelector('.lexicon-index ol');
+      var group = null, groupLetter = '';
+      Array.prototype.slice.call(indexList.children).forEach(function (li) {
+        var letter = li.textContent.trim().charAt(0).toUpperCase();
+        if (letter !== groupLetter) {
+          groupLetter = letter;
+          group = document.createElement('li');
+          group.className = 'index-group';
+          group.innerHTML = '<span class="index-letter" aria-hidden="true"></span><ol></ol>';
+          group.firstChild.textContent = letter;
+          indexList.insertBefore(group, li);
+        }
+        group.lastChild.appendChild(li);
+      });
+      indexList.classList.add('by-letter');
+
+      // deal the letter groups into the columns (three, two or one, from
+      // --cols), in order, so that the longest column is as short as can be
+      var groups = Array.prototype.slice.call(indexList.children);
+      var LETTER_WEIGHT = 1.6;   // a letter and the space above it, in entries
+      var dealtCols = 0;
+      function balanceIndex() {
+        var cols = parseInt(getComputedStyle(indexList).getPropertyValue('--cols'), 10) || 1;
+        if (cols === dealtCols) return;
+        dealtCols = cols;
+        var sizes = groups.map(function (g) { return g.lastChild.children.length + LETTER_WEIGHT; });
+        // best[k][i]: the smallest longest column putting groups i.. into k columns
+        var n = groups.length, best = [], cut = [];
+        function span(i, j) { var t = 0; for (var x = i; x < j; x++) t += sizes[x]; return t; }
+        for (var k = 1; k <= cols; k++) {
+          best[k] = []; cut[k] = [];
+          for (var i = 0; i <= n; i++) {
+            if (k === 1) { best[k][i] = span(i, n); cut[k][i] = n; continue; }
+            best[k][i] = Infinity;
+            for (var j = i + 1; j <= n; j++) {
+              var worst = Math.max(span(i, j), best[k - 1][j]);
+              if (worst < best[k][i]) { best[k][i] = worst; cut[k][i] = j; }
+            }
+            if (i === n) { best[k][i] = 0; cut[k][i] = n; }
+          }
+        }
+        while (indexList.firstChild) indexList.removeChild(indexList.firstChild);
+        var at = 0;
+        for (var c = cols; c >= 1 && at < n; c--) {
+          var end = cut[c][at];
+          var col = document.createElement('li');
+          col.className = 'index-col';
+          var ol = document.createElement('ol');
+          groups.slice(at, end).forEach(function (g) { ol.appendChild(g); });
+          col.appendChild(ol);
+          indexList.appendChild(col);
+          at = end;
+        }
+      }
+      window.addEventListener('resize', balanceIndex);
+      balanceIndex();
+
+      // a subheading opens each letter's subsection, and the A–Z jumps to it
+      var first = {};
+      terms.forEach(function (t) {
+        var letter = t.querySelector('dt').textContent.trim().charAt(0).toUpperCase();
+        t.dataset.letter = letter;
+        if (first[letter]) return;
+        var h = document.createElement('div');
+        h.className = 'lexicon-letter';
+        h.id = 'letter-' + letter.toLowerCase();
+        h.setAttribute('role', 'heading');
+        h.setAttribute('aria-level', '2');
+        h.textContent = letter;
+        t.parentNode.insertBefore(h, t);
+        first[letter] = h;
+      });
+
+      var az = document.querySelector('.az-index');
+      var links = {};
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function (letter) {
+        var li = document.createElement('li');
+        var el;
+        if (first[letter]) {
+          el = document.createElement('a');
+          el.href = '#' + first[letter].id;
+          links[letter] = el;
+        } else {
+          el = document.createElement('span');
+          el.setAttribute('aria-hidden', 'true');
+        }
+        el.textContent = letter;
+        li.appendChild(el);
+        az.appendChild(li);
+      });
+
+      // the letter of the term at the top of the reading area; near the end
+      // the reading line slides down, so the last terms (which never reach
+      // the top of the screen) are still reached before the footer comes in
+      // and the bar hides
+      var current = null;
+      var footer = document.querySelector('.site-footer');
+      function readingLine() {
+        var vh = window.innerHeight;
+        var base = vh * 0.3;
+        var last = terms[terms.length - 1];
+        var maxScroll = document.documentElement.scrollHeight - vh;
+        var end = footer ? Math.min(maxScroll, footer.getBoundingClientRect().top + window.scrollY - vh) : maxScroll;
+        end -= vh * 0.25;   // the last letter then holds for the final stretch
+        // where the last term's top sits on screen at that final position
+        var lastAtEnd = last.getBoundingClientRect().top + window.scrollY - end + 2;
+        if (lastAtEnd <= base) return base;
+        var t = Math.max(0, Math.min(1, (window.scrollY - (end - vh)) / vh));
+        return base + t * (lastAtEnd - base);
+      }
+      function mark() {
+        var line = readingLine();
+        var at = null;
+        for (var i = 0; i < terms.length; i++) {
+          if (terms[i].getBoundingClientRect().top <= line) at = terms[i];
+          else break;
+        }
+        var letter = at ? at.dataset.letter : null;
+        if (letter === current) return;
+        current = letter;
+        var order = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var at = current ? order.indexOf(current) : -9;
+        Object.keys(links).forEach(function (l) {
+          var d = Math.abs(order.indexOf(l) - at);
+          links[l].classList.toggle('current', d === 0);
+          links[l].classList.toggle('near', d === 1);
+        });
+      }
+      window.addEventListener('scroll', mark, { passive: true });
+      window.addEventListener('resize', mark);
+      mark();
+    })();
+  </script>
+  <script src="../assets/site.js?v=8c1d74fd" data-base="../"></script>
+  <script src="../assets/tools.js?v=987ddbc4" data-search-scope="dl.lexicon, .curated" data-hide-until=".lexicon-top"></script>
+</body>
+</html>
