@@ -1019,6 +1019,127 @@
 
     .ov-thumb .tt { fill: none; stroke: currentColor; stroke-width: 1.5; }
 
+    /* ---------- Typology 6: ASI alignment and moral & political philosophy ---------- */
+    .asi-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      animation: view-in 0.4s ease;
+    }
+
+    body[data-show="asi-main"] .asi-view {
+      display: block;
+    }
+
+    body[data-show="asi-main"] .diagram-top .page-title {
+      font-size: clamp(30px, 4vw, 42px);
+    }
+
+    .diagram-desc .desc-sub a {
+      color: var(--link-blue);
+    }
+
+    .asi-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .asi-table {
+      width: 100%;
+      min-width: 720px;
+      border-collapse: collapse;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      line-height: 1.35;
+      text-align: left;
+    }
+
+    .asi-table th,
+    .asi-table td {
+      padding: 16px 18px;
+      vertical-align: top;
+    }
+
+    /* the column and row names: italic, outside the orange grid */
+    .asi-table thead th,
+    .asi-table tbody th {
+      font-size: 16px;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .asi-table thead th:first-child {
+      width: 20%;
+    }
+
+    .asi-table tbody th {
+      border-top: 1px solid var(--muted);
+      border-bottom: 1px solid var(--muted);
+      border-right: 1px solid var(--muted);
+    }
+
+    .asi-table td {
+      border: 1px solid var(--link-blue);
+      font-weight: 500;
+    }
+
+    .asi-table td .asi-alt {
+      display: block;
+      margin-top: 10px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .asi-source {
+      margin: 72px 0 40px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+    }
+
+    .asi-source a,
+    .asi-prose a {
+      color: var(--link-blue);
+    }
+
+    .asi-prose h2 {
+      margin-bottom: 20px;
+    }
+
+    .asi-prose p {
+      margin: 0 0 20px;
+    }
+
+    .asi-prose .lead {
+      font-weight: 700;
+    }
+
+    /* notes mapping each proposal onto moral and political philosophy */
+    .asi-prose sup a {
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.65em;
+      text-decoration: none;
+    }
+
+    .asi-note {
+      margin: 0 0 40px;
+      padding: 12px 16px;
+      border: 1px solid var(--link-blue);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .asi-note b {
+      font-weight: 600;
+    }
+
+    .asi-note .asi-mark {
+      margin-right: 8px;
+      color: var(--link-blue);
+    }
+
+    .ov-thumb .ag { fill: none; stroke-width: 1.5; }
+
     @keyframes view-in {
       from { opacity: 0; }
     }
@@ -1488,6 +1609,9 @@
       <div class="tab-group" role="tablist" aria-label="A Typology of Cultural Existential Risk (C-ER) Scenarios">
         <button type="button" role="tab" aria-selected="false" data-show="mono-main">Mono &amp; Polyculture</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="High-level Types of ASI Alignment">
+        <button type="button" role="tab" aria-selected="false" data-show="asi-main">ASI Alignment</button>
+      </div>
     </div>
     </div>
 
@@ -1603,6 +1727,25 @@
           <p class="ov-kicker">Typology 5</p>
           <h2 class="ov-title">A Typology of Cultural Existential Risk (C-ER) Scenarios</h2>
           <p class="ov-desc">Global monoculture and global polyculture, the two failure modes of cultural existential risk, and the narrow corridor between them.</p>
+        </button>
+        <button type="button" class="ov-card" data-go="asi-main">
+          <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
+            <rect class="ag" x="40" y="50" width="56" height="40" style="stroke: var(--muted)"/>
+            <rect class="ag" x="96" y="50" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="152" y="50" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="208" y="50" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="40" y="90" width="56" height="40" style="stroke: var(--muted)"/>
+            <rect class="ag" x="96" y="90" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="152" y="90" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="208" y="90" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="40" y="130" width="56" height="40" style="stroke: var(--muted)"/>
+            <rect class="ag" x="96" y="130" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="152" y="130" width="56" height="40" style="stroke: var(--link-blue)"/>
+            <rect class="ag" x="208" y="130" width="56" height="40" style="stroke: var(--link-blue)"/>
+          </svg>
+          <p class="ov-kicker">Typology 6</p>
+          <h2 class="ov-title">High-level Types of ASI Alignment</h2>
+          <p class="ov-desc">Singular, multiple and unified: how ASI alignment theory maps onto meta-ethics and political philosophy.</p>
         </button>
       </div>
     </section>
@@ -2022,6 +2165,56 @@
 
       <p class="mono-source">See also the graphic taxonomy of x-risks from <a href="https://www.are.na/block/41292921" target="_blank" rel="noopener">The Precipice</a> by Toby Ord (2020).</p>
     </section>
+
+    <section class="asi-view" aria-label="High-level Types of ASI Alignment Map onto Positions in Moral &amp; Political Philosophy">
+      <div class="asi-scroll">
+          <table class="asi-table">
+            <thead>
+              <tr>
+                <td aria-hidden="true" style="border: none"></td>
+                <th scope="col">Singular</th>
+                <th scope="col">Multiple</th>
+                <th scope="col">Unified</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Meta-Ethical Theory</th>
+                <td>Moral Monism</td>
+                <td>Moral Pluralism</td>
+                <td>Moral Convergentism</td>
+              </tr>
+              <tr>
+                <th scope="row">Political Philosophy</th>
+                <td>Mono-topia (classical utopia)</td>
+                <td>Meta-utopia</td>
+                <td>Syn-topia</td>
+              </tr>
+              <tr>
+                <th scope="row">ASI Alignment Theory</th>
+                <td>Coherent <em>Extrapolated</em> Volition (CEV)<span class="asi-alt">Idealised Alignment</span></td>
+                <td>Coherent <em>Aggregated</em> Volition (CAV)<span class="asi-alt">Pluralistic Alignment</span></td>
+                <td>Coherent <em>Blended</em> Volition (CBV)<span class="asi-alt">Synthetic Alignment</span></td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+
+      <p class="asi-source">[Copy of the <a href="https://ai-safety-atlas.com/chapters/v1/strategies/appendix-long-term-questions/#alignment-to-what" target="_blank" rel="noopener">Alignment to What?</a> subsection in Chapter 3: Strategies, Appendix: Long-term Questions, <em>AI Safety Atlas</em>]</p>
+
+      <div class="mono-prose asi-prose">
+        <h2 id="alignment-to-what">Alignment to what?</h2>
+        <p><span class="lead">Coherent Extrapolated Volition (CEV) attempts to identify what humans would collectively want if we were smarter, more informed, and more morally developed.</span> It proposes that instead of directly programming specific values into a superintelligent AI, we should program it to figure out what humans would want if we overcame our cognitive limitations. When we train AI systems on current human preferences, we risk encoding our biases, contradictions, and shortsightedness. CEV instead asks: what &ldquo;would we want&rdquo; if we knew more, thought faster, or were more the people we wished to be, and had grown up further together? Essentially, picture the ideal version of humanity that could theoretically exist in the future.<sup><a href="#asi-note-a" id="asi-ref-a">[a]</a></sup> Tell the AI to take actions according to that (<a href="https://intelligence.org/files/CEV.pdf" target="_blank" rel="noopener">Yudkowsky, 2004</a>).</p>
+        <p>CEV tried to create a path for AI to respect our deeper intentions rather than our immediate desires. The practical implementation of CEV remains speculative. It would require sophisticated modeling of human psychology, ethical development, and social dynamics&mdash;capabilities beyond current AI systems. Modern approaches like RLHF (Reinforcement Learning from Human Feedback) can be seen as primitive precursors that align AI with current human preferences rather than extrapolated ones. Constitutional AI frameworks move slightly closer to CEV by trying to encode higher-level principles rather than specific preferences, but still fall far short of full extrapolation.</p>
+        <p class="asi-note" id="asi-note-a"><a class="asi-mark" href="#asi-ref-a">[a]</a><b>Moral Monism, Classical Utopia:</b> &lsquo;one true moral theory&rsquo;, &lsquo;one perfect society&rsquo;</p>
+
+        <p><span class="lead">Coherent Aggregated Volition (CAV) finds a coherent set of goals and beliefs that best represent humanity&rsquo;s current values without attempting to extrapolate future development.</span> Ben Goertzel proposed this alternative to CEV, focusing on current human values rather than speculating about our idealized future selves. CAV treats goals and beliefs together as &ldquo;gobs&rdquo; (goal and belief sets) and seeks to find a maximally consistent, compact set that maintains similarity to diverse human perspectives. Unlike CEV, which assumes our values would converge if we became more enlightened, CAV acknowledges that fundamental value differences might persist.<sup><a href="#asi-note-b" id="asi-ref-b">[b]</a></sup> It aims to create a coherent aggregation that balances different perspectives rather than trying to predict how those perspectives might evolve. This makes CAV potentially more feasible to implement, as it works with observable current values rather than hypothetical future ones (<a href="https://multiverseaccordingtoben.blogspot.com/2010/03/coherent-aggregated-volition-toward.html" target="_blank" rel="noopener">Goertzel, 2010</a>).</p>
+        <p class="asi-note" id="asi-note-b"><a class="asi-mark" href="#asi-ref-b">[b]</a><b>Moral Pluralism &amp; Meta-Utopia:</b> &lsquo;multiple (agent-relative) true moral theories&rsquo;, &lsquo;multiple equally legitimate (population-relative) good societies&rsquo;</p>
+
+        <p><span class="lead">Coherent Blended Volition (CBV) emphasizes that human values should be creatively &ldquo;blended&rdquo; through human-guided processes rather than algorithmically averaged or extrapolated.</span> CBV refines CAV by addressing potential misinterpretations. When discussing value aggregation, many assume it means simple averaging or majority voting. CBV instead proposes a creative blending process that produces new, harmonious value systems that all participants would recognize as adequately representing their contributions.<sup><a href="#asi-note-c" id="asi-ref-c">[c]</a></sup> The concept draws from cognitive science theories of conceptual blending, where new ideas emerge from the creative combination of existing ones. In this framework, the process of determining AI values would be guided by humans through collaborative processes rather than delegated to AI systems. This addresses concerns about AI paternalism, where machines might override human autonomy in the name of our &ldquo;extrapolated&rdquo; interests (<a href="https://jetpress.org/v22/goertzel-pitt.htm" target="_blank" rel="noopener">Goertzel &amp; Pitt, 2012</a>). CBV connects to contemporary discussions about participatory AI governance and democratic oversight of AI development. Systems like vTaiwan have implemented CBV-like processes for technology policy development (<a href="https://info.vtaiwan.tw/" target="_blank" rel="noopener">vTaiwan, 2023</a>), showing how human-guided blending can work in practice.</p>
+        <p class="asi-note" id="asi-note-c"><a class="asi-mark" href="#asi-ref-c">[c]</a><b>Moral Convergence &amp; Syntopia:</b> &lsquo;multiple moral theories converge into one true synthesised moral theory&rsquo;, &lsquo;multiple visions of good societies converge into one synthesised vision of the good society&rsquo;</p>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -2065,6 +2258,7 @@
         cer: { title: 'A Typology of Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures', slug: 'c-er-scenarios', desc: 'This table outlines potential maximal futures, the best and worst of possible worlds, according to different cultural perspectives. These perspectives are categorised into three primary axes of contention over civilisation&rsquo;s cultural trajectory and the governance mechanisms to steer it.' },
         tech: { title: 'A Typology of Technological Capabilities', slug: 'technological-capabilities', desc: '<span class="desc-sub">Offensive, Defensive, Counter-Offensive, Counter-Defensive</span>We can think through how political and cultural units will interact within a civilisational architecture &ndash; across physical, digital and memetic domains &ndash; using <b>four classes of technological capabilities</b> defined by their <b>function in the engagement sequence</b>. Ultimately, the future of (post-AGI) technological politics and cultural dynamics will be downstream of whether we live in an <em>offense</em> or <em>defense</em> dominant world.' },
         mono: { title: 'A Typology of Cultural Existential Risk (C-ER) Scenarios', slug: 'monoculture-polyculture', desc: 'This page attempts to systematically conceptualise the landscape of cultural existential risk (C-ER) by breaking down its two attractor states and failure modes: Global Monoculture (where everything becomes the same and diversity dies out) and Global Polyculture (where things become so fragmented that we lose all sense of shared experience).' },
+        asi: { title: 'High-level Types of ASI Alignment Map onto Positions in Moral & Political Philosophy', slug: 'asi-alignment', desc: '<span class="desc-sub">An Exercise in <a href="https://en.wikipedia.org/wiki/Ontology_alignment" target="_blank" rel="noopener">Ontology Alignment</a> / <a href="https://en.wikipedia.org/wiki/Structure-mapping_theory" target="_blank" rel="noopener">Structural Mapping</a> between AI Theory &amp; Philosophy</span>Domains listed in order of chronology (which came first) and contingency (which is more fundamental).' },
         attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
       };
       var show = 'overview-main';
