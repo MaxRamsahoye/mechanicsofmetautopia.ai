@@ -87,7 +87,8 @@
         a.className = 'top-nav-ext';
       }
       a.textContent = pg[0];
-      if (url.pathname === location.pathname) a.setAttribute('aria-current', 'page');
+      // a section's subpages keep its menu entry marked
+      if (url.pathname === location.pathname || (pg[1] && !external && location.pathname.indexOf(url.pathname) === 0)) a.setAttribute('aria-current', 'page');
       nav.appendChild(a);
     });
     document.body.insertBefore(nav, document.body.firstChild);

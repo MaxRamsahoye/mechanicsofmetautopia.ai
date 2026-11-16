@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="The political philosophy turn in AI governance and macrostrategy research: Rawls and Nozick, and their successors Gabriel, MacAskill and Ord.">
+  <meta name="description" content="Essays on the intellectual history of meta-utopia, from Rawls and Nozick to AI governance and macrostrategy research.">
   <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico?v=2" sizes="any">
   <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png?v=2">
   <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png?v=2">
@@ -46,7 +46,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Mechanics of Meta-Utopia">
   <meta property="og:title" content="Genealogy — Mechanics of Meta-Utopia">
-  <meta property="og:description" content="The political philosophy turn in AI governance and macrostrategy research: Rawls and Nozick, and their successors Gabriel, MacAskill and Ord.">
+  <meta property="og:description" content="Essays on the intellectual history of meta-utopia, from Rawls and Nozick to AI governance and macrostrategy research.">
   <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/genealogy/">
   <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
   <meta property="og:image:type" content="image/gif">
@@ -177,6 +177,68 @@
     .essay blockquote cite a {
       font-weight: 400;
     }
+    /* the essays, as cards */
+    .essay-list {
+      max-width: 760px;
+    }
+
+    .essay-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 32px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    @media (max-width: 640px) {
+      .essay-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .essay-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 26px 26px 28px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      color: inherit;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .essay-card:hover,
+    .essay-card:focus-visible {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      outline: none;
+    }
+
+    .card-kicker {
+      margin: 0 0 8px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-title {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .card-desc {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
@@ -189,37 +251,24 @@
 
   <main class="page-main">
     <div class="genealogy-top on-band">
-    <h1 class="page-title"><a class="heading-link title-top" href="#">Genealogy: The Political Philosophy Turn in AI Governance &amp; Macrostrategy Research</a></h1>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Genealogy</a></h1>
+    <p class="page-intro">The intellectual history behind <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>.</p>
     </div>
 
-    <article class="essay">
-      <p>AI alignment, once the subject of science-fiction and then machine learning after that, is now entering the province of political philosophy. As an emerging discourse on an emerging technology, one might ask where we are to begin? The libertarian political philosopher Robert Nozick provides a definitive answer: &ldquo;Political philosophers now must either work within [John] Rawls&rsquo; theory [of justice] or explain why not.&rdquo;</p>
-
-      <p>It was this latter task that Nozick&rsquo;s 1974 magnum opus <a href="https://en.wikipedia.org/wiki/Anarchy,_State,_and_Utopia" target="_blank" rel="noopener"><em>Anarchy, State and Utopia</em></a> set out to undertake in response to Rawls&rsquo;s 1971 <a href="https://en.wikipedia.org/wiki/A_Theory_of_Justice" target="_blank" rel="noopener"><em>A Theory of Justice</em></a>. Over 50 years on and these works are considered the canon of modern political and social thought. However, as products of their time in history, neither mentions &lsquo;artificial intelligence&rsquo; once. There is thus a need to re-read Rawlsianism and Nozickianism through the lens of AI and vice versa, to read the 21st century technology of AI through 20th century political philosophy. And by doing so, to pioneer a new political philosophy of AI.</p>
-
-      <p>This is one of the principal purposes of this research project on post-AGI <a href="https://docs.google.com/document/d/1i4b3R_lS0EqYNolk7e0jqi2yylraL-VeS3fk7edKigk/edit?rm=minimal" target="_blank" rel="noopener">civilisation design</a>. However we are not the first to chart this intersection. Before us, following in Rawls&rsquo;s and Nozick&rsquo;s footsteps are Iason Gabriel &ndash; chief research scientist, ethicist and post-AGI researcher at the Big Tech lab Google DeepMind &ndash; and William MacAskill &ndash; founder, director and senior research fellow of the macrostrategy institute Forethought.</p>
-
-      <p>Gabriel is our contemporary Rawls, authoring a paper in his honour <a href="https://direct.mit.edu/daed/article/151/2/218/110610/Toward-a-Theory-of-Justice-for-Artificial" target="_blank" rel="noopener"><em>Towards a Theory of Justice for AI</em></a> (2022) as well as further papers <a href="https://www.pnas.org/doi/10.1073/pnas.2213709120" target="_blank" rel="noopener"><em>Using the Veil of Ignorance to align AI systems with principles of justice</em></a> (2023), <a href="https://link.springer.com/article/10.1007/s11098-025-02300-4" target="_blank" rel="noopener"><em>A matter of principle? AI alignment as the fair treatment of claims</em></a> (2025) &amp; <a href="https://link.springer.com/article/10.1007/s11023-020-09539-2" target="_blank" rel="noopener"><em>Artificial intelligence, values, and alignment</em></a> (2020) which all bring Rawls&rsquo;s political philosophy to bear on the AI discourse. The crux for Gabriel is that alignment should not be a single-shot solution to a monolithic formula (&lsquo;human values&rsquo;), but should instead be procedural and <a href="https://www.plurality.institute/" target="_blank" rel="noopener">pluralistic</a>:</p>
-
-      <blockquote>
-        <p>&#10077; the central challenge for [political and AI] theorists is not to identify &lsquo;true&rsquo; moral principles for AI; rather, it is to identify fair principles for alignment that receive reflective endorsement despite widespread variation in people&rsquo;s moral beliefs. &#10078;</p>
-      </blockquote>
-
-      <p>MacAskill is our Nozick in the &lsquo;Age of AGI&rsquo;, proposing that we navigate &lsquo;the transition to post-AGI society&rsquo; with the north star of <a href="https://www.forethought.org/research/viatopia" target="_blank" rel="noopener"><em>Viatopia</em></a>:</p>
-
-      <blockquote>
-        <p>&#10077; a state of society where existential risk is very low, where many different moral points of view can flourish, where many possible futures are still open to us, and where major decisions are made via thoughtful, reflective processes. &#10078;</p>
-      </blockquote>
-
-      <p>Genealogically, MacAskill&rsquo;s Viatopia is a higher-order <a href="https://consc.net/papers/engineering.pdf" target="_blank" rel="noopener">conceptual engineering</a> incorporating Nozick&rsquo;s <a href="https://philosophicaldisquisitions.blogspot.com/2016/11/what-is-utopia-meta-utopian-argument.html" target="_blank" rel="noopener">meta-utopia</a> (&lsquo;a framework for utopias, a place where people&hellip; pursue their own vision of the good life&rsquo;) as one desideratum (&lsquo;many different moral points of view can flourish&rsquo;) for an intermediate stage of civilisation before undergoing a period of <a href="https://forum.effectivealtruism.org/topics/long-reflection" target="_blank" rel="noopener">Long Reflection</a>. This makes MacAskill, or more so Ord, another successor of Rawls&rsquo;s &ndash; in his case the notion of &lsquo;reflective equilibrium&rsquo; &ndash; who coined the Long Reflection in <em>The Precipice</em> (2020) as a &ldquo;time to reflect upon what we truly desire; upon which of these visions for humanity would be the best realization of our potential&rdquo;.</p>
-
-      <h2 id="long-reflective-equilibrium"><a class="heading-link" href="#long-reflective-equilibrium">The Long Reflective Equilibrium: Ord as Resurrecting Rawls</a></h2>
-
-      <blockquote>
-        <p>&#10077; The ultimate aim of the Long Reflection would be to achieve a final answer to the question of which is the best kind of future for humanity. This may be the true answer (if truth is applicable to moral questions) or failing that, the answer we would converge to under an ideal process of reflection. It may be that even convergence is impossible, with some disputes or uncertainties that are beyond the power of reason to resolve. If so, our aim would be to find the future that gave the best possible conciliation between the remaining perspectives. &#10078;</p>
-        <cite>&ndash; Toby Ord, <a href="https://theprecipice.com/" target="_blank" rel="noopener"><em>The Precipice: Existential Risk and the Future of Humanity</em></a> (2020)</cite>
-      </blockquote>
-    </article>
+    <section class="essay-list" aria-label="Essays">
+      <ol class="essay-grid">
+        <li><a class="essay-card" href="political-philosophy-turn/">
+          <p class="card-kicker">Essay 1</p>
+          <h2 class="card-title">The Political Philosophy Turn in AI Governance &amp; Macrostrategy Research</h2>
+          <p class="card-desc">Rawls and Nozick, and their successors in AI alignment: Gabriel, MacAskill and Ord.</p>
+        </a></li>
+        <li><a class="essay-card" href="literature-map/">
+          <p class="card-kicker">Essay 2</p>
+          <h2 class="card-title">Literature Map of Meta-Utopia within the PARA-Sphere</h2>
+          <p class="card-desc">Eight restylings of meta-utopia, from Viatopia and Paretotopia to Hanson&rsquo;s walled gardens.</p>
+        </a></li>
+      </ol>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -269,6 +318,6 @@
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
-  <script src="../assets/tools.js?v=3b21652b" data-search-scope=".essay" data-hide-until=".genealogy-top"></script>
+  <script src="../assets/tools.js?v=eb50dbb4" data-search-scope=".essay-list" data-hide-until=".genealogy-top"></script>
 </body>
 </html>
