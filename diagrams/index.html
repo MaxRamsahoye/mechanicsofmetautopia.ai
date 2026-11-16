@@ -413,19 +413,21 @@
     }
 
     /* existential cultural risks are marked with an X */
-    .risk-x {
+    .risk-cell .risk-x {
       margin: 0 0 6px;
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 700;
       color: var(--risk-x);
     }
 
-    /* the figure label sits just above the grid, flush with its right edge */
+    /* the figure label sits above the grid, level with the Scope label and
+       flush with the grid's right edge */
     .risk-caption {
       grid-column: 2 / 6;
       grid-row: 1;
-      align-self: end;
-      margin: 0 0 14px;
+      align-self: start;
+      margin: 0;
+      line-height: inherit;
       text-align: right;
       font-size: 15px;
     }
