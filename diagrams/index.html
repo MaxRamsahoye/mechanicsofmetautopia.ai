@@ -243,6 +243,147 @@
       display: block;
     }
 
+    /* ---------- Typology 2: cultural risks, by scope and severity ---------- */
+    .risks-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      animation: view-in 0.4s ease;
+    }
+
+    body[data-show="risks-main"] .risks-view {
+      display: block;
+    }
+
+    :root {
+      --risk-x: #d0021b;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --risk-x: #ff5a5f;
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --risk-x: #ff5a5f;
+    }
+
+    /* wide enough to read; narrower windows scroll it sideways */
+    .risk-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .risk-figure {
+      min-width: 860px;
+      margin: 0;
+      font-family: var(--sans);
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 104px repeat(4, minmax(0, 1fr)) 84px;
+      grid-template-rows: auto repeat(4, auto) auto;
+    }
+
+    .risk-axis {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .risk-axis-y {
+      grid-column: 1;
+      grid-row: 1;
+      padding: 0 0 22px;
+    }
+
+    .risk-axis-x {
+      grid-column: 6;
+      grid-row: 5;
+      align-self: end;
+      padding: 0 0 0 16px;
+      transform: translateY(50%);
+    }
+
+    .risk-label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .risk-label-y {
+      grid-column: 1;
+      padding-right: 16px;
+    }
+
+    .risk-label-x {
+      grid-row: 6;
+      justify-content: center;
+      padding-top: 22px;
+    }
+
+    .risk-cell {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 140px;
+      box-sizing: border-box;
+      padding: 22px 20px;
+      border-right: 1px solid var(--canvas-ink);
+      border-bottom: 1px solid var(--canvas-ink);
+      text-align: center;
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    /* the grid's outer edge is a little heavier */
+    .risk-cell.c1 { border-left: 1.5px solid var(--canvas-ink); }
+    .risk-cell.c4 { border-right-width: 1.5px; }
+    .risk-cell.r1 { border-top: 1.5px solid var(--canvas-ink); }
+    .risk-cell.r4 { border-bottom-width: 1.5px; }
+
+    .risk-cell h3 {
+      margin: 0 0 6px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.3;
+      letter-spacing: 0;
+    }
+
+    .risk-cell p {
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .risk-cell .risk-eg {
+      margin-top: 4px;
+      font-size: 12px;
+    }
+
+    /* existential cultural risks are marked with an X */
+    .risk-x {
+      margin: 0 0 6px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--risk-x);
+    }
+
+    .risk-caption {
+      margin: 48px 0 0;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    .risk-caption b {
+      font-weight: 600;
+    }
+
+    .ov-thumb .rk { fill: none; stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1.2; }
+    .ov-thumb .rk-x { stroke: var(--risk-x); stroke-width: 2.2; stroke-linecap: round; }
+
     @keyframes view-in {
       from { opacity: 0; }
     }
@@ -700,6 +841,9 @@
       <div class="tab-group" role="tablist" aria-label="The Four Post-AGI Cultural Attractor States">
         <button type="button" role="tab" aria-selected="false" data-show="attractors-main">Four Attractors</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="A Typology of Cultural Risks">
+        <button type="button" role="tab" aria-selected="false" data-show="risks-main">Cultural Risks</button>
+      </div>
     </div>
     </div>
 
@@ -716,6 +860,33 @@
           <p class="ov-kicker">Typology 1</p>
           <h2 class="ov-title">The Four Post-AGI Cultural Attractor States</h2>
           <p class="ov-desc">Four futures for post-AGI cultural dynamics, mapped by cultural integrity and membrane permeability.</p>
+        </button>
+        <button type="button" class="ov-card" data-go="risks-main">
+          <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
+            <rect class="rk" x="70" y="10" width="40" height="40"/>
+            <rect class="rk" x="110" y="10" width="40" height="40"/>
+            <rect class="rk" x="150" y="10" width="40" height="40"/>
+            <rect class="rk" x="190" y="10" width="40" height="40"/>
+            <rect class="rk" x="70" y="50" width="40" height="40"/>
+            <rect class="rk" x="110" y="50" width="40" height="40"/>
+            <rect class="rk" x="150" y="50" width="40" height="40"/>
+            <rect class="rk" x="190" y="50" width="40" height="40"/>
+            <rect class="rk" x="70" y="90" width="40" height="40"/>
+            <rect class="rk" x="110" y="90" width="40" height="40"/>
+            <rect class="rk" x="150" y="90" width="40" height="40"/>
+            <rect class="rk" x="190" y="90" width="40" height="40"/>
+            <rect class="rk" x="70" y="130" width="40" height="40"/>
+            <rect class="rk" x="110" y="130" width="40" height="40"/>
+            <rect class="rk" x="150" y="130" width="40" height="40"/>
+            <rect class="rk" x="190" y="130" width="40" height="40"/>
+            <path class="rk-x" d="M165,25 l10,10 m0,-10 l-10,10"/>
+            <path class="rk-x" d="M205,25 l10,10 m0,-10 l-10,10"/>
+            <path class="rk-x" d="M165,65 l10,10 m0,-10 l-10,10"/>
+            <path class="rk-x" d="M205,65 l10,10 m0,-10 l-10,10"/>
+          </svg>
+          <p class="ov-kicker">Typology 2</p>
+          <h2 class="ov-title">A Typology of Cultural Risks</h2>
+          <p class="ov-desc">Cultural harms mapped by scope and severity, from the loss of a single word to the loss of all world-cultures.</p>
         </button>
       </div>
     </section>
@@ -740,6 +911,42 @@
                 </div>
                 <p class="matrix-frames"><em>Unified Frames</em>: 1. Duettmann's <a href="https://foresightinstitute.substack.com/p/defend-physical" target="_blank" rel="noopener">'multi-polar active shields'</a> and Clarke's <a href="https://80000hours.org/problem-profiles/risks-of-stable-totalitarianism/" target="_blank" rel="noopener">'stable totalitarianism'</a> (top left). 2. Nozick's <a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">‘meta-utopia’</a> (top right) and Barrat-Douglas' <a href="https://strangecities.substack.com/p/the-choice-transition" target="_blank" rel="noopener">'choice transition’</a> and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener">'societal uplift'</a> 3. Hanson's <a href="https://quillette.com/2024/04/11/beware-cultural-drift/" target="_blank" rel="noopener">'global monoculture'</a> and Drexler's <a href="https://en.wikipedia.org/wiki/Gray_goo" target="_blank" rel="noopener">'gray goo'</a> (bottom right) 4. Bostrom's (technological) <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener">'permanent plateau'</a> and Ord's <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">'unrecoverable collapse'</a> (bottom left)</p>
               </figure>
+    </section>
+
+    <section class="risks-view" aria-label="A Typology of Cultural Risks">
+      <div class="risk-scroll">
+              <figure class="risk-figure" aria-label="Cultural risks by scope and severity">
+                <div class="risk-grid">
+                  <div class="risk-axis risk-axis-y">Scope</div>
+                  <div class="risk-label risk-label-y" style="grid-row: 2">civilisational</div>
+                  <div class="risk-cell r1 c1" style="grid-row: 2; grid-column: 2"><h3>Loss of potential world-cultures</h3><p>The speciation of new world-cultures that never happened</p></div>
+                  <div class="risk-cell r1 c2" style="grid-row: 2; grid-column: 3"><h3>Loss of many world-cultures</h3><p>The destruction of historical archives, leaving only a partial cultural record</p></div>
+                  <div class="risk-cell r1 c3" style="grid-row: 2; grid-column: 4"><p class="risk-x">X</p><h3>Loss of all world-cultures, but one</h3><p>The memetic &lsquo;grey goo&rsquo; scenario of total mono-cultural homogenisation</p></div>
+                  <div class="risk-cell r1 c4" style="grid-row: 2; grid-column: 5"><p class="risk-x">X</p><h3>Loss of all world-cultures</h3><p>The classic x-catastrophe</p></div>
+                  <div class="risk-label risk-label-y" style="grid-row: 3">regional</div>
+                  <div class="risk-cell r2 c1" style="grid-row: 3; grid-column: 2"><h3>Loss of potential regional cultures</h3><p>The speciation of new regional cultures that never happened</p></div>
+                  <div class="risk-cell r2 c2" style="grid-row: 3; grid-column: 3"><h3>Loss of regional cultures</h3><p>The destruction of historical archives, leaving only a partial cultural record</p><p class="risk-eg">e.g. the burning of the <em>Great Library of Alexandria</em> or the fall of Asimov&rsquo;s <em>Foundation</em></p></div>
+                  <div class="risk-cell r2 c3" style="grid-row: 3; grid-column: 4"><p class="risk-x">(group-relative) X</p><h3>Loss of an entire regional culture</h3><p>The total erasure of a distinct culture, including its language, art and history</p></div>
+                  <div class="risk-cell r2 c4" style="grid-row: 3; grid-column: 5"><p class="risk-x">X</p><h3>Loss of cultural openness</h3><p>A &lsquo;meta-dystopia&rsquo; where cultures become separated and isolated from each other</p></div>
+                  <div class="risk-label risk-label-y" style="grid-row: 4">local</div>
+                  <div class="risk-cell r3 c1" style="grid-row: 4; grid-column: 2"><h3>Collective loss of a single word</h3><p>e.g. schadenfreude, ubuntu, wabi-sabi</p></div>
+                  <div class="risk-cell r3 c2" style="grid-row: 4; grid-column: 3"><h3>Loss of an entire language</h3><p>From the destruction of historical records or the absence of living speakers</p></div>
+                  <div class="risk-cell r3 c3" style="grid-row: 4; grid-column: 4"><h3>Cultural death of the collective</h3><p>A people experience the complete loss of their cultural identity</p></div>
+                  <div class="risk-cell r3 c4" style="grid-row: 4; grid-column: 5"><h3>Actual death of the collective</h3><p>The extinction of a people whose cultural practices are bound with their existence</p></div>
+                  <div class="risk-label risk-label-y" style="grid-row: 5">small</div>
+                  <div class="risk-cell r4 c1" style="grid-row: 5; grid-column: 2"><h3>Individual loss of a single word</h3><p>A person forgets a single word in their native language and never uses it again</p></div>
+                  <div class="risk-cell r4 c2" style="grid-row: 5; grid-column: 3"><h3>Individual loss of their language</h3><p>A person forgets their native language and never uses it again</p></div>
+                  <div class="risk-cell r4 c3" style="grid-row: 5; grid-column: 4"><h3>Cultural death of the individual</h3><p>A person experiences the complete loss of their cultural identity, family history and sense of place-in-the-world</p></div>
+                  <div class="risk-cell r4 c4" style="grid-row: 5; grid-column: 5"><h3>Actual death of the individual</h3><p>A person dies and their own personal understanding of culture dies with them</p></div>
+                  <div class="risk-axis risk-axis-x">Severity</div>
+                  <div class="risk-label risk-label-x" style="grid-column: 2">imperceptible</div>
+                  <div class="risk-label risk-label-x" style="grid-column: 3">notable</div>
+                  <div class="risk-label risk-label-x" style="grid-column: 4">significant</div>
+                  <div class="risk-label risk-label-x" style="grid-column: 5">extreme</div>
+                </div>
+                <figcaption class="risk-caption"><b>Figure.</b> Qualitative Cultural Risk Categories</figcaption>
+              </figure>
+      </div>
     </section>
   </main>
 
@@ -780,6 +987,7 @@
       var viewBtns = Array.prototype.slice.call(document.querySelectorAll('.view-tabs [data-show]'));
       var TEXT = {
         overview: { title: 'Typologies', slug: '', desc: 'Typologies from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.' },
+        risks: { title: 'A Typology of Cultural Risks: From Minor to Existential', slug: 'cultural-risks', desc: 'Cultural extinction is the ultimate threat faced by a civilisation that would wish to preserve cultural diversity, and by cultures that would wish to see their belief and value systems held by future generations. Along the way are many intermediate scenarios of increasing scope and severity. This matrix maps that landscape of cultural harms: from the loss of a single word to the loss of all world-cultures.' },
         attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
       };
       var show = 'overview-main';
