@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Diagrams from The Mechanics of Meta-Utopia.">
+  <meta name="description" content="Typologies from The Mechanics of Meta-Utopia.">
   <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico?v=2" sizes="any">
   <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png?v=2">
   <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png?v=2">
@@ -41,11 +41,11 @@
       if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
-  <title>Diagrams — Mechanics of Meta-Utopia</title>
+  <title>Typologies — Mechanics of Meta-Utopia</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Mechanics of Meta-Utopia">
-  <meta property="og:title" content="Diagrams — Mechanics of Meta-Utopia">
-  <meta property="og:description" content="Diagrams from The Mechanics of Meta-Utopia.">
+  <meta property="og:title" content="Typologies — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Typologies from The Mechanics of Meta-Utopia.">
   <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/diagrams/">
   <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
   <meta property="og:image:type" content="image/gif">
@@ -247,7 +247,7 @@
       from { opacity: 0; }
     }
 
-    /* All Diagrams: a card for each diagram, with a small drawing of it */
+    /* All Typologies: a card for each diagram, with a small drawing of it */
     .ov-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -690,12 +690,12 @@
   <main class="page-main">
     <div class="diagram-top wide-top">
     <div class="diagram-head">
-    <h1 class="page-title"><a class="heading-link title-top" href="#">Diagrams</a></h1>
-    <p class="diagram-desc">Diagrams from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.</p>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Typologies</a></h1>
+    <p class="diagram-desc">Typologies from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.</p>
     </div>
-    <div class="view-tabs" aria-label="Diagrams">
-      <div class="tab-group" role="tablist" aria-label="All Diagrams">
-        <button type="button" role="tab" aria-selected="true" data-show="overview-main">All Diagrams</button>
+    <div class="view-tabs" aria-label="Typologies">
+      <div class="tab-group" role="tablist" aria-label="All Typologies">
+        <button type="button" role="tab" aria-selected="true" data-show="overview-main">All Typologies</button>
       </div>
       <div class="tab-group" role="tablist" aria-label="The Four Post-AGI Cultural Attractor States">
         <button type="button" role="tab" aria-selected="false" data-show="attractors-main">Four Attractors</button>
@@ -703,7 +703,7 @@
     </div>
     </div>
 
-    <section class="overview-view" aria-label="All Diagrams">
+    <section class="overview-view" aria-label="All Typologies">
       <div class="ov-grid">
         <button type="button" class="ov-card" data-go="attractors-main">
           <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
@@ -713,7 +713,7 @@
             <rect class="q q-br" x="150" y="90" width="75" height="80"/>
             <rect class="q q-c" x="112.5" y="58" width="75" height="64"/>
           </svg>
-          <p class="ov-kicker">Diagram 1</p>
+          <p class="ov-kicker">Typology 1</p>
           <h2 class="ov-title">The Four Post-AGI Cultural Attractor States</h2>
           <p class="ov-desc">Four futures for post-AGI cultural dynamics, mapped by cultural integrity and membrane permeability.</p>
         </button>
@@ -755,7 +755,7 @@
       <ol>
         <li><a href="../">Article</a></li>
         <li><a href="../genealogy/">Genealogy</a></li>
-        <li><a href="../diagrams/">Diagrams</a></li>
+        <li><a href="../diagrams/">Typologies</a></li>
         <li><a href="../lexicon/">Concepts</a></li>
         <li><a href="../sources/">Sources</a></li>
         <li><a href="../1.0/">Version 1.0</a></li>
@@ -772,14 +772,14 @@
   </button>
 
   <script>
-    // the views: All Diagrams, or one diagram at its own address
+    // the views: All Typologies, or one diagram at its own address
     (function () {
       var body = document.body;
       var titleLink = document.querySelector('.diagram-top .page-title a');
       var desc = document.querySelector('.diagram-desc');
       var viewBtns = Array.prototype.slice.call(document.querySelectorAll('.view-tabs [data-show]'));
       var TEXT = {
-        overview: { title: 'Diagrams', slug: '', desc: 'Diagrams from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.' },
+        overview: { title: 'Typologies', slug: '', desc: 'Typologies from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.' },
         attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
       };
       var show = 'overview-main';
@@ -851,6 +851,6 @@
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
-  <script src="../assets/tools.js?v=eb50dbb4" data-hide-until=".diagram-top"></script>
+  <script src="../assets/tools.js?v=407b3f6a" data-hide-until=".diagram-top"></script>
 </body>
 </html>
