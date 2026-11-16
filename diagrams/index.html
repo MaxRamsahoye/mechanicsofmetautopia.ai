@@ -621,6 +621,15 @@
       line-height: 1.35;
     }
 
+    /* wide windows: the whole diagram at three quarters of that size */
+    @media (min-width: 1181px) {
+      .attractors-view .matrix-wrap {
+        zoom: 0.75;
+        /* the column's width before scaling, so the whole diagram scales */
+        width: var(--wide-col);
+      }
+    }
+
     @media (max-width: 1180px) {
       .attractors-view .matrix {
         aspect-ratio: 1.1 / 1;
