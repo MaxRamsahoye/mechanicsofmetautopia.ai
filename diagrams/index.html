@@ -802,69 +802,42 @@
       display: block;
     }
 
-    /* tree diagrams: a parent, joined by lines to its branches */
+    /* tree diagrams, as in the source document: open labels, with lines
+       fanning out from the parent to each of its branches */
     .tree {
-      --tree-line: 1.5px;
       margin: 72px 0;
       font-family: 'IBM Plex Sans', sans-serif;
       text-align: center;
     }
 
     .tree-root {
-      position: relative;
       width: fit-content;
-      max-width: 340px;
-      margin: 0 auto 48px;
-      padding: 14px 22px;
-      border: var(--tree-line) solid var(--canvas-ink);
+      max-width: 360px;
+      margin: 0 auto;
+      padding: 0 12px;
     }
 
-    /* the stem down from the parent */
-    .tree-root::after {
-      content: '';
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      width: var(--tree-line);
-      height: 24px;
-      margin-left: calc(var(--tree-line) / -2);
-      background: var(--canvas-ink);
+    .tree-lines {
+      display: block;
+      width: 100%;
+      height: 64px;
+      margin: 10px 0;
+      overflow: visible;
+    }
+
+    .tree-lines line {
+      stroke: var(--canvas-ink);
+      stroke-width: 1.5;
+      vector-effect: non-scaling-stroke;
     }
 
     .tree-kids {
-      position: relative;
       display: grid;
       grid-template-columns: repeat(var(--n), minmax(0, 1fr));
-      gap: 24px;
-    }
-
-    /* the bar across, from the first branch to the last */
-    .tree-kids::before {
-      content: '';
-      position: absolute;
-      top: -24px;
-      left: calc((100% - (var(--n) - 1) * 24px) / var(--n) / 2);
-      right: calc((100% - (var(--n) - 1) * 24px) / var(--n) / 2);
-      height: var(--tree-line);
-      background: var(--canvas-ink);
     }
 
     .tree-kid {
-      position: relative;
-      padding: 14px 16px;
-      border: var(--tree-line) solid var(--canvas-ink);
-    }
-
-    /* each branch's own line up to the bar */
-    .tree-kid::before {
-      content: '';
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      width: var(--tree-line);
-      height: 24px;
-      margin-left: calc(var(--tree-line) / -2);
-      background: var(--canvas-ink);
+      padding: 0 14px;
     }
 
     .tn-kicker {
@@ -914,17 +887,12 @@
     }
 
     @media (max-width: 700px) {
-      .tree-kids {
-        gap: 10px;
-      }
-
-      .tree-kids::before {
-        left: calc((100% - (var(--n) - 1) * 10px) / var(--n) / 2);
-        right: calc((100% - (var(--n) - 1) * 10px) / var(--n) / 2);
-      }
-
       .tree-kid {
-        padding: 10px 6px;
+        padding: 0 5px;
+      }
+
+      .tree-lines {
+        height: 44px;
       }
 
       .tn-title { font-size: 14px; }
@@ -1856,6 +1824,7 @@
 
       <figure class="tree" aria-label="Cultural existential risk and its two failure modes">
         <div class="tree-root"><span class="tn-title">Cultural Existential Risk</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(Extreme Homogenisation)</span></div>
           <div class="tree-kid"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(Extreme Heterogenisation)</span></div>
@@ -1877,6 +1846,7 @@
 
       <figure class="tree" aria-label="Global monoculture scenarios">
         <div class="tree-root"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(Homogenisation)</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Runaway Replicators</span><span class="tn-sub">(Memetic Explosion)</span><span class="tn-note">d/acc spears win</span></div>
           <div class="tree-kid"><span class="tn-title">Nationalistic Superpower Hegemony</span><span class="tn-sub">(US or China Takeover)</span><span class="tn-note">Western/Eastern cultural imperialism</span></div>
@@ -1896,6 +1866,7 @@
 
       <figure class="tree" aria-label="Global polyculture scenarios">
         <div class="tree-root"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(Heterogenisation)</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Localised Lock-ins / Meta-Dystopia</span><span class="tn-sub">(Local Stable Dystopias)</span><span class="tn-note">d/acc shields win</span></div>
           <div class="tree-kid"><span class="tn-title">Perpetual Pluralism</span><span class="tn-sub">(Evolutionary Stage 1: Variation &gt; Selection)</span><span class="tn-note">libertarian universalism</span></div>
@@ -1921,6 +1892,7 @@
 
       <figure class="tree" aria-label="The narrow cultural corridor">
         <div class="tree-root"><span class="tn-title">The Narrow Cultural Corridor</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Pluralistic Libertarianism</span><span class="tn-sub">Invisible Hand</span><span class="tn-note">Laissez-faire</span><span class="tn-leviathan">The Absentee Leviathan</span></div>
           <div class="tree-kid"><span class="tn-title">Autopoetic Alignment</span><span class="tn-sub">Many Hands (Goddess Durga)</span><span class="tn-note">Concert&eacute;e</span><span class="tn-leviathan">The Self-Regulating Leviathan</span></div>
@@ -1941,6 +1913,7 @@
 
       <figure class="tree" aria-label="The motivations of pluralistic libertarianism">
         <div class="tree-root"><span class="tn-kicker">Motivations</span><span class="tn-title">Pluralistic Libertarianism</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Moral Pluralism</span><span class="tn-sub">Ideal Theory</span><span class="tn-note">multiple legitimate moralities exist and are equal in moral status</span></div>
           <div class="tree-kid"><span class="tn-title">Political Realism</span><span class="tn-sub">Realpolitik</span><span class="tn-note">cooperation and compromise are preferable to competition and conflict</span></div>
@@ -1958,6 +1931,7 @@
 
       <figure class="tree" aria-label="The motivations of benevolent paternalism">
         <div class="tree-root"><span class="tn-kicker">Motivations</span><span class="tn-title">Benevolent Paternalism</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Moral Realism</span><span class="tn-sub">Ideal Theory</span><span class="tn-note">one true morality exists</span></div>
           <div class="tree-kid"><span class="tn-title">Political Idealism</span><span class="tn-sub">Utopian Social Engineering</span><span class="tn-note">the state has the moral imperative to create the good society</span></div>
@@ -1977,6 +1951,7 @@
 
       <figure class="tree" aria-label="Value alignment">
         <div class="tree-root"><span class="tn-title">Value Alignment</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Pluralistic Alignment</span><span class="tn-note">pluralism</span></div>
           <div class="tree-kid"><span class="tn-title">Monolithic Alignment</span><span class="tn-note">monism</span></div>
@@ -1985,6 +1960,7 @@
 
       <figure class="tree" aria-label="Monolithic alignment">
         <div class="tree-root"><span class="tn-title">Monolithic Alignment</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Human Alignment</span><span class="tn-note">biological humans</span></div>
           <div class="tree-kid"><span class="tn-title">Post-human Alignment</span><span class="tn-note">digital minds, ems</span></div>
@@ -1994,6 +1970,7 @@
 
       <figure class="tree" aria-label="Pluralistic alignment">
         <div class="tree-root"><span class="tn-title">Pluralistic Alignment</span></div>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Multi-Substrate (Sentiocentric) Alignment</span><span class="tn-note">all forms of sentient minds: &lsquo;beings&rsquo;</span></div>
           <div class="tree-kid"><span class="tn-title">Multi-Cultural Alignment</span><span class="tn-note">all world-cultures (epistemology, ontology, axiology): &lsquo;ideas&rsquo;</span></div>
