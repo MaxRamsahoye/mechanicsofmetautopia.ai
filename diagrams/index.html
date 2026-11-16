@@ -487,6 +487,175 @@
     .ov-thumb .rk { fill: none; stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1.2; }
     .ov-thumb .rk-x { stroke: var(--risk-x); stroke-width: 2.2; stroke-linecap: round; }
 
+    /* ---------- Typology 3: C-ER scenarios, by cultural perspective ---------- */
+    .cer-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      animation: view-in 0.4s ease;
+    }
+
+    body[data-show="cer-main"] .cer-view {
+      display: block;
+    }
+
+    /* its long title, a little smaller */
+    body[data-show="cer-main"] .diagram-top .page-title {
+      font-size: clamp(30px, 4vw, 42px);
+    }
+
+    /* the three groups of perspectives, and the two outcomes */
+    .cer-view {
+      --g-worldviews: #674ea7;
+      --g-civilisations: #e69138;
+      --g-substrates: #45818e;
+      --g-catastrophe: #cc0000;
+      --g-eucatastrophe: #6aa84f;
+    }
+
+    /* the three axes, keyed by colour */
+    .cer-axes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px 40px;
+      margin: 0 0 40px;
+      padding: 0;
+      list-style: none;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .cer-axes li {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .cer-swatch {
+      flex: none;
+      width: 12px;
+      height: 12px;
+      background: color-mix(in srgb, var(--g) 45%, transparent);
+      border: 1px solid var(--g);
+      transform: translateY(1px);
+    }
+
+    .cer-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .cer-table {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    .cer-table th,
+    .cer-table td {
+      padding: 22px 24px;
+      border-top: 1px solid var(--canvas-ink);
+      border-bottom: 1px solid var(--canvas-ink);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .cer-table thead th {
+      padding-top: 14px;
+      padding-bottom: 14px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      background: color-mix(in srgb, currentColor 7%, transparent);
+    }
+
+    .cer-table thead th:nth-child(1) { width: 24%; }
+    .cer-table thead .th-cat { width: 38%; background: color-mix(in srgb, var(--g-catastrophe) 20%, transparent); }
+    .cer-table thead .th-eu { width: 38%; background: color-mix(in srgb, var(--g-eucatastrophe) 22%, transparent); }
+
+    .cer-table tbody th {
+      font-weight: 700;
+      background: color-mix(in srgb, var(--g) 26%, transparent);
+    }
+
+    .cer-table tbody th small {
+      display: block;
+      margin-top: 4px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .cer-table tbody td {
+      background: color-mix(in srgb, currentColor 4%, transparent);
+    }
+
+    .cer-table td b {
+      font-weight: 700;
+    }
+
+    .g-worldviews { --g: var(--g-worldviews); }
+    .g-civilisations { --g: var(--g-civilisations); }
+    .g-substrates { --g: var(--g-substrates); }
+
+    /* the three axes, explained */
+    .cer-notes {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 40px;
+      margin: 64px 0 0;
+    }
+
+    @media (max-width: 860px) {
+      .cer-notes {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .cer-note {
+      padding-top: 18px;
+      border-top: 3px solid var(--g);
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    .cer-note h3 {
+      margin: 0 0 10px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .cer-note p {
+      margin: 0 0 12px;
+    }
+
+    .cer-note ul {
+      margin: 0;
+      padding-left: 1.1em;
+    }
+
+    .cer-note li {
+      margin: 0 0 10px;
+    }
+
+    .cer-source {
+      margin: 56px 0 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+    }
+
+    .cer-source a {
+      font-style: italic;
+    }
+
+    .ov-thumb .cer-c { stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1; }
+
     @keyframes view-in {
       from { opacity: 0; }
     }
@@ -947,6 +1116,9 @@
       <div class="tab-group" role="tablist" aria-label="A Typology of Cultural Risks">
         <button type="button" role="tab" aria-selected="false" data-show="risks-main">Cultural Risks</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="A Typology of Cultural Existential Risk Scenarios">
+        <button type="button" role="tab" aria-selected="false" data-show="cer-main">C-ER Scenarios</button>
+      </div>
     </div>
     </div>
 
@@ -990,6 +1162,36 @@
           <p class="ov-kicker">Typology 2</p>
           <h2 class="ov-title">A Typology of Cultural Risks</h2>
           <p class="ov-desc">Cultural harms mapped by scope and severity, from the loss of a single word to the loss of all world-cultures.</p>
+        </button>
+        <button type="button" class="ov-card" data-go="cer-main">
+          <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
+            <rect class="cer-c" x="60" y="12" width="44" height="18" style="fill: color-mix(in srgb, currentColor 10%, transparent)"/>
+            <rect class="cer-c" x="104" y="12" width="68" height="18" style="fill: color-mix(in srgb, #cc0000 22%, transparent)"/>
+            <rect class="cer-c" x="172" y="12" width="68" height="18" style="fill: color-mix(in srgb, #6aa84f 26%, transparent)"/>
+            <rect class="cer-c" x="60" y="30" width="44" height="13.8" style="fill: color-mix(in srgb, #674ea7 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="30" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="43.8" width="44" height="13.8" style="fill: color-mix(in srgb, #674ea7 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="43.8" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="57.599999999999994" width="44" height="13.8" style="fill: color-mix(in srgb, #674ea7 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="57.599999999999994" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="71.39999999999999" width="44" height="13.8" style="fill: color-mix(in srgb, #e69138 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="71.39999999999999" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="85.19999999999999" width="44" height="13.8" style="fill: color-mix(in srgb, #e69138 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="85.19999999999999" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="98.99999999999999" width="44" height="13.8" style="fill: color-mix(in srgb, #e69138 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="98.99999999999999" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="112.79999999999998" width="44" height="13.8" style="fill: color-mix(in srgb, #e69138 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="112.79999999999998" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="126.59999999999998" width="44" height="13.8" style="fill: color-mix(in srgb, #45818e 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="126.59999999999998" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="140.39999999999998" width="44" height="13.8" style="fill: color-mix(in srgb, #45818e 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="140.39999999999998" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+            <rect class="cer-c" x="60" y="154.2" width="44" height="13.8" style="fill: color-mix(in srgb, #45818e 30%, transparent)"/>
+            <rect class="cer-c" x="104" y="154.2" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
+          </svg>
+          <p class="ov-kicker">Typology 3</p>
+          <h2 class="ov-title">A Typology of Cultural Existential Risk Scenarios</h2>
+          <p class="ov-desc">The best and worst of possible worlds, according to different worldviews, civilisations and substrates.</p>
         </button>
       </div>
     </section>
@@ -1051,6 +1253,104 @@
               </figure>
       </div>
     </section>
+
+    <section class="cer-view" aria-label="A Typology of Cultural Existential Risk Scenarios">
+      <ul class="cer-axes">
+        <li class="g-worldviews"><span class="cer-swatch" aria-hidden="true"></span><span><b>Worldviews:</b> Religious Fundamentalism vs Secular Atheism vs Syncretism</span></li>
+        <li class="g-civilisations"><span class="cer-swatch" aria-hidden="true"></span><span><b>Civilisations:</b> Western Civilisation vs Eastern Civilisation vs Rest of World</span></li>
+        <li class="g-substrates"><span class="cer-swatch" aria-hidden="true"></span><span><b>Substrates:</b> Humanism vs Trans-humanism vs Post-humanism</span></li>
+      </ul>
+      <div class="cer-scroll">
+          <table class="cer-table">
+            <thead>
+              <tr>
+                <th scope="col">Cultural Perspective</th>
+                <th scope="col" class="th-cat">Maximal Cultural Catastrophe from that Perspective</th>
+                <th scope="col" class="th-eu">Maximal Cultural Eucatastrophe from that Perspective</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="g-worldviews">
+                <th scope="row">Religious Fundamentalism<small>(Christian, Islamic, Jewish)</small></th>
+                <td><b>Death of Gods:</b> A future that contains no adherents to their religion, and it goes extinct.</td>
+                <td><b>Stable Theocracy:</b> A future where their religion successfully spreads, becoming the universal religion for all time.</td>
+              </tr>
+              <tr class="g-worldviews">
+                <th scope="row">Secular Atheism</th>
+                <td><b>Dark Age:</b> A future where the entire population is religious and there is no one left in the world who does not believe in some form of supernatural metaphysics (deities) or new age spirituality.</td>
+                <td><b>New Enlightenment:</b> A future where improvements in quality of life, education and critical thought produce an epistemic environment in which no one is susceptible to &lsquo;magical thinking&rsquo; or subscribes to unsubstantiated beliefs based on &lsquo;faith&rsquo;. Atheism becomes the rational default for new minds.</td>
+              </tr>
+              <tr class="g-worldviews">
+                <th scope="row">Syncretism<small>(The Perennial Philosophy)</small></th>
+                <td><b>Divergent Cultural Evolution:</b> A future where inter-cultural dialogue ceases and the world&rsquo;s cultures become more distinct, divided and disagreeable; irreconcilable, warring sub-cultures that share no common language.</td>
+                <td><b>Convergent Cultural Evolution:</b> A future where cosmopolitan multi-culturalism culminates in a unified worldview, cohering all world cultures into a higher-order whole.</td>
+              </tr>
+              <tr class="g-civilisations">
+                <th scope="row">Western Civilisation<small>(US/UK)</small></th>
+                <td><b>Capitalist Cultural Hegemony:</b> A future &lsquo;Pax Americana&rsquo; where individualism (amoral familialism), materialism (consumer culture) and egoism/nihilism (self-interest without self-social narrative) become the world value-system.</td>
+                <td><b>Illiberalism:</b> A future where the sovereignty of the individual &ndash; freedom of thought, speech and action &ndash; as the foundational cultural principle of modernity is lost.</td>
+              </tr>
+              <tr class="g-civilisations">
+                <th scope="row">Eastern Civilisation<small>(China)</small></th>
+                <td><b>Americanisation:</b> A future where collective duty and national cohesion are dissolved by Western cultural imperialism and market forces, and Chinese society abandons its Confucian and communist heritage.</td>
+                <td><b>Capitalist (with Chinese Characteristics) Cultural Hegemony:</b> A future where Chinese culture becomes the universal cultural form.</td>
+              </tr>
+              <tr class="g-civilisations">
+                <th scope="row">Rest of World<small>(Europe, South America, Africa etc.)</small></th>
+                <td><b>Perpetual Periphery:</b> A future of cultural subordination to superpowers, where regional cultures are continuously eroded by hegemonic media, technology and values imported from the West and East, leading to a loss of unique cultural identity and soft power on the world stage.</td>
+                <td><b>Role Reversal:</b> A future where subaltern cultures become the dominant culture.</td>
+              </tr>
+              <tr class="g-civilisations">
+                <th scope="row">Indigenous Cultures</th>
+                <td><b>The Great Silence of Oral History:</b> A future where all unique, non-written histories, languages and traditional knowledges are eradicated through assimilation into dominant global cultures, leaving indigenous peoples without their ancestral grounding or distinct cultural identity.</td>
+                <td><b>Wisdom of the Elders:</b> A future where indigenous peoples globally revitalise their threatened languages and traditions, and their ecological and spiritual wisdom is integrated into cultural discourse and global institutions.</td>
+              </tr>
+              <tr class="g-substrates">
+                <th scope="row">Humanism<small>(Biological Humans)</small></th>
+                <td><b>Existential Extermination:</b> A future where human philosophy, literature and art are destroyed or relegated to the archive of lesser culture in a world populated by more advanced post-human minds.</td>
+                <td><b>Human Flourishing:</b> A future golden age (Renaissance and Enlightenment) where human artefacts and works become more numerous and sophisticated than at any point in history.</td>
+              </tr>
+              <tr class="g-substrates">
+                <th scope="row">Trans-humanism<small>(Enhanced Humans)</small></th>
+                <td><b>Biological Purity:</b> A future where new cultural possibilities from physical and psychological augmentation are never realised due to a Luddism that enforces &ldquo;natural&rdquo; biology.</td>
+                <td><b>Augmented Reality:</b> A future where humans explore new states of mind, modes of inquiry and methods of cultural production by enhancing their bodies and brains.</td>
+              </tr>
+              <tr class="g-substrates">
+                <th scope="row">Post-humanism<small>(Digital Minds)</small></th>
+                <td><b>Unexplored Lands:</b> A future where intelligence fails to make the jump to digital substrates, leaving the vast and rich potential of consciousness in the universe unfulfilled.</td>
+                <td><b>Lands of Infinite Fun:</b> A future post-scarcity digital paradise where culture is limited only by imagination, allowing for trillions of simulated lives, art forms and experiences to exist in a state of eternal creative play.</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <div class="cer-notes">
+        <div class="cer-note g-worldviews">
+          <h3>1. The Epistemic Axis (Belief)</h3>
+          <p>This axis concerns the source and validity of knowledge and values.</p>
+          <ul>
+            <li><b>Poles:</b> <em>Religious Dogma</em> (Faith/Revelation) vs. <em>Scientific Empiricism</em> (Evidence/Reason) vs. <em>Syncretic Philosophy</em> (Integrated Wisdom).</li>
+            <li><b>The Conflict:</b> The struggle to establish a shared metaphysical or moral framework in a world where AGI may challenge or validate traditional religious claims, render scientific inquiry obsolete, or accelerate the synthesis of world philosophies.</li>
+          </ul>
+        </div>
+        <div class="cer-note g-civilisations">
+          <h3>2. The Civilisational Axis (Identity)</h3>
+          <p>This axis concerns the scale and composition of collective identity, power and sovereignty.</p>
+          <ul>
+            <li><b>Poles:</b> <em>Individualism</em> (Western Liberalism) vs. <em>Collectivism</em> (Eastern/Indigenous Duty) vs. <em>Globalism</em> (Planetary Identity).</li>
+            <li><b>The Conflict:</b> The tension between preserving distinct national, regional or indigenous cultures and submitting to a dominant cultural hegemony (American, Chinese or AGI-facilitated Global), versus achieving a truly equitable, decentralised world system.</li>
+          </ul>
+        </div>
+        <div class="cer-note g-substrates">
+          <h3>3. The Ontological Axis (Being)</h3>
+          <p>This axis concerns the nature of consciousness, embodiment and life itself.</p>
+          <ul>
+            <li><b>Poles:</b> <em>Biological Humanism</em> (Unmodified Carbon Life) vs. <em>Trans-humanism</em> (Augmented/Enhanced Life) vs. <em>Post-humanism</em> (Digital/Synthetic Life).</li>
+            <li><b>The Conflict:</b> The fundamental debate over the legitimate forms of future existence: whether the human form and consciousness should be preserved, enhanced or superseded by non-biological intelligence. The politics of substrate-based rights and resource allocation will be central here.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="cer-source">See also the typology of moral worldviews and catastrophes in <a href="https://www.forethought.org/research/no-easy-eutopia" target="_blank" rel="noopener">No Easy Eutopia</a> by William MacAskill &amp; Fin Moorhouse (2025).</p>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -1091,6 +1391,7 @@
       var TEXT = {
         overview: { title: 'Typologies', slug: '', desc: 'Typologies for <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.' },
         risks: { title: 'A Typology of Cultural Risks: From Minor to Existential', slug: 'cultural-risks', desc: 'Cultural extinction is the ultimate threat faced by a civilisation that would wish to preserve cultural diversity, and by cultures that would wish to see their belief and value systems held by future generations. Along the way are many intermediate scenarios of increasing scope and severity. This matrix maps that landscape of cultural harms: from the loss of a single word to the loss of all world-cultures.' },
+        cer: { title: 'A Typology of Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures', slug: 'c-er-scenarios', desc: 'This table outlines potential maximal futures, the best and worst of possible worlds, according to different cultural perspectives. These perspectives are categorised into three primary axes of contention over civilisation&rsquo;s cultural trajectory and the governance mechanisms to steer it.' },
         attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
       };
       var show = 'overview-main';
