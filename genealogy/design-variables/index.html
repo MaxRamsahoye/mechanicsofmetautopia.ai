@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How AGI could raise or lower the integrity, permeability and legibility of sub-topias, for better and for worse.">
+  <link id="favicon-ico" rel="icon" href="../../favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../../favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../../favicon/apple-touch-icon-light.png?v=2">
+  <script>
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Post-AGI Implications for Meta-Utopian Design Variables — Genealogy — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Post-AGI Implications for Meta-Utopian Design Variables — Genealogy — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="How AGI could raise or lower the integrity, permeability and legibility of sub-topias, for better and for worse.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/genealogy/design-variables/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/site.css?v=ab0ac983" rel="stylesheet">
+  <style>
+    /* light sepia band from the top of the window to just below the intro */
+    .genealogy-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 216px;
+    }
+
+    .genealogy-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -112px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    .genealogy-top .page-intro {
+      margin-bottom: 0;
+    }
+
+    /* the site name sits in the top-right corner, as on the Lexicon */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the essay, set as the article's text */
+    .essay {
+      max-width: 760px;
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.3;
+    }
+
+    .essay p {
+      margin: 15px 0;
+    }
+
+    .essay a:not(.heading-link) {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    html:not(.colour) .essay a:not(.heading-link) {
+      color: inherit;
+    }
+
+    .essay h2 {
+      margin: 88px 0 18px;
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.15em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .essay h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.45em;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    /* quotations, set in from an orange rule */
+    .essay blockquote {
+      margin: 32px 0;
+      padding-left: 28px;
+      border-left: 2px solid var(--link-blue);
+    }
+
+    .essay blockquote p {
+      margin: 0;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--mono-caps);
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay blockquote cite a {
+      font-weight: 400;
+    }
+    /* no footer on the Genealogy pages, as on Diagrams */
+    .site-footer {
+      display: none;
+    }
+
+    /* a small link back up to the Genealogy list, above the title */
+    .essay-kicker {
+      margin: 0 0 14px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .essay-kicker a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .essay-kicker a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* links within the site keep the text colour; only links to other sites turn orange */
+    html.colour .essay a:not([href^="http"]):not(.heading-link) {
+      color: inherit;
+    }
+
+    /* lists inside quotations */
+    .essay blockquote ul {
+      margin: 14px 0 0;
+      padding-left: 1.1em;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote li {
+      margin: 0 0 10px;
+    }
+
+    .essay blockquote p + p {
+      margin-top: 14px;
+    }
+
+    .essay h3 {
+      margin: 48px 0 12px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 0.9em;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.3;
+    }
+
+    .essay h2 + h3 {
+      margin-top: 24px;
+    }
+
+    .essay > ul {
+      margin: 12px 0 18px;
+      padding-left: 1.2em;
+    }
+
+    .essay > ul li {
+      margin: 0 0 10px;
+    }
+
+    .essay li b,
+    .essay p > b {
+      font-weight: 700;
+    }
+
+    .essay .o {
+      color: var(--link-blue);
+    }
+
+    .essay-break {
+      margin: 72px 0 0 !important;
+      text-align: center;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      color: var(--link-blue);
+    }
+
+    .essay-see {
+      margin: 18px 0 0 !important;
+      padding-left: 1.2em;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 15px;
+    }
+
+    .essay-see a {
+      color: var(--link-blue);
+    }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to Genealogy" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="genealogy-top on-band">
+    <p class="essay-kicker"><a class="plain-link" href="../">Genealogy</a></p>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Post-AGI Implications for Meta-Utopian Design Variables</a></h1>
+    </div>
+
+    <article class="essay">
+      <p>The dynamics of a meta-utopian civilisation are structurally determined by the interaction between three variables:</p>
+
+      <ul>
+        <li><b>Integrity:</b> the intra-cultural self-reproduction of sub-topias. How efficiently cultures can maintain their beliefs, values and identity over time.</li>
+        <li><b>Permeability:</b> the inter-cultural self-protection of sub-topias. How open or closed cultures are to physical migration and digital communication from other cultures.</li>
+        <li><b>Legibility:</b> the extra-cultural predictive processing of sub-topias by the meta-system. How accurately a governance institution can model cultures and their interactions with each other.</li>
+      </ul>
+
+      <p>As a general-purpose technology, AGI could increase and decrease these variables, with both positive and negative implications depending on the moral value of the cultures in question.</p>
+
+      <h2 id="integrity"><a class="heading-link" href="#integrity">Integrity<span class="o">:</span> Intra-Cultural Self-Reproduction</a></h2>
+
+      <h3>AI<span class="o">-</span>Increased Integrity</h3>
+
+      <p>AI could optimise socialisation processes, educational curricula and community media to ensure highly consistent intergenerational transmission of core values.</p>
+
+      <ul>
+        <li><b>Personalised AI Tutors:</b> could individually tailor learning experiences to effectively embed cultural tenets within children.</li>
+        <li><b>AI-Managed Social Platforms:</b> could filter out or flag information that conflicts with the community&rsquo;s established beliefs.</li>
+      </ul>
+
+      <p>This use of AI would protect the culture within the sub-topia, making it extremely resilient to change and ensuring long-term continuity: a culture that is cohesive and highly resistant to change.</p>
+
+      <ul>
+        <li><b>Positive:</b> AI could aid liberal, secular and scientific cultures in preserving beneficial epistemic and moral norms.</li>
+        <li><b>Negative:</b> AI could aid extremist ideologies (e.g. fundamentalist religions) in indoctrinating the next generation and locking in their values.</li>
+      </ul>
+
+      <p class="essay-see">See: <a href="https://www.societylibrary.org/ai-debate-blog/2024/3/13/what-are-the-potential-societal-benefits-and-risks-of-aligning-human-beliefs-and-behaviors-using-ai" target="_blank" rel="noopener">What are the potential societal benefits and risks of aligning human beliefs and behaviors using AI?</a> <em>The Society Library</em> Debate Map</p>
+
+      <h3>AI<span class="o">-</span>Decreased Integrity</h3>
+
+      <p>AI could accelerate cultural degeneration.</p>
+
+      <ul>
+        <li><b>Weaponised Generative AI:</b> could rapidly create and propagate highly compelling, alternative cultural narratives, making internal community beliefs seem arbitrary or obsolete.</li>
+        <li><b>Atomised AI Assistants:</b> designed to optimise individual happiness might prioritise personal preference over collective cohesion, weakening traditional social structures like the family or shared communal practices.</li>
+      </ul>
+
+      <p>The net effect would be a high rate of internal cultural change and a breakdown of effective intergenerational transmission, leading sub-topias to quickly lose their distinct identity.</p>
+
+      <ul>
+        <li><b>Positive:</b> AI-produced media could deradicalise and rehabilitate members of regressive cultures more effectively than human communication and psychologists.</li>
+        <li><b>Negative:</b> AI-produced media could radicalise members of progressive cultures more effectively than human communication.</li>
+      </ul>
+
+      <p class="essay-break" aria-hidden="true">&#11046; &nbsp; &#11046; &nbsp; &#11046;</p>
+
+      <h2 id="permeability"><a class="heading-link" href="#permeability">Permeability<span class="o">:</span> Inter-Cultural Self-Protection</a></h2>
+
+      <h3>AI<span class="o">-</span>Increased Permeability (Positive)</h3>
+
+      <p>AI could be instrumental in lowering the barriers between sub-topias:</p>
+
+      <ul>
+        <li><b>Multi-Cultural Governance:</b> Advanced AI systems could negotiate reciprocal migration treaties between communities, automatically verify credentials and value-compatibility, and even offer real-time mediation for cultural conflicts arising from movement.</li>
+        <li><b>Economic Enabling Conditions:</b> AI could optimise resource allocation across the meta-utopia to eliminate transaction costs between sub-topias, making the free movement of individuals and ideas the civilisational default.</li>
+      </ul>
+
+      <p>This use of AI could lead to a hyper-fluid civilisation where citizens can seamlessly exit or enter communities based on their evolving preferences, maximising freedom of association and enabling rapid voluntary migration, rendering protective walls largely obsolete.</p>
+
+      <h3>AI<span class="o">-</span>Decreased Permeability (Negative)</h3>
+
+      <p>The risk of &lsquo;lock-in&rsquo; and &lsquo;lock-out&rsquo; could be dramatically amplified by AI:</p>
+
+      <ul>
+        <li><b>Border Control:</b> AI could be utilised for rigorous, real-time biometric and digital border control, making unauthorised entry or exit virtually impossible.</li>
+        <li><b>Exit Costs:</b> AI could also be used to engineer extremely high exit costs by embedding an individual&rsquo;s digital identity, career credentials and personal resources within a sub-topia&rsquo;s proprietary systems, making a transition to an alternative system penalised or even functionally prohibitive.</li>
+      </ul>
+
+      <p>This AI-enforced structure would create isolated, fragmented cultural silos &ndash; a meta-dystopia &ndash; where populations become trapped within their chosen or inherited culture, unable to escape even if their values change or their utopia declines. The walls, whether physical, legal or digital, would become absolute.</p>
+
+      <h3>AI<span class="o">-</span>Increased Permeability (Offensive)</h3>
+
+      <p>AI could be weaponised to destroy protective barriers between sub-topias:</p>
+
+      <ul>
+        <li><b>Offensive Cyberweaponry against Digital Firewalls:</b> AI could autonomously develop zero-day exploits and sophisticated hacking tools to breach the digital defenses of sub-topias, regardless of their complexity or security measures.</li>
+        <li><b>Offensive Kinetic Weaponry against Physical Borders:</b> AI-piloted drones or autonomous weapons systems could be deployed to physically dismantle walls, fortifications or other border infrastructure, overwhelming human defense forces.</li>
+      </ul>
+
+      <h3>AI<span class="o">-</span>Decreased Permeability (Defensive)</h3>
+
+      <p>AI could be used to construct impervious barriers between sub-topias:</p>
+
+      <ul>
+        <li><b>Defensive Cyberweaponry for Digital Firewalls:</b> AI could autonomously develop sophisticated, self-evolving digital defenses, creating firewalls and intrusion detection systems that are impervious to all known and future offensive cyber tactics.</li>
+        <li><b>Defensive Kinetic Weaponry for Physical Borders:</b> AI-managed autonomous defense systems could deploy non-lethal or lethal kinetic barriers or perimeter patrol systems to create virtually impregnable physical borders.</li>
+      </ul>
+
+      <p class="essay-key"><b>The way permeability plays out depends on open questions of whether we are in an offense- or defense-dominant world, at technological completion or at a specific state of differential technological development:</b></p>
+
+      <ul>
+        <li>whether, when all possible technological capabilities are developed, offensive or defensive technologies are more powerful</li>
+        <li>whether offensive or defensive technology is developed first, and potentially locked in</li>
+      </ul>
+
+      <p class="essay-break" aria-hidden="true">&#11046; &nbsp; &#11046; &nbsp; &#11046;</p>
+
+      <h2 id="interstitial-zone"><a class="heading-link" href="#interstitial-zone">Meta-Utopia<span class="o">:</span> The Interstitial Zone</a></h2>
+
+      <p>In relation to the overarching system or &lsquo;world&rsquo;, the relevant attribute is the interstitial zone: the civilisational-scale commons, or the space <em>between</em> the sub-topias. This zone is defined by legibility, which is the ease with which diverse sub-topias and their internal value systems can be understood and navigated by each other and by the meta-system itself.</p>
+
+      <p><b>High Legibility:</b> means that the differences between communities are transparent, enabling effective governance, coordination and informed choice for citizens considering movement.</p>
+
+      <p><b>Low Legibility:</b> means that the meta-system cannot adequately see or model its parts, leading to systemic failures, unpredictable interactions, and difficulty for individuals in discerning the true nature of their potential destination or origin community.</p>
+
+      <p>AI can significantly enhance this legibility by providing universal value-mapping, real-time cultural translation and sophisticated conflict resolution protocols for the &lsquo;world&rsquo; as a whole.</p>
+
+      <h2 id="legibility"><a class="heading-link" href="#legibility">Legibility<span class="o">:</span> Extra-Cultural Predictive Processing</a></h2>
+
+      <h3>AI<span class="o">-</span>Increased Legibility</h3>
+
+      <p>AI could assist cultures in communicating with each other, and members in moving to the culture that suits them best:</p>
+
+      <ul>
+        <li><b>Universal Translation:</b> AI could instantly translate all laws, customs and social cues of a new community, offering a cultural assimilation toolkit that makes transitioning from one sub-topia to another nearly effortless.</li>
+        <li><b>Cultural Calculation:</b> Sophisticated AI-driven population markets could match individuals (demand) to the community (supply) that maximises their values.</li>
+      </ul>
+
+      <p>The result would be a hyper-fluid civilisation of cultural communities, where citizens can find the perfect utopia and seamlessly exit or enter based on their evolving preferences, maximising freedom of association and enabling rapid voluntary migration.</p>
+
+      <h3>AI<span class="o">-</span>Decreased Legibility</h3>
+
+      <p>AI capabilities could also result in a world of maximal obscurity.</p>
+
+      <ul>
+        <li><b>Black-Boxing:</b> If sub-topias use proprietary AI systems to run themselves, they could become black boxes: their internal workings, values and agreements opaque to outsiders and the meta-system.</li>
+        <li><b>Information Isolation:</b> AI could be used to strategically obscure or manipulate information (e.g. through hyper-personalised, filter-bubble realities), making it impossible for an individual to discern truth from fabrication, lowering the collective legibility of reality.</li>
+      </ul>
+
+      <p>This opacity would create information asymmetries that render any form of cross-cultural coordination virtually impossible. For the population, the cost of informed choice becomes prohibitive, as they cannot discern the true nature of a destination sub-topia, effectively leading to choice-paralysis and a <em>de facto</em> low-permeability system, even if borders are minimal.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>Utopia will consist of utopias”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../../">Article</a></li>
+        <li><a href="../../genealogy/">Genealogy</a></li>
+        <li><a href="../../diagrams/">Typologies</a></li>
+        <li><a href="../../lexicon/">Concepts</a></li>
+        <li><a href="../../sources/">Sources</a></li>
+        <li><a href="../../1.0/">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+
+  <div class="progress-pill progress-edge" data-start=".genealogy-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".genealogy-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.genealogy-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
+
+  <a class="site-title" href="../../">Mechanics of<br>Meta-Utopia</a>
+
+  <script src="../../assets/site.js?v=eb0b6127" data-base="../../"></script>
+  <script src="../../assets/tools.js?v=407b3f6a" data-search-scope=".essay" data-hide-until=".genealogy-top"></script>
+</body>
+</html>
