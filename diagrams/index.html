@@ -110,6 +110,19 @@
       }
     }
 
+    /* the title and description as one block, as wide as the title */
+    .diagram-head {
+      width: fit-content;
+      max-width: 100%;
+    }
+
+    /* a diagram's description runs the length of its title */
+    body:not([data-show="overview-main"]) .diagram-desc {
+      width: 0;
+      min-width: 100%;
+      max-width: none;
+    }
+
     /* the site name sits in the top-right corner, as on the other pages */
     .site-title,
     body.footer-in-view .site-title {
@@ -676,8 +689,10 @@
 
   <main class="page-main">
     <div class="diagram-top wide-top">
+    <div class="diagram-head">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Diagrams</a></h1>
     <p class="diagram-desc">Diagrams from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.</p>
+    </div>
     <div class="view-tabs" aria-label="Diagrams">
       <div class="tab-group" role="tablist" aria-label="All Diagrams">
         <button type="button" role="tab" aria-selected="true" data-show="overview-main">All Diagrams</button>
@@ -776,7 +791,20 @@
         document.title = d.title + ' \u2014 Mechanics of Meta-Utopia';
         desc.innerHTML = d.desc;
         history.replaceState(null, '', d.slug ? '#' + d.slug : location.pathname);
+        fitDesc();
       }
+
+      // a diagram's description runs exactly the length of its title's
+      // longest line, however the title wraps
+      function fitDesc() {
+        desc.style.minWidth = '';
+        if (show === 'overview-main') return;
+        var left = titleLink.getBoundingClientRect().left, right = left;
+        Array.prototype.forEach.call(titleLink.getClientRects(), function (r) { right = Math.max(right, r.right); });
+        desc.style.minWidth = Math.round(right - left) + 'px';
+      }
+      window.addEventListener('resize', fitDesc);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitDesc);
 
       viewBtns.forEach(function (b) {
         b.addEventListener('click', function () { show = b.dataset.show; render(); });
