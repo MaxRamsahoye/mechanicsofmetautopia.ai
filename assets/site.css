@@ -783,3 +783,39 @@ html.hide-scrollbar::-webkit-scrollbar {
   font-synthesis: none;
   -webkit-text-stroke: 0.35px currentColor;
 }
+
+/* ---------- version 1's orange: bands, links, accents ---------- */
+:root {
+  --link-blue: #e36843;
+  --selection-bg: rgba(227, 104, 67, 0.22);
+}
+
+/* the default band (b): orange, with dark text */
+html.band-purple:not([data-theme]) {
+  --link-blue: #e36843;
+  --selection-bg: rgba(227, 104, 67, 0.22);
+  --inverse-bg: #e36843;
+  --inverse-ink: #000000;
+  --band-bg: #e36843;
+}
+
+html[data-theme="dark"] {
+  --link-blue: #d15632;
+  --selection-bg: rgba(209, 86, 50, 0.35);
+  --band-bg: #d15632;
+  --inverse-bg: #d15632;
+  --inverse-ink: #000000;
+}
+
+/* on an orange band: dark text, links and controls */
+html.band-purple:not([data-theme]) :is(.on-band, .back-arrow, .theme-toggle, .top-nav, .over-band),
+html[data-theme="dark"] :is(.on-band, .back-arrow, .theme-toggle, .top-nav, .over-band) {
+  --canvas-ink: #000000;
+  --muted: rgba(0, 0, 0, 0.6);
+  --link-blue: #000000;
+  --selection-bg: rgba(255, 255, 255, 0.35);
+}
+
+html[data-theme="dark"] .on-band {
+  color: var(--canvas-ink);
+}

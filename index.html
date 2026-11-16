@@ -514,7 +514,7 @@
       align-items: center;
       justify-content: center;
       background: var(--canvas-bg);
-      transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.8s ease-in-out;
     }
 
     .loader.loader-done {
@@ -522,91 +522,25 @@
       pointer-events: none;
     }
 
-    .loader svg {
-      width: 72px;
-      height: 72px;
-      transform: rotate(-90deg);
-    }
-
-    .loader circle {
-      fill: none;
-      stroke-width: 1.6;
-    }
-
-    .loader-track {
-      stroke: var(--canvas-track-tint);
-    }
-
-    .loader-fill {
-      stroke: var(--link);
-    }
-
-    .loader.loader-stacking > svg:not(.loader-wheel) {
-      display: none;
-    }
-
-    /* the default loading screen: a simplified Emergence Model, its four
-       quadrants arriving one by one around a spinning wheel, which turns the
-       accent once the page is ready */
-    /* (in 2.5D: the disc laid flat and seen from above at an angle, with
-       its thickness beneath it, turning in its own plane) */
-    .loader svg.loader-wheel {
-      width: 120px;
+    .loader-gif {
+      width: 360px;
       height: auto;
-      overflow: visible;
-      transform: none;
-      --w1: #5b3f99;
-      --w2: #4d3590;
-      --w3: #432c7a;
-      --w4: #2f1d5c;
+      mix-blend-mode: multiply;
     }
 
-    .loader-wheel path {
-      stroke: var(--canvas-bg);
-      stroke-width: 2.5;
-      stroke-linejoin: round;
-      transform-box: fill-box;
-      transform-origin: center;
-      opacity: 0;
-      transition: fill 0.3s ease;
-      animation: loader-quadrant-in var(--dur) cubic-bezier(0.22, 1, 0.36, 1) var(--delay) forwards;
+    html[data-theme="dark"] .loader-gif {
+      filter: invert(1) hue-rotate(180deg);
+      mix-blend-mode: screen;
     }
 
-    /* its sides: the same quadrants, darker, without the gaps between them */
-    .loader-wheel .lw-side {
-      filter: brightness(0.62);
+    @media (max-width: 1024px) {
+      .loader-gif {
+        width: 200px;
+      }
     }
 
-    .loader-wheel .lw-side path {
-      stroke: none;
-    }
-
-    .loader-wheel path:nth-of-type(1) { fill: var(--w1); }
-    .loader-wheel path:nth-of-type(2) { fill: var(--w2); }
-    .loader-wheel path:nth-of-type(3) { fill: var(--w4); }
-    .loader-wheel path:nth-of-type(4) { fill: var(--w3); }
-
-    .loader.loader-complete .loader-wheel {
-      --w1: color-mix(in srgb, var(--link-blue) 45%, var(--canvas-bg));
-      --w2: color-mix(in srgb, var(--link-blue) 60%, var(--canvas-bg));
-      --w3: color-mix(in srgb, var(--link-blue) 78%, var(--canvas-bg));
-      --w4: var(--link-blue);
-    }
-
-    html[data-theme="dark"] .loader.loader-complete .loader-wheel {
-      --w1: var(--link-blue);
-      --w2: color-mix(in srgb, var(--link-blue) 70%, #6a3fc4);
-      --w3: color-mix(in srgb, var(--link-blue) 40%, #6a3fc4);
-      --w4: #6a3fc4;
-    }
-
-    @keyframes loader-spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes loader-quadrant-in {
-      from { opacity: 0; transform: scale(0.8); }
-      to { opacity: 1; transform: scale(1); }
+    body.loading-active {
+      overflow: hidden;
     }
 
     .page {
@@ -1991,8 +1925,8 @@
     .article-body .matrix-frames {
       max-width: 760px;
       margin: 0 0 48px;
-      padding-left: 20px;
-      border-left: 2px solid currentColor;
+      padding-left: 24px;
+      border-left: 4px solid var(--canvas-accent);
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 16px;
       line-height: 1.6;
@@ -2044,8 +1978,8 @@
     .matrix {
       position: relative;
       aspect-ratio: 1 / 1;
-      background: var(--canvas-ink);
-      border: 1px solid var(--canvas-ink);
+      background: var(--m-line);
+      border: 1px solid var(--m-line);
       overflow: hidden;
       --m-pad: 22px;
     }
@@ -2056,8 +1990,24 @@
       transition: background-color 0.3s ease;
     }
 
-    .m-cell:hover {
-      background: color-mix(in srgb, var(--canvas-ink) 7%, var(--canvas-bg));
+    /* each future its own tint on hover; the clash, all four */
+    .m-tl:hover { background: var(--m-tl); }
+    .m-tr:hover { background: var(--m-tr); }
+    .m-bl:hover { background: var(--m-bl); }
+    .m-br:hover { background: var(--m-br); }
+
+    .m-center::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--m-center);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .m-center:hover::before {
+      opacity: 1;
     }
 
     .m-tl, .m-tr, .m-bl, .m-br {
@@ -2076,7 +2026,7 @@
       width: 50%;
       height: 40%;
       z-index: 1;
-      border: 1px solid var(--canvas-ink);
+      border: 1px solid var(--m-line);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -2201,14 +2151,55 @@
         display: none;
       }
     }
+
+    /* ---------- version 1's orange: bands, links, accents ---------- */
+    :root {
+      --canvas-accent: #e36843;
+      --link-blue: #e36843;
+      --selection-bg: rgba(227, 104, 67, 0.22);
+      --note-highlight: #fde4d9;
+      /* the four futures matrix, as in version 1 */
+      --m-line: #e5e5e5;
+      --m-tl: #fee4d0;
+      --m-tr: #fdf8e2;
+      --m-bl: #ffeae7;
+      --m-br: #f5f6f7;
+      --m-center: conic-gradient(#fdf8e2 0deg 90deg, #f5f6f7 90deg 180deg, #ffeae7 180deg 270deg, #fee4d0 270deg 360deg);
+    }
+
+    /* the default band (b): orange, with dark text */
+    html.band-purple:not([data-theme]) {
+      --link-blue: #e36843;
+      --selection-bg: rgba(227, 104, 67, 0.22);
+      --note-highlight: #fde4d9;
+      --inverse-bg: #e36843;
+      --inverse-bg-alt: #dc5e35;
+      --inverse-ink: #000000;
+      --inverse-link: #000000;
+    }
+
+    html[data-theme="dark"] {
+      --canvas-accent: #d15632;
+      --link-blue: #d15632;
+      --selection-bg: rgba(209, 86, 50, 0.35);
+      --note-highlight: #3d2219;
+      --rule: #333333;
+      --inverse-bg: #d15632;
+      --inverse-bg-alt: #c04d2b;
+      --inverse-ink: #000000;
+      --inverse-link: #000000;
+      --m-line: #333333;
+      --m-tl: #3d2b1f;
+      --m-tr: #3a2e22;
+      --m-bl: #382422;
+      --m-br: #2a2b2c;
+      --m-center: conic-gradient(#3a2e22 0deg 90deg, #2a2b2c 90deg 180deg, #382422 180deg 270deg, #3d2b1f 270deg 360deg);
+    }
   </style>
 </head>
 <body>
   <div class="loader" aria-hidden="true">
-    <svg viewBox="0 0 30 30">
-      <circle class="loader-track" cx="15" cy="15" r="13"/>
-      <circle class="loader-fill" cx="15" cy="15" r="13"/>
-    </svg>
+    <img class="loader-gif" src="Hex%20Grid%20Circular.gif" alt="">
   </div>
   <noscript><style>.loader { display: none; }</style></noscript>
   <script>
@@ -2229,138 +2220,23 @@
         return;
       }
 
-      var ready = false;
-      var loaded = new Promise(function (resolve) {
-        if (document.readyState === 'complete') resolve(); else window.addEventListener('load', resolve);
-      });
-      var fonts = document.fonts ? document.fonts.ready : Promise.resolve();
-      Promise.all([loaded, fonts]).then(function () { ready = true; });
-
-      function finishLoader() {
+      // as in version 1: the hex grid turns until the page has loaded, holds
+      // for a moment, then fades away
+      document.body.classList.add('loading-active');
+      function finish() {
         // The page script plays the completion chord on this.
         window.loaderComplete = true;
         document.dispatchEvent(new Event('loadercomplete'));
-        // the finished stack (already blue from the moment the last slab
-        // landed) holds a moment, then fades away
-        var stacking = loader.classList.contains('loader-stacking');
-        var hold = stacking ? Math.max(200, 650 - (performance.now() - (window.loaderBlueAt || 0))) : 200;
-        loader.classList.add('loader-complete');
-        setTimeout(function () {
-          loader.classList.add('loader-done');
-          setTimeout(function () { loader.remove(); }, 700);
-        }, hold);
+        loader.classList.add('loader-done');
+        document.body.classList.remove('loading-active');
+        setTimeout(function () { loader.remove(); }, 800);
       }
-
-      // Default: the wheel. The ring stays as the fallback, for anyone who
-      // prefers reduced motion (or who sets localStorage.loader = 'ring').
-      var useRing = false;
-      try { useRing = localStorage.getItem('mm.loader') === 'ring'; } catch (e) {}
-      if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) useRing = true;
-      if (!useRing) {
-        var LEVELS = 4, STEP = 420, DUR = 700, MAX_WAIT = 7000;
-        // the four quadrants of a solid disc, clockwise from the upper left
-        var R = 48;
-        function at(rad, deg) { var t = deg * Math.PI / 180; return (rad * Math.cos(t)).toFixed(2) + ' ' + (rad * Math.sin(t)).toFixed(2); }
-        var paths = '';
-        for (var i = 0; i < LEVELS; i++) {
-          var a0 = 180 + i * 90, a1 = a0 + 90;
-          paths += '<path style="--delay:' + (i * STEP) + 'ms;--dur:' + DUR + 'ms" d="M' + at(R, a0) + 'A' + R + ' ' + R + ' 0 0 1 ' + at(R, a1) +
-            'L0 0Z"/>';
-        }
-        // laid flat (half as deep as wide), turning in its own plane, over
-        // copies of itself a step lower each, which make its thickness
-        var SPIN = '<animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="2.4s" begin="0s" repeatCount="indefinite"/>';
-        var disc = function (dy, cls) {
-          return '<g' + (cls ? ' class="' + cls + '"' : '') + ' transform="translate(0 ' + dy + ')"><g transform="scale(1 0.5)"><g>' + SPIN + paths + '</g></g></g>';
-        };
-        var DEPTH = 10, layers = '';
-        for (var d = DEPTH; d >= 1; d--) layers += disc(d, 'lw-side');
-        loader.insertAdjacentHTML('beforeend', '<svg class="loader-wheel" viewBox="-52 -28 104 66">' + layers + disc(0) + '</svg>');
-        loader.classList.add('loader-stacking');
-        var built = (LEVELS - 1) * STEP + DUR + 120;
-        var t0 = performance.now();
-        // a soft note as each quadrant arrives, rising a step each time (the
-        // browser may hold sound back until the page has been interacted with)
-        var layerCtx = null;
-        function layerSound(i) {
-          try {
-            if (!layerCtx) {
-              var AC = window.AudioContext || window.webkitAudioContext;
-              if (!AC) return;
-              layerCtx = new AC();
-            }
-            if (layerCtx.state === 'suspended') layerCtx.resume();
-            var when = layerCtx.currentTime;
-            var freq = [130.81, 164.81, 196.00, 261.63][i % 4];   // C3 E3 G3 C4
-            [[freq, 0.05, 0.7], [freq * 2, 0.012, 0.35]].forEach(function (partial) {
-              var osc = layerCtx.createOscillator();
-              osc.type = 'sine';
-              osc.frequency.value = partial[0];
-              var gain = layerCtx.createGain();
-              gain.gain.setValueAtTime(0, when);
-              gain.gain.linearRampToValueAtTime(partial[1], when + 0.008);
-              gain.gain.exponentialRampToValueAtTime(0.0001, when + partial[2]);
-              osc.connect(gain).connect(layerCtx.destination);
-              osc.start(when);
-              osc.stop(when + partial[2]);
-            });
-          } catch (e) {}
-        }
-        for (var n = 0; n < LEVELS; n++) {
-          setTimeout(layerSound.bind(null, n), n * STEP + DUR * 0.55);
-        }
-        // turn the accent the moment the last quadrant arrives (the ease-out
-        // has it settled well before its animation formally ends)
-        setTimeout(function () {
-          window.loaderBlueAt = performance.now();
-          loader.classList.add('loader-complete');
-        }, (LEVELS - 1) * STEP + DUR * 0.55);
-        (function wait() {
-          var elapsed = performance.now() - t0;
-          if (elapsed >= built && (ready || elapsed >= MAX_WAIT)) finishLoader();
-          else setTimeout(wait, 60);
-        })();
-        return;
-      }
-
-      var fill = loader.querySelector('.loader-fill');
-      var LENGTH = 2 * Math.PI * 13;
-      var FILL_MS = 1400;
-      var MAX_MS = 5000;
-      var start = performance.now();
-      var finished = false;
-
-      fill.style.strokeDasharray = LENGTH + ' ' + LENGTH;
-      fill.style.strokeDashoffset = LENGTH;
-
-      function draw(pct) {
-        if (pct >= 100) {
-          fill.style.strokeDasharray = 'none';
-        } else {
-          fill.style.strokeDashoffset = LENGTH * (1 - pct / 100);
-        }
-      }
-
-      function finish() {
-        if (finished) return;
-        finished = true;
-        finishLoader();
-      }
-
-      // One smooth, continuous fill. If the page is still loading when the
-      // ring closes, it simply stays full until it is ready.
-      function tick(now) {
-        var elapsed = now - start;
-        var t = Math.min(1, elapsed / FILL_MS);
-        var eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-        draw(eased * 100);
-        if (t >= 1 && (ready || elapsed >= MAX_MS)) finish(); else requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
+      function start() { setTimeout(finish, 1500); }
+      if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
     })();
   </script>
   <div class="frame-header">
-    <a class="site-title" href="./">Meta-<br>Utopia</a>
+    <a class="site-title" href="./">Mechanics of<br>Meta-Utopia</a>
 
     <nav class="toc" aria-label="Contents" data-upcoming='[]'>
       <p class="toc-label">The Mechanics of Meta-Utopia</p>
@@ -2423,7 +2299,7 @@
     </button>
   </div>
 
-  <a class="corner-title" href="./" aria-hidden="true" tabindex="-1">Meta-<br>Utopia</a>
+  <a class="corner-title" href="./" aria-hidden="true" tabindex="-1">Mechanics of<br>Meta-Utopia</a>
   <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
     <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
     <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
