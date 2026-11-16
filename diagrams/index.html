@@ -436,6 +436,17 @@
       font-weight: 600;
     }
 
+    /* the key to the X markers, after the figure label */
+    .risk-key {
+      margin-left: 32px;
+      white-space: nowrap;
+    }
+
+    .risk-caption .risk-key-x {
+      font-weight: 700;
+      color: var(--risk-x);
+    }
+
     /* on wide windows the scope labels and the Severity label hang in the
        margins, so the four columns take the column's full width */
     @media (max-width: 600px) {
@@ -1035,7 +1046,7 @@
                   <div class="risk-label risk-label-x" style="grid-column: 3">notable</div>
                   <div class="risk-label risk-label-x" style="grid-column: 4">significant</div>
                   <div class="risk-label risk-label-x" style="grid-column: 5">extreme</div>
-                  <p class="risk-caption"><b>Figure.</b> Qualitative Cultural Risk Categories</p>
+                  <p class="risk-caption"><b>Figure.</b> Qualitative Cultural Risk Categories<span class="risk-key"><b class="risk-key-x">X</b> = Cultural Existential Risk</span></p>
                 </div>
               </figure>
       </div>
