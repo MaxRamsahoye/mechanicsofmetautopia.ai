@@ -276,15 +276,16 @@
     }
 
     .risk-figure {
-      min-width: 860px;
+      /* wide enough for four columns that each hold their longest heading
+         on one line (--risk-col is measured by the script below) */
+      width: max-content;
       margin: 0;
-      padding-right: 24px;
       font-family: 'IBM Plex Sans', sans-serif;
     }
 
     .risk-grid {
       display: grid;
-      grid-template-columns: 104px repeat(4, minmax(0, 1fr)) 124px;
+      grid-template-columns: 104px repeat(4, max(var(--risk-col, 200px), var(--wide-col) / 4)) 112px;
       grid-template-rows: auto repeat(4, auto) auto;
     }
 
@@ -303,7 +304,7 @@
       grid-column: 6;
       grid-row: 5;
       align-self: end;
-      padding: 0 0 0 52px;
+      padding: 0 0 0 44px;
       transform: translateY(50%);
     }
 
@@ -392,6 +393,7 @@
     }
 
     .risk-cell h3 {
+      white-space: nowrap;
       margin: 0 0 6px;
       font-family: inherit;
       font-size: 15px;
@@ -418,9 +420,13 @@
       color: var(--risk-x);
     }
 
+    /* the figure label sits just above the grid, flush with its right edge */
     .risk-caption {
-      margin: 48px 0 0;
-      font-family: 'IBM Plex Sans', sans-serif;
+      grid-column: 2 / 6;
+      grid-row: 1;
+      align-self: end;
+      margin: 0 0 14px;
+      text-align: right;
       font-size: 15px;
     }
 
@@ -430,18 +436,25 @@
 
     /* on wide windows the scope labels and the Severity label hang in the
        margins, so the four columns take the column's full width */
+    @media (max-width: 600px) {
+      .risk-grid {
+        grid-template-columns: 104px repeat(4, var(--risk-col, 200px)) 112px;
+      }
+    }
+
+    /* the grid may run on into the right margin, up to the window's edge */
+    @media (min-width: 601px) {
+      .risk-scroll {
+        margin-right: calc((var(--wide-col) - 100vw) / 2 + 16px);
+      }
+    }
+
     @media (min-width: 1440px) {
       .risk-scroll {
-        margin: 0 -124px 0 -104px;
+        margin-left: -104px;
       }
 
-      .risk-figure {
-        padding-right: 0;
-      }
 
-      .risk-caption {
-        padding-left: 104px;
-      }
     }
 
     /* its long title is set a little smaller, on one line across the column */
@@ -1020,8 +1033,8 @@
                   <div class="risk-label risk-label-x" style="grid-column: 3">notable</div>
                   <div class="risk-label risk-label-x" style="grid-column: 4">significant</div>
                   <div class="risk-label risk-label-x" style="grid-column: 5">extreme</div>
+                  <p class="risk-caption"><b>Figure.</b> Qualitative Cultural Risk Categories</p>
                 </div>
-                <figcaption class="risk-caption"><b>Figure.</b> Qualitative Cultural Risk Categories</figcaption>
               </figure>
       </div>
     </section>
@@ -1104,6 +1117,26 @@
         if (TEXT[k].slug && location.hash === '#' + TEXT[k].slug) show = k + '-main';
       });
       render();
+    })();
+
+    // Typology 2: every column is as wide as the longest cell heading needs
+    // to sit on one line (and wider where the page has room)
+    (function () {
+      var fig = document.querySelector('.risk-figure');
+      if (!fig) return;
+      function fit() {
+        if (!fig.offsetParent) return;
+        var widest = 0;
+        fig.querySelectorAll('.risk-cell h3').forEach(function (h) { widest = Math.max(widest, h.scrollWidth); });
+        var cell = fig.querySelector('.risk-cell');
+        var cs = getComputedStyle(cell);
+        var pad = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight) + parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+        fig.style.setProperty('--risk-col', Math.ceil(widest + pad + 2) + 'px');
+      }
+      document.querySelectorAll('[data-show], [data-go]').forEach(function (b) { b.addEventListener('click', function () { setTimeout(fit, 0); }); });
+      window.addEventListener('resize', fit);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+      fit();
     })();
 
     // the menu in the left margin fades in while the pointer is within the
