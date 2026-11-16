@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Diagrams from The Mechanics of Meta-Utopia.">
+  <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png">
+  <script>
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Diagrams — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Diagrams — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Diagrams from The Mechanics of Meta-Utopia.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/diagrams/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../assets/site.css?v=ab0ac983" rel="stylesheet">
+  <style>
+    /* ---------- the Models page pattern from complexemergencemodel.systems ---------- */
+
+    /* the top section, on the page's own background */
+    .diagram-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 80px;
+    }
+
+    .diagram-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -80px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--canvas-bg);
+      z-index: -1;
+    }
+
+    .site-footer {
+      display: none;
+    }
+
+    /* with no band, the corner controls and the top menu keep the page's
+       own colours whatever the band setting */
+    html:not([data-theme]) body.no-band :is(.back-arrow, .theme-toggle, .top-nav, .over-band) {
+      --canvas-ink: #000000;
+      --muted: #8c8c8c;
+      --link-blue: #e36843;
+    }
+
+    html[data-theme="dark"] body.no-band :is(.back-arrow, .theme-toggle, .top-nav, .over-band) {
+      --canvas-ink: #ffffff;
+      --muted: #8c8c8c;
+      --link-blue: #d15632;
+    }
+
+    .diagram-desc {
+      max-width: 760px;
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 600px) {
+      .diagram-top::before {
+        top: -140px;
+      }
+    }
+
+    /* the site name sits in the top-right corner, as on the other pages */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the views: all the diagrams, or one of them */
+    .view-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px;
+      row-gap: 18px;
+      margin: 48px 0 0;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tab-group {
+      display: flex;
+      gap: 28px;
+    }
+
+    .view-tabs button {
+      padding: 0 0 6px;
+      border: none;
+      border-bottom: 1.5px solid transparent;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      text-transform: inherit;
+      white-space: nowrap;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .view-tabs button:hover,
+    .view-tabs button[aria-selected="true"] {
+      color: var(--canvas-ink);
+    }
+
+    .view-tabs button[aria-selected="true"] {
+      border-bottom-color: currentColor;
+    }
+
+    /* in the margin to the left wherever it fits (elsewhere a row above) */
+    @media (min-width: 1440px) {
+      .view-tabs {
+        position: absolute;
+        top: 50%;
+        left: calc((var(--wide-col) - 100vw) / 2 + 24px);
+        font-size: 11px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+        margin: 0;
+        transform: translateY(-50%);
+      }
+
+      .tab-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+      }
+    }
+
+    /* in the margin, the menu is out of sight until the pointer comes into
+       the left fifth of the window */
+    @media (hover: hover) {
+      body.side-menu .view-tabs {
+        opacity: 0;
+        transition: opacity 0.35s ease;
+      }
+
+      body.side-menu.menu-near .view-tabs,
+      body.side-menu .view-tabs:focus-within {
+        opacity: 1;
+      }
+    }
+
+    .overview-view,
+    .attractors-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      animation: view-in 0.4s ease;
+    }
+
+    body[data-show="overview-main"] .overview-view,
+    body[data-show="attractors-main"] .attractors-view {
+      display: block;
+    }
+
+    @keyframes view-in {
+      from { opacity: 0; }
+    }
+
+    /* All Diagrams: a card for each diagram, with a small drawing of it */
+    .ov-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 32px;
+    }
+
+    .ov-card {
+      display: flex;
+      flex-direction: column;
+      padding: 26px 26px 28px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      background: none;
+      font: inherit;
+      color: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .ov-card:hover,
+    .ov-card:focus-visible {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      outline: none;
+    }
+
+    .ov-thumb {
+      display: block;
+      width: 100%;
+      height: 170px;
+      margin-bottom: 24px;
+    }
+
+    .ov-thumb .q { stroke: var(--m-line); stroke-width: 1.5; }
+    .ov-thumb .q-tl { fill: var(--m-tl); }
+    .ov-thumb .q-tr { fill: var(--m-tr); }
+    .ov-thumb .q-bl { fill: var(--m-bl); }
+    .ov-thumb .q-br { fill: var(--m-br); }
+    .ov-thumb .q-c { fill: var(--canvas-bg); }
+
+    .ov-kicker {
+      margin: 0 0 8px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .ov-title {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .ov-desc {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    /* the cards keep to the text column on narrower windows; the diagram
+       keeps the wide column, as the top section does */
+    @media (max-width: 1180px) {
+      .overview-view {
+        width: auto;
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 1000px) {
+      .ov-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 640px) {
+      .ov-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ---------- the matrix, as in the article ---------- */
+
+    :root {
+      --m-line: #e5e5e5;
+      --m-tl: #fee4d0;
+      --m-tr: #fdf8e2;
+      --m-bl: #ffeae7;
+      --m-br: #f5f6f7;
+      --m-center: conic-gradient(#fdf8e2 0deg 90deg, #f5f6f7 90deg 180deg, #ffeae7 180deg 270deg, #fee4d0 270deg 360deg);
+      --canvas-accent: #e36843;
+    }
+
+    html[data-theme="dark"] {
+      --m-line: #333333;
+      --m-tl: #3d2b1f;
+      --m-tr: #3a2e22;
+      --m-bl: #382422;
+      --m-br: #2a2b2c;
+      --m-center: conic-gradient(#3a2e22 0deg 90deg, #2a2b2c 90deg 180deg, #382422 180deg 270deg, #3d2b1f 270deg 360deg);
+      --canvas-accent: #d15632;
+    }
+
+    /* ---------- the four futures matrix ---------- */
+
+    .matrix-figure {
+      margin: 72px 0 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .matrix-frames {
+      max-width: 760px;
+      margin: 0 0 48px;
+      padding-left: 24px;
+      border-left: 4px solid var(--canvas-accent);
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .matrix-wrap {
+      position: relative;
+      max-width: 760px;
+      padding: 0 0 64px 60px;
+    }
+
+    .matrix-axis {
+      position: absolute;
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+    }
+
+    .matrix-axis-y {
+      left: 0;
+      top: 0;
+      bottom: 64px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      text-align: center;
+    }
+
+    .matrix-axis-x {
+      left: 60px;
+      right: 0;
+      bottom: 0;
+      text-align: center;
+    }
+
+    .matrix-tick {
+      position: absolute;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .matrix-tick.y-high { left: 26px; top: calc((100% - 64px) * 0.15); }
+    .matrix-tick.y-low { left: 26px; top: calc((100% - 64px) * 0.85 - 1em); }
+    .matrix-tick.x-low { bottom: 34px; left: calc(60px + (100% - 60px) * 0.15); }
+    .matrix-tick.x-high { bottom: 34px; right: calc((100% - 60px) * 0.15); }
+
+    /* four L-shaped futures around the central clash; the hairlines are the
+       ink showing through the gaps between them */
+    .matrix {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      background: var(--m-line);
+      border: 1px solid var(--m-line);
+      overflow: hidden;
+      --m-pad: 22px;
+    }
+
+    .m-cell {
+      position: absolute;
+      background: var(--canvas-bg);
+      transition: background-color 0.3s ease;
+    }
+
+    /* each future its own tint on hover; the clash, all four */
+    .m-tl:hover { background: var(--m-tl); }
+    .m-tr:hover { background: var(--m-tr); }
+    .m-bl:hover { background: var(--m-bl); }
+    .m-br:hover { background: var(--m-br); }
+
+    .m-center::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--m-center);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+    }
+
+    .m-center:hover::before {
+      opacity: 1;
+    }
+
+    .m-tl, .m-tr, .m-bl, .m-br {
+      width: calc(50% - 0.5px);
+      height: calc(50% - 0.5px);
+    }
+
+    .m-tl { left: 0; top: 0; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 60%, 50% 100%, 0 100%); }
+    .m-tr { right: 0; top: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 50% 60%, 0 60%); }
+    .m-bl { left: 0; bottom: 0; clip-path: polygon(0 0, 50% 0, 50% 40%, 100% 40%, 100% 100%, 0 100%); }
+    .m-br { right: 0; bottom: 0; clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%, 0 40%, 50% 40%); }
+
+    .m-center {
+      left: 25%;
+      top: 30%;
+      width: 50%;
+      height: 40%;
+      z-index: 1;
+      border: 1px solid var(--m-line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .m-text {
+      position: absolute;
+      width: calc(100% - 2 * var(--m-pad));
+      transition: transform 0.3s ease;
+    }
+
+    .m-cell:hover .m-text {
+      transform: translateY(-3px);
+    }
+
+    .m-tl .m-text { top: var(--m-pad); left: var(--m-pad); }
+    .m-tr .m-text { top: var(--m-pad); right: var(--m-pad); text-align: right; }
+    .m-bl .m-text { bottom: var(--m-pad); left: var(--m-pad); }
+    .m-br .m-text { bottom: var(--m-pad); right: var(--m-pad); text-align: right; }
+    .m-center .m-text { position: relative; padding: 0 var(--m-pad); width: auto; }
+
+    html .matrix .m-text h4 {
+      margin: 0 0 3px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+      line-height: 1.25;
+      -webkit-text-stroke: 0;
+    }
+
+    html.serif-headings .matrix .m-text h4 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    .m-sub {
+      display: block;
+      margin: 0 0 10px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    .m-text p {
+      max-width: none;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 16px;
+      line-height: 1.32;
+    }
+
+    /* narrower windows: the titles only */
+    @media (max-width: 1180px) {
+      .m-text p {
+        display: none;
+      }
+
+      .matrix {
+        --m-pad: 14px;
+      }
+
+      html .matrix .m-text h4 {
+        font-size: 15px;
+      }
+
+      html.serif-headings .matrix .m-text h4 {
+        font-size: 18px;
+      }
+
+      .m-sub {
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .matrix-wrap {
+        padding: 0 0 56px 52px;
+      }
+
+      .matrix-axis {
+        font-size: 14px;
+      }
+
+      .matrix-axis-y {
+        bottom: 56px;
+      }
+
+      .matrix-axis-x {
+        left: 52px;
+      }
+
+      .matrix-tick {
+        font-size: 11px;
+      }
+
+      .matrix-tick.y-high, .matrix-tick.y-low { left: 21px; }
+      .matrix-tick.y-high { top: calc((100% - 56px) * 0.15); }
+      .matrix-tick.y-low { top: calc((100% - 56px) * 0.85 - 1em); }
+      .matrix-tick.x-low { bottom: 30px; left: calc(52px + (100% - 52px) * 0.15); }
+      .matrix-tick.x-high { bottom: 30px; right: calc((100% - 52px) * 0.15); }
+
+      .matrix {
+        aspect-ratio: 1 / 1;
+        --m-pad: 10px;
+      }
+
+      html .matrix .m-text h4 {
+        font-size: 13px;
+      }
+
+      html.serif-headings .matrix .m-text h4 {
+        font-size: 15px;
+      }
+
+      .m-sub {
+        display: none;
+      }
+    }
+
+
+    /* ---------- scaled up for this page ---------- */
+
+    .attractors-view .matrix-figure {
+      margin: 0;
+    }
+
+    .attractors-view .matrix-frames {
+      max-width: 860px;
+      margin-bottom: 64px;
+      font-size: 17px;
+    }
+
+    .attractors-view .matrix-wrap {
+      max-width: none;
+      padding: 0 0 80px 76px;
+    }
+
+    .attractors-view .matrix-axis { font-size: 19px; }
+    .attractors-view .matrix-axis-y { bottom: 80px; }
+    .attractors-view .matrix-axis-x { left: 76px; }
+    .attractors-view .matrix-tick { font-size: 15px; }
+    .attractors-view .matrix-tick.y-high { left: 34px; top: calc((100% - 80px) * 0.15); }
+    .attractors-view .matrix-tick.y-low { left: 34px; top: calc((100% - 80px) * 0.85 - 1em); }
+    .attractors-view .matrix-tick.x-low { bottom: 44px; left: calc(76px + (100% - 76px) * 0.15); }
+    .attractors-view .matrix-tick.x-high { bottom: 44px; right: calc((100% - 76px) * 0.15); }
+
+    .attractors-view .matrix {
+      aspect-ratio: 1.25 / 1;
+      --m-pad: 32px;
+    }
+
+    html .attractors-view .matrix .m-text h4 { font-size: 22px; margin-bottom: 4px; }
+    html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 27px; }
+    .attractors-view .m-sub { font-size: 20px; margin-bottom: 14px; }
+
+    .attractors-view .m-text p {
+      display: block;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 1180px) {
+      .attractors-view .matrix {
+        aspect-ratio: 1.1 / 1;
+        --m-pad: 24px;
+      }
+
+      html .attractors-view .matrix .m-text h4 { font-size: 19px; }
+      html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 23px; }
+      .attractors-view .m-sub { font-size: 18px; margin-bottom: 10px; }
+      .attractors-view .m-text p { font-size: 16px; }
+    }
+
+    @media (max-width: 900px) {
+      .attractors-view .m-text p {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .attractors-view .matrix-wrap { padding: 0 0 56px 52px; }
+      .attractors-view .matrix-axis { font-size: 14px; }
+      .attractors-view .matrix-axis-y { bottom: 56px; }
+      .attractors-view .matrix-axis-x { left: 52px; }
+      .attractors-view .matrix-tick { font-size: 11px; }
+      .attractors-view .matrix-tick.y-high, .attractors-view .matrix-tick.y-low { left: 21px; }
+      .attractors-view .matrix-tick.y-high { top: calc((100% - 56px) * 0.15); }
+      .attractors-view .matrix-tick.y-low { top: calc((100% - 56px) * 0.85 - 1em); }
+      .attractors-view .matrix-tick.x-low { bottom: 30px; left: calc(52px + (100% - 52px) * 0.15); }
+      .attractors-view .matrix-tick.x-high { bottom: 30px; right: calc((100% - 52px) * 0.15); }
+      .attractors-view .matrix { aspect-ratio: 1 / 1; --m-pad: 10px; }
+      html .attractors-view .matrix .m-text h4 { font-size: 13px; }
+      html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 15px; }
+      .attractors-view .m-sub { display: none; }
+    }
+  </style>
+</head>
+<body class="no-band" data-show="overview-main">
+  <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="diagram-top wide-top">
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Diagrams</a></h1>
+    <p class="diagram-desc">Diagrams from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.</p>
+    <div class="view-tabs" aria-label="Diagrams">
+      <div class="tab-group" role="tablist" aria-label="All Diagrams">
+        <button type="button" role="tab" aria-selected="true" data-show="overview-main">All Diagrams</button>
+      </div>
+      <div class="tab-group" role="tablist" aria-label="The Four Post-AGI Cultural Attractor States">
+        <button type="button" role="tab" aria-selected="false" data-show="attractors-main">Four Attractors</button>
+      </div>
+    </div>
+    </div>
+
+    <section class="overview-view" aria-label="All Diagrams">
+      <div class="ov-grid">
+        <button type="button" class="ov-card" data-go="attractors-main">
+          <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
+            <rect class="q q-tl" x="75" y="10" width="75" height="80"/>
+            <rect class="q q-tr" x="150" y="10" width="75" height="80"/>
+            <rect class="q q-bl" x="75" y="90" width="75" height="80"/>
+            <rect class="q q-br" x="150" y="90" width="75" height="80"/>
+            <rect class="q q-c" x="112.5" y="58" width="75" height="64"/>
+          </svg>
+          <p class="ov-kicker">Diagram 1</p>
+          <h2 class="ov-title">The Four Post-AGI Cultural Attractor States</h2>
+          <p class="ov-desc">Four futures for post-AGI cultural dynamics, mapped by cultural integrity and membrane permeability.</p>
+        </button>
+      </div>
+    </section>
+
+    <section class="attractors-view" aria-label="The Four Post-AGI Cultural Attractor States">
+
+              <figure class="matrix-figure" aria-label="Four futures: a typology of post-AGI cultural attractor states">
+                <p class="matrix-frames"><em>Unified Frames</em>: 1. Duettmann's <a href="https://foresightinstitute.substack.com/p/defend-physical" target="_blank" rel="noopener">'multi-polar active shields'</a> and Clarke's <a href="https://80000hours.org/problem-profiles/risks-of-stable-totalitarianism/" target="_blank" rel="noopener">'stable totalitarianism'</a> (top left). 2. Nozick's <a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">‘meta-utopia’</a> (top right) and Barrat-Douglas' <a href="https://strangecities.substack.com/p/the-choice-transition" target="_blank" rel="noopener">'choice transition’</a> and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener">'societal uplift'</a> 3. Hanson's <a href="https://quillette.com/2024/04/11/beware-cultural-drift/" target="_blank" rel="noopener">'global monoculture'</a> and Drexler's <a href="https://en.wikipedia.org/wiki/Gray_goo" target="_blank" rel="noopener">'gray goo'</a> (bottom right) 4. Bostrom's (technological) <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener">'permanent plateau'</a> and Ord's <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">'unrecoverable collapse'</a> (bottom left)</p>
+                <div class="matrix-wrap">
+                  <div class="matrix-axis matrix-axis-y">Cultural Integrity</div>
+                  <div class="matrix-tick y-high">High</div>
+                  <div class="matrix-tick y-low">Low</div>
+                  <div class="matrix">
+                    <div class="m-cell m-tl"><div class="m-text"><h4>Meta-Dystopian Enclosure</h4><span class="m-sub">(Localised lock-ins)</span><p>The transition to a defense-dominant, maximally decentralised world-system where every sub-topia is a completely closed system with memetic transmission and physical migration rendered functionally impossible.</p></div></div>
+                    <div class="m-cell m-tr"><div class="m-text"><h4>Meta-Utopian Uplift</h4><span class="m-sub">(Epistemic Equilibria)</span><p>The transition to a semi-compartmentalised world-system with boundaries open enough for multi-culturalism, freedom of movement and moral progress, but sufficiently protected to prevent hostile cultural takeover.</p></div></div>
+                    <div class="m-cell m-bl"><div class="m-text"><h4>Cultural Collapse</h4><span class="m-sub">(Permanent Plateau)</span><p>A null state where all sub-topias have lost their coherent, collective, cultural identity and localised lock-downs prevent the creation of new sub-topias, leading to civilisational stagnation by default.</p></div></div>
+                    <div class="m-cell m-br"><div class="m-text"><h4>Mono-Cultural Takeover</h4><span class="m-sub">(Gray Goo)</span><p>An expansionist culture or an invasive memetic replicator breaks out of one sub-topia and colonises all others, proliferating to the point of extreme cultural homogeneity across the entire civilisation.</p></div></div>
+                    <div class="m-cell m-center"><div class="m-text"><h4>Clash of Civilisations</h4><span class="m-sub">(Cultural Competition and Conflict)</span><p>An underdetermined, hybrid condition – exhibiting proto-characteristics of mono-culture, meta-dystopia and cultural collapse – where multiple cultures compete for survival, sovereignty and supremacy.</p></div></div>
+                  </div>
+                  <div class="matrix-axis matrix-axis-x">Membrane Permeability</div>
+                  <div class="matrix-tick x-low">Low</div>
+                  <div class="matrix-tick x-high">High</div>
+                </div>
+              </figure>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>Utopia will consist of utopias”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../">Article</a></li>
+        <li><a href="../diagrams/">Diagrams</a></li>
+        <li><a href="../lexicon/">Concepts</a></li>
+        <li><a href="../sources/">Sources</a></li>
+        <li><a href="../1.0/">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".diagram-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    // the views: All Diagrams, or one diagram at its own address
+    (function () {
+      var body = document.body;
+      var titleLink = document.querySelector('.diagram-top .page-title a');
+      var desc = document.querySelector('.diagram-desc');
+      var viewBtns = Array.prototype.slice.call(document.querySelectorAll('.view-tabs [data-show]'));
+      var TEXT = {
+        overview: { title: 'Diagrams', slug: '', desc: 'Diagrams from <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.' },
+        attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
+      };
+      var show = 'overview-main';
+
+      function render() {
+        var d = TEXT[show.split('-')[0]];
+        body.setAttribute('data-show', show);
+        viewBtns.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.show === show ? 'true' : 'false'); });
+        titleLink.textContent = d.title;
+        document.title = d.title + ' \u2014 Mechanics of Meta-Utopia';
+        desc.innerHTML = d.desc;
+        history.replaceState(null, '', d.slug ? '#' + d.slug : location.pathname);
+      }
+
+      viewBtns.forEach(function (b) {
+        b.addEventListener('click', function () { show = b.dataset.show; render(); });
+      });
+      document.querySelectorAll('.ov-card[data-go]').forEach(function (c) {
+        c.addEventListener('click', function () { show = c.dataset.go; render(); window.scrollTo({ top: 0 }); });
+      });
+
+      // an address naming a diagram opens it
+      Object.keys(TEXT).forEach(function (k) {
+        if (TEXT[k].slug && location.hash === '#' + TEXT[k].slug) show = k + '-main';
+      });
+      render();
+    })();
+
+    // the menu in the left margin fades in while the pointer is within the
+    // left fifth of the window (not when the menu is a row above the page)
+    (function () {
+      var tabs = document.querySelector('.view-tabs');
+      function sideMode() {
+        var on = getComputedStyle(tabs).position === 'absolute' && getComputedStyle(tabs).flexDirection === 'column';
+        document.body.classList.toggle('side-menu', on);
+      }
+      document.addEventListener('mousemove', function (e) {
+        sideMode();
+        document.body.classList.toggle('menu-near', e.clientX < window.innerWidth / 5);
+      }, { passive: true });
+      document.documentElement.addEventListener('mouseleave', function () { document.body.classList.remove('menu-near'); });
+      window.addEventListener('resize', sideMode);
+      sideMode();
+    })();
+
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.diagram-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
+
+  <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
+
+  <script src="../assets/site.js?v=4b65a367" data-base="../"></script>
+  <script src="../assets/tools.js?v=a555ac5a" data-hide-until=".diagram-top"></script>
+</body>
+</html>

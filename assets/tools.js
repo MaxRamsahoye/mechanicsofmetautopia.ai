@@ -69,7 +69,7 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Concepts', 'lexicon/'], ['Sources', 'sources/'],
+    var pages = [['Article', ''], ['Diagrams', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'],
       ['Four Attractor States', 'https://maxramsahoye.github.io/momu.civilisationdesignerconsole/'],
       ['Cultural Dynamics Simulator', 'https://maxramsahoye.github.io/momu.culturaldynamicssimulator/']];
     var nav = document.createElement('nav');
