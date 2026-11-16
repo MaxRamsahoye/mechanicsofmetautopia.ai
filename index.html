@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link id="favicon-ico" rel="icon" href="favicon/favicon-light.ico" sizes="any">
-  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32-light.png">
-  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="favicon/favicon-192-light.png">
-  <link id="favicon-apple" rel="apple-touch-icon" href="favicon/apple-touch-icon-light.png">
+  <link id="favicon-ico" rel="icon" href="favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="favicon/apple-touch-icon-light.png?v=2">
   <script>
     (function () {
       try {
@@ -42,10 +42,10 @@
         }
         if (t === 'dark') {
           var suffix = 'dark';
-          document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico';
-          document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png';
-          document.getElementById('favicon-192').href = 'favicon/favicon-192-' + suffix + '.png';
-          document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png';
+          document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico?v=2';
+          document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png?v=2';
+          document.getElementById('favicon-192').href = 'favicon/favicon-192-' + suffix + '.png?v=2';
+          document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png?v=2';
         }
       } catch (e) {}
       try {
@@ -3181,10 +3181,10 @@
 
       function setFavicons(isDark) {
         var suffix = isDark ? 'dark' : 'light';
-        document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico';
-        document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png';
-        document.getElementById('favicon-192').href = 'favicon/favicon-192-' + suffix + '.png';
-        document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png';
+        document.getElementById('favicon-ico').href = 'favicon/favicon-' + suffix + '.ico?v=2';
+        document.getElementById('favicon-32').href = 'favicon/favicon-32-' + suffix + '.png?v=2';
+        document.getElementById('favicon-192').href = 'favicon/favicon-192-' + suffix + '.png?v=2';
+        document.getElementById('favicon-apple').href = 'favicon/apple-touch-icon-' + suffix + '.png?v=2';
       }
 
       function currentTheme() {
