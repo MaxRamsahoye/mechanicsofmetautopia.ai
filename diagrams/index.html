@@ -381,6 +381,20 @@
       font-weight: 600;
     }
 
+    /* its long title is set a little smaller, on one line across the column */
+    @media (min-width: 601px) {
+      body[data-show="risks-main"] .diagram-top .page-title {
+        font-size: min(42px, calc(var(--wide-col) / 25.6));
+        white-space: nowrap;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body[data-show="risks-main"] .diagram-top .page-title {
+        font-size: 30px;
+      }
+    }
+
     .ov-thumb .rk { fill: none; stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1.2; }
     .ov-thumb .rk-x { stroke: var(--risk-x); stroke-width: 2.2; stroke-linecap: round; }
 
