@@ -10,6 +10,13 @@
   <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png">
   <script>
     try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
       var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
       // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
       var fromSite = false;
@@ -1330,6 +1337,6 @@
     })();
   </script>
   <script src="../assets/site.js?v=4b65a367" data-base="../"></script>
-  <script src="../assets/tools.js?v=224e6da6" data-search-scope="dl.lexicon, .curated" data-hide-until=".lexicon-top"></script>
+  <script src="../assets/tools.js?v=3e9222ea" data-search-scope="dl.lexicon, .curated" data-hide-until=".lexicon-top"></script>
 </body>
 </html>

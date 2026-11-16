@@ -56,7 +56,10 @@
     '  border-bottom: 1.5px solid transparent; transition: color 0.2s ease, border-color 0.2s ease; }',
     '.top-nav a:hover { color: var(--canvas-ink); }',
     '.top-nav a[aria-current="page"] { color: var(--canvas-ink); border-bottom-color: currentColor; }',
-    '@media (max-width: 899px) { .top-nav { display: none; } }'
+    '@media (max-width: 899px) { .top-nav { display: none; } }',
+    'html .top-nav a.top-nav-ext { color: var(--muted, #8c8c8c); }',
+    'html .top-nav a.top-nav-ext:hover { color: var(--canvas-ink); }',
+    '@media (max-width: 1199px) { .top-nav .top-nav-ext { display: none; } }'
   ].join('\n');
   var style = document.createElement('style');
   style.textContent = css;
@@ -66,14 +69,23 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Concepts', 'lexicon/'], ['Sources', 'sources/']];
+    var pages = [['Article', ''], ['Concepts', 'lexicon/'], ['Sources', 'sources/'],
+      ['Four Attractor States', 'https://maxramsahoye.github.io/momu.civilisationdesignerconsole/'],
+      ['Cultural Dynamics Simulator', 'https://maxramsahoye.github.io/momu.culturaldynamicssimulator/']];
     var nav = document.createElement('nav');
     nav.className = 'top-nav';
     nav.setAttribute('aria-label', 'Pages');
     pages.forEach(function (pg) {
       var a = document.createElement('a');
       var url = new URL(pg[1], base);
-      a.href = url.pathname;
+      // the tools live on their own sites: they open in a new tab
+      var external = /^https?:/.test(pg[1]);
+      a.href = external ? url.href : url.pathname;
+      if (external) {
+        a.target = '_blank';
+        a.rel = 'noopener';
+        a.className = 'top-nav-ext';
+      }
       a.textContent = pg[0];
       if (url.pathname === location.pathname) a.setAttribute('aria-current', 'page');
       nav.appendChild(a);

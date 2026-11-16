@@ -13,6 +13,10 @@
         if ('scrollRestoration' in history) {
           history.scrollRestoration = 'manual';
         }
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
         if (!location.hash) window.scrollTo(0, 0);
       } catch (e) {}
       try {
@@ -3540,6 +3544,6 @@
       });
     })();
   </script>
-  <script src="assets/tools.js?v=224e6da6" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
+  <script src="assets/tools.js?v=3e9222ea" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
 </body>
 </html>
