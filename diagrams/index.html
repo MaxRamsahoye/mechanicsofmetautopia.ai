@@ -656,6 +656,140 @@
 
     .ov-thumb .cer-c { stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1; }
 
+    /* ---------- Typology 4: technological capabilities ---------- */
+    .tech-view {
+      display: none;
+      width: var(--wide-col);
+      margin: 0 0 160px calc((100% - var(--wide-col)) / 2);
+      animation: view-in 0.4s ease;
+      --c-spear: #cc4125;
+      --c-shield: #3d85c6;
+      --c-counter-shield: #e69138;
+      --c-counter-spear: #674ea7;
+    }
+
+    body[data-show="tech-main"] .tech-view {
+      display: block;
+    }
+
+    /* the subtitle, above the description */
+    .diagram-desc .desc-sub {
+      display: block;
+      margin: 0 0 14px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .tech-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tech-table {
+      width: 100%;
+      max-width: 860px;
+      min-width: 560px;
+      border-collapse: collapse;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 17px;
+      text-align: center;
+    }
+
+    .tech-table th,
+    .tech-table td {
+      padding: 16px 14px;
+      border: 1px solid var(--canvas-ink);
+    }
+
+    /* the header row is open: lines only between and below */
+    .tech-table thead th {
+      padding: 12px 14px;
+      border-top: none;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .tech-table thead th:first-child,
+    .tech-table tbody th {
+      border-left: none;
+    }
+
+    .tech-table thead th:last-child,
+    .tech-table tbody td:last-child {
+      border-right: none;
+    }
+
+    .tech-table tbody tr:last-child > * {
+      border-bottom: none;
+    }
+
+    /* the class column is set off by a heavier line, as an axis */
+    .tech-table th:first-child {
+      width: 25%;
+      border-right-width: 2px;
+    }
+
+    .tech-table tbody th {
+      font-weight: 600;
+      background: color-mix(in srgb, var(--c) 22%, transparent);
+    }
+
+    .c-spear { --c: var(--c-spear); }
+    .c-shield { --c: var(--c-shield); }
+    .c-counter-shield { --c: var(--c-counter-shield); }
+    .c-counter-spear { --c: var(--c-counter-spear); }
+
+    /* the classes, explained */
+    .tech-notes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 56px;
+      margin: 72px 0 0;
+    }
+
+    @media (max-width: 860px) {
+      .tech-notes {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .tech-notes h3 {
+      margin: 0 0 24px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 19px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .tech-class {
+      margin: 0 0 32px;
+      padding-left: 20px;
+      border-left: 3px solid var(--c);
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .tech-class p {
+      margin: 0 0 10px;
+    }
+
+    .tech-class p:last-child {
+      margin-bottom: 0;
+    }
+
+    .tech-class .tc-name {
+      font-weight: 700;
+    }
+
+    .tech-class .tc-label {
+      font-style: italic;
+    }
+
+    .ov-thumb .tc { stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1; fill: none; }
+
     @keyframes view-in {
       from { opacity: 0; }
     }
@@ -1119,6 +1253,9 @@
       <div class="tab-group" role="tablist" aria-label="A Typology of Cultural Existential Risk Scenarios">
         <button type="button" role="tab" aria-selected="false" data-show="cer-main">C-ER Scenarios</button>
       </div>
+      <div class="tab-group" role="tablist" aria-label="A Typology of Technological Capabilities">
+        <button type="button" role="tab" aria-selected="false" data-show="tech-main">Capabilities</button>
+      </div>
     </div>
     </div>
 
@@ -1192,6 +1329,33 @@
           <p class="ov-kicker">Typology 3</p>
           <h2 class="ov-title">A Typology of Cultural Existential Risk Scenarios</h2>
           <p class="ov-desc">The best and worst of possible worlds, according to different worldviews, civilisations and substrates.</p>
+        </button>
+        <button type="button" class="ov-card" data-go="tech-main">
+          <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
+            <rect class="tc" x="70" y="22" width="40" height="28"/>
+            <rect class="tc" x="110" y="22" width="40" height="28"/>
+            <rect class="tc" x="150" y="22" width="40" height="28"/>
+            <rect class="tc" x="190" y="22" width="40" height="28"/>
+            <rect class="tc" x="70" y="50" width="40" height="28" style="fill: color-mix(in srgb, #cc4125 28%, transparent)"/>
+            <rect class="tc" x="110" y="50" width="40" height="28"/>
+            <rect class="tc" x="150" y="50" width="40" height="28"/>
+            <rect class="tc" x="190" y="50" width="40" height="28"/>
+            <rect class="tc" x="70" y="78" width="40" height="28" style="fill: color-mix(in srgb, #3d85c6 28%, transparent)"/>
+            <rect class="tc" x="110" y="78" width="40" height="28"/>
+            <rect class="tc" x="150" y="78" width="40" height="28"/>
+            <rect class="tc" x="190" y="78" width="40" height="28"/>
+            <rect class="tc" x="70" y="106" width="40" height="28" style="fill: color-mix(in srgb, #e69138 28%, transparent)"/>
+            <rect class="tc" x="110" y="106" width="40" height="28"/>
+            <rect class="tc" x="150" y="106" width="40" height="28"/>
+            <rect class="tc" x="190" y="106" width="40" height="28"/>
+            <rect class="tc" x="70" y="134" width="40" height="28" style="fill: color-mix(in srgb, #674ea7 28%, transparent)"/>
+            <rect class="tc" x="110" y="134" width="40" height="28"/>
+            <rect class="tc" x="150" y="134" width="40" height="28"/>
+            <rect class="tc" x="190" y="134" width="40" height="28"/>
+          </svg>
+          <p class="ov-kicker">Typology 4</p>
+          <h2 class="ov-title">A Typology of Technological Capabilities</h2>
+          <p class="ov-desc">Spear, shield, counter-shield and counter-spear: four classes of capability, by their function in the engagement sequence.</p>
         </button>
       </div>
     </section>
@@ -1351,6 +1515,73 @@
       </div>
       <p class="cer-source">See also the typology of moral worldviews and catastrophes in <a href="https://www.forethought.org/research/no-easy-eutopia" target="_blank" rel="noopener">No Easy Eutopia</a> by William MacAskill &amp; Fin Moorhouse (2025).</p>
     </section>
+
+    <section class="tech-view" aria-label="A Typology of Technological Capabilities">
+      <div class="tech-scroll">
+          <table class="tech-table">
+            <thead>
+              <tr>
+                <th scope="col">Class</th>
+                <th scope="col">Position</th>
+                <th scope="col">Action</th>
+                <th scope="col">Objective</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row" class="c-spear">Spear</th>
+                <td>Proactive</td>
+                <td>Attack</td>
+                <td>Breach</td>
+              </tr>
+              <tr>
+                <th scope="row" class="c-shield">Shield</th>
+                <td>Passive</td>
+                <td>Protect</td>
+                <td>Endure</td>
+              </tr>
+              <tr>
+                <th scope="row" class="c-counter-shield">Counter-Shield</th>
+                <td>Reactive-Offense</td>
+                <td>Negate Defense</td>
+                <td>Enable Breach</td>
+              </tr>
+              <tr>
+                <th scope="row" class="c-counter-spear">Counter-Spear</th>
+                <td>Reactive-Defense</td>
+                <td>Negate Attack</td>
+                <td>Intercept</td>
+              </tr>
+            </tbody>
+          </table>
+      </div>
+      <div class="tech-notes">
+        <div>
+          <h3>The Primary Classes</h3>
+          <div class="tech-class c-spear">
+            <p><span class="tc-name">C1. Spear (Offensive):</span> Technologies designed to project force, bypass barriers, and degrade or destroy an opponent&rsquo;s assets. Their primary metric is <b>penetration</b>.</p>
+            <p><span class="tc-label">Example:</span> A thermal-seeking missile or a SQL injection script.</p>
+          </div>
+          <div class="tech-class c-shield">
+            <p><span class="tc-name">C2. Shield (Defensive):</span> Technologies designed to absorb, deflect, or dissipate an attack to preserve the integrity of a system or entity. Their primary metric is <b>resilience</b>.</p>
+            <p><span class="tc-label">Example:</span> Chobham armour on a tank or a robust web application firewall (WAF).</p>
+          </div>
+        </div>
+        <div>
+          <h3>The Reactionary Classes</h3>
+          <div class="tech-class c-counter-shield">
+            <p><span class="tc-name">Counter-Shield (Penetration Enhancer):</span> A specialised offensive class designed specifically to exploit a known weakness in a &lsquo;Shield&rsquo; or to overwhelm its capacity. Its goal is to make the defense irrelevant.</p>
+            <p><span class="tc-label">Definition:</span> Technologies that neutralise a defender&rsquo;s protection to allow the primary &lsquo;Spear&rsquo; to reach the target.</p>
+            <p><span class="tc-label">Example:</span> <b>Tandem-charge warheads</b> (designed to blow through reactive armour shields) or <b>stealth coatings</b> (designed to make a craft invisible to radar shields).</p>
+          </div>
+          <div class="tech-class c-counter-spear">
+            <p><span class="tc-name">Counter-Spear (Interceptor/Disruptor):</span> A specialised defensive class that moves beyond passive protection to actively neutralise the &lsquo;Spear&rsquo; while it is in transit, or even before it is deployed.</p>
+            <p><span class="tc-label">Definition:</span> Technologies that target the incoming threat&rsquo;s guidance, propulsion, or logic before it can test the &lsquo;Shield&rsquo;.</p>
+            <p><span class="tc-label">Example:</span> Electronic Counter-Measures (ECM) that &lsquo;blind&rsquo; an incoming missile&rsquo;s seeker, or Automated Patching that closes a vulnerability as soon as an exploit attempt is detected.</p>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -1392,6 +1623,7 @@
         overview: { title: 'Typologies', slug: '', desc: 'Typologies for <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>, drawn at full size.' },
         risks: { title: 'A Typology of Cultural Risks: From Minor to Existential', slug: 'cultural-risks', desc: 'Cultural extinction is the ultimate threat faced by a civilisation that would wish to preserve cultural diversity, and by cultures that would wish to see their belief and value systems held by future generations. Along the way are many intermediate scenarios of increasing scope and severity. This matrix maps that landscape of cultural harms: from the loss of a single word to the loss of all world-cultures.' },
         cer: { title: 'A Typology of Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures', slug: 'c-er-scenarios', desc: 'This table outlines potential maximal futures, the best and worst of possible worlds, according to different cultural perspectives. These perspectives are categorised into three primary axes of contention over civilisation&rsquo;s cultural trajectory and the governance mechanisms to steer it.' },
+        tech: { title: 'A Typology of Technological Capabilities', slug: 'technological-capabilities', desc: '<span class="desc-sub">Offensive, Defensive, Counter-Offensive, Counter-Defensive</span>We can think through how political and cultural units will interact within a civilisational architecture &ndash; across physical, digital and memetic domains &ndash; using <b>four classes of technological capabilities</b> defined by their <b>function in the engagement sequence</b>. Ultimately, the future of (post-AGI) technological politics and cultural dynamics will be downstream of whether we live in an <em>offense</em> or <em>defense</em> dominant world.' },
         attractors: { title: 'The Four Post-AGI Cultural Attractor States', slug: 'four-attractors', desc: 'The possibility space of civilisation design, charted by its two variables: cultural integrity and membrane permeability. A civilisation &ndash; existing, historical, future or speculative &ndash; can be represented here as a point, its coordinates shifting over time, between a desired multi-cultural equilibrium and three cultural existential risks.' }
       };
       var show = 'overview-main';
