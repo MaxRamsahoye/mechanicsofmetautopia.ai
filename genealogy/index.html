@@ -183,23 +183,19 @@
     }
 
     /* the essays, as cards */
+    /* the essays, one above the other, across the wide column (as on Diagrams) */
     .essay-list {
-      max-width: 760px;
+      width: var(--wide-col);
+      margin-left: calc((100% - var(--wide-col)) / 2);
     }
 
     .essay-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: minmax(0, 1fr);
       gap: 32px;
       list-style: none;
       margin: 0;
       padding: 0;
-    }
-
-    @media (max-width: 640px) {
-      .essay-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
     }
 
     .essay-card {
@@ -255,7 +251,7 @@
   </a>
 
   <main class="page-main">
-    <div class="genealogy-top on-band">
+    <div class="genealogy-top wide-top on-band">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Genealogy</a></h1>
     <p class="page-intro">The intellectual history behind <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>.</p>
     </div>
