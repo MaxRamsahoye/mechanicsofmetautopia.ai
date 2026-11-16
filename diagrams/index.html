@@ -428,6 +428,22 @@
       font-weight: 600;
     }
 
+    /* on wide windows the scope labels and the Severity label hang in the
+       margins, so the four columns take the column's full width */
+    @media (min-width: 1440px) {
+      .risk-scroll {
+        margin: 0 -124px 0 -104px;
+      }
+
+      .risk-figure {
+        padding-right: 0;
+      }
+
+      .risk-caption {
+        padding-left: 104px;
+      }
+    }
+
     /* its long title is set a little smaller, on one line across the column */
     @media (min-width: 601px) {
       body[data-show="risks-main"] .diagram-top .page-title {
