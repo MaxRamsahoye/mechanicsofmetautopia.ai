@@ -99,7 +99,26 @@ const CSS = `
   blockquote { margin: 10pt 0 12pt; padding-left: 14pt; border-left: 1pt solid #000; font-size: 12pt; }
   blockquote p:last-child { margin-bottom: 0; }
   :root { --canvas-ink: #000; --canvas-bg: #fff; --muted: #8c8c8c; --canvas-accent: #e36843; --serif: 'ET Bembo', Georgia, serif; }
-  .matrix-figure { margin: 18pt 0 16pt; break-inside: avoid; }
+  .matrix-figure { margin: 18pt 0 16pt; }
+  /* the diagram on a page of its own, turned landscape: the full version,
+     with each future's description, drawn at the site's wide size and
+     scaled to fit the page, centred on it */
+  @page diagram { size: A4 landscape; margin: 16mm 16mm 18mm; }
+  .matrix-figure .matrix-wrap {
+    page: diagram; break-before: page; break-after: page;
+    --ax-l: 100px; --ax-b: 64px; --ar: 40px;
+    width: 1080px; max-width: none; margin: 0 auto; zoom: 0.68;
+  }
+  .matrix-figure .matrix {
+    aspect-ratio: 9 / 8;
+    --m-pad: 30px; --m-h4-sans: 21px; --m-h4: 26px; --m-sub: 20px; --m-p: 19px; --m-p-lh: 1.4;
+  }
+  .matrix .m-text p { display: block !important; }
+  .matrix .m-sub { display: block !important; }
+  .matrix-axis { font-size: 16px !important; }
+  .matrix-tick { font-size: 14px !important; }
+  .matrix-tick.y-high, .matrix-tick.y-low { right: calc(100% - var(--ax-l) + 10px) !important; }
+  .matrix-tick.x-low, .matrix-tick.x-high { bottom: 34px !important; }
   .matrix-frames { margin: 0 0 16pt; padding-left: 14pt; border-left: 3pt solid #e36843; font-family: 'IBM Plex Sans', sans-serif; font-size: 9.5pt; line-height: 1.55; }
   .matrix-detail { display: none !important; }
   /* drawn at rest: no future chosen, whatever the pointer */
