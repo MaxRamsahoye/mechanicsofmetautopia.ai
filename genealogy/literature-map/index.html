@@ -395,7 +395,9 @@
       margin: 72px 0 0;
       padding: 64px 0;
       font-family: var(--serif);
-      font-size: clamp(22px, 0.6vw + 15px, 25px);
+      /* halfway between its first size (19px) and the enlarged one
+         (clamp(22px, 0.6vw + 15px, 25px)) */
+      font-size: clamp(20.5px, 0.3vw + 17px, 22px);
       line-height: 1.45;
     }
 
@@ -488,12 +490,10 @@
       margin-top: 28px;
     }
 
-    /* the epigraph sits halfway between its old size (21px) and the
-       abstract's (clamp(22px, 0.6vw + 15px, 25px)) */
     .page-dark-side-of-meta-utopia .essay-epigraph {
       margin-top: 64px;
-      font-size: clamp(21.5px, 0.3vw + 18px, 23px);
-      line-height: 1.4;
+      font-size: clamp(24px, 0.8vw + 15px, 28px);
+      line-height: 1.35;
     }
 
     /* its subheadings in italic */
