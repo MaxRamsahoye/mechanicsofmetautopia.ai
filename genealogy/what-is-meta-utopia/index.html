@@ -481,6 +481,52 @@
       margin-top: 8px;
     }
 
+    /* Appendix 7 (The Dark Side of Meta-Utopia): a larger epigraph with more
+       room above it and the byline; a shorter end to the top band; the grey
+       bands run straight into the site footer */
+    .page-dark-side-of-meta-utopia .essay-byline {
+      margin-top: 28px;
+    }
+
+    /* the epigraph sits halfway between its old size (21px) and the
+       abstract's (clamp(22px, 0.6vw + 15px, 25px)) */
+    .page-dark-side-of-meta-utopia .essay-epigraph {
+      margin-top: 64px;
+      font-size: clamp(21.5px, 0.3vw + 18px, 23px);
+      line-height: 1.4;
+    }
+
+    /* its subheadings in italic */
+    body:has(.page-dark-side-of-meta-utopia) .essay h3,
+    body:has(.page-dark-side-of-meta-utopia) .essay h4 {
+      font-style: italic;
+    }
+
+    .genealogy-top.page-dark-side-of-meta-utopia {
+      margin-bottom: 136px;
+    }
+
+    .genealogy-top.page-dark-side-of-meta-utopia::before {
+      bottom: -40px;
+    }
+
+    .page-dark-side-of-meta-utopia .band-notes {
+      padding-bottom: 0;
+    }
+
+    body:has(.page-dark-side-of-meta-utopia) .page-main {
+      padding-bottom: 0;
+    }
+
+    body:has(.page-dark-side-of-meta-utopia) .essay {
+      padding-bottom: 0;
+    }
+
+    body:has(.page-dark-side-of-meta-utopia) .site-footer {
+      display: block;
+      margin-top: 0;
+    }
+
     /* the abstract, up in the band */
     .genealogy-top .essay-abstract {
       max-width: 760px;
@@ -883,7 +929,7 @@
   </a>
 
   <main class="page-main">
-    <div class="genealogy-top on-band">
+    <div class="genealogy-top on-band page-what-is-meta-utopia">
     <p class="essay-kicker"><a class="plain-link" href="../">Supplements</a></p>
     <h1 class="page-title"><a class="heading-link title-top" href="#">What is <em>Meta</em>-Utopia?</a></h1>
 
