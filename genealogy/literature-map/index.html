@@ -223,6 +223,260 @@
       margin-top: 14px;
     }
 
+    /* Appendix 5: the lede in the band under the title */
+    .genealogy-top .o {
+      color: inherit;
+    }
+
+    .essay-series {
+      margin: -4px 0 18px;
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+    }
+
+    .essay-lede {
+      max-width: 760px;
+      margin: 22px 0 10px;
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.35;
+    }
+
+    .essay-byline {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    /* the abstract, in a grey box */
+    .essay-abstract {
+      margin: 0 0 40px;
+      padding: 22px 26px;
+      background: color-mix(in srgb, currentColor 5%, transparent);
+      border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    }
+
+    .essay-abstract p {
+      margin: 0 !important;
+    }
+
+    .essay-abstract a {
+      font-weight: 400 !important;
+    }
+
+    /* the contents, numbered in orange */
+    .essay-contents {
+      margin: 0 0 24px;
+      padding: 20px 0;
+      border-top: 2px solid var(--link-blue);
+      border-bottom: 2px solid var(--link-blue);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    .essay-contents .ec-head {
+      margin: 0 0 12px !important;
+      font-weight: 700;
+    }
+
+    .essay-contents ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .essay-contents li {
+      display: flex;
+      gap: 10px;
+      margin: 0 0 8px;
+    }
+
+    .essay-contents li .o {
+      flex: none;
+      width: 1.2em;
+      font-weight: 700;
+    }
+
+    .essay-contents a {
+      font-weight: 500 !important;
+      text-decoration: none !important;
+      color: inherit;
+    }
+
+    .essay-contents a:hover {
+      text-decoration: underline !important;
+    }
+
+    /* footnotes, set in from the text */
+    .essay sup a {
+      font-weight: 700 !important;
+      text-decoration: none !important;
+    }
+
+    .essay-note {
+      margin: 8px 0 32px;
+      padding: 14px 18px;
+      border-left: 2px solid var(--link-blue);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay-note p {
+      margin: 0 0 8px !important;
+    }
+
+    .essay-note p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .essay-note .en-quote {
+      font-style: italic;
+    }
+
+    .essay-note a {
+      font-weight: 400 !important;
+    }
+
+    .essay-note a.o {
+      text-decoration: none !important;
+      font-weight: 700 !important;
+      margin-right: 4px;
+    }
+
+    .essay-def {
+      font-size: 1.05em;
+    }
+
+    /* the Venn diagram */
+    .venn {
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .venn svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+
+    .venn .venn-a { fill: color-mix(in srgb, #6aa84f 34%, transparent); }
+    .venn .venn-b { fill: color-mix(in srgb, #cc0000 26%, transparent); }
+    .venn .venn-ab { fill: #f1c232; fill-opacity: 0.85; }
+    .venn .venn-line { fill: none; stroke: var(--canvas-ink); stroke-width: 1.5; }
+
+    .venn text {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 600;
+      text-anchor: middle;
+      fill: var(--canvas-ink);
+    }
+
+    .venn .venn-mid {
+      font-size: 13px;
+      fill: #000;
+    }
+
+    .venn figcaption {
+      margin-top: 12px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    /* the appendix table runs wider than the text */
+    .essay-wide {
+      width: var(--wide-col);
+      margin: 32px 0 0 calc((100% - var(--wide-col)) / 2);
+    }
+
+    .rt-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .risk-hazards {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .risk-hazards th,
+    .risk-hazards td {
+      padding: 18px 20px;
+      border: 1px solid var(--link-blue);
+      vertical-align: top;
+    }
+
+    .risk-hazards thead th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      font-weight: 400;
+      font-style: italic;
+      background: color-mix(in srgb, var(--link-blue) 14%, transparent);
+    }
+
+    .risk-hazards thead th:nth-child(1) { width: 20%; }
+    .risk-hazards thead th:nth-child(2) { width: 38%; }
+
+    .risk-hazards tbody th {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .risk-hazards .rt-sub i {
+      display: block;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .risk-hazards .rt-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .risk-hazards td p {
+      margin: 0 0 10px !important;
+    }
+
+    .risk-hazards td p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .risk-hazards .rt-quote {
+      font-style: italic;
+    }
+
+    .risk-hazards .rt-cite,
+    .risk-hazards .rt-also {
+      display: block;
+      font-size: 13px;
+    }
+
+    .risk-hazards .rt-also {
+      margin-top: 6px;
+    }
+
+    .risk-hazards a,
+    .risk-hazards a *,
+    .essay blockquote cite a,
+    .essay blockquote cite a * {
+      font-weight: 400 !important;
+    }
+
     /* room at the end of the page, below the last line */
     .essay {
       padding-bottom: 160px;
@@ -297,6 +551,7 @@
     <div class="genealogy-top on-band">
     <p class="essay-kicker"><a class="plain-link" href="../">Appendices</a></p>
     <h1 class="page-title"><a class="heading-link title-top" href="#">Literature Map of Meta-Utopia within the PARA-Sphere</a></h1>
+
     </div>
 
     <article class="essay">

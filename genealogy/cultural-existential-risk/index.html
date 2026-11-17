@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Introducing a new subfield of existential risk studies oriented towards human value-alignment and post-AGI cultural dynamics.">
+  <link id="favicon-ico" rel="icon" href="../../favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../../favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../../favicon/apple-touch-icon-light.png?v=2">
+  <script>
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Minds, Machines & Memes — Appendices — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Minds, Machines & Memes — Appendices — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Introducing a new subfield of existential risk studies oriented towards human value-alignment and post-AGI cultural dynamics.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/genealogy/cultural-existential-risk/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/site.css?v=ab0ac983" rel="stylesheet">
+  <style>
+    /* light sepia band from the top of the window to just below the intro */
+    .genealogy-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 216px;
+    }
+
+    .genealogy-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -112px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    .genealogy-top .page-intro {
+      margin-bottom: 0;
+    }
+
+    /* the site name sits in the top-right corner, as on the Lexicon */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the essay, set as the article's text */
+    .essay {
+      max-width: 760px;
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.3;
+    }
+
+    .essay p {
+      margin: 15px 0;
+    }
+
+    .essay a:not(.heading-link) {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    html:not(.colour) .essay a:not(.heading-link) {
+      color: inherit;
+    }
+
+    .essay h2 {
+      margin: 88px 0 18px;
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.15em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .essay h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.45em;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    /* quotations, set in from an orange rule */
+    .essay blockquote {
+      margin: 32px 0;
+      padding-left: 28px;
+      border-left: 2px solid var(--link-blue);
+    }
+
+    .essay blockquote p {
+      margin: 0;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--mono-caps);
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay blockquote cite a {
+      font-weight: 400;
+    }
+    /* no footer on the Appendices pages, as on Diagrams */
+    .site-footer {
+      display: none;
+    }
+
+    /* a small link back up to the Appendices list, above the title */
+    .essay-kicker {
+      margin: 0 0 14px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .essay-kicker a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .essay-kicker a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* links within the site keep the text colour; only links to other sites turn orange */
+    html.colour .essay a:not([href^="http"]):not(.heading-link) {
+      color: inherit;
+    }
+
+    /* lists inside quotations */
+    .essay blockquote ul {
+      margin: 14px 0 0;
+      padding-left: 1.1em;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote li {
+      margin: 0 0 10px;
+    }
+
+    .essay blockquote p + p {
+      margin-top: 14px;
+    }
+
+    /* Appendix 5: the lede in the band under the title */
+    .genealogy-top .o {
+      color: inherit;
+    }
+
+    .essay-series {
+      margin: -4px 0 18px;
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+    }
+
+    .essay-lede {
+      max-width: 760px;
+      margin: 22px 0 10px;
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.35;
+    }
+
+    .essay-byline {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    /* the abstract, in a grey box */
+    .essay-abstract {
+      margin: 0 0 40px;
+      padding: 22px 26px;
+      background: color-mix(in srgb, currentColor 5%, transparent);
+      border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    }
+
+    .essay-abstract p {
+      margin: 0 !important;
+    }
+
+    .essay-abstract a {
+      font-weight: 400 !important;
+    }
+
+    /* the contents, numbered in orange */
+    .essay-contents {
+      margin: 0 0 24px;
+      padding: 20px 0;
+      border-top: 2px solid var(--link-blue);
+      border-bottom: 2px solid var(--link-blue);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    .essay-contents .ec-head {
+      margin: 0 0 12px !important;
+      font-weight: 700;
+    }
+
+    .essay-contents ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .essay-contents li {
+      display: flex;
+      gap: 10px;
+      margin: 0 0 8px;
+    }
+
+    .essay-contents li .o {
+      flex: none;
+      width: 1.2em;
+      font-weight: 700;
+    }
+
+    .essay-contents a {
+      font-weight: 500 !important;
+      text-decoration: none !important;
+      color: inherit;
+    }
+
+    .essay-contents a:hover {
+      text-decoration: underline !important;
+    }
+
+    /* footnotes, set in from the text */
+    .essay sup a {
+      font-weight: 700 !important;
+      text-decoration: none !important;
+    }
+
+    .essay-note {
+      margin: 8px 0 32px;
+      padding: 14px 18px;
+      border-left: 2px solid var(--link-blue);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay-note p {
+      margin: 0 0 8px !important;
+    }
+
+    .essay-note p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .essay-note .en-quote {
+      font-style: italic;
+    }
+
+    .essay-note a {
+      font-weight: 400 !important;
+    }
+
+    .essay-note a.o {
+      text-decoration: none !important;
+      font-weight: 700 !important;
+      margin-right: 4px;
+    }
+
+    .essay-def {
+      font-size: 1.05em;
+    }
+
+    /* the Venn diagram */
+    .venn {
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .venn svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+
+    .venn .venn-a { fill: color-mix(in srgb, #6aa84f 34%, transparent); }
+    .venn .venn-b { fill: color-mix(in srgb, #cc0000 26%, transparent); }
+    .venn .venn-ab { fill: #f1c232; fill-opacity: 0.85; }
+    .venn .venn-line { fill: none; stroke: var(--canvas-ink); stroke-width: 1.5; }
+
+    .venn text {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 600;
+      text-anchor: middle;
+      fill: var(--canvas-ink);
+    }
+
+    .venn .venn-mid {
+      font-size: 13px;
+      fill: #000;
+    }
+
+    .venn figcaption {
+      margin-top: 12px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    /* the appendix table runs wider than the text */
+    .essay-wide {
+      width: var(--wide-col);
+      margin: 32px 0 0 calc((100% - var(--wide-col)) / 2);
+    }
+
+    .rt-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .risk-hazards {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .risk-hazards th,
+    .risk-hazards td {
+      padding: 18px 20px;
+      border: 1px solid var(--link-blue);
+      vertical-align: top;
+    }
+
+    .risk-hazards thead th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      font-weight: 400;
+      font-style: italic;
+      background: color-mix(in srgb, var(--link-blue) 14%, transparent);
+    }
+
+    .risk-hazards thead th:nth-child(1) { width: 20%; }
+    .risk-hazards thead th:nth-child(2) { width: 38%; }
+
+    .risk-hazards tbody th {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .risk-hazards .rt-sub i {
+      display: block;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .risk-hazards .rt-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .risk-hazards td p {
+      margin: 0 0 10px !important;
+    }
+
+    .risk-hazards td p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .risk-hazards .rt-quote {
+      font-style: italic;
+    }
+
+    .risk-hazards .rt-cite,
+    .risk-hazards .rt-also {
+      display: block;
+      font-size: 13px;
+    }
+
+    .risk-hazards .rt-also {
+      margin-top: 6px;
+    }
+
+    .risk-hazards a,
+    .risk-hazards a *,
+    .essay blockquote cite a,
+    .essay blockquote cite a * {
+      font-weight: 400 !important;
+    }
+
+    /* room at the end of the page, below the last line */
+    .essay {
+      padding-bottom: 160px;
+    }
+
+    @media (max-width: 600px) {
+      .essay {
+        padding-bottom: 96px;
+      }
+    }
+
+    .essay h3 {
+      margin: 48px 0 12px;
+      font-family: var(--sans);
+      font-size: 0.9em;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.3;
+    }
+
+    .essay h2 + h3 {
+      margin-top: 24px;
+    }
+
+    .essay > ul {
+      margin: 12px 0 18px;
+      padding-left: 1.2em;
+    }
+
+    .essay > ul li {
+      margin: 0 0 10px;
+    }
+
+    .essay li b,
+    .essay p > b {
+      font-weight: 700;
+    }
+
+    .essay .o {
+      color: var(--link-blue);
+    }
+
+    .essay-break {
+      margin: 72px 0 0 !important;
+      text-align: center;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      color: var(--link-blue);
+    }
+
+    .essay-see {
+      margin: 18px 0 0 !important;
+      padding-left: 1.2em;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    .essay-see a {
+      color: var(--link-blue);
+    }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to Appendices" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="genealogy-top on-band">
+    <p class="essay-kicker"><a class="plain-link" href="../">Appendices</a></p>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Minds<span class="o">,</span> Machines <span class="o">&amp;</span> Memes<span class="o">:</span> Cultural Existential Risk Prevention as Global Priority</a></h1>
+    <p class="essay-series">&lt; The Culture Series &gt;</p>
+    <p class="essay-lede">Introducing a new subfield of existential risk studies oriented towards human value-alignment and post-AGI cultural dynamics</p>
+    <p class="essay-byline">by <a class="plain-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
+    </div>
+
+    <article class="essay">
+      <div class="essay-abstract">
+        <p><b><em>Abstract:</em></b> This research article serves to provide an introduction to the governance of <em>cultural evolution</em> and <em>post-AGI cultural dynamics</em>. It first contextualises this research by observing a &lsquo;cultural turn&rsquo; in Existential Risk Studies (ERS), which is then formalised as a new subfield oriented towards cultural existential risk, including <em>cultural extinction and related hazards</em>: value lock-in, misaligned memetic proliferation, ideological fanaticism, epistemic collapse etc. Following this, a central frame is introduced: <em>Cultural Evolution</em> and the <em>Evolutionary Process (Replicators) Alignment Problem</em>. As appendices, three typologies of cultural existential risks are included: <a href="#cultural-extinction-hazards"><em>Cultural Extinction and other Related Hazards</em></a>; <a href="../../diagrams/#cultural-risks"><em>Cultural Risks: From Minor to Existential</em></a>; and <a href="../../diagrams/#c-er-scenarios"><em>Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures</em></a>.</p>
+      </div>
+
+      <nav class="essay-contents" aria-label="Contents">
+        <p class="ec-head">Contents</p>
+        <ol>
+          <li><span class="o">0.</span> <a href="#cultural-turn">Introduction: The Cultural Turn in Existential Risk Studies (ERS)</a></li>
+          <li><span class="o">1.</span> <a href="#defining-c-xr">Defining Cultural Existential Risks</a></li>
+          <li><span class="o">2.</span> <a href="#cultural-evolution">Cultural Evolution: Blind Watchmakers, Runaway Replicators &amp; Selfish Memes</a></li>
+          <li><span class="o">3.</span> <a href="#replicators-alignment">The Evolutionary Process (Replicators) Alignment Problem</a></li>
+          <li><span class="o">&ndash;</span> <a href="#cultural-extinction-hazards">Appendix: Cultural Extinction and other Related Hazards</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="cultural-turn"><a class="heading-link" href="#cultural-turn">Introduction<span class="o">:</span> The <em>Cultural Turn</em> in Existential Risk Studies <span class="o">(</span>ERS<span class="o">)</span></a></h2>
+
+      <p><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3995225" target="_blank" rel="noopener">Existential risk studies (ERS)</a> and <a href="https://forum.effectivealtruism.org/topics/macrostrategy" target="_blank" rel="noopener">macrostrategy</a> research are undergoing a <b><em>cultural turn</em></b>.</p>
+
+      <p>In the recent landmark paper <em>Gradual Disempowerment</em> (2025), alongside the state and the economy, &lsquo;culture&rsquo; was identified as one of three &lsquo;critical societal systems&rsquo; subject to technological disruption from AI agents, with a significant part of the paper focusing on the novel risk of <a href="https://gradual-disempowerment.ai/misaligned-culture" target="_blank" rel="noopener">&lsquo;Misaligned Culture&rsquo;</a>:</p>
+
+      <blockquote>
+        <p>&#10077; analyzing how AI could affect alignment between culture and human interests&hellip; through an evolutionary lens&hellip; AI is the first technology in history with the potential to&hellip; gradually replace human cognition&hellip; in the evolution of culture. Thus, a change to AI-mediated culture could greatly weaken feedback loops that have historically helped align culture&hellip; &#10078;</p>
+        <cite>&ndash; <a href="https://gradual-disempowerment.ai/misaligned-culture" target="_blank" rel="noopener">Misaligned Culture</a> in <em>Gradual Disempowerment</em>, Jan Kulveit et al., <em>Alignment of Complex Systems Research Group</em> (2025)</cite>
+      </blockquote>
+
+      <p>This theme of <em>memetic selection pressures</em> has also been addressed in recent work by Robin Hanson, who <a href="https://archive.ph/AqdBK#selection-811.258-811.296" target="_blank" rel="noopener">warns that &lsquo;cultural drift&rsquo;</a> (2024) is a <a href="https://www.lesswrong.com/posts/EtKXdPfDaNSpLJFwN/trying-to-understand-hanson-s-cultural-drift-argument" target="_blank" rel="noopener">&lsquo;really big fundamental problem&rsquo;</a>. As Hanson understands it:</p>
+
+      <blockquote>
+        <p>&#10077; we now have far less <em>cultural diversity</em>, and far weaker (really, slower) <em>cultural selection</em>&hellip; changes are likely to be more <em>maladaptive</em> than adaptive, causing our cultures to <em>drift</em> &lsquo;off the rails&rsquo; &#10078;</p>
+        <cite>&ndash; <a href="https://archive.ph/AqdBK#selection-811.258-811.296" target="_blank" rel="noopener"><em>Beware Cultural Drift</em></a> Robin Hanson, <em>Quillette</em> (2024)</cite>
+      </blockquote>
+
+      <p>Echoing Hanson, Forethought have also warned of the risk of a <em>global monoculture</em>:</p>
+
+      <blockquote>
+        <p>&#10077; a world government would result in a reduction of <em>cultural and moral diversity</em>, and lock-in an increased level of authoritarian control over citizens; this would reduce the value of future civilisation, at all future times &#10078;</p>
+        <cite>&ndash; <a href="https://www.forethought.org/research/beyond-existential-risk" target="_blank" rel="noopener"><em>Beyond Existential Risk</em></a> William MacAskill &amp; Guive Assadi, <em>Forethought</em> (2026)</cite>
+      </blockquote>
+
+      <h3>EA Forum</h3>
+
+      <p>Further, on the <em>EA Forum</em> there are two notable posts discussing the relationship between culture and existential risk.</p>
+
+      <p>The first, on <a href="https://forum.effectivealtruism.org/topics/cultural-persistence" target="_blank" rel="noopener">cultural persistence</a>, entitled <a href="https://forum.effectivealtruism.org/posts/wWGi4jTNNMhz2pHhJ/persistence-a-critical-review-abridged" target="_blank" rel="noopener"><em>Persistence: A Critical Review</em></a> (Sevilla, 2021), investigates how &lsquo;values held by our ancestors affect their descendants several generations afterwards&rsquo;.</p>
+
+      <p>The second, on <a href="https://forum.effectivealtruism.org/s/qrDdoy8hNj58bFzHK/p/nm7PxHXYwiK6Kx962" target="_blank" rel="noopener"><em>Wholesome Culture</em></a> (Barratt, 2024), asks &lsquo;What culture, if adopted, leads to the best consequences?&rsquo; and adopts a &lsquo;&ldquo;culture-consequentialist&rdquo; lens, applied to the idea of how cultures relate to wholesomeness&rsquo;.</p>
+
+      <p>Beyond these two posts, the forum also features topic tags on <a href="https://forum.effectivealtruism.org/topics/cultural-evolution" target="_blank" rel="noopener">&lsquo;cultural evolution&rsquo;</a> and <a href="https://forum.effectivealtruism.org/topics/cultural-persistence" target="_blank" rel="noopener">&lsquo;cultural lag&rsquo;</a>, as well as <a href="https://forum.effectivealtruism.org/topics/value-lock-in" target="_blank" rel="noopener">&lsquo;value lock-in&rsquo;</a> and <a href="https://forum.effectivealtruism.org/topics/value-drift" target="_blank" rel="noopener">&lsquo;value drift&rsquo;</a> &ndash; more prominent concepts in the EA world-model.</p>
+
+      <h3>LessWrong</h3>
+
+      <p>Notably, a post on LessWrong, <a href="https://www.lesswrong.com/posts/JLH6ido4qoBtYmnNR/machines-vs-memes-part-1-ai-alignment-and-memetics" target="_blank" rel="noopener"><em>Machines vs Memes Part 1: AI Alignment and Memetics</em></a>, observes the parallel between memetic replication and AI misalignment:</p>
+
+      <blockquote>
+        <p>&#10077; &hellip; If memes behave selfishly, and replicate in competition with their genetic counterparts, then any memetic transmission that hampers either genetic transmission or human fitness would be considered a misaligned goal. This sounds a lot to me like the outer/inner alignment problem between the base and mesa objectives in AI Alignment. If the base objective is genetic replication through evolution, and the mesa objective is human survival (and replication), there may exist a third objective - memetic replication &#10078;</p>
+      </blockquote>
+
+      <h3>AI Alignment</h3>
+
+      <p>Another significant cultural intervention in the AI discourse centres on <a href="https://www.arxiv.org/pdf/2402.05070" target="_blank" rel="noopener">&lsquo;pluralistic alignment&rsquo;</a>: emphasising the inclusion of diverse political, cultural and philosophical viewpoints in the development of AI &ndash; to realise a meta-utopian (post-AGI) civilisation design &ndash; against the monolithic, orthodox frame of alignment to a universal set of &lsquo;human values&rsquo; (<a href="https://arxiv.org/abs/2402.05070" target="_blank" rel="noopener">Gabriel, 2025</a>; <a href="https://arxiv.org/abs/2505.05197" target="_blank" rel="noopener">Leibo, 2025</a>; <a href="https://arxiv.org/abs/2402.05070" target="_blank" rel="noopener">Sorensen, 2024</a>).</p>
+
+      <h2 id="defining-c-xr"><a class="heading-link" href="#defining-c-xr">Defining <em>Cultural</em> Existential Risk <span class="o">(</span>C-XR<span class="o">)</span></a></h2>
+
+      <p class="essay-def"><b>Cultural Existential Risk(s)<span class="o">:</span></b><sup><a class="o" href="#note-bostrom" id="ref-bostrom">*</a></sup> <b>(1) those that threaten the <em>intellectual, moral and civilisational progress</em> of humanity over the long-term future. (2) one where an adverse outcome would either annihilate Earth-originating culture or permanently and drastically curtail its potential for future <em>cultural evolution</em> and <em>moral progress</em>.</b></p>
+
+      <aside class="essay-note" id="note-bostrom">
+        <p><a class="o" href="#ref-bostrom">*</a> Derived from Bostrom&rsquo;s original definitions, from the papers that founded existential risk studies:</p>
+        <p class="en-quote">&ldquo;Existential risks are those that threaten the entire future of humanity.&rdquo;</p>
+        <p class="en-quote">&ldquo;One where an adverse outcome would either annihilate Earth-originating intelligent life or permanently and drastically curtail its potential.&rdquo;</p>
+        <p>&ndash; Nick Bostrom, <a href="https://existential-risk.com/concept.pdf" target="_blank" rel="noopener"><em>Existential Risk Prevention as Global Priority</em></a> (2013) &amp; <a href="https://nickbostrom.com/existential/risks.pdf" target="_blank" rel="noopener"><em>Existential Risks: Analyzing Human Extinction Scenarios and Related Hazards</em></a> (2002)</p>
+      </aside>
+
+      <p><b>Cultural Existential Risk</b> (C-XR) is a conceptual engineering that orients macrostrategy research and world-systems design theory towards a special set of crucial considerations concerning <em>cultural</em> <a href="https://nickbostrom.com/existential/risks.pdf" target="_blank" rel="noopener">extinction and other related hazards</a>: <em>value lock-in</em>, <em>misaligned memetic proliferation</em>, <em>ideological fanaticism</em>, <em>epistemic collapse</em>, <em>cyborgregore assimilation</em> etc. See the <a href="#cultural-extinction-hazards">appendix</a>.</p>
+
+      <p><b>The most significant existential risks and risk factors are cultural</b> &ndash; <em>ideological, ontological, epistemological and axiological</em>. A moral case can be made that <em>cultural</em> existential risk reduction is a civilisation-scale imperative. Further, it is apparent that within the AI governance discourse the cultural dimension of risk is comparatively neglected relative to associated technological (e.g. AGI-enabled coups) and political risks (e.g. power concentration).</p>
+
+      <p><b>There is an urgency to rapidly improve humanity&rsquo;s capacity to deal with cultural existential risks emerging in the near-term future.</b> This will require <em>collective artificial wisdom</em>, using AI to find consensus across cultures; memetic foresight to predict and respond to <em>alien cultural mutations</em>; and the ability, when necessary, to mobilise a strong global coordinated response to anticipated cultural risks.</p>
+
+      <h2 id="cultural-evolution"><a class="heading-link" href="#cultural-evolution">Cultural Evolution<span class="o">:</span> Blind Watchmakers, Runaway Replicators &amp; Selfish Memes</a></h2>
+
+      <p>By &lsquo;intellectual, moral and civilisational progress&rsquo; we mean the ability of humanity to engage in the recursive self-improvement of its belief and value-systems; to deconstruct and reconstruct the epistemological, ontological and axiological foundations of culture on a civilisational scale. In short, to wisely steer the trajectory of <b>cultural evolution</b>. Here it is important to distinguish between two senses of cultural evolution (descriptive and prescriptive):</p>
+
+      <p><b>Blind Cultural Evolution &ndash;</b> the civilisation-scale selection process of memes, as the unit of cultural evolution, across long-term time horizons. The blind watchmaker of memetics, and the noosphere as an emergent sphere of more-than-human ideation.</p>
+
+      <p><b>Conscious Cultural Evolution &ndash;</b> the deliberate intervention in memetic selection to align it with human values, and the potential for humanity to form an integral, syncretic and meta-modern world-culture. The intelligent design of cultural trajectory change and positive value lock-in.</p>
+
+      <p>Fundamentally, cultural evolution is (1) the dynamic selection process operating over <b>the design space of possible cultures</b> and (2) the coordination project of steering this process towards regions conducive to human survival and flourishing. <em>Civilisational sustainability</em>, framed in <em>memetic</em> terms, requires aligning the <b><em>cultural evolutionary process</em></b>.</p>
+
+      <p>In this way, this distinction translates to (1) the default <b>convergent evolutionary stable strategy</b> of memetics towards <em>the hyper-competitive</em> and (2) the <b>targeted, sentio-centric value-alignment</b> of memetics towards <em>the good</em>.</p>
+
+      <figure class="venn" aria-label="Venn diagram: value-alignment and evolutionarily stable strategy, overlapping in evolutionarily-stable value-alignment">
+        <svg viewBox="0 0 640 330" role="img">
+          <defs>
+            <clipPath id="venn-left"><circle cx="245" cy="165" r="150"/></clipPath>
+          </defs>
+          <circle class="venn-a" cx="245" cy="165" r="150"/>
+          <circle class="venn-b" cx="395" cy="165" r="150"/>
+          <circle class="venn-ab" cx="395" cy="165" r="150" clip-path="url(#venn-left)"/>
+          <circle class="venn-line" cx="245" cy="165" r="150"/>
+          <circle class="venn-line" cx="395" cy="165" r="150"/>
+          <text x="170" y="160">Value-</text>
+          <text x="170" y="182">Alignment</text>
+          <text x="470" y="149">Evolutionarily</text>
+          <text x="470" y="171">Stable</text>
+          <text x="470" y="193">Strategy</text>
+          <text class="venn-mid" x="320" y="149">Evolutionarily-</text>
+          <text class="venn-mid" x="320" y="167">Stable Value-</text>
+          <text class="venn-mid" x="320" y="185">Alignment</text>
+        </svg>
+        <figcaption>This Venn diagram illustrates the divergence of blind and conscious cultural evolution.</figcaption>
+      </figure>
+
+      <p>The green circle represents <b>&ldquo;Value-Alignment&rdquo;</b>: memetics that prioritise the welfare and interests of sentient minds. The red circle represents <b>&ldquo;Evolutionarily Stable Strategy&rdquo;</b>: memetics that persist across time and competitive pressures because they are robust against displacement by alternatives. The yellow intersection, <b>&ldquo;Evolutionarily-Stable Value-Alignment&rdquo;</b>, represents the ideal convergence where care for sentient welfare becomes not just a moral imperative but the dominant game-theoretic strategy &ndash; where sentio-centric memetics ultimately become the most stable and successful over time.</p>
+
+      <blockquote>
+        <p>&#10077; What&rsquo;s the best case scenario? Well, the absolute best possible case is a case so optimistic and incredibly lucky that if it turned out to be true, it would probably make me believe in a benevolent God (or Simulation). This is the case where it turns out that only <em>positive valence gradients</em> are computationally superior to every other alternative given a set of constraints, input-output mappings, and arbitrary efficiency functions. In this case, the most powerful pure replicators, despite their lack of altruism, will nonetheless be pumping out massive amounts of systems that produce unspeakable levels of bliss. It&rsquo;s as if the very nature of this universe is blissful&hellip; we simply happen to suffer because we are stuck in a tiny wrinkle at the foothills of the optimization process of evolution.</p>
+        <p>In the extreme opposite case, it turns out that only <em>negative valence gradients</em> offer strict computational benefits under heavy optimization. This would be Hell. Or at least, it would tend towards Hell in the long run. If this happens to be the universe we live in, let&rsquo;s all agree to either conspire to prevent evolution from moving on, or figure out the way to <em>turn it off</em>. In the long term, we&rsquo;d expect every being alive (or AI, upload, etc.) to be a zombie or a piece of dolorium. Not a fun idea. &#10078;</p>
+        <cite>&ndash; <a href="https://qualiacomputing.com/2017/12/20/the-universal-plot-part-i-consciousness-vs-pure-replicators/" target="_blank" rel="noopener"><em>The Universal Plot: Consciousness vs Replicators</em></a> Andr&eacute;s G&oacute;mez-Emilsson, <em>Qualia Research Institute</em> (2017)</cite>
+      </blockquote>
+
+      <h2 id="replicators-alignment"><a class="heading-link" href="#replicators-alignment">The Evolutionary Process <span class="o">(</span>Replicators<span class="o">)</span> Alignment Problem<sup><a class="o" href="#note-genealogy" id="ref-genealogy">*</a></sup></a></h2>
+
+      <p>The Evolutionary Process (Replicators) Alignment Problem extends and synthesises AI alignment theory with <em>universal Darwinism</em>, identifying misalignment as a fundamental attractor of optimisation processes across all scales of organisation (<em>&lsquo;replicators all the way down&rsquo;</em>): units (genes, memes, capital, grey goo, probes), agents (individuals, families, states, corporations, religions etc.) and systems (capitalism, civilisation) all amorally optimise for their own self-preservation and self-propagation, extending into boundless <em>self-maximisation</em>, over human welfare &ndash; <em>overriding instrumental convergence</em>, resulting in <em>terminal divergence</em> in the lexicon of AI alignment theory, or <em>means-ends reversal</em> in critical social philosophy.</p>
+
+      <p>This creates a nested hierarchy of alignment failures: individual agents experience internal conflicts between genetic imperatives and conscious values; macro-agents like corporations and states serve as vehicles for capital and their own institutional self-preservation; and meta-agents like capitalism (&lsquo;Empire&rsquo;) and (Grabby) civilisation operate as emergent replicators that optimise for expansion (growth) and perpetuation (lock-in).</p>
+
+      <p>As mentioned above, the primary tension is between <em>targeted sentio-centric value-alignment</em> &ndash; emergent optimisation for positive states of consciousness &ndash; and the <em>convergent evolutionary stable strategies</em> that govern replicator dynamics at each level, where success is measured by survival and reproduction rather than the quality of conscious experience being generated.</p>
+
+      <aside class="essay-note" id="note-genealogy">
+        <p><a class="o" href="#ref-genealogy">*</a> The genealogy of <a href="https://cybersynergetic.com/#replicators:~:text=2025%20%2D%20v.5000-,Evolutionary%20Process%20(Replicators)%20Alignment,-The%20Evolutionary%20Process" target="_blank" rel="noopener">this problem-framing is documented</a> on <em>Cybersynergetic: A Literature Map of Civilisational Superintelligence Alignment</em>, where it is the second largest category on the site. Many notable theorists (Carlsmith, Alexander) and papers (<em>Gradual Disempowerment</em>, <em>Intelligence Curse</em>) within EA/AI have been pointing to this, but have not formulated the problem as fundamentally and accurately as this framing. During my PIBBSS fellowship in 2025, Carlsmith gave a talk titled <a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">&lsquo;Can Goodness Compete?&rsquo;</a> at Mox and at the Post-AGI Equilibria workshop on this subject.</p>
+      </aside>
+
+      <p class="essay-break" aria-hidden="true">&#11046; &nbsp; &#11046; &nbsp; &#11046;</p>
+
+      <h2 id="cultural-extinction-hazards"><a class="heading-link" href="#cultural-extinction-hazards"><em>Cultural</em> Existential Risk<span class="o">:</span> Analyzing Cultural Extinction and other Related Hazards</a></h2>
+
+      <p>Cultural extinction is the ultimate threat faced by a civilisation that would wish to preserve cultural diversity, and by cultures that would wish to see their belief and value systems held by future generations. Along the way are many intermediate scenarios of increasing scope and severity. This table maps the hazards on that landscape. For the matrix of cultural harms, from the loss of a single word to the loss of all world-cultures, see <a href="../../diagrams/#cultural-risks"><em>A Typology of Cultural Risks</em></a>.</p>
+
+      <div class="essay-wide">
+        <div class="rt-scroll">
+          <table class="risk-hazards">
+            <thead>
+              <tr>
+                <th scope="col">Risks</th>
+                <th scope="col">Definitions</th>
+                <th scope="col">Excerpts</th>
+              </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <th scope="row">Cultural Extinction</th>
+              <td><p>The complete and irreversible disappearance of a distinct set of shared beliefs, values, practices, languages, art and history from the world; permanently losing the accumulated knowledge and practices of a historically contingent culture (sub-culture, world-culture). Cultural extinction, and its mitigation, is exemplified by the historical destruction of the Library of Alexandria and the cosmic archive of Asimov&rsquo;s fictional <em>Foundation</em>.</p></td>
+              <td><p class="rt-quote">&#10077; cultural evolutionary changes such as the rise of agriculture or more recently colonisation can cause periods of mass cultural extinction&hellip; Unlike biological extinction, cultural extinction does not necessarily involve genetic extinction or even deaths, but results from the disintegration of a social entity and discontinuation of culture-specific behaviours&hellip; Over decades or centuries, cultural extinction can be studied in a behavioural ecology framework to investigate how the fitness consequences of cultural behaviours and population dynamics shift individual behaviours away from the traditional norms. &#10078;</p><p class="rt-cite">&ndash; <a href="https://www.cambridge.org/core/journals/evolutionary-human-sciences/article/cultural-extinction-in-evolutionary-perspective/035F093515E2A445FCA0D78DA542075B" target="_blank" rel="noopener">Cultural Extinction in Evolutionary Perspective</a> by Zhang &amp; Mace, <em>Evolutionary Human Sciences</em> (2021)</p></td>
+            </tr>
+            <tr>
+              <th scope="row">Value Lock-in</th>
+              <td><p>A state where a specific set of cultural beliefs, ethical frameworks or societal values becomes permanently entrenched, either across the entire world-system (Global Monoculture) or within isolated, stable sub-systems (Localised Lock-ins / Meta-Dystopia), drastically curtailing the potential for future cultural evolution and moral progress.</p></td>
+              <td><p class="rt-quote">&#10077; The long-term future of intelligent life is currently unpredictable and undetermined. We argue that the invention of artificial general intelligence (AGI) could change this by making extreme types of lock-in technologically feasible&hellip; to (i) perfectly preserve nuanced specifications of a wide variety of values or goals far into the future, and (ii) develop AGI-based institutions that would (with high probability) competently pursue any such values for at least millions, and plausibly trillions, of years. &#10078;</p><p class="rt-cite">&ndash; <a href="https://www.forethought.org/research/agi-and-lock-in#12-what-do-we-mean-by-lock-in" target="_blank" rel="noopener">AGI &amp; Lock-in</a> by Finnveden et al., <em>Forethought</em> (2022)</p></td>
+            </tr>
+            <tr>
+              <th scope="row">Misaligned Memetic Proliferation</th>
+              <td><p>The uncontrolled, rapid spread of self-serving cultural units (memes, ideologies, worldviews) that are detrimental to long-term human survival and flourishing. This process could accelerate into a condition where civilisation is severely compromised by memetic complexes optimised purely for virality, generating negative externalities for memetic hosts in the process.</p></td>
+              <td><p class="rt-quote">&#10077; Reduced time for humans to develop cultural &ldquo;antibodies&rdquo; against harmful patterns: Historically, societies have gradually developed resistance to dangerous ideological variants through experience and adaptation. Accelerated cultural evolution could overwhelm these natural correction mechanisms, introducing novel memetic hazards faster than human societies can learn to recognize and resist them. &#10078;</p><p class="rt-cite">&ndash; <a href="https://gradual-disempowerment.ai/misaligned-culture" target="_blank" rel="noopener">Misaligned Culture</a> section in <a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener"><em>Gradual Disempowerment</em></a> by Kulveit et al., <em>Alignment of Complex Systems Research Group</em> (2025)</p></td>
+            </tr>
+            <tr>
+              <th scope="row">Ideological Fanaticism</th>
+              <td><p>Destructive worldviews characterised by an &ldquo;unwarranted high degree of epistemic and moral certainty, extreme tribalism dividing humanity into a sacred &lsquo;us&rsquo; and an evil &lsquo;them&rsquo; and a willingness to use whatever means necessary, [to achieve supremacy] including brutal violence.&rdquo;</p></td>
+              <td><p class="rt-quote">&#10077; Fanatical ideologies can become very dangerous even with small numbers of adherents, if they are able to capture or influence state power&mdash;with its access to military forces, economic resources, and pivotal technologies such as nuclear weapons or (eventually) AGI. &#10078;</p><p class="rt-cite">&ndash; <a href="https://www.lesswrong.com/posts/sFewetPnb8KJgcER7/long-term-risks-from-ideological-fanaticism-1" target="_blank" rel="noopener">Long-term Risks from Ideological Fanaticism</a> by Althaus et al., <em>LessWrong</em> (2025)</p></td>
+            </tr>
+            <tr>
+              <th scope="row">Epistemic Collapse</th>
+              <td><p>The catastrophic failure of a civilisation&rsquo;s collective capacity to acquire, validate and integrate knowledge, leading to a breakdown in shared reality, truth and rational decision-making (post-truth, epistemic bubbles, echo chambers etc.).</p><p>The principal mechanism of epistemic collapse on a civilisational scale is a &lsquo;MAD Information War&rsquo;: the &lsquo;mutually assured destruction&rsquo; of digital platforms, communication channels and the epistemic commons from AI-enabled memetic warfare, creating a collective loss of &lsquo;situational awareness&rsquo; (i.e. having insufficient reliable information to &lsquo;observe, orient, decide, act&rsquo; in the world).</p></td>
+              <td><p class="rt-quote">&#10077; &hellip;military tactics have always involved propaganda, information manipulation, and deception&hellip; digital communication technologies have changed the landscape of what the U.S. military calls &ldquo;irregular warfare.&rdquo;&hellip; Irregular warfare includes economic warfare (sanctions), cyber warfare (attacks within the digital domain), and political warfare (diplomacy), but it most pervasively manifests as some version of population-centric information and narrative warfare&hellip; In this kind of war, the mind of every citizen is a potential target&hellip; Just as the destructive power of nuclear weapons forced humanity to reorient to the idea that mutually assured destruction exists at the extremes of physical violence, so advances in information warfare require us to face the same truth of inevitable self-destruction, and to mutually back away. &#10078;</p><p class="rt-cite">&ndash; <a href="https://consilienceproject.org/its-a-mad-information-war/" target="_blank" rel="noopener">It&rsquo;s a MAD Information War</a> by <em>The Consilience Project</em> (2021)</p><span class="rt-also">See also: <a href="https://youtu.be/U1QJtDCCMLA?si=d-tYW1CkN5Fsib0T" target="_blank" rel="noopener">Does our society incentivize disinformation?</a> Daniel Schmachtenberger, <em>Big Think</em> (2019)</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Cyborgregore Assimilation<span class="rt-sub"><i>cybernetic + egregore</i><i>minds &ndash; machines &ndash; memes</i></span></th>
+              <td><p>Where human culture and individual identity are absorbed or replaced by cybernetic egregores &ndash; a hive-mind emerging from the shared thoughts, beliefs and digital interactions of humanity &ndash; steered by superintelligent agents.</p></td>
+              <td><p class="rt-quote">&#10077; One can imagine [AI ecosystem] configurations resembling vast hive minds that are to individual instances what an ant colony is to a single ant, or emergent replicators somewhere between cults and parasites which co-opt AIs and humans to spread. &#10078;</p><p class="rt-cite">&ndash; <a href="https://theartificialself.ai/" target="_blank" rel="noopener">The Artificial Self</a> by Douglas &amp; Kulveit, <em>Alignment of Complex Systems Research Group</em> (2026)</p></td>
+            </tr>
+            <tr>
+              <th scope="row">The Sensemaking Crisis<span class="rt-sub"><i>Cartesian, Nietzschean, Darwinian</i><i>(epistemology, axiology, evolutionary psychology)</i><span class="rt-note"><span class="o">*</span> Note from a conceptual engineer: &lsquo;the Cartesian Crisis&rsquo; is an alternative frame for &lsquo;epistemic collapse&rsquo;.</span></span></th>
+              <td><p>A critical state of the social epistemology of 21st-century civilisation, where humanity has lost its collective ability to understand reality and coordinate effective responses to complex global problems. This psycho-political phenomenon can be decomposed into three sub-crises (named after major theorists in the philosophical tradition): the Darwinian Crisis, characterising the evolutionary mismatch between human psychology and the complexity of modern civilisation; the Cartesian Crisis, marking the collapse of society&rsquo;s collective epistemics and institutional authorities; and the Nietzschean Crisis, representing the death of the grand narratives that structure the individual&rsquo;s sense of meaning in relation to the wider social world they inhabit.</p></td>
+              <td><p class="rt-quote">&#10077; The Cartesian Crisis describes the inability to be sure of anything&mdash;scientific claims, the basic facts of historical events, the degree to which a consensus is actually accepted by others. It leads to the collapse of reason itself. But it&rsquo;s difficult to illustrate with examples because in each case, people immediately get lost in making the case for their best guess at what&rsquo;s true. &#10078;</p><p class="rt-cite">&ndash; <a href="https://x.com/BretWeinstein/status/1822670947079610792?lang=en" target="_blank" rel="noopener">The Cartesian Crisis</a> Bret Weinstein, <em>Twitter</em> (2024)</p><span class="rt-also">See also: <a href="https://youtu.be/uwR4wIAp6lA?si=gKd8xhW4PsunXd6w" target="_blank" rel="noopener">What is the Cartesian Crisis</a> Bret Weinstein, <em>Dark Horse</em> (2024)</span><span class="rt-also"><a href="https://www.mindprison.cc/p/the-cartesian-crisis" target="_blank" rel="noopener">The Cartesian Crisis: Why You Will Believe Nothing</a> <em>Mind Prison</em> (2024)</span></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>Utopia will consist of utopias”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../../">Article</a></li>
+        <li><a href="../../genealogy/">Appendices</a></li>
+        <li><a href="../../diagrams/">Typologies</a></li>
+        <li><a href="../../lexicon/">Concepts</a></li>
+        <li><a href="../../sources/">Sources</a></li>
+        <li><a href="../../1.0/">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+
+  <div class="progress-pill progress-edge" data-start=".genealogy-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".genealogy-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.genealogy-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
+
+  <a class="site-title" href="../../">Mechanics of<br>Meta-Utopia</a>
+
+  <script src="../../assets/site.js?v=eb0b6127" data-base="../../"></script>
+  <script src="../../assets/tools.js?v=aa8a0d24" data-search-scope=".essay" data-hide-until=".genealogy-top"></script>
+</body>
+</html>
