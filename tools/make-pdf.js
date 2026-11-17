@@ -121,6 +121,10 @@ const CSS = `
   .matrix-tick.x-low, .matrix-tick.x-high { bottom: 34px !important; }
   .matrix-frames { margin: 0 0 16pt; padding-left: 14pt; border-left: 3pt solid #e36843; font-family: 'IBM Plex Sans', sans-serif; font-size: 9.5pt; line-height: 1.55; }
   .matrix-detail { display: none !important; }
+  .matrix-frames .frames-head { margin: 0 0 5pt; }
+  .matrix-frames ol { margin: 0; padding-left: 1.4em; list-style: decimal; }
+  .matrix-frames li { margin: 0 0 3pt; padding-left: 0.2em; text-indent: 0; }
+  .matrix-frames li::before { content: none; }
   /* drawn at rest: no future chosen, whatever the pointer */
   .matrix { pointer-events: none; }
   .matrix .m-cell { background: #fff !important; transition: none !important; }
