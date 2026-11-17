@@ -705,6 +705,25 @@
       font-family: var(--sans);
     }
 
+    .src-head {
+      margin: 0 0 32px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .ord-figure .src-head {
+      text-align: center;
+    }
+
+    .src-figure .bos-note {
+      max-width: 980px;
+      margin: 12px 0 0;
+      color: var(--canvas-ink);
+    }
+
     .src-figure figcaption {
       margin: 28px 0 0;
       font-size: 14px;
@@ -730,6 +749,8 @@
       grid-template-columns: 150px repeat(3, minmax(170px, 1fr)) 84px 170px;
       grid-template-rows: 64px repeat(5, 84px) auto;
       min-width: 820px;
+      /* room above for the Scope axis's arrowhead, inside the scroll box */
+      padding: 16px 16px 0 0;
       font-size: 14px;
       line-height: 1.35;
     }
@@ -1872,6 +1893,7 @@
       </div>
       <p class="cer-source">See also <a href="https://existential-risk.com/concept.pdf" target="_blank" rel="noopener">Existential Risk Prevention as Global Priority</a> by Nick Bostrom (2002 &gt; 2008 &gt; 2013).</p>
           <figure class="src-figure" aria-label="Qualitative risk categories, after Nick Bostrom">
+        <h2 class="src-head">Qualitative Risk Categories</h2>
         <div class="src-scroll">
           <div class="bos-grid">
             <div class="bos-scope bos-axis" style="grid-row: 1; grid-column: 1; align-items: flex-start">Scope</div>
@@ -1914,7 +1936,8 @@
             <div class="bos-sev bos-axis" style="grid-row: 7; grid-column: 6; justify-content: flex-start; padding-left: 22px">Severity</div>
           </div>
         </div>
-        <figcaption><b>Figure 2.</b> Qualitative risk categories, from <em>Existential Risk Prevention as Global Priority</em> by Nick Bostrom (2013). The area marked <span class="bos-x" style="font-size: inherit">X</span> represents existential risks: those of at least crushing severity and at least pan-generational scope.</figcaption>
+        <figcaption><b>Figure 2.</b> Qualitative risk categories, from <em>Existential Risk Prevention as Global Priority</em> by Nick Bostrom (2013). The area marked <span class="bos-x" style="font-size: inherit">X</span> represents existential risks: those of at least crushing severity and at least pan-generational scope.
+          <p class="bos-note"><i>Note: The scope of a risk can be</i> personal <i>(affecting only one person),</i> local <i>(affecting some geographical region or a distinct group),</i> global <i>(affecting the entire human population or a large part thereof),</i> trans-generational <i>(affecting humanity for numerous generations), or</i> pan-generational <i>(affecting humanity over all, or almost all, future generations). The severity of a risk can be classified as</i> imperceptible <i>(barely noticeable),</i> endurable <i>(causing significant harm but not completely ruining quality of life), or</i> crushing <i>(causing death or a permanent and drastic reduction of quality of life).</i></p></figcaption>
       </figure>
     </section>
 
@@ -2024,6 +2047,7 @@
       </div>
       <p class="cer-source">See also the typology of moral worldviews and catastrophes in <a href="https://www.forethought.org/research/no-easy-eutopia" target="_blank" rel="noopener">No Easy Eutopia</a> by William MacAskill &amp; Fin Moorhouse (2025).</p>
           <figure class="src-figure" aria-label="Moral perspectives and moral catastrophes, after MacAskill and Moorhouse">
+        <h2 class="src-head">Moral Perspectives &amp; Moral Catastrophes</h2>
         <div class="src-scroll">
           <table class="cer-table nee-table">
             <thead>
@@ -2322,6 +2346,7 @@
 
       <p class="mono-source">See also the graphic taxonomy of x-risks from <a href="https://www.are.na/block/41292921" target="_blank" rel="noopener">The Precipice</a> by Toby Ord (2020).</p>
           <figure class="src-figure ord-figure" aria-label="An extended classification of existential catastrophes, after Toby Ord">
+        <h2 class="src-head">An Extended Classification of Existential Catastrophes</h2>
         <div class="src-scroll">
         <svg class="ord-tree" viewBox="0 0 1030 480" role="img" aria-label="Existential catastrophe divides into extinction and failed continuation; failed continuation into unrecoverable collapse and unrecoverable dystopia; unrecoverable dystopia into undesired, enforced and desired dystopia">
           <line x1="300" y1="58" x2="85" y2="124"/><line x1="300" y1="58" x2="515" y2="124"/><line x1="515" y1="192" x2="300" y2="268"/><line x1="515" y1="192" x2="728" y2="268"/><line x1="728" y1="336" x2="513" y2="410"/><line x1="728" y1="336" x2="728" y2="410"/><line x1="728" y1="336" x2="945" y2="410"/>
