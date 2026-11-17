@@ -2096,8 +2096,36 @@
       transition: transform 0.3s ease;
     }
 
-    .m-cell:hover .m-text {
-      transform: translateY(-3px);
+    /* a chosen future (hovered, or tapped on narrower windows): its text
+       grows a little and darkens, growing from its own corner */
+    .m-cell:hover .m-text,
+    .m-cell.is-selected .m-text {
+      transform: translateY(-3px) scale(1.05);
+    }
+
+    .m-tl .m-text { transform-origin: top left; }
+    .m-tr .m-text { transform-origin: top right; }
+    .m-bl .m-text { transform-origin: bottom left; }
+    .m-br .m-text { transform-origin: bottom right; }
+    .m-center .m-text { transform-origin: center; }
+
+    .m-text h4,
+    .m-text .m-sub,
+    .m-text p {
+      transition: -webkit-text-stroke-width 0.3s ease, font-weight 0.3s ease;
+    }
+
+    html .article-body .matrix .m-cell:is(:hover, .is-selected) .m-text h4 {
+      font-weight: 700;
+    }
+
+    html.serif-headings .article-body .matrix .m-cell:is(:hover, .is-selected) .m-text h4 {
+      -webkit-text-stroke-width: 0.85px;
+    }
+
+    .matrix .m-cell:is(:hover, .is-selected) .m-sub,
+    .article-body .matrix .m-cell:is(:hover, .is-selected) .m-text p {
+      -webkit-text-stroke: 0.3px currentColor;
     }
 
     .m-tl .m-text { top: var(--m-pad); left: var(--m-pad); }
