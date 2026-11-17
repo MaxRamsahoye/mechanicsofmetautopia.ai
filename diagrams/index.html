@@ -1307,14 +1307,23 @@
       }
     }
 
-    /* windows wide enough for the title column and the full-size diagram
-       side by side: the title and description, smaller, on the left; the
-       diagram, at the article's size, on the right. The pair starts 180px
-       from the window's left edge (room for the menu), or is centred when
-       there is more room than that */
+    /* the Unified Frames note, copied into the left column for the
+       side-by-side layout below (shown only there) */
+    .frames-side {
+      display: none;
+    }
+
+    /* windows wide enough for the left column and the full-size diagram side
+       by side: the title, description and Unified Frames, smaller, in a
+       column on the left; the diagram, at the article's size, on the right.
+       The diagram starts 534px from the window's left edge, or further in
+       when there is more room (the pair centred); the column runs from 64px
+       short of it back to 70px from the window's edge, or more */
     @media (min-width: 1680px) {
       body[data-show="attractors-main"] .page-main {
-        --t1-left: max(180px, 50vw - 717px);
+        /* the diagram's left edge, and the column's, in the window */
+        --t1-diagram: calc(max(180px, 50vw - 717px) + 354px);
+        --t1-col: 400px;
         display: grid;
         grid-template-columns: 100%;
         align-items: start;
@@ -1327,16 +1336,10 @@
       }
 
       body[data-show="attractors-main"] .diagram-top {
-        width: 290px;
-        /* from the main column's left edge to the pair's left edge */
-        margin-left: calc(var(--t1-left) - 50vw + 50%);
+        width: var(--t1-col);
+        /* from the main column's left edge to the column's left edge */
+        margin-left: calc(var(--t1-diagram) - 64px - var(--t1-col) - 50vw + 50%);
         margin-bottom: 0;
-        position: sticky;
-        top: 140px;
-      }
-
-      body[data-show="attractors-main"] .view-tabs {
-        left: calc(24px - var(--t1-left));
       }
 
       body[data-show="attractors-main"] .diagram-top::before {
@@ -1354,9 +1357,38 @@
         line-height: 1.45;
       }
 
+      body[data-show="attractors-main"] .frames-side {
+        display: block;
+        margin: 28px 0 0;
+        padding-left: 18px;
+        border-left: 3px solid var(--canvas-accent);
+        font-family: var(--sans);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      body[data-show="attractors-main"] .attractors-view .matrix-frames {
+        display: none;
+      }
+
+      /* the menu of typologies sits under the column, as a row, rather than
+         in the margin where the column now reaches */
+      body[data-show="attractors-main"] .view-tabs {
+        position: static;
+        transform: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 14px 28px;
+        margin: 44px 0 0;
+      }
+
+      body[data-show="attractors-main"] .tab-group {
+        flex-direction: row;
+      }
+
       body[data-show="attractors-main"] .attractors-view {
         width: 1080px;
-        margin-left: calc(var(--t1-left) - 50vw + 50% + 290px + 64px);
+        margin-left: calc(var(--t1-diagram) - 50vw + 50%);
       }
 
       body[data-show="attractors-main"] .attractors-view .matrix-wrap {
@@ -2037,6 +2069,17 @@
   </button>
 
   <script>
+    // Typology 1: its Unified Frames note, copied into the left column
+    // (shown there only when the column sits beside the diagram)
+    (function () {
+      var note = document.querySelector('.attractors-view .matrix-frames');
+      var head = document.querySelector('.diagram-head');
+      if (!note || !head) return;
+      var copy = note.cloneNode(true);
+      copy.className = 'frames-side';
+      head.insertAdjacentElement('afterend', copy);
+    })();
+
     // the views: All Typologies, or one diagram at its own address
     (function () {
       var body = document.body;
