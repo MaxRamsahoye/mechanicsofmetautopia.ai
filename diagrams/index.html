@@ -56,6 +56,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../assets/matrix.css?v=c6c67d0b" rel="stylesheet">
   <link href="../assets/site.css?v=34995492" rel="stylesheet">
   <style>
     /* ---------- the Models page pattern from complexemergencemodel.systems ---------- */
@@ -1272,295 +1273,26 @@
       --canvas-accent: #d15632;
     }
 
-    /* ---------- the four futures matrix ---------- */
-
-    .matrix-figure {
-      margin: 72px 0 0;
-      font-family: var(--sans);
-    }
-
-    .matrix-frames {
-      max-width: 760px;
-      margin: 0 0 48px;
-      padding-left: 24px;
-      border-left: 4px solid var(--canvas-accent);
-      font-family: var(--sans);
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .matrix-wrap {
-      position: relative;
-      max-width: 760px;
-      padding: 0 0 64px 60px;
-    }
-
-    .matrix-axis {
-      position: absolute;
-      font-family: var(--sans);
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
-
-    .matrix-axis-y {
-      left: 0;
-      top: 0;
-      bottom: 64px;
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      text-align: center;
-    }
-
-    .matrix-axis-x {
-      left: 60px;
-      right: 0;
-      bottom: 0;
-      text-align: center;
-    }
-
-    .matrix-tick {
-      position: absolute;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    .matrix-tick.y-high { left: 26px; top: calc((100% - 64px) * 0.15); }
-    .matrix-tick.y-low { left: 26px; top: calc((100% - 64px) * 0.85 - 1em); }
-    .matrix-tick.x-low { bottom: 34px; left: calc(60px + (100% - 60px) * 0.15); }
-    .matrix-tick.x-high { bottom: 34px; right: calc((100% - 60px) * 0.15); }
-
-    /* four L-shaped futures around the central clash; the hairlines are the
-       ink showing through the gaps between them */
-    .matrix {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      background: var(--m-line);
-      border: 1px solid var(--m-line);
-      overflow: hidden;
-      --m-pad: 22px;
-    }
-
-    .m-cell {
-      position: absolute;
-      background: var(--canvas-bg);
-      transition: background-color 0.3s ease;
-    }
-
-    /* each future its own tint on hover; the clash, all four */
-    .m-tl:hover { background: var(--m-tl); }
-    .m-tr:hover { background: var(--m-tr); }
-    .m-bl:hover { background: var(--m-bl); }
-    .m-br:hover { background: var(--m-br); }
-
-    .m-center::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--m-center);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
-    }
-
-    .m-center:hover::before {
-      opacity: 1;
-    }
-
-    /* the automatic tour through the futures shows each as hover does */
-    .m-tl.is-selected { background: var(--m-tl); }
-    .m-tr.is-selected { background: var(--m-tr); }
-    .m-bl.is-selected { background: var(--m-bl); }
-    .m-br.is-selected { background: var(--m-br); }
-    .m-center.is-selected::before { opacity: 1; }
-    .m-cell.is-selected .m-text { transform: translateY(-3px); }
-
-    .m-tl, .m-tr, .m-bl, .m-br {
-      width: calc(50% - 0.5px);
-      height: calc(50% - 0.5px);
-    }
-
-    .m-tl { left: 0; top: 0; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 60%, 50% 100%, 0 100%); }
-    .m-tr { right: 0; top: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 50% 60%, 0 60%); }
-    .m-bl { left: 0; bottom: 0; clip-path: polygon(0 0, 50% 0, 50% 40%, 100% 40%, 100% 100%, 0 100%); }
-    .m-br { right: 0; bottom: 0; clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%, 0 40%, 50% 40%); }
-
-    .m-center {
-      left: 25%;
-      top: 30%;
-      width: 50%;
-      height: 40%;
-      z-index: 1;
-      border: 1px solid var(--m-line);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .m-text {
-      position: absolute;
-      width: calc(100% - 2 * var(--m-pad));
-      transition: transform 0.3s ease;
-    }
-
-    .m-cell:hover .m-text {
-      transform: translateY(-3px);
-    }
-
-    .m-tl .m-text { top: var(--m-pad); left: var(--m-pad); }
-    .m-tr .m-text { top: var(--m-pad); right: var(--m-pad); text-align: right; }
-    .m-bl .m-text { bottom: var(--m-pad); left: var(--m-pad); }
-    .m-br .m-text { bottom: var(--m-pad); right: var(--m-pad); text-align: right; }
-    .m-center .m-text { position: relative; padding: 0 var(--m-pad); width: auto; }
-
-    html .matrix .m-text h4 {
-      margin: 0 0 3px;
-      font-family: var(--sans);
-      font-weight: 600;
-      font-size: 17px;
-      letter-spacing: -0.01em;
-      line-height: 1.25;
-      -webkit-text-stroke: 0;
-    }
-
-    html.serif-headings .matrix .m-text h4 {
-      font-family: var(--serif);
-      font-weight: 700;
-      font-size: 21px;
-      letter-spacing: 0;
-      -webkit-text-stroke: 0.4px currentColor;
-    }
-
-    .m-sub {
-      display: block;
-      margin: 0 0 10px;
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 17px;
-      line-height: 1.25;
-    }
-
-    .m-text p {
-      max-width: none;
-      margin: 0;
-      font-family: var(--serif);
-      font-size: 16px;
-      line-height: 1.32;
-    }
-
-    /* narrower windows: the titles only */
-    @media (max-width: 1180px) {
-      .m-text p {
-        display: none;
-      }
-
-      .matrix {
-        --m-pad: 14px;
-      }
-
-      html .matrix .m-text h4 {
-        font-size: 15px;
-      }
-
-      html.serif-headings .matrix .m-text h4 {
-        font-size: 18px;
-      }
-
-      .m-sub {
-        font-size: 15px;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .matrix-wrap {
-        padding: 0 0 56px 52px;
-      }
-
-      .matrix-axis {
-        font-size: 14px;
-      }
-
-      .matrix-axis-y {
-        bottom: 56px;
-      }
-
-      .matrix-axis-x {
-        left: 52px;
-      }
-
-      .matrix-tick {
-        font-size: 11px;
-      }
-
-      .matrix-tick.y-high, .matrix-tick.y-low { left: 21px; }
-      .matrix-tick.y-high { top: calc((100% - 56px) * 0.15); }
-      .matrix-tick.y-low { top: calc((100% - 56px) * 0.85 - 1em); }
-      .matrix-tick.x-low { bottom: 30px; left: calc(52px + (100% - 52px) * 0.15); }
-      .matrix-tick.x-high { bottom: 30px; right: calc((100% - 52px) * 0.15); }
-
-      .matrix {
-        aspect-ratio: 1 / 1;
-        --m-pad: 10px;
-      }
-
-      html .matrix .m-text h4 {
-        font-size: 13px;
-      }
-
-      html.serif-headings .matrix .m-text h4 {
-        font-size: 15px;
-      }
-
-      .m-sub {
-        display: none;
-      }
-    }
-
-
-    /* ---------- scaled up for this page ---------- */
+    /* ---------- Typology 1: its place on this page ----------
+       the diagram's design and behaviour are shared with the article, in
+       assets/matrix.css and assets/matrix.js */
 
     .attractors-view .matrix-figure {
       margin: 0;
+      font-family: var(--sans);
     }
 
     .attractors-view .matrix-frames {
       max-width: 860px;
       margin: 56px 0 0;
+      padding-left: 24px;
+      border-left: 4px solid var(--canvas-accent);
       font-size: 17px;
+      line-height: 1.6;
     }
 
     .attractors-view .matrix-wrap {
-      --ax-l: 112px;
-      --ax-b: 80px;
       max-width: none;
-      padding: 0 0 var(--ax-b) var(--ax-l);
-    }
-
-    .attractors-view .matrix-axis { font-size: 19px; }
-    .attractors-view .matrix-axis-y { bottom: var(--ax-b); }
-    .attractors-view .matrix-axis-x { left: var(--ax-l); }
-    .attractors-view .matrix-tick { font-size: 15px; }
-    .attractors-view .matrix-tick.y-high,
-    .attractors-view .matrix-tick.y-low { left: auto; right: calc(100% - var(--ax-l) + 12px); text-align: right; }
-    .attractors-view .matrix-tick.y-high { top: calc((100% - var(--ax-b)) * 0.15); }
-    .attractors-view .matrix-tick.y-low { top: calc((100% - var(--ax-b)) * 0.85 - 1em); }
-    .attractors-view .matrix-tick.x-low { bottom: 44px; left: calc(var(--ax-l) + (100% - var(--ax-l)) * 0.15); }
-    .attractors-view .matrix-tick.x-high { bottom: 44px; right: calc((100% - var(--ax-l)) * 0.15); }
-
-    .attractors-view .matrix {
-      aspect-ratio: 1.25 / 1;
-      --m-pad: 32px;
-    }
-
-    html .attractors-view .matrix .m-text h4 { font-size: 22px; margin-bottom: 4px; }
-    html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 27px; }
-    .attractors-view .m-sub { font-size: 20px; margin-bottom: 14px; }
-
-    .attractors-view .m-text p {
-      display: block;
-      font-size: 18px;
-      line-height: 1.35;
     }
 
     /* wide windows: the title and description, smaller, in a column on the
@@ -1580,8 +1312,7 @@
       }
 
       body[data-show="attractors-main"] .diagram-top {
-        --t1-col: 290px;
-        width: var(--t1-col);
+        width: 290px;
         margin-bottom: 0;
         position: sticky;
         top: 140px;
@@ -1606,63 +1337,19 @@
         /* starts past the title column and its gap; ends 64px in from the
            window's right edge (the main column is centred in the window) */
         margin-left: calc((100% - var(--wide-col)) / 2 + 290px + 64px);
-        width: min(1240px, 50vw + 50% - 64px - (100% - var(--wide-col)) / 2 - 290px - 64px, max(860px, (100vh - 220px) * 0.95 + 112px));
+        width: min(1240px, 50vw + 50% - 64px - (100% - var(--wide-col)) / 2 - 290px - 64px, max(880px, (100vh - 240px) * 0.95 + 140px));
       }
 
-      body[data-show="attractors-main"] .attractors-view .matrix-wrap {
-        zoom: 1;
-        width: auto;
-      }
-
+      /* taller than wide, with the text a little smaller, to fit beside the title */
       body[data-show="attractors-main"] .attractors-view .matrix {
         aspect-ratio: 0.95 / 1;
         --m-pad: 28px;
+        --m-h4-sans: 19px;
+        --m-h4: 24px;
+        --m-sub: 17px;
+        --m-p: 16px;
+        --m-p-lh: 1.32;
       }
-
-      html.serif-headings body[data-show="attractors-main"] .attractors-view .matrix .m-text h4 { font-size: 24px; }
-      body[data-show="attractors-main"] .attractors-view .m-sub { font-size: 17px; margin-bottom: 10px; }
-      body[data-show="attractors-main"] .attractors-view .m-text p { font-size: 16px; line-height: 1.32; }
-    }
-
-    /* wide windows: the whole diagram at 0.85 of that size */
-    @media (min-width: 1181px) {
-      .attractors-view .matrix-wrap {
-        zoom: 0.85;
-        /* the column's width before scaling, so the whole diagram scales */
-        width: var(--wide-col);
-      }
-    }
-
-    @media (max-width: 1180px) {
-      .attractors-view .matrix {
-        aspect-ratio: 1.1 / 1;
-        --m-pad: 24px;
-      }
-
-      html .attractors-view .matrix .m-text h4 { font-size: 19px; }
-      html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 23px; }
-      .attractors-view .m-sub { font-size: 18px; margin-bottom: 10px; }
-      .attractors-view .m-text p { font-size: 16px; }
-    }
-
-    @media (max-width: 900px) {
-      .attractors-view .m-text p {
-        display: none;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .attractors-view .matrix-wrap { --ax-l: 78px; --ax-b: 56px; }
-      .attractors-view .matrix-axis { font-size: 14px; }
-      .attractors-view .matrix-tick { font-size: 11px; }
-      .attractors-view .matrix-tick.y-high,
-      .attractors-view .matrix-tick.y-low { right: calc(100% - var(--ax-l) + 7px); }
-      .attractors-view .matrix-tick.x-low,
-      .attractors-view .matrix-tick.x-high { bottom: 30px; }
-      .attractors-view .matrix { aspect-ratio: 1 / 1; --m-pad: 10px; }
-      html .attractors-view .matrix .m-text h4 { font-size: 13px; }
-      html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 15px; }
-      .attractors-view .m-sub { display: none; }
     }
   </style>
 </head>
@@ -2391,59 +2078,6 @@
       render();
     })();
 
-    // Typology 1: a tour through the futures, from the clash in the middle to
-    // the top right and on clockwise, back to the middle after the top left;
-    // the pointer takes over while it is on the diagram, and the tour
-    // resumes a few seconds after it leaves
-    (function () {
-      var matrix = document.querySelector('.attractors-view .matrix');
-      if (!matrix) return;
-      var order = ['center', 'tr', 'br', 'bl', 'tl'];
-      var cells = order.map(function (k) { return matrix.querySelector('.m-' + k); });
-      var i = 0, timer = null, resume = null, paused = false;
-
-      function clear() { cells.forEach(function (c) { c.classList.remove('is-selected'); }); }
-
-      function step() {
-        if (paused || matrix.matches(':hover') || !matrix.offsetParent || document.hidden) return;
-        clear();
-        cells[i].classList.add('is-selected');
-        i = (i + 1) % cells.length;
-      }
-
-      function start() {
-        clearInterval(timer);
-        paused = false;
-        step();
-        timer = setInterval(step, 3200);
-      }
-
-      function hold() {
-        paused = true;
-        clearTimeout(resume);
-        clear();
-      }
-
-      matrix.addEventListener('mouseenter', hold);
-      matrix.addEventListener('mouseleave', function () {
-        clearTimeout(resume);
-        resume = setTimeout(start, 3000);
-      });
-      // a tap on a touch screen chooses that future and holds the tour a while
-      matrix.addEventListener('click', function (e) {
-        var c = e.target.closest('.m-cell');
-        if (!c) return;
-        hold();
-        c.classList.add('is-selected');
-        i = (cells.indexOf(c) + 1) % cells.length;
-        resume = setTimeout(start, 8000);
-      });
-      document.querySelectorAll('[data-show], [data-go]').forEach(function (b) {
-        b.addEventListener('click', function () { if (!paused) { i = 0; setTimeout(start, 0); } });
-      });
-      start();
-    })();
-
     // Typology 2: every column is as wide as the longest cell heading needs
     // to sit on one line (and wider where the page has room)
     (function () {
@@ -2494,6 +2128,7 @@
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
+  <script src="../assets/matrix.js?v=856ce7a7"></script>
   <script src="../assets/tools.js?v=a249bb60" data-hide-until=".diagram-top"></script>
 </body>
 </html>

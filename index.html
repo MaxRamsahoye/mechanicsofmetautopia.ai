@@ -79,6 +79,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
   <noscript><link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,500&display=swap" rel="stylesheet"></noscript>
+  <link href="assets/matrix.css?v=c6c67d0b" rel="stylesheet">
   <style>
     @font-face {
       font-family: 'ET Bembo';
@@ -1937,7 +1938,9 @@
       -webkit-text-stroke: 0.4px currentColor;
     }
 
-    /* ---------- the four futures matrix ---------- */
+    /* ---------- the four futures matrix ----------
+       its design and behaviour are shared with Typology 1, in
+       assets/matrix.css and assets/matrix.js; here, only its place in the article */
 
     .matrix-figure {
       margin: 112px 0 120px;
@@ -1954,224 +1957,6 @@
       line-height: 1.6;
     }
 
-    .matrix-wrap {
-      /* --ax-l / --ax-b: room for the axis labels; --ar: room for the arrowheads */
-      --ax-l: 100px;
-      --ax-b: 64px;
-      --ar: 40px;
-      position: relative;
-      box-sizing: border-box;
-      max-width: 820px;
-      padding: var(--ar) var(--ar) var(--ax-b) var(--ax-l);
-    }
-
-    /* as in Typology 2: the two axes, left and bottom, run on past the grid
-       to an arrowhead */
-    .matrix-wrap::before,
-    .matrix-wrap::after {
-      content: '';
-      position: absolute;
-      background: var(--canvas-ink);
-    }
-
-    .matrix-wrap::before {
-      left: calc(var(--ax-l) - 5.5px);
-      top: 0;
-      width: 14px;
-      height: calc(var(--ar) + 1px);
-      clip-path: polygon(50% 0, 100% 14px, calc(50% + 1.5px) 14px, calc(50% + 1.5px) 100%, calc(50% - 1.5px) 100%, calc(50% - 1.5px) 14px, 0 14px);
-    }
-
-    .matrix-wrap::after {
-      right: 0;
-      top: calc(100% - var(--ax-b) - 8.5px);
-      width: calc(var(--ar) + 1px);
-      height: 14px;
-      clip-path: polygon(0 calc(50% - 1.5px), calc(100% - 14px) calc(50% - 1.5px), calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, calc(100% - 14px) calc(50% + 1.5px), 0 calc(50% + 1.5px));
-    }
-
-    .matrix-axis {
-      position: absolute;
-      font-family: 'Inter', sans-serif;
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
-
-    .matrix-axis-y {
-      left: 0;
-      top: var(--ar);
-      bottom: var(--ax-b);
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      text-align: center;
-    }
-
-    .matrix-axis-x {
-      left: var(--ax-l);
-      right: var(--ar);
-      bottom: 0;
-      text-align: center;
-    }
-
-    .matrix-tick {
-      position: absolute;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    /* the scale's labels on the left sit right-aligned against the grid */
-    .matrix-tick.y-high,
-    .matrix-tick.y-low { right: calc(100% - var(--ax-l) + 10px); text-align: right; }
-    .matrix-tick.y-high { top: calc(var(--ar) + (100% - var(--ar) - var(--ax-b)) * 0.15); }
-    .matrix-tick.y-low { top: calc(var(--ar) + (100% - var(--ar) - var(--ax-b)) * 0.85 - 1em); }
-    .matrix-tick.x-low { bottom: 34px; left: calc(var(--ax-l) + (100% - var(--ax-l) - var(--ar)) * 0.15); }
-    .matrix-tick.x-high { bottom: 34px; right: calc(var(--ar) + (100% - var(--ax-l) - var(--ar)) * 0.15); }
-
-    /* four L-shaped futures around the central clash; the hairlines are the
-       ink showing through the gaps between them */
-    .matrix {
-      position: relative;
-      aspect-ratio: 1 / 1;
-      /* the lines in the ink, as in Typology 2: hairlines inside, the outer
-         edge heavier, the two axes heavier still */
-      --m-line: var(--canvas-ink);
-      background: var(--m-line);
-      border: 1.5px solid var(--canvas-ink);
-      border-left-width: 3px;
-      border-bottom-width: 3px;
-      overflow: hidden;
-      --m-pad: 22px;
-    }
-
-    .m-cell {
-      position: absolute;
-      background: var(--canvas-bg);
-      transition: background-color 0.3s ease;
-    }
-
-    /* each future its own tint on hover; the clash, all four */
-    .m-tl:hover { background: var(--m-tl); }
-    .m-tr:hover { background: var(--m-tr); }
-    .m-bl:hover { background: var(--m-bl); }
-    .m-br:hover { background: var(--m-br); }
-
-    .m-center::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--m-center);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      z-index: -1;
-    }
-
-    .m-center:hover::before {
-      opacity: 1;
-    }
-
-    .m-tl, .m-tr, .m-bl, .m-br {
-      width: calc(50% - 0.5px);
-      height: calc(50% - 0.5px);
-    }
-
-    .m-tl { left: 0; top: 0; clip-path: polygon(0 0, 100% 0, 100% 60%, 50% 60%, 50% 100%, 0 100%); }
-    .m-tr { right: 0; top: 0; clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 100%, 50% 60%, 0 60%); }
-    .m-bl { left: 0; bottom: 0; clip-path: polygon(0 0, 50% 0, 50% 40%, 100% 40%, 100% 100%, 0 100%); }
-    .m-br { right: 0; bottom: 0; clip-path: polygon(50% 0, 100% 0, 100% 100%, 0 100%, 0 40%, 50% 40%); }
-
-    .m-center {
-      left: 25%;
-      top: 30%;
-      width: 50%;
-      height: 40%;
-      z-index: 1;
-      border: 1px solid var(--m-line);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-    }
-
-    .m-text {
-      position: absolute;
-      width: calc(100% - 2 * var(--m-pad));
-      transition: transform 0.3s ease;
-    }
-
-    /* a chosen future (hovered, or tapped on narrower windows): its text
-       grows a little and darkens, growing from its own corner */
-    .m-cell:hover .m-text,
-    .m-cell.is-selected .m-text {
-      transform: translateY(-3px) scale(1.05);
-    }
-
-    .m-tl .m-text { transform-origin: top left; }
-    .m-tr .m-text { transform-origin: top right; }
-    .m-bl .m-text { transform-origin: bottom left; }
-    .m-br .m-text { transform-origin: bottom right; }
-    .m-center .m-text { transform-origin: center; }
-
-    .m-text h4,
-    .m-text .m-sub,
-    .m-text p {
-      transition: -webkit-text-stroke-width 0.3s ease, font-weight 0.3s ease;
-    }
-
-    html .article-body .matrix .m-cell:is(:hover, .is-selected) .m-text h4 {
-      font-weight: 700;
-    }
-
-    html.serif-headings .article-body .matrix .m-cell:is(:hover, .is-selected) .m-text h4 {
-      -webkit-text-stroke-width: 0.85px;
-    }
-
-    .matrix .m-cell:is(:hover, .is-selected) .m-sub,
-    .article-body .matrix .m-cell:is(:hover, .is-selected) .m-text p {
-      -webkit-text-stroke: 0.3px currentColor;
-    }
-
-    .m-tl .m-text { top: var(--m-pad); left: var(--m-pad); }
-    .m-tr .m-text { top: var(--m-pad); right: var(--m-pad); text-align: right; }
-    .m-bl .m-text { bottom: var(--m-pad); left: var(--m-pad); }
-    .m-br .m-text { bottom: var(--m-pad); right: var(--m-pad); text-align: right; }
-    .m-center .m-text { position: relative; padding: 0 var(--m-pad); width: auto; }
-
-    html .article-body .matrix .m-text h4 {
-      margin: 0 0 3px;
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 17px;
-      letter-spacing: -0.01em;
-      line-height: 1.25;
-      -webkit-text-stroke: 0;
-    }
-
-    html.serif-headings .article-body .matrix .m-text h4 {
-      font-family: var(--serif);
-      font-weight: 700;
-      font-size: 21px;
-      letter-spacing: 0;
-      -webkit-text-stroke: 0.4px currentColor;
-    }
-
-    .m-sub {
-      display: block;
-      margin: 0 0 10px;
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 17px;
-      line-height: 1.25;
-    }
-
-    .article-body .m-text p {
-      max-width: none;
-      margin: 0;
-      font-family: var(--serif);
-      font-size: 16px;
-      line-height: 1.32;
-    }
-
     /* wide windows: the matrix breaks out of the text column, wider and taller */
     @media (min-width: 1181px) {
       .matrix-figure {
@@ -2179,32 +1964,9 @@
       }
 
       .matrix-wrap {
-        box-sizing: border-box;
         width: min(1080px, 100vw - 120px);
         max-width: none;
         margin-left: calc((100% - min(1080px, 100vw - 120px)) / 2);
-      }
-
-      .matrix {
-        aspect-ratio: 9 / 8;
-        --m-pad: 30px;
-      }
-
-      html .article-body .matrix .m-text h4 {
-        font-size: 21px;
-      }
-
-      html.serif-headings .article-body .matrix .m-text h4 {
-        font-size: 26px;
-      }
-
-      .m-sub {
-        font-size: 20px;
-      }
-
-      .article-body .m-text p {
-        font-size: 19px;
-        line-height: 1.4;
       }
 
       /* the contents list would sit over the diagram: it steps aside while it is in view */
@@ -2215,155 +1977,19 @@
       }
     }
 
-    /* the description of a chosen future, below the matrix on narrower windows */
-    .matrix-detail {
-      margin: 40px 0 0;
-      padding: 24px 26px 26px;
-      color: var(--canvas-ink);
-      background: var(--m-detail, var(--m-tl));
-    }
-
-    .matrix-detail[hidden] {
-      display: none;
-    }
-
-    .matrix-detail.d-tl { --m-detail: var(--m-tl); }
-    .matrix-detail.d-tr { --m-detail: var(--m-tr); }
-    .matrix-detail.d-bl { --m-detail: var(--m-bl); }
-    .matrix-detail.d-br { --m-detail: var(--m-br); }
-    .matrix-detail.d-center { --m-detail: var(--m-center); }
-
-    html .article-body .matrix-detail h4 {
-      margin: 0 0 4px;
-      font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      font-weight: 600;
-      line-height: 1.3;
-      letter-spacing: -0.01em;
-    }
-
-    html.serif-headings .article-body .matrix-detail h4 {
-      font-family: var(--serif);
-      font-weight: 700;
-      font-size: 21px;
-      letter-spacing: 0;
-      -webkit-text-stroke: 0.4px currentColor;
-    }
-
-    .matrix-detail .m-sub {
-      display: block;
-      margin: 0 0 12px;
-      font-size: 17px;
-    }
-
-    .article-body .matrix-detail p {
-      max-width: none;
-      margin: 0;
-      font-family: var(--serif);
-      font-size: 17px;
-      line-height: 1.5;
-    }
-
-    /* narrower windows: the titles only; a tap shows the description below */
     @media (max-width: 1180px) {
-      .matrix .m-cell {
-        cursor: pointer;
-        -webkit-tap-highlight-color: transparent;
-      }
-
-      .matrix .m-cell:focus-visible {
-        outline: 2px solid var(--canvas-accent);
-        outline-offset: -3px;
-      }
-
-      .m-tl.is-selected { background: var(--m-tl); }
-      .m-tr.is-selected { background: var(--m-tr); }
-      .m-bl.is-selected { background: var(--m-bl); }
-      .m-br.is-selected { background: var(--m-br); }
-      .m-center.is-selected::before { opacity: 1; }
-
       .matrix-figure {
         margin: 88px 0 96px;
-      }
-
-      .article-body .m-text p {
-        display: none;
-      }
-
-      .matrix {
-        --m-pad: 14px;
-      }
-
-      html .article-body .matrix .m-text h4 {
-        font-size: 17px;
-      }
-
-      html.serif-headings .article-body .matrix .m-text h4 {
-        font-size: 21px;
-      }
-
-      .m-sub {
-        font-size: 17px;
       }
     }
 
     @media (max-width: 600px) {
-      .matrix-wrap {
-        --ax-l: 76px;
-        --ax-b: 56px;
-        --ar: 26px;
-      }
-
-      .matrix-axis {
-        font-size: 14px;
-      }
-
-      .matrix-tick {
-        font-size: 11px;
-      }
-
-      .matrix-tick.y-high, .matrix-tick.y-low { right: calc(100% - var(--ax-l) + 6px); }
-      .matrix-tick.x-low, .matrix-tick.x-high { bottom: 30px; }
-
-      .matrix {
-        aspect-ratio: 1 / 1.3;
-        --m-pad: 10px;
-      }
-
-      html .article-body .matrix .m-text h4 {
-        font-size: 14px;
-      }
-
-      html.serif-headings .article-body .matrix .m-text h4 {
-        font-size: 17px;
-      }
-
-      .matrix .m-sub {
-        display: none;
-      }
-
       .article-body .matrix-frames {
         margin-bottom: 64px;
       }
 
-      .matrix-detail {
-        margin-top: 32px;
-        padding: 20px 20px 22px;
-      }
-
       .matrix-figure {
         margin: 72px 0 80px;
-      }
-    }
-
-    /* the smallest phones: the titles step back down to fit beside the centre */
-    @media (max-width: 360px) {
-      html .article-body .matrix .m-text h4 {
-        font-size: 13px;
-      }
-
-      html.serif-headings .article-body .matrix .m-text h4 {
-        font-size: 15px;
       }
     }
 
@@ -2373,13 +1999,6 @@
       --link-blue: #e36843;
       --selection-bg: rgba(227, 104, 67, 0.22);
       --note-highlight: #fde4d9;
-      /* the four futures matrix, as in version 1 */
-      --m-line: #e5e5e5;
-      --m-tl: #fee4d0;
-      --m-tr: #fdf8e2;
-      --m-bl: #ffeae7;
-      --m-br: #f5f6f7;
-      --m-center: conic-gradient(#fdf8e2 0deg 90deg, #f5f6f7 90deg 180deg, #ffeae7 180deg 270deg, #fee4d0 270deg 360deg);
     }
 
     /* the default band (b): orange, with dark text */
@@ -2403,12 +2022,6 @@
       --inverse-bg-alt: #df6740;
       --inverse-ink: #000000;
       --inverse-link: #000000;
-      --m-line: #333333;
-      --m-tl: #3d2b1f;
-      --m-tr: #3a2e22;
-      --m-bl: #382422;
-      --m-br: #2a2b2c;
-      --m-center: conic-gradient(#3a2e22 0deg 90deg, #2a2b2c 90deg 180deg, #382422 180deg 270deg, #3d2b1f 270deg 360deg);
     }
   </style>
 </head>
@@ -2858,77 +2471,13 @@
   </div>
 
   <script>
-    // the four futures matrix: on narrower windows, where the cells show titles only,
-    // choosing a cell shows its description below the matrix, in the cell's colour;
-    // on wide windows the contents list steps aside while the wide matrix is in view
+    // the contents list steps aside while the wide four futures matrix is in view
     (function () {
-      var fig = document.querySelector('.matrix-figure');
-      if (!fig) return;
-      var cells = fig.querySelectorAll('.m-cell');
-      var box = fig.querySelector('.matrix-detail');
-      var narrow = window.matchMedia('(max-width: 1180px)');
-      var keys = ['tl', 'tr', 'bl', 'br', 'center'];
-      var current = null;
-
-      function key(cell) {
-        for (var i = 0; i < keys.length; i++) {
-          if (cell.classList.contains('m-' + keys[i])) return keys[i];
-        }
-        return 'tl';
-      }
-
-      function clear() {
-        current = null;
-        box.hidden = true;
-        box.innerHTML = '';
-        cells.forEach(function (c) {
-          c.classList.remove('is-selected');
-          if (narrow.matches) c.setAttribute('aria-pressed', 'false');
-        });
-      }
-
-      function choose(cell) {
-        if (current === cell) { clear(); return; }
-        clear();
-        current = cell;
-        cell.classList.add('is-selected');
-        cell.setAttribute('aria-pressed', 'true');
-        box.className = 'matrix-detail d-' + key(cell);
-        box.innerHTML = cell.querySelector('.m-text').innerHTML;
-        box.hidden = false;
-      }
-
-      function sync() {
-        clear();
-        cells.forEach(function (c) {
-          if (narrow.matches) {
-            c.setAttribute('role', 'button');
-            c.setAttribute('tabindex', '0');
-            c.setAttribute('aria-pressed', 'false');
-          } else {
-            ['role', 'tabindex', 'aria-pressed'].forEach(function (a) { c.removeAttribute(a); });
-          }
-        });
-      }
-
-      cells.forEach(function (c) {
-        c.addEventListener('click', function () { if (narrow.matches) choose(c); });
-        c.addEventListener('keydown', function (e) {
-          if (!narrow.matches || (e.key !== 'Enter' && e.key !== ' ')) return;
-          e.preventDefault();
-          choose(c);
-        });
-      });
-      if (narrow.addEventListener) narrow.addEventListener('change', sync);
-      else narrow.addListener(sync);
-      sync();
-
-      var wrap = fig.querySelector('.matrix-wrap');
-      if ('IntersectionObserver' in window && wrap) {
-        new IntersectionObserver(function (es) {
-          document.body.classList.toggle('matrix-in-view', es[0].isIntersecting);
-        }).observe(wrap);
-      }
+      var wrap = document.querySelector('.matrix-figure .matrix-wrap');
+      if (!wrap || !('IntersectionObserver' in window)) return;
+      new IntersectionObserver(function (es) {
+        document.body.classList.toggle('matrix-in-view', es[0].isIntersecting);
+      }).observe(wrap);
     })();
 
     // the title takes you back to the top of the page
@@ -3832,6 +3381,7 @@
       });
     })();
   </script>
+  <script src="assets/matrix.js?v=856ce7a7"></script>
   <script src="assets/tools.js?v=a249bb60" data-search-scope=".article-body, .endnotes" data-search-exclude="#overview" data-hide-until="#overview"></script>
 </body>
 </html>
