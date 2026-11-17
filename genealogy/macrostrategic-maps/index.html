@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Employing the philosophical method of conceptual engineering to construct foundational frames for cultural macrostrategy.">
+  <link id="favicon-ico" rel="icon" href="../../favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../../favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../../favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../../favicon/apple-touch-icon-light.png?v=2">
+  <script>
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Macrostrategic Maps — Appendices — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Macrostrategic Maps — Appendices — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Employing the philosophical method of conceptual engineering to construct foundational frames for cultural macrostrategy.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/genealogy/macrostrategic-maps/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../../assets/site.css?v=ab0ac983" rel="stylesheet">
+  <style>
+    /* light sepia band from the top of the window to just below the intro */
+    .genealogy-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 216px;
+    }
+
+    .genealogy-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -112px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    .genealogy-top .page-intro {
+      margin-bottom: 0;
+    }
+
+    /* the site name sits in the top-right corner, as on the Lexicon */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the essay, set as the article's text */
+    .essay {
+      max-width: 760px;
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.3;
+    }
+
+    .essay p {
+      margin: 15px 0;
+    }
+
+    .essay a:not(.heading-link) {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    html:not(.colour) .essay a:not(.heading-link) {
+      color: inherit;
+    }
+
+    .essay h2 {
+      margin: 88px 0 18px;
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.15em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .essay h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.45em;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    /* quotations, set in from an orange rule */
+    .essay blockquote {
+      margin: 32px 0;
+      padding-left: 28px;
+      border-left: 2px solid var(--link-blue);
+    }
+
+    .essay blockquote p {
+      margin: 0;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--mono-caps);
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay blockquote cite a {
+      font-weight: 400;
+    }
+    /* no footer on the Appendices pages, as on Diagrams */
+    .site-footer {
+      display: none;
+    }
+
+    /* a small link back up to the Appendices list, above the title */
+    .essay-kicker {
+      margin: 0 0 14px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .essay-kicker a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .essay-kicker a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* links within the site keep the text colour; only links to other sites turn orange */
+    html.colour .essay a:not([href^="http"]):not(.heading-link) {
+      color: inherit;
+    }
+
+    /* lists inside quotations */
+    .essay blockquote ul {
+      margin: 14px 0 0;
+      padding-left: 1.1em;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote li {
+      margin: 0 0 10px;
+    }
+
+    .essay blockquote p + p {
+      margin-top: 14px;
+    }
+
+    /* Appendix 5: the lede in the band under the title */
+    .genealogy-top .o {
+      color: inherit;
+    }
+
+    .essay-series {
+      margin: -4px 0 18px;
+      font-family: var(--serif);
+      font-size: 22px;
+      font-style: italic;
+    }
+
+    .essay-lede {
+      max-width: 760px;
+      margin: 22px 0 10px;
+      font-family: var(--serif);
+      font-size: 24px;
+      line-height: 1.35;
+    }
+
+    .essay-byline {
+      margin: 0;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    /* the abstract, in a grey box */
+    .essay-abstract {
+      margin: 0 0 40px;
+      padding: 22px 26px;
+      background: color-mix(in srgb, currentColor 5%, transparent);
+      border-top: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+      border-bottom: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+    }
+
+    .essay-abstract p {
+      margin: 0 !important;
+    }
+
+    .essay-abstract a {
+      font-weight: 400 !important;
+    }
+
+    /* a grey box set into the text (a literature map) */
+    .essay-box {
+      margin: 32px 0;
+      padding: 22px 26px;
+      background: color-mix(in srgb, currentColor 5%, transparent);
+      font-size: 0.9em;
+    }
+
+    .essay-box h3 {
+      margin: 0 0 12px !important;
+    }
+
+    .essay-box p {
+      margin: 0 0 12px !important;
+    }
+
+    .essay-box p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    /* the contents, numbered in orange */
+    .essay-contents {
+      margin: 0 0 24px;
+      padding: 20px 0;
+      border-top: 2px solid var(--link-blue);
+      border-bottom: 2px solid var(--link-blue);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    .essay-contents .ec-head {
+      margin: 0 0 12px !important;
+      font-weight: 700;
+    }
+
+    .essay-contents ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .essay-contents li {
+      display: flex;
+      gap: 10px;
+      margin: 0 0 8px;
+    }
+
+    .essay-contents li .o {
+      flex: none;
+      width: 1.2em;
+      font-weight: 700;
+    }
+
+    .essay-contents a {
+      font-weight: 500 !important;
+      text-decoration: none !important;
+      color: inherit;
+    }
+
+    .essay-contents a:hover {
+      text-decoration: underline !important;
+    }
+
+    /* footnotes, set in from the text */
+    .essay sup a,
+    .essay sup a.o,
+    .essay-note a.o {
+      font-weight: 700 !important;
+      text-decoration: none !important;
+      color: var(--link-blue) !important;
+    }
+
+    .essay-note {
+      margin: 8px 0 32px;
+      padding: 14px 18px;
+      border-left: 2px solid var(--link-blue);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay-note p {
+      margin: 0 0 8px !important;
+    }
+
+    .essay-note p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .essay-note .en-quote {
+      font-style: italic;
+    }
+
+    .essay-note a {
+      font-weight: 400 !important;
+    }
+
+    .essay-note a.o {
+      text-decoration: none !important;
+      font-weight: 700 !important;
+      margin-right: 4px;
+    }
+
+    .essay-def {
+      font-size: 1.05em;
+    }
+
+    /* the Venn diagram */
+    .venn {
+      margin: 40px 0;
+      text-align: center;
+    }
+
+    .venn svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+    }
+
+    .venn .venn-a { fill: color-mix(in srgb, #6aa84f 34%, transparent); }
+    .venn .venn-b { fill: color-mix(in srgb, #cc0000 26%, transparent); }
+    .venn .venn-ab { fill: #f1c232; fill-opacity: 0.85; }
+    .venn .venn-line { fill: none; stroke: var(--canvas-ink); stroke-width: 1.5; }
+
+    .venn text {
+      font-family: var(--sans);
+      font-size: 17px;
+      font-weight: 600;
+      text-anchor: middle;
+      fill: var(--canvas-ink);
+    }
+
+    .venn .venn-mid {
+      font-size: 13px;
+      fill: #000;
+    }
+
+    .venn figcaption {
+      margin-top: 12px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    /* the appendix table runs wider than the text */
+    .essay-wide {
+      width: var(--wide-col);
+      margin: 32px 0 0 calc((100% - var(--wide-col)) / 2);
+    }
+
+    .rt-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .risk-hazards {
+      width: 100%;
+      min-width: 820px;
+      border-collapse: collapse;
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .risk-hazards th,
+    .risk-hazards td {
+      padding: 18px 20px;
+      border: 1px solid var(--link-blue);
+      vertical-align: top;
+    }
+
+    .risk-hazards thead th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      font-weight: 400;
+      font-style: italic;
+      background: color-mix(in srgb, var(--link-blue) 14%, transparent);
+    }
+
+    .risk-hazards thead th:nth-child(1) { width: 20%; }
+    .risk-hazards thead th:nth-child(2) { width: 38%; }
+
+    .risk-hazards tbody th {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .risk-hazards .rt-sub i {
+      display: block;
+      margin-top: 4px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .risk-hazards .rt-note {
+      display: block;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .risk-hazards td p {
+      margin: 0 0 10px !important;
+    }
+
+    .risk-hazards td p:last-child {
+      margin-bottom: 0 !important;
+    }
+
+    .risk-hazards .rt-quote {
+      font-style: italic;
+    }
+
+    .risk-hazards .rt-cite,
+    .risk-hazards .rt-also {
+      display: block;
+      font-size: 13px;
+    }
+
+    .risk-hazards .rt-also {
+      margin-top: 6px;
+    }
+
+    .risk-hazards a,
+    .risk-hazards a *,
+    .essay blockquote cite a,
+    .essay blockquote cite a * {
+      font-weight: 400 !important;
+    }
+
+    /* room at the end of the page, below the last line */
+    .essay {
+      padding-bottom: 160px;
+    }
+
+    @media (max-width: 600px) {
+      .essay {
+        padding-bottom: 96px;
+      }
+    }
+
+    .essay h3 {
+      margin: 48px 0 12px;
+      font-family: var(--sans);
+      font-size: 0.9em;
+      font-weight: 600;
+      letter-spacing: 0;
+      line-height: 1.3;
+    }
+
+    .essay h2 + h3 {
+      margin-top: 24px;
+    }
+
+    .essay > ul {
+      margin: 12px 0 18px;
+      padding-left: 1.2em;
+    }
+
+    .essay > ul li {
+      margin: 0 0 10px;
+    }
+
+    .essay li b,
+    .essay p > b {
+      font-weight: 700;
+    }
+
+    .essay .o {
+      color: var(--link-blue);
+    }
+
+    .essay-break {
+      margin: 72px 0 0 !important;
+      text-align: center;
+      font-size: 15px;
+      letter-spacing: 0.1em;
+      color: var(--link-blue);
+    }
+
+    .essay-see {
+      margin: 18px 0 0 !important;
+      padding-left: 1.2em;
+      font-family: var(--sans);
+      font-size: 15px;
+    }
+
+    .essay-see a {
+      color: var(--link-blue);
+    }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to Appendices" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="genealogy-top on-band">
+    <p class="essay-kicker"><a class="plain-link" href="../">Appendices</a></p>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Macrostrategic Maps<span class="o">:</span> For the Governance of Cultural Evolution in the Age of AGI</a></h1>
+    <p class="essay-series">&lt; The Culture Series &gt;</p>
+    <p class="essay-lede">Employing the philosophical method of conceptual engineering to construct foundational frames for cultural macrostrategy</p>
+    <p class="essay-byline">by <a class="plain-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
+    </div>
+
+    <article class="essay">
+      <div class="essay-abstract">
+        <p><b><em>Abstract:</em></b> This research article employs the philosophical method of conceptual engineering to construct a series of foundational frames for cultural existential risk studies (C-ERS): facilitating the <em>Convergence of Civilisations</em>, engaging in <em>Differential Cultural Development</em>, utilising <em>AI for Culture</em> and <em>Human Value-Alignment</em>, preparing for the <em>Cultural Explosion</em>, solving the <em>Cultural Communication Problem</em> and <em>Designing New Coordination Mechanisms</em>.</p>
+      </div>
+
+      <nav class="essay-contents" aria-label="Contents">
+        <p class="ec-head">Contents</p>
+        <ol>
+          <li><span class="o">&ndash;</span> <a href="#cultures-civilisations">Cultures &amp; Civilisations: Clash, Conquest, Consolidation, Collapse, Convergence</a></li>
+          <li><span class="o">&ndash;</span> <a href="#differential-cultural-development">Differential Cultural Development: Freedom before Fascism</a></li>
+          <li><span class="o">&ndash;</span> <a href="#ai-for-culture">AI for Culture &amp; Human Value-Alignment: The Transition to Syntopia</a></li>
+          <li><span class="o">&ndash;</span> <a href="#cultural-explosion">Preparing for the Cultural Explosion: Hyper-Acceleration &amp; Differentiation</a></li>
+          <li><span class="o">&ndash;</span> <a href="#cultural-communication-problem">The Cultural Communication Problem: Computational Complexity</a></li>
+          <li><span class="o">&ndash;</span> <a href="../../diagrams/#technological-capabilities">Appendix: A Typology of Technological Capabilities</a></li>
+        </ol>
+      </nav>
+
+      <h2 id="cultural-macrostrategy"><a class="heading-link" href="#cultural-macrostrategy">Cultural Macrostrategy<span class="o">:</span> Major Frames for the Governance of Cultural Evolution</a></h2>
+
+      <p>Here I construct a series of major frames for the (post-AGI) governance of cultural evolution, and conclude by charting future research directions for the frontier macrostrategy field of <em>Coordination Studies</em>.</p>
+
+      <h2 id="cultures-civilisations"><a class="heading-link" href="#cultures-civilisations">Cultures &amp; Civilisations<span class="o">:</span> Clash<span class="o">,</span> Conquest<span class="o">,</span> Consolidation<span class="o">,</span> Collapse<span class="o">,</span> Convergence<sup><a class="o" href="#note-sears" id="ref-sears">*</a></sup></a></h2>
+
+      <blockquote>
+        <p>&#10077; World politics is entering a new phase&hellip; It is my hypothesis that the fundamental source of conflict in this new world will not be primarily ideological or primarily economic. The great divisions among humankind and the dominating source of conflict will be cultural. Nation states will remain the most powerful actors in world affairs, but the principal conflicts of global politics will occur between nations and groups of different civilizations. The clash of civilizations will dominate global politics. The fault lines between civilizations will be the battle lines of the future. &#10078;</p>
+        <cite>&ndash; Samuel P. Huntington, <a href="https://www.guillaumenicaise.com/wp-content/uploads/2013/10/huntington_clash-of-civlizations.pdf" target="_blank" rel="noopener"><em>The Clash of Civilizations?</em></a> (1993)</cite>
+      </blockquote>
+
+      <aside class="essay-note" id="note-sears">
+        <p><a class="o" href="#ref-sears">*</a> Here I seek to follow the pioneering path of <a href="https://forum.effectivealtruism.org/posts/coNjDHp6F7QmprxFo/nathan-a-sears-1987-2023" target="_blank" rel="noopener">Nathan Sears</a>, who remains the most prominent scholar to put macrostrategy into dialogue with international relations (IR). See <a href="https://www.researchgate.net/publication/344942589_International_Politics_in_the_Age_of_Existential_Threats" target="_blank" rel="noopener"><em>International Politics in the Age of Existential Threats</em></a> (2020), <a href="https://www.researchgate.net/publication/366020757_Sears_Nathan_2022_Great_Power_Rivalry_and_Macrosecuritization_Failure-_PhD_Thesispdf" target="_blank" rel="noopener"><em>Great Power Rivalry and Macrosecuritization Failure</em></a> (2022, PhD thesis) and <a href="https://www.researchgate.net/publication/347454408_Anarchy_Technology_and_the_Self-Destruction_Hypothesis_Human_Survival_and_the_Fermi_Paradox" target="_blank" rel="noopener"><em>Anarchy, Technology, and the Self-Destruction Hypothesis: Human Survival and the Fermi Paradox</em></a> (2020), the last of which formalises Bostrom&rsquo;s paper <a href="https://nickbostrom.com/papers/vulnerable.pdf" target="_blank" rel="noopener"><em>The Vulnerable World Hypothesis</em></a> (2019) within IR and SETI (the search for extra-terrestrial intelligence).</p>
+      </aside>
+
+      <p><a href="https://www.guillaumenicaise.com/wp-content/uploads/2013/10/huntington_clash-of-civlizations.pdf" target="_blank" rel="noopener"><em>The Clash of Civilizations?</em></a> (1993) is a famous hypothesis by Huntington (an American political scientist) that (post-Cold War) global conflicts in the 21st century will be driven primarily by cultural differences rather than ideological competition or economic conditions.</p>
+
+      <p>In contrast to this model of <em>divergent cultural evolution</em> leading to <em>cultural competition and conflict</em>, Bostrom proposes in <a href="https://nickbostrom.com/fut/singleton" target="_blank" rel="noopener"><em>What is a Singleton?</em></a> (2005) that &lsquo;a singleton could form&hellip; through convergent evolution&hellip;&rsquo;:</p>
+
+      <blockquote>
+        <p>&#10077; e.g. if it turns out that all sufficiently advanced individuals or cultures come to accept fundamentally the same values or goals. These common values in combination with all the individuals and cultures that embrace them would then be an &ldquo;agency&rdquo; in the broad sense intended here, and it would constitute a singleton. &#10078;</p>
+      </blockquote>
+
+      <p>This excerpt captures what I will call the <em>Convergence of Civilisations</em> hypothesis. Alongside Clash (Huntington) and Convergence (Bostrom), we can also posit three other future scenarios for how post-AGI cultural dynamics will play out over the long-term future: Conquest, Consolidation and Collapse.</p>
+
+      <ul>
+        <li><b>The Clash of Civilisations:</b> <em>divergent</em> cultural evolution leading to <em>cultural competition and conflict</em>.</li>
+        <li><b>The Convergence of Civilisations:</b> <em>convergent</em> cultural evolution leading to <em>cultural cooperation and consensus</em>.</li>
+        <li><b>The Conquest of Civilisations:</b> <em>offensive</em> cultural dynamics leading to a unilaterally enforced global monoculture.</li>
+        <li><b>The Consolidation of Civilisations:</b> <em>defensive</em> cultural dynamics leading to a multilaterally enforced global polyculture.</li>
+        <li><b>The Collapse of Civilisations:</b> <em>stagnated</em> cultural evolution leading to the extinction of cultures and a failure to realise cultural progress.</li>
+      </ul>
+
+      <p>Based on these cultural attractors we can construct a typology of cultural technologies (AI for culture: epistemics, ontologies, axiologies):</p>
+
+      <ul>
+        <li><b>Catapults</b> (the memetic equivalent of bunker busters) or memetic &lsquo;Spears&rsquo;: cyberwarfare technologies for control over population-level psychology (e.g. irregular warfare, foreign propaganda, psyops).</li>
+        <li><b>Citadels</b> (memetic equivalents of fortress futures) or memetic &lsquo;Shields&rsquo;: cybersecurity technologies to prevent external influence (e.g. the Golden Shield, the Great Firewall of China) and form hyper-secure subcultures, fragmenting civilisation into a multitude of non-interacting, self-contained small worlds (localised lock-ins).</li>
+        <li><b>Causeways</b> (the memetic equivalent of physical bridges) or memetic &lsquo;Sanctuaries&rsquo;: digital democratic communication technologies to facilitate the convergence of multiple cultures into a unified, syncretic world-culture.</li>
+      </ul>
+
+      <p>Ultimately, the final equilibria of post-AGI cultural dynamics will be determined by which class of technologies becomes more advanced and implemented; in other words, whether civilisation succeeds or fails in steering a process of differential techno-cultural development and deployment.</p>
+
+      <h2 id="differential-cultural-development"><a class="heading-link" href="#differential-cultural-development">Differential Cultural Development<span class="o">:</span> Freedom before Fascism</a></h2>
+
+      <p>As with technological and intellectual development, in an ideal world cultural development would also be differential: that is, beliefs and values (<a href="https://newmaterialism.eu/almanac/e/ethico-onto-epistem-ology.html" target="_blank" rel="noopener">&lsquo;ethico-onto-epistem-ologies&rsquo;</a>, worldviews, superstructures, memetic complexes etc.) would emerge in a specific sequence, such that cultural evolution as a macrohistorical process would overall be aligned with survival and flourishing.</p>
+
+      <p class="essay-def"><b>Differential Cultural Development<span class="o">:</span> trying to retard the proliferation of dangerous ideologies and accelerate the adoption of beneficial worldviews, especially those that ameliorate the hazards posed by ideologies.</b></p>
+
+      <p>Whilst we are not in the idealised position of a meta-utopian civilisation designer (a grander version of the &lsquo;social planner&rsquo; in economics) &ndash; instead situated within a spontaneous order with limited influence over cultural evolution &ndash; we may still have the power to affect the rate of development of various cultures, and potentially the sequence in which cultures are developed and adopted (to what extent depends on how we define &ldquo;we&rdquo;).</p>
+
+      <h2 id="ai-for-culture"><a class="heading-link" href="#ai-for-culture">AI for Culture <span class="o">&amp;</span> Human Value<span class="o">-</span>Alignment<span class="o">:</span> The Transition to Syntopia</a></h2>
+
+      <p>Another development within the field of AI alignment and governance is the epistemic turn and the subfield of <a href="https://80000hours.org/problem-profiles/ai-enhanced-decision-making/" target="_blank" rel="noopener">&lsquo;AI for epistemics&rsquo;</a>: a growing focus on the foundations of knowledge, belief-formation and truth-seeking in a world increasingly populated and mediated by AI systems, which affect our ability to discern truth, manage large-scale information environments and engage in public discourse.</p>
+
+      <p>This turn towards &lsquo;collective epistemics&rsquo; (or <a href="https://plato.stanford.edu/entries/epistemology-social/" target="_blank" rel="noopener">social epistemology</a> in philosophy) is motivated by concerns that advanced AI will have the capability to manipulate or overwhelm human epistemic processes, potentially leading to &lsquo;epistemic collapse&rsquo; or &lsquo;value lock-in&rsquo;. In other words, AGI will likely be weaponised for mass disinformation and outpace human critical faculties, leading to a loss of agency over our own thought processes and belief/value systems. In this sense, <em>AI for epistemics and coordination</em> can be positioned as a <em>defensive accelerationist</em> (d/acc) counter-measure against cultural existential risks (e.g. value lock-in, misaligned memetic proliferation, ideological fanaticism, epistemic collapse, cyborgregore assimilation).</p>
+
+      <div class="essay-box">
+        <h3>AI for Epistemics: Field-Formation &amp; Literature Map</h3>
+        <p>Most recently <a href="https://www.forethought.org/" target="_blank" rel="noopener"><em>Forethought</em></a> (FTT), in collaboration with the <a href="https://www.flf.org/" target="_blank" rel="noopener"><em>Future of Life Foundation</em></a> (FLF),<sup><a class="o" href="#note-flf" id="ref-flf">*</a></sup> have published a research article, <a href="https://newsletter.forethought.org/p/ai-tools-for-collective-epistemics" target="_blank" rel="noopener"><em>AI Tools for Collective Epistemics (alt. Design Sketches for Collective Epistemics)</em></a> (2026), following earlier articles <a href="https://www.forethought.org/research/whats-important-in-ai-for-epistemics" target="_blank" rel="noopener"><em>What&rsquo;s Important in &ldquo;AI for Epistemics&rdquo;?</em></a> (August 2024) and <a href="https://www.forethought.org/research/project-ideas-epistemics#highlight--epistemics" target="_blank" rel="noopener"><em>Project ideas: Epistemics</em></a> (January 2024), as well as mentions throughout the institute&rsquo;s research.</p>
+        <p>Sourbut, a researcher at FLF, has most recently published on LessWrong <a href="https://www.lesswrong.com/posts/tBbfBWJxyBdoMR6zG/ai-for-human-reasoning-for-rationalists" target="_blank" rel="noopener"><em>AI for Human Reasoning for Rationalists</em></a> (2026), and previously <a href="https://www.lesswrong.com/posts/DMswzhPQqkqx2XAma/a-full-epistemic-stack-knowledge-commons-for-the-21st-1" target="_blank" rel="noopener"><em>A Full Epistemic Stack: Knowledge Commons for the 21st Century</em></a> (2025).</p>
+        <p>FLF has also publicised the final projects of their flagship <a href="https://forum.effectivealtruism.org/posts/dQWHB2s3frDjXwGFe/funded-fellowship-ai-for-human-reasoning-fellowship-with-the" target="_blank" rel="noopener">fellowship</a> at <a href="https://aiforhumanreasoning.com/" target="_blank" rel="noopener">aiforhumanreasoning.com</a>. At a smaller scale there has also been an <a href="https://forum.effectivealtruism.org/posts/FEoXikrKeAGEA6jLQ/ai-for-epistemics-hackathon" target="_blank" rel="noopener">AI for Epistemics Hackathon</a> and previously an <a href="https://blog.aiimpacts.org/p/winners-of-the-essay-competition" target="_blank" rel="noopener">Essay Competition on the Automation of Wisdom and Philosophy</a>.</p>
+        <p>Other research in this space includes <a href="https://joecarlsmith.com/2026/01/29/building-ais-that-do-human-like-philosophy/" target="_blank" rel="noopener"><em>Building AIs that do human-like philosophy</em></a> by Carlsmith (2026), <a href="https://www.lesswrong.com/posts/mfwZrKxfGWD5dZHzo/good-ai-epistemics-as-an-offramp-from-the-intelligence" target="_blank" rel="noopener"><em>Good AI Epistemics as an Offramp from the Intelligence Explosion</em></a> by Goldhaber (2026, FLF fellowship program director) and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener"><em>&lsquo;AI for societal uplift&rsquo; as a path to victory</em></a> by Douglas (2025).</p>
+      </div>
+
+      <aside class="essay-note" id="note-flf">
+        <p><a class="o" href="#ref-flf">*</a> FLF is a spin-off from the <a href="https://futureoflife.org/" target="_blank" rel="noopener"><em>Future of Life Institute</em></a> (FLI) focused on <a href="https://aiforhumanreasoning.com/" target="_blank" rel="noopener">&lsquo;AI for human reasoning&rsquo;</a>:</p>
+        <p class="en-quote">&ldquo;The broad, fuzzy domain of potential AI capabilities that can improve the quality of understanding and coordination, more than they make the world complex, we&rsquo;re calling AI for Human Reasoning. This approach prioritizes developing AI that augments human understanding and decision-making rather than replacing it, ensuring that our collective wisdom can outpace the challenges we create.&rdquo;</p>
+      </aside>
+
+      <p>AI for Epistemics as a framing either implies that thinking is neutral, or has implicit value-judgements. Based on the conceptual engineering of <a href="https://newmaterialism.eu/almanac/e/ethico-onto-epistem-ology.html" target="_blank" rel="noopener">&ldquo;ethico-onto-epistem-ology&rdquo;</a> &ndash; which points to &lsquo;the inseparability of ethics, ontology and epistemology when engaging in (scientific) knowledge production&rsquo; and &lsquo;with the world itself&rsquo; &ndash; we can extend the field into AI for Epistemics, Ontology and Axiology, covering three foundational domains and questions of philosophy (how we know, what exists, what is of value). In other words, how AI implicates not just belief-formation, but also cognitive mapping and moral psychology.</p>
+
+      <p>Further, beyond AI for epistemics, which frames knowledge-production and societal decision-making as an analytic process, we could conceptualise this domain as AI for psychology, even AI for social psychology or, at the grandest level, AI for sociology: how AI can be used to model complex adaptive societal systems and predict population-level behaviour (macrosociological phenomena). Here we are effectively speaking of an actually-existing science of &lsquo;psychohistory&rsquo;, the fictional meta-discipline imagined by Asimov in the <em>Foundation</em> series (1951&ndash;93): &lsquo;a science in which things could be predicted on a probabilistic or statistical basis&rsquo;.</p>
+
+      <p>The ultimate culmination of <em>AI for sociology</em> is the summoning of a <a href="https://sites.google.com/view/civilisationalmechanics/critical-alien-phenomenology/demons" target="_blank" rel="noopener"><em>Cartesian-Laplacean Demon</em></a>: a superintelligence capable of controlling what subjects perceive and predicting what subjects will do; manufacturing and anticipating human behaviour.<sup><a class="o" href="#note-kulveit" id="ref-kulveit">*</a></sup> Descartes&rsquo;s Demon and Laplace&rsquo;s Demon are two classical Enlightenment thought experiments from the history of philosophy that can be combined and reinterpreted as a technological prophecy for superintelligence (if you are willing to think like an applied interdisciplinary philosopher ;).</p>
+
+      <aside class="essay-note" id="note-kulveit">
+        <p><a class="o" href="#ref-kulveit">*</a> A similar but distinct idea is Kulveit&rsquo;s Sociology of AI <a href="https://acsresearch.org/research" target="_blank" rel="noopener">(ACS Research)</a>:</p>
+        <p class="en-quote">&ldquo;We are empirically studying AI &lsquo;psychology&rsquo; and &lsquo;sociology&rsquo; &mdash; investigating the internal states, self-concepts, and social dynamics of large language models&hellip; Inter-agent dynamics &mdash; examining the social behavior of interacting LLM agents, including persona transfer, cultural dynamics, and emergent cooperation.&rdquo;</p>
+        <p class="en-quote">&ldquo;We are moving beyond the study of individual AI agents toward understanding the complex dynamics of entire ecosystems of intelligence. This involves analyzing interactions between diverse AI systems (such as LLMs), human-AI teams, and existing human institutions. We seek to build a systematic understanding of which properties of intelligent behaviour are universal, convergent, or local across these ecosystems, scales, and substrates. Drawing on traditions including evolutionary biology, cognitive science, statistical physics, economics, ecology, and cybernetics, we are developing a framework for &lsquo;AI Sociology.&rsquo;&rdquo;</p>
+      </aside>
+
+      <h3>Creating a Cartesian-Laplacean Angel<span class="o">:</span> Aligning Perceptual &amp; Predictive Power</h3>
+
+      <p>The moral imperative for steerers of cultural evolution and human alignment researchers is to wisely use this newfound techno-science to realise a <em>Cartesian-Laplacean Angel</em>: an aligned superintelligence that uses its complete technology of human behaviour to steer humans, potentially over intergenerational time, towards the most moral world-culture, and ultimately realise moral progress in a way that is subjectively perceived as voluntary and beneficial by the members of current cultures in the world today.</p>
+
+      <p>This Cartesian-Laplacean Angel would enact a reflective process of <em>coherent blended volition (CBV)</em> to &ndash; safely, wisely and benevolently &ndash; navigate the transition (risks)<sup><a class="o" href="#note-transition" id="ref-transition">*</a></sup> between the intermediate stage of <em>Poly-Utopia</em> (plurality of utopias) and the ideal civilisational culture that I call <em>Syntopia</em> (synthesis of utopias).</p>
+
+      <aside class="essay-note" id="note-transition">
+        <p><a class="o" href="#ref-transition">*</a> Transition risk is a conceptual engineering introduced by Ord <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">(<em>The Precipice</em>, 2020)</a>:</p>
+        <p class="en-quote">&ldquo;Transition risks: risks that arise during a transition to a new technological or social regime. For example the risks as we develop and deploy transformative AGI are like this, as are the risks of climate change as we transition to being a high-energy civilization. Rushing the transition may do nothing to lower these risks&mdash;indeed it could easily heighten them. But if the transition is necessary or highly desirable, we may have to go through it at some point, so mere delay is not a solution, and may also make things worse. The general prescription for these risks is neither haste nor slowness, but care and foresight.&rdquo;</p>
+      </aside>
+
+      <p><b>Coherent blended volition (CBV)</b> &ldquo;proposes a creative blending process that produces new, harmonious value systems that all participants would recognize as adequately representing their contributions.&rdquo; <a href="https://ai-safety-atlas.com/chapters/v1/strategies/appendix-long-term-questions/#alignment-to-what" target="_blank" rel="noopener">(AI Safety Atlas, 2025)</a></p>
+
+      <h3>Syntopia</h3>
+
+      <p><b>Syntopia</b> is an ideal civilisational end-state in which humanity has converged on a universal morality, &lsquo;perennial philosophy&rsquo; and syncretic culture. All minds share in the truth (epistemics), goodness (ethics) and beauty (aesthetics) of a grand synthesis, which <em>transcends and includes</em> all worldviews from history in an <em>emergent whole</em>, aligned with the nature of interobjective reality and the conditions of existential flourishing. Life is lived pluralistically and dynamically, without locking in the future to a singular way of life or form of being, but instead oscillating between cultures across (what would for humans be multiple) lifetimes. Syntopia could potentially emerge from mass multi-directional migration and cultural cross-pollination over intergenerational time, or from AI-enhanced epistemics at a civilisational scale.</p>
+
+      <p>Syntopia is similar to the cultural stage of metamodernism, or Teal civilisation in integral theory:</p>
+
+      <p><b><em>Metamodernism</em> &ndash;</b> the culmination of the historical sequence of cultural logics, from traditional religions (Pre-modern) and Enlightenment reason (Modern) to sceptical deconstruction (Postmodern) to a synthesis of them all (Metamodern).</p>
+
+      <p><b><em>Integral Theory</em> &ndash;</b> the development of human consciousness and social structures through stages of increasing interior and exterior complexity toward a final stage (colour-coded &lsquo;teal&rsquo; in spiral dynamics) that integrates all previous worldviews. Each stage transcends and includes the ones before it, expanding the collective capacity for empathy, logic and perspective-taking.</p>
+
+      <p>To reach Syntopia requires facing what I have previously diagnosed as <a href="https://docs.google.com/document/d/1V_gwEAz4pzgwN6YZSAuEyJof_iA7z5WLmh6vFYJyCmw/edit?rm=minimal" target="_blank" rel="noopener"><em>The Dark Side of Meta-Utopia</em></a>, and what MacAskill in <em>What We Owe the Future</em> calls the <em>lock-in paradox</em>:</p>
+
+      <blockquote>
+        <p>&#10077; This&hellip; point&mdash;that we need to structure global society so that cultural evolution guides the world towards better values and better societal structures&mdash;highlights <strong>an issue facing the design of a morally exploratory world that I&rsquo;ll call the lock-in paradox.</strong> We need to lock in some institutions and ideas in order to prevent a more thoroughgoing lock-in of values. One challenge is that these institutions and ideas will be morally controversial; for example, from many fundamentalist religious perspectives, the idea that we would encourage or even allow a diversity of worldviews might be regarded as abominable. Similarly, the idea that the path to the correct moral view is via reflection and good-faith debate, rather than studying the scripture of a holy book, is not one that everyone would accept. <strong>The lock-in paradox thus resembles the familiar paradox of tolerance&mdash;the necessity for liberal societies to defend themselves against intolerant views that would undermine their freedom, even if doing so requires curtailing the very tolerance they want to preserve.</strong> &#10078;</p>
+        <cite>&ndash; William MacAskill, <em>What We Owe the Future</em> (2022)</cite>
+      </blockquote>
+
+      <h2 id="cultural-explosion"><a class="heading-link" href="#cultural-explosion">Preparing for the Cultural Explosion<span class="o">:</span> Hyper-Acceleration &amp; Differentiation</a></h2>
+
+      <blockquote>
+        <p>&#10077; Explosions are manifestly dangerous. from any perspective that is really (which is to say historically) instantiated. Only in the most radically anomalous cases can they be durably sustained. It is the firm prediction of accelerationism, therefore, that <strong>the typical practical topic of modern civilization will be the controlled explosion</strong>, commonly translated as governance. or regulation. &#10078;</p>
+        <cite>&ndash; <a href="https://s3.amazonaws.com/arena-attachments/2118354/b390e4336afaec0f023cb1198bed3691.pdf?1525169195" target="_blank" rel="noopener"><em>Teleoplexy: Notes on Acceleration</em></a> by Nick Land (2014)</cite>
+      </blockquote>
+
+      <p><em>Forethought</em> have recently argued that civilisation must begin <a href="https://www.forethought.org/research/preparing-for-the-intelligence-explosion" target="_blank" rel="noopener"><em>Preparing for the Intelligence Explosion</em></a>, and have further extended this problem-framing to incorporate what they term <a href="https://www.forethought.org/research/the-industrial-explosion" target="_blank" rel="noopener"><em>The Industrial Explosion</em></a>, of physical capabilities taking off alongside cognitive ones.</p>
+
+      <p>Beyond digital software and hardware, I propose that we also need to prepare for the <em>Cultural Explosion</em>: the rapid acceleration of cultural production, differentiation and propagation enabled by the capabilities of AGI.</p>
+
+      <p>This phenomenon has previously been discussed in relation to <a href="https://gradual-disempowerment.ai/misaligned-culture" target="_blank" rel="noopener">Misaligned Culture</a> and <a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener">Gradual Disempowerment</a>, with an emphasis on the acceleration of cultural evolution and AI-AI culture expanding and out-competing legacy human culture in the noosphere:</p>
+
+      <blockquote>
+        <p>&#10077; Beyond shifting what kinds of cultural variants are selected for, AI systems could dramatically accelerate the pace of cultural evolution itself. This acceleration presents distinct risks, even if selection pressures remain human-centric. With vastly more computational power applied to generating and testing cultural variants, we might see: More effective exploitation of human cognitive biases; More extreme ideological variants; Faster erosion of equilibria that previously helped maintain social stability; Reduced time for humans to develop cultural &ldquo;antibodies&rdquo; against harmful patterns&hellip;</p>
+        <p>With gradual increases in the capabilities and autonomy of AI systems, we may even expect a growing share of communication between AIs, and AIs participating in culture essentially independently. Instead of augmenting human cultural participation, they might start to replace key components. &#10078;</p>
+        <cite>&ndash; <a href="https://gradual-disempowerment.ai/misaligned-culture" target="_blank" rel="noopener">Misaligned Culture</a> in <em>Gradual Disempowerment</em>, Jan Kulveit et al., <em>Alignment of Complex Systems Research Group</em> (2025)</cite>
+      </blockquote>
+
+      <h2 id="cultural-communication-problem"><a class="heading-link" href="#cultural-communication-problem">The Cultural Communication Problem<span class="o">:</span> Computational Complexity</a></h2>
+
+      <p>In a forthcoming (2027) book, <a href="https://www.dropbox.com/scl/fi/3luqs1iy9pqf85am6hld2/Copy-Law-Liberty-Leviathan-Draft-Jan-2026.pdf?rlkey=n1em5or9kpn2oh6h479c4x4zh&amp;st=gvjlo718&amp;dl=0" target="_blank" rel="noopener"><em>Law, Liberty &amp; Leviathan</em></a>, Anders Sandberg (Chapter 6: <em>The Rationality of Planned Economies: Is the Classic Critique of Socialism Undone by AI?</em>) revisits the economic calculation problem in the light of superintelligence.</p>
+
+      <p>Classically, market economists in the Austrian tradition contend that the computational complexity of the economy exceeds the cognitive capabilities of any centralised planner to rationally allocate resources. The argument from superintelligence posits that with the advent of ASI there will finally be an agent fit for this task, and hence the market becomes obsolete as a mechanism of economic calculation and resource allocation. The objection is that computational complexity is not agent-relative, but is inherent to reality and therefore beyond the capabilities of any possible calculator, even a superintelligent one.</p>
+
+      <aside class="essay-note">
+        <p><span class="o">*</span> I have written about the emerging discourse on markets, superintelligence and the economic calculation problem at <a href="https://docs.google.com/document/d/1kJkzTHJuoL8a2KNMQGUKXP9fuURypVMIosaveB_RdFg/edit?rm=minimal" target="_blank" rel="noopener"><em>Hayek&rsquo;s Great Wall: Under Siege in the Age of AI?</em></a></p>
+      </aside>
+
+      <p>Here I propose there is a parallel to this problem from political economy within (post-AGI) cultural epistemology that I call the <b>Cultural Communication Problem:</b> agents cannot efficiently model or predict the minds and behaviour of other agents due to extreme cultural <em>differentiation</em>, <em>divergence</em> and <em>defensiveness</em>.</p>
+
+      <ul>
+        <li><b>Differentiation:</b> creating a diversity of alien subcultures and collectives of AI minds.</li>
+        <li><b>Divergence:</b> cultures rapidly move away from any shared common ground, making their core values and assumptions mutually incomprehensible and incompatible.</li>
+        <li><b>Defensiveness:</b> cultures adopting isolationist, protective measures (e.g. memetic &lsquo;firewalls&rsquo;) to rigidly safeguard their internal coherence against external influence or assimilation.</li>
+      </ul>
+
+      <p>This poses the risk of civilisation vectoring toward the Global Polyculture attractor, where the failure of cross-cultural communication prevents the necessary mechanisms of cultural selection and synthesis from operating on the massive cultural variation generated by the AI-accelerated cultural evolutionary process. Even if benevolent cultural forms exist, they cannot effectively spread or cohere into a shared global culture if the computational overhead of translating, integrating and achieving consensus across hyper-differentiated groups is too high. This ultimately threatens collective epistemics, moral progress and civilisation-wide coordination.</p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>Utopia will consist of utopias”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../../">Article</a></li>
+        <li><a href="../../genealogy/">Appendices</a></li>
+        <li><a href="../../diagrams/">Typologies</a></li>
+        <li><a href="../../lexicon/">Concepts</a></li>
+        <li><a href="../../sources/">Sources</a></li>
+        <li><a href="../../1.0/">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+
+  <div class="progress-pill progress-edge" data-start=".genealogy-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".genealogy-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.genealogy-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
+
+  <a class="site-title" href="../../">Mechanics of<br>Meta-Utopia</a>
+
+  <script src="../../assets/site.js?v=eb0b6127" data-base="../../"></script>
+  <script src="../../assets/tools.js?v=aa8a0d24" data-search-scope=".essay" data-hide-until=".genealogy-top"></script>
+</body>
+</html>

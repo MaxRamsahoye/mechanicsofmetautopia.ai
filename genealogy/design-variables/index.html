@@ -266,6 +266,26 @@
       font-weight: 400 !important;
     }
 
+    /* a grey box set into the text (a literature map) */
+    .essay-box {
+      margin: 32px 0;
+      padding: 22px 26px;
+      background: color-mix(in srgb, currentColor 5%, transparent);
+      font-size: 0.9em;
+    }
+
+    .essay-box h3 {
+      margin: 0 0 12px !important;
+    }
+
+    .essay-box p {
+      margin: 0 0 12px !important;
+    }
+
+    .essay-box p:last-child {
+      margin-bottom: 0 !important;
+    }
+
     /* the contents, numbered in orange */
     .essay-contents {
       margin: 0 0 24px;
@@ -311,9 +331,12 @@
     }
 
     /* footnotes, set in from the text */
-    .essay sup a {
+    .essay sup a,
+    .essay sup a.o,
+    .essay-note a.o {
       font-weight: 700 !important;
       text-decoration: none !important;
+      color: var(--link-blue) !important;
     }
 
     .essay-note {
