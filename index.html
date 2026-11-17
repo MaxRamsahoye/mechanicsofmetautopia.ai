@@ -1953,9 +1953,39 @@
     }
 
     .matrix-wrap {
+      /* --ax-l / --ax-b: room for the axis labels; --ar: room for the arrowheads */
+      --ax-l: 60px;
+      --ax-b: 64px;
+      --ar: 40px;
       position: relative;
-      max-width: 760px;
-      padding: 0 0 64px 60px;
+      box-sizing: border-box;
+      max-width: 820px;
+      padding: var(--ar) var(--ar) var(--ax-b) var(--ax-l);
+    }
+
+    /* as in Typology 2: the two axes, left and bottom, run on past the grid
+       to an arrowhead */
+    .matrix-wrap::before,
+    .matrix-wrap::after {
+      content: '';
+      position: absolute;
+      background: var(--canvas-ink);
+    }
+
+    .matrix-wrap::before {
+      left: calc(var(--ax-l) - 5.5px);
+      top: 0;
+      width: 14px;
+      height: calc(var(--ar) + 1px);
+      clip-path: polygon(50% 0, 100% 14px, calc(50% + 1.5px) 14px, calc(50% + 1.5px) 100%, calc(50% - 1.5px) 100%, calc(50% - 1.5px) 14px, 0 14px);
+    }
+
+    .matrix-wrap::after {
+      right: 0;
+      top: calc(100% - var(--ax-b) - 8.5px);
+      width: calc(var(--ar) + 1px);
+      height: 14px;
+      clip-path: polygon(0 calc(50% - 1.5px), calc(100% - 14px) calc(50% - 1.5px), calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, calc(100% - 14px) calc(50% + 1.5px), 0 calc(50% + 1.5px));
     }
 
     .matrix-axis {
@@ -1968,16 +1998,16 @@
 
     .matrix-axis-y {
       left: 0;
-      top: 0;
-      bottom: 64px;
+      top: var(--ar);
+      bottom: var(--ax-b);
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       text-align: center;
     }
 
     .matrix-axis-x {
-      left: 60px;
-      right: 0;
+      left: var(--ax-l);
+      right: var(--ar);
       bottom: 0;
       text-align: center;
     }
@@ -1988,18 +2018,23 @@
       color: var(--muted);
     }
 
-    .matrix-tick.y-high { left: 26px; top: calc((100% - 64px) * 0.15); }
-    .matrix-tick.y-low { left: 26px; top: calc((100% - 64px) * 0.85 - 1em); }
-    .matrix-tick.x-low { bottom: 34px; left: calc(60px + (100% - 60px) * 0.15); }
-    .matrix-tick.x-high { bottom: 34px; right: calc((100% - 60px) * 0.15); }
+    .matrix-tick.y-high { left: 26px; top: calc(var(--ar) + (100% - var(--ar) - var(--ax-b)) * 0.15); }
+    .matrix-tick.y-low { left: 26px; top: calc(var(--ar) + (100% - var(--ar) - var(--ax-b)) * 0.85 - 1em); }
+    .matrix-tick.x-low { bottom: 34px; left: calc(var(--ax-l) + (100% - var(--ax-l) - var(--ar)) * 0.15); }
+    .matrix-tick.x-high { bottom: 34px; right: calc(var(--ar) + (100% - var(--ax-l) - var(--ar)) * 0.15); }
 
     /* four L-shaped futures around the central clash; the hairlines are the
        ink showing through the gaps between them */
     .matrix {
       position: relative;
       aspect-ratio: 1 / 1;
+      /* the lines in the ink, as in Typology 2: hairlines inside, the outer
+         edge heavier, the two axes heavier still */
+      --m-line: var(--canvas-ink);
       background: var(--m-line);
-      border: 1px solid var(--m-line);
+      border: 1.5px solid var(--canvas-ink);
+      border-left-width: 3px;
+      border-bottom-width: 3px;
       overflow: hidden;
       --m-pad: 22px;
     }
@@ -2241,19 +2276,13 @@
 
     @media (max-width: 600px) {
       .matrix-wrap {
-        padding: 0 0 56px 52px;
+        --ax-l: 52px;
+        --ax-b: 56px;
+        --ar: 26px;
       }
 
       .matrix-axis {
         font-size: 14px;
-      }
-
-      .matrix-axis-y {
-        bottom: 56px;
-      }
-
-      .matrix-axis-x {
-        left: 52px;
       }
 
       .matrix-tick {
@@ -2261,10 +2290,7 @@
       }
 
       .matrix-tick.y-high, .matrix-tick.y-low { left: 21px; }
-      .matrix-tick.y-high { top: calc((100% - 56px) * 0.15); }
-      .matrix-tick.y-low { top: calc((100% - 56px) * 0.85 - 1em); }
-      .matrix-tick.x-low { bottom: 30px; left: calc(52px + (100% - 52px) * 0.15); }
-      .matrix-tick.x-high { bottom: 30px; right: calc((100% - 52px) * 0.15); }
+      .matrix-tick.x-low, .matrix-tick.x-high { bottom: 30px; }
 
       .matrix {
         aspect-ratio: 1 / 1;
