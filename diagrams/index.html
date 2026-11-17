@@ -511,7 +511,7 @@
       --g-civilisations: #e36843;
       --g-substrates: #b45f06;
       --g-catastrophe: #c0451f;
-      --g-eucatastrophe: #f9cb9c;
+      --g-eucatastrophe: #f1c232;
     }
 
     /* the three axes, keyed by colour */
@@ -549,7 +549,7 @@
 
     .cer-table {
       width: 100%;
-      min-width: 820px;
+      min-width: 940px;
       border-collapse: collapse;
       font-family: var(--serif);
       font-size: 18px;
@@ -571,16 +571,17 @@
       font-family: var(--sans);
       font-size: 15px;
       font-weight: 500;
-      background: color-mix(in srgb, currentColor 7%, transparent);
+      background: var(--canvas-bg);
     }
 
-    .cer-table thead th:nth-child(1) { width: 24%; }
-    .cer-table thead .th-cat { width: 38%; background: color-mix(in srgb, var(--g-catastrophe) 20%, transparent); }
-    .cer-table thead .th-eu { width: 38%; background: color-mix(in srgb, var(--g-eucatastrophe) 40%, transparent); }
+    .cer-table thead th:nth-child(2) { width: 22%; }
+    .cer-table thead .th-cat { width: 33%; background: color-mix(in srgb, var(--g-catastrophe) 20%, transparent); }
+    .cer-table thead .th-eu { width: 33%; background: color-mix(in srgb, var(--g-eucatastrophe) 30%, transparent); }
 
+    /* the perspectives and their futures in white, with black text */
     .cer-table tbody th {
       font-weight: 700;
-      background: color-mix(in srgb, var(--g) 32%, transparent);
+      background: var(--canvas-bg);
     }
 
     .cer-table tbody th small {
@@ -591,7 +592,31 @@
     }
 
     .cer-table tbody td {
-      background: color-mix(in srgb, currentColor 4%, transparent);
+      background: var(--canvas-bg);
+    }
+
+    /* the three groups labelled on the left, outside the table's lines */
+    .cer-table .cer-group-head,
+    .cer-table th.cer-group {
+      width: 12%;
+      padding: 22px 24px 0 0;
+      border: none;
+      background: none;
+    }
+
+    .cer-table th.cer-group {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    /* space between the groups */
+    .cer-table tr.cer-gap td {
+      height: 36px;
+      padding: 0;
+      border: none;
+      background: none;
     }
 
     .cer-table td b {
@@ -617,11 +642,19 @@
     }
 
     .cer-note {
-      padding-top: 18px;
-      border-top: 3px solid var(--g);
       font-family: var(--serif);
       font-size: 18px;
       line-height: 1.45;
+    }
+
+    /* each note's group, above its line */
+    .cer-note .cer-note-label {
+      margin: 0 0 18px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid var(--g);
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 600;
     }
 
     .cer-note h3 {
@@ -1506,7 +1539,7 @@
           <svg class="ov-thumb" viewBox="0 0 300 180" aria-hidden="true">
             <rect class="cer-c" x="60" y="12" width="44" height="18" style="fill: color-mix(in srgb, currentColor 10%, transparent)"/>
             <rect class="cer-c" x="104" y="12" width="68" height="18" style="fill: color-mix(in srgb, #c0451f 22%, transparent)"/>
-            <rect class="cer-c" x="172" y="12" width="68" height="18" style="fill: color-mix(in srgb, #f9cb9c 26%, transparent)"/>
+            <rect class="cer-c" x="172" y="12" width="68" height="18" style="fill: color-mix(in srgb, #f1c232 26%, transparent)"/>
             <rect class="cer-c" x="60" y="30" width="44" height="13.8" style="fill: color-mix(in srgb, #f6b26b 30%, transparent)"/>
             <rect class="cer-c" x="104" y="30" width="136" height="13.8" style="fill: color-mix(in srgb, currentColor 5%, transparent)"/>
             <rect class="cer-c" x="60" y="43.8" width="44" height="13.8" style="fill: color-mix(in srgb, #f6b26b 30%, transparent)"/>
@@ -1673,6 +1706,7 @@
           <table class="cer-table">
             <thead>
               <tr>
+                <td class="cer-group-head" aria-hidden="true"></td>
                 <th scope="col">Cultural Perspective</th>
                 <th scope="col" class="th-cat">Maximal Cultural Catastrophe from that Perspective</th>
                 <th scope="col" class="th-eu">Maximal Cultural Eucatastrophe from that Perspective</th>
@@ -1680,6 +1714,7 @@
             </thead>
             <tbody>
               <tr class="g-worldviews">
+                <th scope="rowgroup" rowspan="3" class="cer-group">Worldviews</th>
                 <th scope="row">Religious Fundamentalism<small>(Christian, Islamic, Jewish)</small></th>
                 <td><b>Death of Gods:</b> A future that contains no adherents to their religion, and it goes extinct.</td>
                 <td><b>Stable Theocracy:</b> A future where their religion successfully spreads, becoming the universal religion for all time.</td>
@@ -1694,7 +1729,9 @@
                 <td><b>Divergent Cultural Evolution:</b> A future where inter-cultural dialogue ceases and the world&rsquo;s cultures become more distinct, divided and disagreeable; irreconcilable, warring sub-cultures that share no common language.</td>
                 <td><b>Convergent Cultural Evolution:</b> A future where cosmopolitan multi-culturalism culminates in a unified worldview, cohering all world cultures into a higher-order whole.</td>
               </tr>
+              <tr class="cer-gap" aria-hidden="true"><td colspan="4"></td></tr>
               <tr class="g-civilisations">
+                <th scope="rowgroup" rowspan="4" class="cer-group">Civilisations</th>
                 <th scope="row">Western Civilisation<small>(US/UK)</small></th>
                 <td><b>Illiberalism:</b> A future where the sovereignty of the individual &ndash; freedom of thought, speech and action &ndash; as the foundational cultural principle of modernity is lost.</td>
                 <td><b>Capitalist Cultural Hegemony:</b> A future &lsquo;Pax Americana&rsquo; where individualism (amoral familialism), materialism (consumer culture) and egoism/nihilism (self-interest without self-social narrative) become the world value-system.</td>
@@ -1714,7 +1751,9 @@
                 <td><b>The Great Silence of Oral History:</b> A future where all unique, non-written histories, languages and traditional knowledges are eradicated through assimilation into dominant global cultures, leaving indigenous peoples without their ancestral grounding or distinct cultural identity.</td>
                 <td><b>Wisdom of the Elders:</b> A future where indigenous peoples globally revitalise their threatened languages and traditions, and their ecological and spiritual wisdom is integrated into cultural discourse and global institutions.</td>
               </tr>
+              <tr class="cer-gap" aria-hidden="true"><td colspan="4"></td></tr>
               <tr class="g-substrates">
+                <th scope="rowgroup" rowspan="3" class="cer-group">Substrates</th>
                 <th scope="row">Humanism<small>(Biological Humans)</small></th>
                 <td><b>Existential Extermination:</b> A future where human philosophy, literature and art are destroyed or relegated to the archive of lesser culture in a world populated by more advanced post-human minds.</td>
                 <td><b>Human Flourishing:</b> A future golden age (Renaissance and Enlightenment) where human artefacts and works become more numerous and sophisticated than at any point in history.</td>
@@ -1734,6 +1773,7 @@
       </div>
       <div class="cer-notes">
         <div class="cer-note g-worldviews">
+          <p class="cer-note-label">Worldviews</p>
           <h3>1. The Epistemic Axis (Belief)</h3>
           <p>This axis concerns the source and validity of knowledge and values.</p>
           <ul>
@@ -1742,6 +1782,7 @@
           </ul>
         </div>
         <div class="cer-note g-civilisations">
+          <p class="cer-note-label">Civilisations</p>
           <h3>2. The Civilisational Axis (Identity)</h3>
           <p>This axis concerns the scale and composition of collective identity, power and sovereignty.</p>
           <ul>
@@ -1750,6 +1791,7 @@
           </ul>
         </div>
         <div class="cer-note g-substrates">
+          <p class="cer-note-label">Substrates</p>
           <h3>3. The Ontological Axis (Being)</h3>
           <p>This axis concerns the nature of consciousness, embodiment and life itself.</p>
           <ul>
