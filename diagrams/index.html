@@ -578,10 +578,21 @@
     .cer-table thead .th-cat { width: 33%; background: color-mix(in srgb, var(--g-catastrophe) 20%, transparent); }
     .cer-table thead .th-eu { width: 33%; background: color-mix(in srgb, var(--g-eucatastrophe) 30%, transparent); }
 
-    /* the perspectives and their futures in white, with black text */
-    .cer-table tbody th {
+    /* the perspectives (the first column) in white on black; their futures
+       in black on white */
+    .cer-table tbody th:not(.cer-group),
+    .cer-table thead th:first-of-type {
+      background: var(--canvas-ink);
+      color: var(--canvas-bg);
+    }
+
+    .cer-table tbody th:not(.cer-group) {
       font-weight: 700;
-      background: var(--canvas-bg);
+    }
+
+    /* a fine line between the perspectives within a group */
+    .cer-table tbody tr:not(:has(.cer-group)) > th {
+      box-shadow: inset 0 1px 0 color-mix(in srgb, var(--canvas-bg) 40%, var(--canvas-ink));
     }
 
     .cer-table tbody th small {
@@ -1698,9 +1709,9 @@
 
     <section class="cer-view" aria-label="A Typology of Cultural Existential Risk Scenarios">
       <ul class="cer-axes">
-        <li class="g-worldviews"><span class="cer-swatch" aria-hidden="true"></span><span><b>Worldviews:</b> Religious Fundamentalism vs Secular Atheism vs Syncretism</span></li>
-        <li class="g-civilisations"><span class="cer-swatch" aria-hidden="true"></span><span><b>Civilisations:</b> Western Civilisation vs Eastern Civilisation vs Rest of World</span></li>
-        <li class="g-substrates"><span class="cer-swatch" aria-hidden="true"></span><span><b>Substrates:</b> Humanism vs Trans-humanism vs Post-humanism</span></li>
+        <li class="g-worldviews"><span><b>Worldviews:</b> Religious Fundamentalism vs Secular Atheism vs Syncretism</span></li>
+        <li class="g-civilisations"><span><b>Civilisations:</b> Western Civilisation vs Eastern Civilisation vs Rest of World</span></li>
+        <li class="g-substrates"><span><b>Substrates:</b> Humanism vs Trans-humanism vs Post-humanism</span></li>
       </ul>
       <div class="cer-scroll">
           <table class="cer-table">
