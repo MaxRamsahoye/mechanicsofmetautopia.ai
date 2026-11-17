@@ -1367,6 +1367,14 @@
       opacity: 1;
     }
 
+    /* the automatic tour through the futures shows each as hover does */
+    .m-tl.is-selected { background: var(--m-tl); }
+    .m-tr.is-selected { background: var(--m-tr); }
+    .m-bl.is-selected { background: var(--m-bl); }
+    .m-br.is-selected { background: var(--m-br); }
+    .m-center.is-selected::before { opacity: 1; }
+    .m-cell.is-selected .m-text { transform: translateY(-3px); }
+
     .m-tl, .m-tr, .m-bl, .m-br {
       width: calc(50% - 0.5px);
       height: calc(50% - 0.5px);
@@ -1523,18 +1531,22 @@
     }
 
     .attractors-view .matrix-wrap {
+      --ax-l: 112px;
+      --ax-b: 80px;
       max-width: none;
-      padding: 0 0 80px 76px;
+      padding: 0 0 var(--ax-b) var(--ax-l);
     }
 
     .attractors-view .matrix-axis { font-size: 19px; }
-    .attractors-view .matrix-axis-y { bottom: 80px; }
-    .attractors-view .matrix-axis-x { left: 76px; }
+    .attractors-view .matrix-axis-y { bottom: var(--ax-b); }
+    .attractors-view .matrix-axis-x { left: var(--ax-l); }
     .attractors-view .matrix-tick { font-size: 15px; }
-    .attractors-view .matrix-tick.y-high { left: 34px; top: calc((100% - 80px) * 0.15); }
-    .attractors-view .matrix-tick.y-low { left: 34px; top: calc((100% - 80px) * 0.85 - 1em); }
-    .attractors-view .matrix-tick.x-low { bottom: 44px; left: calc(76px + (100% - 76px) * 0.15); }
-    .attractors-view .matrix-tick.x-high { bottom: 44px; right: calc((100% - 76px) * 0.15); }
+    .attractors-view .matrix-tick.y-high,
+    .attractors-view .matrix-tick.y-low { left: auto; right: calc(100% - var(--ax-l) + 12px); text-align: right; }
+    .attractors-view .matrix-tick.y-high { top: calc((100% - var(--ax-b)) * 0.15); }
+    .attractors-view .matrix-tick.y-low { top: calc((100% - var(--ax-b)) * 0.85 - 1em); }
+    .attractors-view .matrix-tick.x-low { bottom: 44px; left: calc(var(--ax-l) + (100% - var(--ax-l)) * 0.15); }
+    .attractors-view .matrix-tick.x-high { bottom: 44px; right: calc((100% - var(--ax-l)) * 0.15); }
 
     .attractors-view .matrix {
       aspect-ratio: 1.25 / 1;
@@ -1549,6 +1561,67 @@
       display: block;
       font-size: 18px;
       line-height: 1.35;
+    }
+
+    /* wide windows: the title and description, smaller, in a column on the
+       left; the diagram beside them on the right, scaled up to the window's
+       right margin (and no taller than the window) */
+    @media (min-width: 1440px) {
+      body[data-show="attractors-main"] .page-main {
+        display: grid;
+        grid-template-columns: 100%;
+        align-items: start;
+      }
+
+      body[data-show="attractors-main"] .diagram-top,
+      body[data-show="attractors-main"] .attractors-view {
+        grid-row: 1;
+        grid-column: 1;
+      }
+
+      body[data-show="attractors-main"] .diagram-top {
+        --t1-col: 290px;
+        width: var(--t1-col);
+        margin-bottom: 0;
+        position: sticky;
+        top: 140px;
+      }
+
+      body[data-show="attractors-main"] .diagram-top::before {
+        display: none;
+      }
+
+      body[data-show="attractors-main"] .diagram-top .page-title {
+        font-size: 34px;
+        line-height: 1.15;
+      }
+
+      body[data-show="attractors-main"] .diagram-desc {
+        margin-top: 4px;
+        font-size: 17px;
+        line-height: 1.45;
+      }
+
+      body[data-show="attractors-main"] .attractors-view {
+        /* starts past the title column and its gap; ends 64px in from the
+           window's right edge (the main column is centred in the window) */
+        margin-left: calc((100% - var(--wide-col)) / 2 + 290px + 64px);
+        width: min(1240px, 50vw + 50% - 64px - (100% - var(--wide-col)) / 2 - 290px - 64px, max(860px, (100vh - 220px) * 0.95 + 112px));
+      }
+
+      body[data-show="attractors-main"] .attractors-view .matrix-wrap {
+        zoom: 1;
+        width: auto;
+      }
+
+      body[data-show="attractors-main"] .attractors-view .matrix {
+        aspect-ratio: 0.95 / 1;
+        --m-pad: 28px;
+      }
+
+      html.serif-headings body[data-show="attractors-main"] .attractors-view .matrix .m-text h4 { font-size: 24px; }
+      body[data-show="attractors-main"] .attractors-view .m-sub { font-size: 17px; margin-bottom: 10px; }
+      body[data-show="attractors-main"] .attractors-view .m-text p { font-size: 16px; line-height: 1.32; }
     }
 
     /* wide windows: the whole diagram at 0.85 of that size */
@@ -1579,16 +1652,13 @@
     }
 
     @media (max-width: 600px) {
-      .attractors-view .matrix-wrap { padding: 0 0 56px 52px; }
+      .attractors-view .matrix-wrap { --ax-l: 78px; --ax-b: 56px; }
       .attractors-view .matrix-axis { font-size: 14px; }
-      .attractors-view .matrix-axis-y { bottom: 56px; }
-      .attractors-view .matrix-axis-x { left: 52px; }
       .attractors-view .matrix-tick { font-size: 11px; }
-      .attractors-view .matrix-tick.y-high, .attractors-view .matrix-tick.y-low { left: 21px; }
-      .attractors-view .matrix-tick.y-high { top: calc((100% - 56px) * 0.15); }
-      .attractors-view .matrix-tick.y-low { top: calc((100% - 56px) * 0.85 - 1em); }
-      .attractors-view .matrix-tick.x-low { bottom: 30px; left: calc(52px + (100% - 52px) * 0.15); }
-      .attractors-view .matrix-tick.x-high { bottom: 30px; right: calc((100% - 52px) * 0.15); }
+      .attractors-view .matrix-tick.y-high,
+      .attractors-view .matrix-tick.y-low { right: calc(100% - var(--ax-l) + 7px); }
+      .attractors-view .matrix-tick.x-low,
+      .attractors-view .matrix-tick.x-high { bottom: 30px; }
       .attractors-view .matrix { aspect-ratio: 1 / 1; --m-pad: 10px; }
       html .attractors-view .matrix .m-text h4 { font-size: 13px; }
       html.serif-headings .attractors-view .matrix .m-text h4 { font-size: 15px; }
@@ -1775,8 +1845,8 @@
               <figure class="matrix-figure" aria-label="Four futures: a typology of post-AGI cultural attractor states">
                 <div class="matrix-wrap">
                   <div class="matrix-axis matrix-axis-y">Cultural Integrity</div>
-                  <div class="matrix-tick y-high">High</div>
-                  <div class="matrix-tick y-low">Low</div>
+                  <div class="matrix-tick y-high">Maximal</div>
+                  <div class="matrix-tick y-low">Minimal</div>
                   <div class="matrix">
                     <div class="m-cell m-tl"><div class="m-text"><h4>Meta-Dystopian Enclosure</h4><span class="m-sub">(Localised lock-ins)</span><p>The transition to a defense-dominant, maximally decentralised world-system where every sub-topia is a completely closed system with memetic transmission and physical migration rendered functionally impossible.</p></div></div>
                     <div class="m-cell m-tr"><div class="m-text"><h4>Meta-Utopian Uplift</h4><span class="m-sub">(Epistemic Equilibria)</span><p>The transition to a semi-compartmentalised world-system with boundaries open enough for multi-culturalism, freedom of movement and moral progress, but sufficiently protected to prevent hostile cultural takeover.</p></div></div>
@@ -1785,8 +1855,8 @@
                     <div class="m-cell m-center"><div class="m-text"><h4>Clash of Civilisations</h4><span class="m-sub">(Cultural Competition, Conflict &amp; Control)</span><p>An underdetermined, hybrid condition – exhibiting proto-characteristics of mono-culture, meta-dystopia and cultural collapse – where multiple cultures compete for survival, sovereignty and supremacy.</p></div></div>
                   </div>
                   <div class="matrix-axis matrix-axis-x">Membrane Permeability</div>
-                  <div class="matrix-tick x-low">Low</div>
-                  <div class="matrix-tick x-high">High</div>
+                  <div class="matrix-tick x-low">Minimal</div>
+                  <div class="matrix-tick x-high">Maximal</div>
                 </div>
                 <p class="matrix-frames"><em>Unified Frames</em>: 1. Duettmann's <a href="https://foresightinstitute.substack.com/p/defend-physical" target="_blank" rel="noopener">'multi-polar active shields'</a> and Clarke's <a href="https://80000hours.org/problem-profiles/risks-of-stable-totalitarianism/" target="_blank" rel="noopener">'stable totalitarianism'</a> (top left). 2. Nozick's <a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">‘meta-utopia’</a> (top right) and Barrat-Douglas' <a href="https://strangecities.substack.com/p/the-choice-transition" target="_blank" rel="noopener">'choice transition’</a> and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener">'societal uplift'</a> 3. Hanson's <a href="https://quillette.com/2024/04/11/beware-cultural-drift/" target="_blank" rel="noopener">'global monoculture'</a> and Drexler's <a href="https://en.wikipedia.org/wiki/Gray_goo" target="_blank" rel="noopener">'gray goo'</a> (bottom right) 4. Bostrom's (technological) <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener">'permanent plateau'</a> and Ord's <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">'unrecoverable collapse'</a> (bottom left)</p>
               </figure>
@@ -2319,6 +2389,59 @@
         if (TEXT[k].slug && location.hash === '#' + TEXT[k].slug) show = k + '-main';
       });
       render();
+    })();
+
+    // Typology 1: a tour through the futures, from the clash in the middle to
+    // the top right and on clockwise, back to the middle after the top left;
+    // the pointer takes over while it is on the diagram, and the tour
+    // resumes a few seconds after it leaves
+    (function () {
+      var matrix = document.querySelector('.attractors-view .matrix');
+      if (!matrix) return;
+      var order = ['center', 'tr', 'br', 'bl', 'tl'];
+      var cells = order.map(function (k) { return matrix.querySelector('.m-' + k); });
+      var i = 0, timer = null, resume = null, paused = false;
+
+      function clear() { cells.forEach(function (c) { c.classList.remove('is-selected'); }); }
+
+      function step() {
+        if (paused || matrix.matches(':hover') || !matrix.offsetParent || document.hidden) return;
+        clear();
+        cells[i].classList.add('is-selected');
+        i = (i + 1) % cells.length;
+      }
+
+      function start() {
+        clearInterval(timer);
+        paused = false;
+        step();
+        timer = setInterval(step, 3200);
+      }
+
+      function hold() {
+        paused = true;
+        clearTimeout(resume);
+        clear();
+      }
+
+      matrix.addEventListener('mouseenter', hold);
+      matrix.addEventListener('mouseleave', function () {
+        clearTimeout(resume);
+        resume = setTimeout(start, 3000);
+      });
+      // a tap on a touch screen chooses that future and holds the tour a while
+      matrix.addEventListener('click', function (e) {
+        var c = e.target.closest('.m-cell');
+        if (!c) return;
+        hold();
+        c.classList.add('is-selected');
+        i = (cells.indexOf(c) + 1) % cells.length;
+        resume = setTimeout(start, 8000);
+      });
+      document.querySelectorAll('[data-show], [data-go]').forEach(function (b) {
+        b.addEventListener('click', function () { if (!paused) { i = 0; setTimeout(start, 0); } });
+      });
+      start();
     })();
 
     // Typology 2: every column is as wide as the longest cell heading needs
