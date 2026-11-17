@@ -1938,7 +1938,7 @@
     /* ---------- the four futures matrix ---------- */
 
     .matrix-figure {
-      margin: 72px 0 0;
+      margin: 112px 0 120px;
       font-family: 'IBM Plex Sans', sans-serif;
     }
 
@@ -2104,8 +2104,120 @@
       line-height: 1.32;
     }
 
-    /* narrower windows: the titles only */
+    /* wide windows: the matrix breaks out of the text column, wider and taller */
+    @media (min-width: 1181px) {
+      .matrix-figure {
+        margin: 136px 0 144px;
+      }
+
+      .matrix-wrap {
+        box-sizing: border-box;
+        width: min(1080px, 100vw - 120px);
+        max-width: none;
+        margin-left: calc((100% - min(1080px, 100vw - 120px)) / 2);
+      }
+
+      .matrix {
+        aspect-ratio: 9 / 8;
+        --m-pad: 30px;
+      }
+
+      html .article-body .matrix .m-text h4 {
+        font-size: 19px;
+      }
+
+      html.serif-headings .article-body .matrix .m-text h4 {
+        font-size: 23px;
+      }
+
+      .m-sub {
+        font-size: 18px;
+      }
+
+      .article-body .m-text p {
+        font-size: 17px;
+        line-height: 1.38;
+      }
+
+      /* the contents list would sit over the diagram: it steps aside while it is in view */
+      body.matrix-in-view .toc {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+    }
+
+    /* the description of a chosen future, below the matrix on narrower windows */
+    .matrix-detail {
+      margin: 40px 0 0;
+      padding: 24px 26px 26px;
+      color: var(--canvas-ink);
+      background: var(--m-detail, var(--m-tl));
+    }
+
+    .matrix-detail[hidden] {
+      display: none;
+    }
+
+    .matrix-detail.d-tl { --m-detail: var(--m-tl); }
+    .matrix-detail.d-tr { --m-detail: var(--m-tr); }
+    .matrix-detail.d-bl { --m-detail: var(--m-bl); }
+    .matrix-detail.d-br { --m-detail: var(--m-br); }
+    .matrix-detail.d-center { --m-detail: var(--m-center); }
+
+    html .article-body .matrix-detail h4 {
+      margin: 0 0 4px;
+      font-family: 'Inter', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+
+    html.serif-headings .article-body .matrix-detail h4 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 21px;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    .matrix-detail .m-sub {
+      display: block;
+      margin: 0 0 12px;
+      font-size: 17px;
+    }
+
+    .article-body .matrix-detail p {
+      max-width: none;
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.5;
+    }
+
+    /* narrower windows: the titles only; a tap shows the description below */
     @media (max-width: 1180px) {
+      .matrix .m-cell {
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .matrix .m-cell:focus-visible {
+        outline: 2px solid var(--canvas-accent);
+        outline-offset: -3px;
+      }
+
+      .m-tl.is-selected { background: var(--m-tl); }
+      .m-tr.is-selected { background: var(--m-tr); }
+      .m-bl.is-selected { background: var(--m-bl); }
+      .m-br.is-selected { background: var(--m-br); }
+      .m-center.is-selected::before { opacity: 1; }
+
+      .matrix-figure {
+        margin: 88px 0 96px;
+      }
+
       .article-body .m-text p {
         display: none;
       }
@@ -2167,8 +2279,17 @@
         font-size: 15px;
       }
 
-      .m-sub {
+      .matrix .m-sub {
         display: none;
+      }
+
+      .matrix-detail {
+        margin-top: 32px;
+        padding: 20px 20px 22px;
+      }
+
+      .matrix-figure {
+        margin: 72px 0 80px;
       }
     }
 
@@ -2462,6 +2583,7 @@
                   <div class="matrix-tick x-low">Low</div>
                   <div class="matrix-tick x-high">High</div>
                 </div>
+                <div class="matrix-detail" hidden aria-live="polite"></div>
               </figure>
 
             </section>
@@ -2662,6 +2784,79 @@
   </div>
 
   <script>
+    // the four futures matrix: on narrower windows, where the cells show titles only,
+    // choosing a cell shows its description below the matrix, in the cell's colour;
+    // on wide windows the contents list steps aside while the wide matrix is in view
+    (function () {
+      var fig = document.querySelector('.matrix-figure');
+      if (!fig) return;
+      var cells = fig.querySelectorAll('.m-cell');
+      var box = fig.querySelector('.matrix-detail');
+      var narrow = window.matchMedia('(max-width: 1180px)');
+      var keys = ['tl', 'tr', 'bl', 'br', 'center'];
+      var current = null;
+
+      function key(cell) {
+        for (var i = 0; i < keys.length; i++) {
+          if (cell.classList.contains('m-' + keys[i])) return keys[i];
+        }
+        return 'tl';
+      }
+
+      function clear() {
+        current = null;
+        box.hidden = true;
+        box.innerHTML = '';
+        cells.forEach(function (c) {
+          c.classList.remove('is-selected');
+          if (narrow.matches) c.setAttribute('aria-pressed', 'false');
+        });
+      }
+
+      function choose(cell) {
+        if (current === cell) { clear(); return; }
+        clear();
+        current = cell;
+        cell.classList.add('is-selected');
+        cell.setAttribute('aria-pressed', 'true');
+        box.className = 'matrix-detail d-' + key(cell);
+        box.innerHTML = cell.querySelector('.m-text').innerHTML;
+        box.hidden = false;
+      }
+
+      function sync() {
+        clear();
+        cells.forEach(function (c) {
+          if (narrow.matches) {
+            c.setAttribute('role', 'button');
+            c.setAttribute('tabindex', '0');
+            c.setAttribute('aria-pressed', 'false');
+          } else {
+            ['role', 'tabindex', 'aria-pressed'].forEach(function (a) { c.removeAttribute(a); });
+          }
+        });
+      }
+
+      cells.forEach(function (c) {
+        c.addEventListener('click', function () { if (narrow.matches) choose(c); });
+        c.addEventListener('keydown', function (e) {
+          if (!narrow.matches || (e.key !== 'Enter' && e.key !== ' ')) return;
+          e.preventDefault();
+          choose(c);
+        });
+      });
+      if (narrow.addEventListener) narrow.addEventListener('change', sync);
+      else narrow.addListener(sync);
+      sync();
+
+      var wrap = fig.querySelector('.matrix-wrap');
+      if ('IntersectionObserver' in window && wrap) {
+        new IntersectionObserver(function (es) {
+          document.body.classList.toggle('matrix-in-view', es[0].isIntersecting);
+        }).observe(wrap);
+      }
+    })();
+
     // the title takes you back to the top of the page
     document.addEventListener('click', function (e) {
       var a = e.target.closest('a.title-top');
