@@ -699,6 +699,172 @@
       font-style: italic;
     }
 
+    /* ---------- the source figures, redrawn below Typologies 2, 3 and 5 ---------- */
+    .src-figure {
+      margin: 40px 0 0;
+      font-family: var(--sans);
+    }
+
+    .src-figure figcaption {
+      margin: 28px 0 0;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .src-figure figcaption b {
+      font-weight: 600;
+      color: var(--canvas-ink);
+    }
+
+    .src-scroll {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Bostrom's qualitative risk categories: scope by severity, the cells
+       divided by dashed lines, the two regions of global catastrophic and
+       existential risk outlined, and the two axes run on to arrowheads */
+    .bos-grid {
+      display: grid;
+      grid-template-columns: 150px repeat(3, minmax(170px, 1fr)) 84px 170px;
+      grid-template-rows: 64px repeat(5, 84px) auto;
+      min-width: 820px;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .bos-cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 14px;
+      text-align: center;
+      border-right: 1px dashed color-mix(in srgb, var(--canvas-ink) 55%, transparent);
+      border-bottom: 1px dashed color-mix(in srgb, var(--canvas-ink) 55%, transparent);
+    }
+
+    /* the cosmic row and the hellish column: dashed, and empty */
+    .bos-cell.edge { border-color: color-mix(in srgb, var(--canvas-ink) 35%, transparent); }
+    .bos-cell.top { border-top: none; }
+
+    /* the axes */
+    .bos-cell.c1 { border-left: 3px solid var(--canvas-ink); }
+    .bos-cell.r5 { border-bottom: 3px solid var(--canvas-ink); }
+
+    .bos-cell.c1.top::before,
+    .bos-cell.r5.c4::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      background: var(--canvas-ink);
+    }
+
+    .bos-cell.c1.top::before {
+      left: -8.5px;
+      top: -12px;
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+
+    .bos-cell.r5.c4::after {
+      right: -14px;
+      bottom: -8.5px;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+    }
+
+    .bos-cell.c1.top { border-left-width: 3px; }
+
+    /* the outlines: global catastrophic risk (global scope or wider, endurable
+       or worse) and, within it, existential risk (pan-generational, crushing) */
+    .bos-cell.gcr-l { border-left: 2px solid var(--canvas-ink); }
+    .bos-cell.gcr-b { border-bottom: 2px solid var(--canvas-ink); }
+
+    .bos-x {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--risk-x);
+    }
+
+    .bos-scope,
+    .bos-sev {
+      display: flex;
+      align-items: center;
+      font-size: 15px;
+    }
+
+    .bos-scope {
+      justify-content: flex-end;
+      padding-right: 16px;
+    }
+
+    .bos-sev {
+      justify-content: center;
+      padding-top: 14px;
+    }
+
+    .bos-muted { color: var(--muted); }
+
+    .bos-axis {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .bos-region {
+      display: flex;
+      align-items: flex-end;
+      padding: 0 0 6px 12px;
+      font-size: 15px;
+      font-style: italic;
+    }
+
+    /* MacAskill and Moorhouse's moral perspectives: two columns, in the
+       style of the table above */
+    .cer-table.nee-table {
+      min-width: 0;
+    }
+
+    .cer-table.nee-table thead th:first-of-type { width: 40%; }
+    .cer-table.nee-table thead th:nth-child(2) { width: 60%; }
+
+    .cer-table.nee-table tbody th {
+      font-weight: 400;
+    }
+
+    /* Ord's classification of existential catastrophes: a tree */
+    .ord-tree {
+      display: block;
+      width: 100%;
+      min-width: 600px;
+      max-width: 900px;
+      height: auto;
+      margin: 0 auto;
+      overflow: visible;
+    }
+
+    .ord-tree line {
+      stroke: var(--canvas-ink);
+      stroke-width: 1.5;
+    }
+
+    .ord-tree text {
+      fill: var(--canvas-ink);
+      font-family: var(--sans);
+      font-size: 19px;
+      font-weight: 600;
+      text-anchor: middle;
+    }
+
+    .ord-figure figcaption {
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
     .ov-thumb .cer-c { stroke: currentColor; stroke-opacity: 0.45; stroke-width: 1; }
 
     /* ---------- Typology 4: technological capabilities ---------- */
@@ -1705,6 +1871,51 @@
               </figure>
       </div>
       <p class="cer-source">See also <a href="https://existential-risk.com/concept.pdf" target="_blank" rel="noopener">Existential Risk Prevention as Global Priority</a> by Nick Bostrom (2002 &gt; 2008 &gt; 2013).</p>
+          <figure class="src-figure" aria-label="Qualitative risk categories, after Nick Bostrom">
+        <div class="src-scroll">
+          <div class="bos-grid">
+            <div class="bos-scope bos-axis" style="grid-row: 1; grid-column: 1; align-items: flex-start">Scope</div>
+            <div class="bos-scope bos-muted" style="grid-row: 1; grid-column: 1; align-items: flex-end; padding-bottom: 10px">(cosmic)</div>
+            <div class="bos-cell top edge c1" style="grid-row: 1; grid-column: 2"></div>
+            <div class="bos-cell top edge" style="grid-row: 1; grid-column: 3"></div>
+            <div class="bos-cell top edge" style="grid-row: 1; grid-column: 4"></div>
+            <div class="bos-cell top edge" style="grid-row: 1; grid-column: 5"></div>
+            <div class="bos-scope" style="grid-row: 2; grid-column: 1">pan-generational</div>
+            <div class="bos-cell c1 r1" style="grid-row: 2; grid-column: 2">One original Picasso painting destroyed</div>
+            <div class="bos-cell c2 r1 gcr-l" style="grid-row: 2; grid-column: 3">Destruction of cultural heritage</div>
+            <div class="bos-cell c3 r1 gcr-l gcr-b" style="grid-row: 2; grid-column: 4"><span class="bos-x">X</span></div>
+            <div class="bos-cell edge c4 r1" style="grid-row: 2; grid-column: 5"></div>
+            <div class="bos-scope" style="grid-row: 3; grid-column: 1">trans-generational</div>
+            <div class="bos-cell c1 r2" style="grid-row: 3; grid-column: 2">Biodiversity reduced by one species of beetle</div>
+            <div class="bos-cell c2 r2 gcr-l" style="grid-row: 3; grid-column: 3">Dark age</div>
+            <div class="bos-cell c3 r2" style="grid-row: 3; grid-column: 4">Aging</div>
+            <div class="bos-cell edge c4 r2" style="grid-row: 3; grid-column: 5"></div>
+            <div class="bos-scope" style="grid-row: 4; grid-column: 1">global</div>
+            <div class="bos-cell c1 r3" style="grid-row: 4; grid-column: 2">Global warming by 0.01 C&deg;</div>
+            <div class="bos-cell c2 r3 gcr-l gcr-b" style="grid-row: 4; grid-column: 3">Thinning of ozone layer</div>
+            <div class="bos-cell c3 r3 gcr-b" style="grid-row: 4; grid-column: 4">Ephemeral global tyranny</div>
+            <div class="bos-cell edge c4 r3" style="grid-row: 4; grid-column: 5"></div>
+            <div class="bos-scope" style="grid-row: 5; grid-column: 1">local</div>
+            <div class="bos-cell c1 r4" style="grid-row: 5; grid-column: 2">Congestion from one extra vehicle</div>
+            <div class="bos-cell c2 r4" style="grid-row: 5; grid-column: 3">Recession in one country</div>
+            <div class="bos-cell c3 r4" style="grid-row: 5; grid-column: 4">Genocide</div>
+            <div class="bos-cell edge c4 r4" style="grid-row: 5; grid-column: 5"></div>
+            <div class="bos-scope" style="grid-row: 6; grid-column: 1">personal</div>
+            <div class="bos-cell c1 r5" style="grid-row: 6; grid-column: 2">Loss of one hair</div>
+            <div class="bos-cell c2 r5" style="grid-row: 6; grid-column: 3">Car is stolen</div>
+            <div class="bos-cell c3 r5" style="grid-row: 6; grid-column: 4">Fatal car crash</div>
+            <div class="bos-cell edge c4 r5" style="grid-row: 6; grid-column: 5"></div>
+            <div class="bos-region" style="grid-row: 2; grid-column: 6">existential risk</div>
+            <div class="bos-region" style="grid-row: 4; grid-column: 6">global catastrophic risk</div>
+            <div class="bos-sev" style="grid-row: 7; grid-column: 2">imperceptible</div>
+            <div class="bos-sev" style="grid-row: 7; grid-column: 3">endurable</div>
+            <div class="bos-sev" style="grid-row: 7; grid-column: 4">crushing</div>
+            <div class="bos-sev bos-muted" style="grid-row: 7; grid-column: 5">(hellish)</div>
+            <div class="bos-sev bos-axis" style="grid-row: 7; grid-column: 6; justify-content: flex-start; padding-left: 22px">Severity</div>
+          </div>
+        </div>
+        <figcaption><b>Figure 2.</b> Qualitative risk categories, from <em>Existential Risk Prevention as Global Priority</em> by Nick Bostrom (2013). The area marked <span class="bos-x" style="font-size: inherit">X</span> represents existential risks: those of at least crushing severity and at least pan-generational scope.</figcaption>
+      </figure>
     </section>
 
     <section class="cer-view" aria-label="A Typology of Cultural Existential Risk Scenarios">
@@ -1812,6 +2023,45 @@
         </div>
       </div>
       <p class="cer-source">See also the typology of moral worldviews and catastrophes in <a href="https://www.forethought.org/research/no-easy-eutopia" target="_blank" rel="noopener">No Easy Eutopia</a> by William MacAskill &amp; Fin Moorhouse (2025).</p>
+          <figure class="src-figure" aria-label="Moral perspectives and moral catastrophes, after MacAskill and Moorhouse">
+        <div class="src-scroll">
+          <table class="cer-table nee-table">
+            <thead>
+              <tr>
+                <th scope="col">Moral perspective</th>
+                <th scope="col" class="th-cat">Moral catastrophe, from that perspective</th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr>
+                  <th scope="row">Most religious views</th>
+                  <td>Most people on Earth follow the wrong faith or spiritual practices, or are atheist; widespread erosion of spiritual values.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Conservative morality</th>
+                  <td>Most people violate norms of sexual propriety, such as sex before marriage. Marriage rates and birth rates are dropping across most countries. Other forms of decadence, like gambling and drug use, are common.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Pro-life ethics</th>
+                  <td>Over 70 million abortions are performed annually, more than 100 times the number of deaths from homicide.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Cosmopolitan ethics</th>
+                  <td>Millions of children die from easily-preventable diseases every year. Restrictive immigration policies limit freedom of movement and make the world poorer.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Environmentalism</th>
+                  <td>We are causing climate change, the destruction of natural ecosystems, and widespread species and biodiversity loss.</td>
+                </tr>
+                <tr>
+                  <th scope="row">Communism and various forms of socialism</th>
+                  <td>Capitalism, extreme inequality, and widespread worker alienation predominate.</td>
+                </tr>
+            </tbody>
+          </table>
+        </div>
+        <figcaption>Moral perspectives and the moral catastrophe each sees in the world today, from <em>No Easy Eutopia</em> by William MacAskill &amp; Fin Moorhouse (2025).</figcaption>
+      </figure>
     </section>
 
     <section class="tech-view" aria-label="A Typology of Technological Capabilities">
@@ -2071,6 +2321,15 @@
       </div>
 
       <p class="mono-source">See also the graphic taxonomy of x-risks from <a href="https://www.are.na/block/41292921" target="_blank" rel="noopener">The Precipice</a> by Toby Ord (2020).</p>
+          <figure class="src-figure ord-figure" aria-label="An extended classification of existential catastrophes, after Toby Ord">
+        <div class="src-scroll">
+        <svg class="ord-tree" viewBox="0 0 1030 480" role="img" aria-label="Existential catastrophe divides into extinction and failed continuation; failed continuation into unrecoverable collapse and unrecoverable dystopia; unrecoverable dystopia into undesired, enforced and desired dystopia">
+          <line x1="300" y1="58" x2="85" y2="124"/><line x1="300" y1="58" x2="515" y2="124"/><line x1="515" y1="192" x2="300" y2="268"/><line x1="515" y1="192" x2="728" y2="268"/><line x1="728" y1="336" x2="513" y2="410"/><line x1="728" y1="336" x2="728" y2="410"/><line x1="728" y1="336" x2="945" y2="410"/>
+          <text x="300" y="44">Existential Catastrophe</text><text x="85" y="152">Extinction</text><text x="515" y="152">Failed Continuation</text><text x="300" y="296">Unrecoverable Collapse</text><text x="728" y="296">Unrecoverable Dystopia</text><text x="513" y="438">Undesired</text><text x="513" y="462">Dystopia</text><text x="728" y="438">Enforced</text><text x="728" y="462">Dystopia</text><text x="945" y="438">Desired</text><text x="945" y="462">Dystopia</text>
+        </svg>
+        </div>
+        <figcaption><b>Figure 5.2.</b> An extended classification of existential catastrophes by the kind of outcome that gets locked in, from <em>The Precipice</em> by Toby Ord (2020).</figcaption>
+      </figure>
     </section>
 
     <section class="asi-view" aria-label="High-level Types of ASI Alignment Map onto Positions in Moral &amp; Political Philosophy">
