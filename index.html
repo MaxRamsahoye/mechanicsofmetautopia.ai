@@ -739,6 +739,16 @@
       }
     }
 
+    /* phones, tablets and narrower windows: the text runs too close to the
+       edges for the corner name and the progress ring, which would sit over
+       it, so they are not shown */
+    @media (max-width: 1079px) {
+      .corner-title,
+      .progress-ring {
+        display: none;
+      }
+    }
+
     .scroll-top-btn {
       position: fixed;
       bottom: 30px;
