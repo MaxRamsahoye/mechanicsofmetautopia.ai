@@ -794,16 +794,17 @@ html.hide-scrollbar::-webkit-scrollbar {
 html.band-purple:not([data-theme]) {
   --link-blue: #e36843;
   --selection-bg: rgba(227, 104, 67, 0.22);
-  --inverse-bg: #e36843;
+  /* bands a little lighter than the link orange, for black text */
+  --inverse-bg: #ee8058;
   --inverse-ink: #000000;
-  --band-bg: #e36843;
+  --band-bg: #ee8058;
 }
 
 html[data-theme="dark"] {
   --link-blue: #d15632;
   --selection-bg: rgba(209, 86, 50, 0.35);
-  --band-bg: #d15632;
-  --inverse-bg: #d15632;
+  --band-bg: #e8734d;
+  --inverse-bg: #e8734d;
   --inverse-ink: #000000;
 }
 
