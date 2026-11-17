@@ -69,9 +69,7 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'],
-      ['Four Attractor States', 'https://maxramsahoye.github.io/momu.civilisationdesignerconsole/'],
-      ['Cultural Dynamics Simulator', 'https://maxramsahoye.github.io/momu.culturaldynamicssimulator/']];
+    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/']];
     var nav = document.createElement('nav');
     nav.className = 'top-nav';
     nav.setAttribute('aria-label', 'Pages');
