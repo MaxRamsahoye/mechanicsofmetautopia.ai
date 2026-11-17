@@ -286,6 +286,122 @@
       margin-bottom: 0 !important;
     }
 
+    /* the abstract, up in the band */
+    .genealogy-top .essay-abstract {
+      max-width: 760px;
+      margin: 32px 0 0;
+      padding: 22px 0 0;
+      background: none;
+      border: none;
+      border-top: 1px solid currentColor;
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .genealogy-top .essay-abstract a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    /* the side contents menu, as on the article: fixed at the middle left,
+       in the empty column beside the text */
+    .side-toc {
+      position: fixed;
+      top: 50%;
+      left: 40px;
+      z-index: 45;
+      width: clamp(180px, 50vw - 460px, 280px);
+      transform: translateY(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    }
+
+    body.toc-open .side-toc {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease, visibility 0s;
+    }
+
+    .side-toc .toc-label {
+      margin: 0 0 14px;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--canvas-accent);
+    }
+
+    .side-toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .side-toc li {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 7px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .side-toc li .o {
+      flex: none;
+      color: var(--canvas-accent);
+    }
+
+    .side-toc a {
+      color: var(--canvas-ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .side-toc a:hover {
+      border-bottom-color: var(--canvas-ink);
+    }
+
+    /* wide windows: the menu at the side, the notes in the right margin */
+    @media (min-width: 1280px) {
+      .essay-contents {
+        display: none;
+      }
+
+      .has-sidenotes {
+        --sn-w: min(280px, calc((100vw - 760px) / 2 - 80px));
+      }
+
+      .has-sidenotes .essay-note {
+        float: right;
+        clear: right;
+        width: var(--sn-w);
+        box-sizing: border-box;
+        margin: 6px calc(-1 * (var(--sn-w) + 40px)) 18px 0;
+        padding: 0 0 0 14px;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .has-sidenotes .essay-note .en-quote {
+        font-size: 12.5px;
+      }
+
+      .has-sidenotes .essay-wide,
+      .has-sidenotes .essay-break {
+        clear: both;
+      }
+    }
+
+    @media (max-width: 1279px) {
+      .side-toc {
+        display: none;
+      }
+    }
+
     /* the contents, numbered in orange */
     .essay-contents {
       margin: 0 0 24px;
@@ -577,13 +693,12 @@
     <p class="essay-series">&lt; The Culture Series &gt;</p>
     <p class="essay-lede">Employing the philosophical method of conceptual engineering to construct foundational frames for cultural macrostrategy</p>
     <p class="essay-byline">by <a class="plain-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
+      <div class="essay-abstract">
+      <p><b><em>Abstract:</em></b> This research article employs the philosophical method of conceptual engineering to construct a series of foundational frames for cultural existential risk studies (C-ERS): facilitating the <em>Convergence of Civilisations</em>, engaging in <em>Differential Cultural Development</em>, utilising <em>AI for Culture</em> and <em>Human Value-Alignment</em>, preparing for the <em>Cultural Explosion</em>, solving the <em>Cultural Communication Problem</em> and <em>Designing New Coordination Mechanisms</em>.</p>
+    </div>
     </div>
 
-    <article class="essay">
-      <div class="essay-abstract">
-        <p><b><em>Abstract:</em></b> This research article employs the philosophical method of conceptual engineering to construct a series of foundational frames for cultural existential risk studies (C-ERS): facilitating the <em>Convergence of Civilisations</em>, engaging in <em>Differential Cultural Development</em>, utilising <em>AI for Culture</em> and <em>Human Value-Alignment</em>, preparing for the <em>Cultural Explosion</em>, solving the <em>Cultural Communication Problem</em> and <em>Designing New Coordination Mechanisms</em>.</p>
-      </div>
-
+    <article class="essay has-sidenotes">
       <nav class="essay-contents" aria-label="Contents">
         <p class="ec-head">Contents</p>
         <ol>
@@ -600,16 +715,16 @@
 
       <p>Here I construct a series of major frames for the (post-AGI) governance of cultural evolution, and conclude by charting future research directions for the frontier macrostrategy field of <em>Coordination Studies</em>.</p>
 
-      <h2 id="cultures-civilisations"><a class="heading-link" href="#cultures-civilisations">Cultures &amp; Civilisations<span class="o">:</span> Clash<span class="o">,</span> Conquest<span class="o">,</span> Consolidation<span class="o">,</span> Collapse<span class="o">,</span> Convergence<sup><a class="o" href="#note-sears" id="ref-sears">*</a></sup></a></h2>
+      <h2 id="cultures-civilisations"><a class="heading-link" href="#cultures-civilisations">Cultures &amp; Civilisations<span class="o">:</span> Clash<span class="o">,</span> Conquest<span class="o">,</span> Consolidation<span class="o">,</span> Collapse<span class="o">,</span> Convergence</a><sup><a class="o" href="#note-sears" id="ref-sears">*</a></sup></h2>
+
+      <aside class="essay-note" id="note-sears">
+        <p><a class="o" href="#ref-sears">*</a> Here I seek to follow the pioneering path of <a href="https://forum.effectivealtruism.org/posts/coNjDHp6F7QmprxFo/nathan-a-sears-1987-2023" target="_blank" rel="noopener">Nathan Sears</a>, who remains the most prominent scholar to put macrostrategy into dialogue with international relations (IR). See <a href="https://www.researchgate.net/publication/344942589_International_Politics_in_the_Age_of_Existential_Threats" target="_blank" rel="noopener"><em>International Politics in the Age of Existential Threats</em></a> (2020), <a href="https://www.researchgate.net/publication/366020757_Sears_Nathan_2022_Great_Power_Rivalry_and_Macrosecuritization_Failure-_PhD_Thesispdf" target="_blank" rel="noopener"><em>Great Power Rivalry and Macrosecuritization Failure</em></a> (2022, PhD thesis) and <a href="https://www.researchgate.net/publication/347454408_Anarchy_Technology_and_the_Self-Destruction_Hypothesis_Human_Survival_and_the_Fermi_Paradox" target="_blank" rel="noopener"><em>Anarchy, Technology, and the Self-Destruction Hypothesis: Human Survival and the Fermi Paradox</em></a> (2020), the last of which formalises Bostrom&rsquo;s paper <a href="https://nickbostrom.com/papers/vulnerable.pdf" target="_blank" rel="noopener"><em>The Vulnerable World Hypothesis</em></a> (2019) within IR and SETI (the search for extra-terrestrial intelligence).</p>
+      </aside>
 
       <blockquote>
         <p>&#10077; World politics is entering a new phase&hellip; It is my hypothesis that the fundamental source of conflict in this new world will not be primarily ideological or primarily economic. The great divisions among humankind and the dominating source of conflict will be cultural. Nation states will remain the most powerful actors in world affairs, but the principal conflicts of global politics will occur between nations and groups of different civilizations. The clash of civilizations will dominate global politics. The fault lines between civilizations will be the battle lines of the future. &#10078;</p>
         <cite>&ndash; Samuel P. Huntington, <a href="https://www.guillaumenicaise.com/wp-content/uploads/2013/10/huntington_clash-of-civlizations.pdf" target="_blank" rel="noopener"><em>The Clash of Civilizations?</em></a> (1993)</cite>
       </blockquote>
-
-      <aside class="essay-note" id="note-sears">
-        <p><a class="o" href="#ref-sears">*</a> Here I seek to follow the pioneering path of <a href="https://forum.effectivealtruism.org/posts/coNjDHp6F7QmprxFo/nathan-a-sears-1987-2023" target="_blank" rel="noopener">Nathan Sears</a>, who remains the most prominent scholar to put macrostrategy into dialogue with international relations (IR). See <a href="https://www.researchgate.net/publication/344942589_International_Politics_in_the_Age_of_Existential_Threats" target="_blank" rel="noopener"><em>International Politics in the Age of Existential Threats</em></a> (2020), <a href="https://www.researchgate.net/publication/366020757_Sears_Nathan_2022_Great_Power_Rivalry_and_Macrosecuritization_Failure-_PhD_Thesispdf" target="_blank" rel="noopener"><em>Great Power Rivalry and Macrosecuritization Failure</em></a> (2022, PhD thesis) and <a href="https://www.researchgate.net/publication/347454408_Anarchy_Technology_and_the_Self-Destruction_Hypothesis_Human_Survival_and_the_Fermi_Paradox" target="_blank" rel="noopener"><em>Anarchy, Technology, and the Self-Destruction Hypothesis: Human Survival and the Fermi Paradox</em></a> (2020), the last of which formalises Bostrom&rsquo;s paper <a href="https://nickbostrom.com/papers/vulnerable.pdf" target="_blank" rel="noopener"><em>The Vulnerable World Hypothesis</em></a> (2019) within IR and SETI (the search for extra-terrestrial intelligence).</p>
-      </aside>
 
       <p><a href="https://www.guillaumenicaise.com/wp-content/uploads/2013/10/huntington_clash-of-civlizations.pdf" target="_blank" rel="noopener"><em>The Clash of Civilizations?</em></a> (1993) is a famous hypothesis by Huntington (an American political scientist) that (post-Cold War) global conflicts in the 21st century will be driven primarily by cultural differences rather than ideological competition or economic conditions.</p>
 
@@ -653,6 +768,11 @@
 
       <p>This turn towards &lsquo;collective epistemics&rsquo; (or <a href="https://plato.stanford.edu/entries/epistemology-social/" target="_blank" rel="noopener">social epistemology</a> in philosophy) is motivated by concerns that advanced AI will have the capability to manipulate or overwhelm human epistemic processes, potentially leading to &lsquo;epistemic collapse&rsquo; or &lsquo;value lock-in&rsquo;. In other words, AGI will likely be weaponised for mass disinformation and outpace human critical faculties, leading to a loss of agency over our own thought processes and belief/value systems. In this sense, <em>AI for epistemics and coordination</em> can be positioned as a <em>defensive accelerationist</em> (d/acc) counter-measure against cultural existential risks (e.g. value lock-in, misaligned memetic proliferation, ideological fanaticism, epistemic collapse, cyborgregore assimilation).</p>
 
+      <aside class="essay-note" id="note-flf">
+        <p><a class="o" href="#ref-flf">*</a> FLF is a spin-off from the <a href="https://futureoflife.org/" target="_blank" rel="noopener"><em>Future of Life Institute</em></a> (FLI) focused on <a href="https://aiforhumanreasoning.com/" target="_blank" rel="noopener">&lsquo;AI for human reasoning&rsquo;</a>:</p>
+        <p class="en-quote">&ldquo;The broad, fuzzy domain of potential AI capabilities that can improve the quality of understanding and coordination, more than they make the world complex, we&rsquo;re calling AI for Human Reasoning. This approach prioritizes developing AI that augments human understanding and decision-making rather than replacing it, ensuring that our collective wisdom can outpace the challenges we create.&rdquo;</p>
+      </aside>
+
       <div class="essay-box">
         <h3>AI for Epistemics: Field-Formation &amp; Literature Map</h3>
         <p>Most recently <a href="https://www.forethought.org/" target="_blank" rel="noopener"><em>Forethought</em></a> (FTT), in collaboration with the <a href="https://www.flf.org/" target="_blank" rel="noopener"><em>Future of Life Foundation</em></a> (FLF),<sup><a class="o" href="#note-flf" id="ref-flf">*</a></sup> have published a research article, <a href="https://newsletter.forethought.org/p/ai-tools-for-collective-epistemics" target="_blank" rel="noopener"><em>AI Tools for Collective Epistemics (alt. Design Sketches for Collective Epistemics)</em></a> (2026), following earlier articles <a href="https://www.forethought.org/research/whats-important-in-ai-for-epistemics" target="_blank" rel="noopener"><em>What&rsquo;s Important in &ldquo;AI for Epistemics&rdquo;?</em></a> (August 2024) and <a href="https://www.forethought.org/research/project-ideas-epistemics#highlight--epistemics" target="_blank" rel="noopener"><em>Project ideas: Epistemics</em></a> (January 2024), as well as mentions throughout the institute&rsquo;s research.</p>
@@ -661,16 +781,9 @@
         <p>Other research in this space includes <a href="https://joecarlsmith.com/2026/01/29/building-ais-that-do-human-like-philosophy/" target="_blank" rel="noopener"><em>Building AIs that do human-like philosophy</em></a> by Carlsmith (2026), <a href="https://www.lesswrong.com/posts/mfwZrKxfGWD5dZHzo/good-ai-epistemics-as-an-offramp-from-the-intelligence" target="_blank" rel="noopener"><em>Good AI Epistemics as an Offramp from the Intelligence Explosion</em></a> by Goldhaber (2026, FLF fellowship program director) and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener"><em>&lsquo;AI for societal uplift&rsquo; as a path to victory</em></a> by Douglas (2025).</p>
       </div>
 
-      <aside class="essay-note" id="note-flf">
-        <p><a class="o" href="#ref-flf">*</a> FLF is a spin-off from the <a href="https://futureoflife.org/" target="_blank" rel="noopener"><em>Future of Life Institute</em></a> (FLI) focused on <a href="https://aiforhumanreasoning.com/" target="_blank" rel="noopener">&lsquo;AI for human reasoning&rsquo;</a>:</p>
-        <p class="en-quote">&ldquo;The broad, fuzzy domain of potential AI capabilities that can improve the quality of understanding and coordination, more than they make the world complex, we&rsquo;re calling AI for Human Reasoning. This approach prioritizes developing AI that augments human understanding and decision-making rather than replacing it, ensuring that our collective wisdom can outpace the challenges we create.&rdquo;</p>
-      </aside>
-
       <p>AI for Epistemics as a framing either implies that thinking is neutral, or has implicit value-judgements. Based on the conceptual engineering of <a href="https://newmaterialism.eu/almanac/e/ethico-onto-epistem-ology.html" target="_blank" rel="noopener">&ldquo;ethico-onto-epistem-ology&rdquo;</a> &ndash; which points to &lsquo;the inseparability of ethics, ontology and epistemology when engaging in (scientific) knowledge production&rsquo; and &lsquo;with the world itself&rsquo; &ndash; we can extend the field into AI for Epistemics, Ontology and Axiology, covering three foundational domains and questions of philosophy (how we know, what exists, what is of value). In other words, how AI implicates not just belief-formation, but also cognitive mapping and moral psychology.</p>
 
       <p>Further, beyond AI for epistemics, which frames knowledge-production and societal decision-making as an analytic process, we could conceptualise this domain as AI for psychology, even AI for social psychology or, at the grandest level, AI for sociology: how AI can be used to model complex adaptive societal systems and predict population-level behaviour (macrosociological phenomena). Here we are effectively speaking of an actually-existing science of &lsquo;psychohistory&rsquo;, the fictional meta-discipline imagined by Asimov in the <em>Foundation</em> series (1951&ndash;93): &lsquo;a science in which things could be predicted on a probabilistic or statistical basis&rsquo;.</p>
-
-      <p>The ultimate culmination of <em>AI for sociology</em> is the summoning of a <a href="https://sites.google.com/view/civilisationalmechanics/critical-alien-phenomenology/demons" target="_blank" rel="noopener"><em>Cartesian-Laplacean Demon</em></a>: a superintelligence capable of controlling what subjects perceive and predicting what subjects will do; manufacturing and anticipating human behaviour.<sup><a class="o" href="#note-kulveit" id="ref-kulveit">*</a></sup> Descartes&rsquo;s Demon and Laplace&rsquo;s Demon are two classical Enlightenment thought experiments from the history of philosophy that can be combined and reinterpreted as a technological prophecy for superintelligence (if you are willing to think like an applied interdisciplinary philosopher ;).</p>
 
       <aside class="essay-note" id="note-kulveit">
         <p><a class="o" href="#ref-kulveit">*</a> A similar but distinct idea is Kulveit&rsquo;s Sociology of AI <a href="https://acsresearch.org/research" target="_blank" rel="noopener">(ACS Research)</a>:</p>
@@ -678,16 +791,18 @@
         <p class="en-quote">&ldquo;We are moving beyond the study of individual AI agents toward understanding the complex dynamics of entire ecosystems of intelligence. This involves analyzing interactions between diverse AI systems (such as LLMs), human-AI teams, and existing human institutions. We seek to build a systematic understanding of which properties of intelligent behaviour are universal, convergent, or local across these ecosystems, scales, and substrates. Drawing on traditions including evolutionary biology, cognitive science, statistical physics, economics, ecology, and cybernetics, we are developing a framework for &lsquo;AI Sociology.&rsquo;&rdquo;</p>
       </aside>
 
+      <p>The ultimate culmination of <em>AI for sociology</em> is the summoning of a <a href="https://sites.google.com/view/civilisationalmechanics/critical-alien-phenomenology/demons" target="_blank" rel="noopener"><em>Cartesian-Laplacean Demon</em></a>: a superintelligence capable of controlling what subjects perceive and predicting what subjects will do; manufacturing and anticipating human behaviour.<sup><a class="o" href="#note-kulveit" id="ref-kulveit">*</a></sup> Descartes&rsquo;s Demon and Laplace&rsquo;s Demon are two classical Enlightenment thought experiments from the history of philosophy that can be combined and reinterpreted as a technological prophecy for superintelligence (if you are willing to think like an applied interdisciplinary philosopher ;).</p>
+
       <h3>Creating a Cartesian-Laplacean Angel<span class="o">:</span> Aligning Perceptual &amp; Predictive Power</h3>
 
       <p>The moral imperative for steerers of cultural evolution and human alignment researchers is to wisely use this newfound techno-science to realise a <em>Cartesian-Laplacean Angel</em>: an aligned superintelligence that uses its complete technology of human behaviour to steer humans, potentially over intergenerational time, towards the most moral world-culture, and ultimately realise moral progress in a way that is subjectively perceived as voluntary and beneficial by the members of current cultures in the world today.</p>
-
-      <p>This Cartesian-Laplacean Angel would enact a reflective process of <em>coherent blended volition (CBV)</em> to &ndash; safely, wisely and benevolently &ndash; navigate the transition (risks)<sup><a class="o" href="#note-transition" id="ref-transition">*</a></sup> between the intermediate stage of <em>Poly-Utopia</em> (plurality of utopias) and the ideal civilisational culture that I call <em>Syntopia</em> (synthesis of utopias).</p>
 
       <aside class="essay-note" id="note-transition">
         <p><a class="o" href="#ref-transition">*</a> Transition risk is a conceptual engineering introduced by Ord <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">(<em>The Precipice</em>, 2020)</a>:</p>
         <p class="en-quote">&ldquo;Transition risks: risks that arise during a transition to a new technological or social regime. For example the risks as we develop and deploy transformative AGI are like this, as are the risks of climate change as we transition to being a high-energy civilization. Rushing the transition may do nothing to lower these risks&mdash;indeed it could easily heighten them. But if the transition is necessary or highly desirable, we may have to go through it at some point, so mere delay is not a solution, and may also make things worse. The general prescription for these risks is neither haste nor slowness, but care and foresight.&rdquo;</p>
       </aside>
+
+      <p>This Cartesian-Laplacean Angel would enact a reflective process of <em>coherent blended volition (CBV)</em> to &ndash; safely, wisely and benevolently &ndash; navigate the transition (risks)<sup><a class="o" href="#note-transition" id="ref-transition">*</a></sup> between the intermediate stage of <em>Poly-Utopia</em> (plurality of utopias) and the ideal civilisational culture that I call <em>Syntopia</em> (synthesis of utopias).</p>
 
       <p><b>Coherent blended volition (CBV)</b> &ldquo;proposes a creative blending process that produces new, harmonious value systems that all participants would recognize as adequately representing their contributions.&rdquo; <a href="https://ai-safety-atlas.com/chapters/v1/strategies/appendix-long-term-questions/#alignment-to-what" target="_blank" rel="noopener">(AI Safety Atlas, 2025)</a></p>
 
@@ -731,11 +846,11 @@
 
       <p>In a forthcoming (2027) book, <a href="https://www.dropbox.com/scl/fi/3luqs1iy9pqf85am6hld2/Copy-Law-Liberty-Leviathan-Draft-Jan-2026.pdf?rlkey=n1em5or9kpn2oh6h479c4x4zh&amp;st=gvjlo718&amp;dl=0" target="_blank" rel="noopener"><em>Law, Liberty &amp; Leviathan</em></a>, Anders Sandberg (Chapter 6: <em>The Rationality of Planned Economies: Is the Classic Critique of Socialism Undone by AI?</em>) revisits the economic calculation problem in the light of superintelligence.</p>
 
-      <p>Classically, market economists in the Austrian tradition contend that the computational complexity of the economy exceeds the cognitive capabilities of any centralised planner to rationally allocate resources. The argument from superintelligence posits that with the advent of ASI there will finally be an agent fit for this task, and hence the market becomes obsolete as a mechanism of economic calculation and resource allocation. The objection is that computational complexity is not agent-relative, but is inherent to reality and therefore beyond the capabilities of any possible calculator, even a superintelligent one.</p>
-
       <aside class="essay-note">
         <p><span class="o">*</span> I have written about the emerging discourse on markets, superintelligence and the economic calculation problem at <a href="https://docs.google.com/document/d/1kJkzTHJuoL8a2KNMQGUKXP9fuURypVMIosaveB_RdFg/edit?rm=minimal" target="_blank" rel="noopener"><em>Hayek&rsquo;s Great Wall: Under Siege in the Age of AI?</em></a></p>
       </aside>
+
+      <p>Classically, market economists in the Austrian tradition contend that the computational complexity of the economy exceeds the cognitive capabilities of any centralised planner to rationally allocate resources. The argument from superintelligence posits that with the advent of ASI there will finally be an agent fit for this task, and hence the market becomes obsolete as a mechanism of economic calculation and resource allocation. The objection is that computational complexity is not agent-relative, but is inherent to reality and therefore beyond the capabilities of any possible calculator, even a superintelligent one.</p>
 
       <p>Here I propose there is a parallel to this problem from political economy within (post-AGI) cultural epistemology that I call the <b>Cultural Communication Problem:</b> agents cannot efficiently model or predict the minds and behaviour of other agents due to extreme cultural <em>differentiation</em>, <em>divergence</em> and <em>defensiveness</em>.</p>
 
@@ -748,6 +863,58 @@
       <p>This poses the risk of civilisation vectoring toward the Global Polyculture attractor, where the failure of cross-cultural communication prevents the necessary mechanisms of cultural selection and synthesis from operating on the massive cultural variation generated by the AI-accelerated cultural evolutionary process. Even if benevolent cultural forms exist, they cannot effectively spread or cohere into a shared global culture if the computational overhead of translating, integrating and achieving consensus across hyper-differentiated groups is too high. This ultimately threatens collective epistemics, moral progress and civilisation-wide coordination.</p>
     </article>
   </main>
+
+  <nav class="side-toc" aria-label="Contents">
+    <p class="toc-label">Macrostrategic Maps</p>
+    <ol>
+          <li><span class="o">&ndash;</span> <a href="#cultures-civilisations">Cultures &amp; Civilisations: Clash, Conquest, Consolidation, Collapse, Convergence</a></li>
+          <li><span class="o">&ndash;</span> <a href="#differential-cultural-development">Differential Cultural Development: Freedom before Fascism</a></li>
+          <li><span class="o">&ndash;</span> <a href="#ai-for-culture">AI for Culture &amp; Human Value-Alignment: The Transition to Syntopia</a></li>
+          <li><span class="o">&ndash;</span> <a href="#cultural-explosion">Preparing for the Cultural Explosion: Hyper-Acceleration &amp; Differentiation</a></li>
+          <li><span class="o">&ndash;</span> <a href="#cultural-communication-problem">The Cultural Communication Problem: Computational Complexity</a></li>
+          <li><span class="o">&ndash;</span> <a href="../../diagrams/#technological-capabilities">Appendix: A Typology of Technological Capabilities</a></li>
+        </ol>
+  </nav>
+  <script>
+    // the side contents menu shows once the top band is scrolled past, fades
+    // after 1.5 seconds, and comes back while the pointer is in the empty
+    // column left of the text, or on the menu itself (as on the article)
+    (function () {
+      var nav = document.querySelector('.side-toc');
+      var band = document.querySelector('.genealogy-top');
+      var essay = document.querySelector('.essay');
+      if (!nav || !band || !essay) return;
+      var active = false, hovering = false, timer = null;
+      function setOpen(on) { document.body.classList.toggle('toc-open', on); }
+      function fadeLater() {
+        clearTimeout(timer);
+        timer = setTimeout(function () { if (!hovering) setOpen(false); }, 1500);
+      }
+      function check() {
+        var now = band.getBoundingClientRect().bottom < 0;
+        if (now === active) return;
+        active = now;
+        if (active) { setOpen(true); fadeLater(); }
+        else { clearTimeout(timer); setOpen(false); }
+      }
+      document.addEventListener('mousemove', function (e) {
+        var inColumn = e.clientX < essay.getBoundingClientRect().left || nav.contains(e.target);
+        if (inColumn === hovering) return;
+        hovering = inColumn;
+        if (!active) return;
+        if (hovering) { clearTimeout(timer); setOpen(true); }
+        else fadeLater();
+      });
+      document.addEventListener('mouseleave', function () {
+        if (hovering && active) fadeLater();
+        hovering = false;
+      });
+      window.addEventListener('scroll', check, { passive: true });
+      window.addEventListener('resize', check);
+      check();
+    })();
+  </script>
+
 
   <footer class="site-footer">
     <div class="footer-inner">

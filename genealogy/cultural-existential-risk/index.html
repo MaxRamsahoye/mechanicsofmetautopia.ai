@@ -286,6 +286,122 @@
       margin-bottom: 0 !important;
     }
 
+    /* the abstract, up in the band */
+    .genealogy-top .essay-abstract {
+      max-width: 760px;
+      margin: 32px 0 0;
+      padding: 22px 0 0;
+      background: none;
+      border: none;
+      border-top: 1px solid currentColor;
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.45;
+    }
+
+    .genealogy-top .essay-abstract a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    /* the side contents menu, as on the article: fixed at the middle left,
+       in the empty column beside the text */
+    .side-toc {
+      position: fixed;
+      top: 50%;
+      left: 40px;
+      z-index: 45;
+      width: clamp(180px, 50vw - 460px, 280px);
+      transform: translateY(-50%);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+    }
+
+    body.toc-open .side-toc {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s ease, visibility 0s;
+    }
+
+    .side-toc .toc-label {
+      margin: 0 0 14px;
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      color: var(--canvas-accent);
+    }
+
+    .side-toc ol {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .side-toc li {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 7px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .side-toc li .o {
+      flex: none;
+      color: var(--canvas-accent);
+    }
+
+    .side-toc a {
+      color: var(--canvas-ink);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+
+    .side-toc a:hover {
+      border-bottom-color: var(--canvas-ink);
+    }
+
+    /* wide windows: the menu at the side, the notes in the right margin */
+    @media (min-width: 1280px) {
+      .essay-contents {
+        display: none;
+      }
+
+      .has-sidenotes {
+        --sn-w: min(280px, calc((100vw - 760px) / 2 - 80px));
+      }
+
+      .has-sidenotes .essay-note {
+        float: right;
+        clear: right;
+        width: var(--sn-w);
+        box-sizing: border-box;
+        margin: 6px calc(-1 * (var(--sn-w) + 40px)) 18px 0;
+        padding: 0 0 0 14px;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+
+      .has-sidenotes .essay-note .en-quote {
+        font-size: 12.5px;
+      }
+
+      .has-sidenotes .essay-wide,
+      .has-sidenotes .essay-break {
+        clear: both;
+      }
+    }
+
+    @media (max-width: 1279px) {
+      .side-toc {
+        display: none;
+      }
+    }
+
     /* the contents, numbered in orange */
     .essay-contents {
       margin: 0 0 24px;
@@ -577,13 +693,12 @@
     <p class="essay-series">&lt; The Culture Series &gt;</p>
     <p class="essay-lede">Introducing a new subfield of existential risk studies oriented towards human value-alignment and post-AGI cultural dynamics</p>
     <p class="essay-byline">by <a class="plain-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
+      <div class="essay-abstract">
+      <p><b><em>Abstract:</em></b> This research article serves to provide an introduction to the governance of <em>cultural evolution</em> and <em>post-AGI cultural dynamics</em>. It first contextualises this research by observing a &lsquo;cultural turn&rsquo; in Existential Risk Studies (ERS), which is then formalised as a new subfield oriented towards cultural existential risk, including <em>cultural extinction and related hazards</em>: value lock-in, misaligned memetic proliferation, ideological fanaticism, epistemic collapse etc. Following this, a central frame is introduced: <em>Cultural Evolution</em> and the <em>Evolutionary Process (Replicators) Alignment Problem</em>. As appendices, three typologies of cultural existential risks are included: <a href="#cultural-extinction-hazards"><em>Cultural Extinction and other Related Hazards</em></a>; <a href="../../diagrams/#cultural-risks"><em>Cultural Risks: From Minor to Existential</em></a>; and <a href="../../diagrams/#c-er-scenarios"><em>Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures</em></a>.</p>
+    </div>
     </div>
 
-    <article class="essay">
-      <div class="essay-abstract">
-        <p><b><em>Abstract:</em></b> This research article serves to provide an introduction to the governance of <em>cultural evolution</em> and <em>post-AGI cultural dynamics</em>. It first contextualises this research by observing a &lsquo;cultural turn&rsquo; in Existential Risk Studies (ERS), which is then formalised as a new subfield oriented towards cultural existential risk, including <em>cultural extinction and related hazards</em>: value lock-in, misaligned memetic proliferation, ideological fanaticism, epistemic collapse etc. Following this, a central frame is introduced: <em>Cultural Evolution</em> and the <em>Evolutionary Process (Replicators) Alignment Problem</em>. As appendices, three typologies of cultural existential risks are included: <a href="#cultural-extinction-hazards"><em>Cultural Extinction and other Related Hazards</em></a>; <a href="../../diagrams/#cultural-risks"><em>Cultural Risks: From Minor to Existential</em></a>; and <a href="../../diagrams/#c-er-scenarios"><em>Cultural Existential Risk (C-ER) Scenarios from the Perspective of Different World-Cultures</em></a>.</p>
-      </div>
-
+    <article class="essay has-sidenotes">
       <nav class="essay-contents" aria-label="Contents">
         <p class="ec-head">Contents</p>
         <ol>
@@ -644,14 +759,14 @@
 
       <h2 id="defining-c-xr"><a class="heading-link" href="#defining-c-xr">Defining <em>Cultural</em> Existential Risk <span class="o">(</span>C-XR<span class="o">)</span></a></h2>
 
-      <p class="essay-def"><b>Cultural Existential Risk(s)<span class="o">:</span></b><sup><a class="o" href="#note-bostrom" id="ref-bostrom">*</a></sup> <b>(1) those that threaten the <em>intellectual, moral and civilisational progress</em> of humanity over the long-term future. (2) one where an adverse outcome would either annihilate Earth-originating culture or permanently and drastically curtail its potential for future <em>cultural evolution</em> and <em>moral progress</em>.</b></p>
-
       <aside class="essay-note" id="note-bostrom">
         <p><a class="o" href="#ref-bostrom">*</a> Derived from Bostrom&rsquo;s original definitions, from the papers that founded existential risk studies:</p>
         <p class="en-quote">&ldquo;Existential risks are those that threaten the entire future of humanity.&rdquo;</p>
         <p class="en-quote">&ldquo;One where an adverse outcome would either annihilate Earth-originating intelligent life or permanently and drastically curtail its potential.&rdquo;</p>
         <p>&ndash; Nick Bostrom, <a href="https://existential-risk.com/concept.pdf" target="_blank" rel="noopener"><em>Existential Risk Prevention as Global Priority</em></a> (2013) &amp; <a href="https://nickbostrom.com/existential/risks.pdf" target="_blank" rel="noopener"><em>Existential Risks: Analyzing Human Extinction Scenarios and Related Hazards</em></a> (2002)</p>
       </aside>
+
+      <p class="essay-def"><b>Cultural Existential Risk(s)<span class="o">:</span></b><sup><a class="o" href="#note-bostrom" id="ref-bostrom">*</a></sup> <b>(1) those that threaten the <em>intellectual, moral and civilisational progress</em> of humanity over the long-term future. (2) one where an adverse outcome would either annihilate Earth-originating culture or permanently and drastically curtail its potential for future <em>cultural evolution</em> and <em>moral progress</em>.</b></p>
 
       <p><b>Cultural Existential Risk</b> (C-XR) is a conceptual engineering that orients macrostrategy research and world-systems design theory towards a special set of crucial considerations concerning <em>cultural</em> <a href="https://nickbostrom.com/existential/risks.pdf" target="_blank" rel="noopener">extinction and other related hazards</a>: <em>value lock-in</em>, <em>misaligned memetic proliferation</em>, <em>ideological fanaticism</em>, <em>epistemic collapse</em>, <em>cyborgregore assimilation</em> etc. See the <a href="#cultural-extinction-hazards">appendix</a>.</p>
 
@@ -701,17 +816,17 @@
         <cite>&ndash; <a href="https://qualiacomputing.com/2017/12/20/the-universal-plot-part-i-consciousness-vs-pure-replicators/" target="_blank" rel="noopener"><em>The Universal Plot: Consciousness vs Replicators</em></a> Andr&eacute;s G&oacute;mez-Emilsson, <em>Qualia Research Institute</em> (2017)</cite>
       </blockquote>
 
-      <h2 id="replicators-alignment"><a class="heading-link" href="#replicators-alignment">The Evolutionary Process <span class="o">(</span>Replicators<span class="o">)</span> Alignment Problem<sup><a class="o" href="#note-genealogy" id="ref-genealogy">*</a></sup></a></h2>
+      <h2 id="replicators-alignment"><a class="heading-link" href="#replicators-alignment">The Evolutionary Process <span class="o">(</span>Replicators<span class="o">)</span> Alignment Problem</a><sup><a class="o" href="#note-genealogy" id="ref-genealogy">*</a></sup></h2>
+
+      <aside class="essay-note" id="note-genealogy">
+        <p><a class="o" href="#ref-genealogy">*</a> The genealogy of <a href="https://cybersynergetic.com/#replicators:~:text=2025%20%2D%20v.5000-,Evolutionary%20Process%20(Replicators)%20Alignment,-The%20Evolutionary%20Process" target="_blank" rel="noopener">this problem-framing is documented</a> on <em>Cybersynergetic: A Literature Map of Civilisational Superintelligence Alignment</em>, where it is the second largest category on the site. Many notable theorists (Carlsmith, Alexander) and papers (<em>Gradual Disempowerment</em>, <em>Intelligence Curse</em>) within EA/AI have been pointing to this, but have not formulated the problem as fundamentally and accurately as this framing. During my PIBBSS fellowship in 2025, Carlsmith gave a talk titled <a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">&lsquo;Can Goodness Compete?&rsquo;</a> at Mox and at the Post-AGI Equilibria workshop on this subject.</p>
+      </aside>
 
       <p>The Evolutionary Process (Replicators) Alignment Problem extends and synthesises AI alignment theory with <em>universal Darwinism</em>, identifying misalignment as a fundamental attractor of optimisation processes across all scales of organisation (<em>&lsquo;replicators all the way down&rsquo;</em>): units (genes, memes, capital, grey goo, probes), agents (individuals, families, states, corporations, religions etc.) and systems (capitalism, civilisation) all amorally optimise for their own self-preservation and self-propagation, extending into boundless <em>self-maximisation</em>, over human welfare &ndash; <em>overriding instrumental convergence</em>, resulting in <em>terminal divergence</em> in the lexicon of AI alignment theory, or <em>means-ends reversal</em> in critical social philosophy.</p>
 
       <p>This creates a nested hierarchy of alignment failures: individual agents experience internal conflicts between genetic imperatives and conscious values; macro-agents like corporations and states serve as vehicles for capital and their own institutional self-preservation; and meta-agents like capitalism (&lsquo;Empire&rsquo;) and (Grabby) civilisation operate as emergent replicators that optimise for expansion (growth) and perpetuation (lock-in).</p>
 
       <p>As mentioned above, the primary tension is between <em>targeted sentio-centric value-alignment</em> &ndash; emergent optimisation for positive states of consciousness &ndash; and the <em>convergent evolutionary stable strategies</em> that govern replicator dynamics at each level, where success is measured by survival and reproduction rather than the quality of conscious experience being generated.</p>
-
-      <aside class="essay-note" id="note-genealogy">
-        <p><a class="o" href="#ref-genealogy">*</a> The genealogy of <a href="https://cybersynergetic.com/#replicators:~:text=2025%20%2D%20v.5000-,Evolutionary%20Process%20(Replicators)%20Alignment,-The%20Evolutionary%20Process" target="_blank" rel="noopener">this problem-framing is documented</a> on <em>Cybersynergetic: A Literature Map of Civilisational Superintelligence Alignment</em>, where it is the second largest category on the site. Many notable theorists (Carlsmith, Alexander) and papers (<em>Gradual Disempowerment</em>, <em>Intelligence Curse</em>) within EA/AI have been pointing to this, but have not formulated the problem as fundamentally and accurately as this framing. During my PIBBSS fellowship in 2025, Carlsmith gave a talk titled <a href="https://joecarlsmith.substack.com/p/video-and-transcript-of-talk-on-can" target="_blank" rel="noopener">&lsquo;Can Goodness Compete?&rsquo;</a> at Mox and at the Post-AGI Equilibria workshop on this subject.</p>
-      </aside>
 
       <p class="essay-break" aria-hidden="true">&#11046; &nbsp; &#11046; &nbsp; &#11046;</p>
 
@@ -771,6 +886,57 @@
       </div>
     </article>
   </main>
+
+  <nav class="side-toc" aria-label="Contents">
+    <p class="toc-label">Minds, Machines &amp; Memes</p>
+    <ol>
+          <li><span class="o">0.</span> <a href="#cultural-turn">Introduction: The Cultural Turn in Existential Risk Studies (ERS)</a></li>
+          <li><span class="o">1.</span> <a href="#defining-c-xr">Defining Cultural Existential Risks</a></li>
+          <li><span class="o">2.</span> <a href="#cultural-evolution">Cultural Evolution: Blind Watchmakers, Runaway Replicators &amp; Selfish Memes</a></li>
+          <li><span class="o">3.</span> <a href="#replicators-alignment">The Evolutionary Process (Replicators) Alignment Problem</a></li>
+          <li><span class="o">&ndash;</span> <a href="#cultural-extinction-hazards">Appendix: Cultural Extinction and other Related Hazards</a></li>
+        </ol>
+  </nav>
+  <script>
+    // the side contents menu shows once the top band is scrolled past, fades
+    // after 1.5 seconds, and comes back while the pointer is in the empty
+    // column left of the text, or on the menu itself (as on the article)
+    (function () {
+      var nav = document.querySelector('.side-toc');
+      var band = document.querySelector('.genealogy-top');
+      var essay = document.querySelector('.essay');
+      if (!nav || !band || !essay) return;
+      var active = false, hovering = false, timer = null;
+      function setOpen(on) { document.body.classList.toggle('toc-open', on); }
+      function fadeLater() {
+        clearTimeout(timer);
+        timer = setTimeout(function () { if (!hovering) setOpen(false); }, 1500);
+      }
+      function check() {
+        var now = band.getBoundingClientRect().bottom < 0;
+        if (now === active) return;
+        active = now;
+        if (active) { setOpen(true); fadeLater(); }
+        else { clearTimeout(timer); setOpen(false); }
+      }
+      document.addEventListener('mousemove', function (e) {
+        var inColumn = e.clientX < essay.getBoundingClientRect().left || nav.contains(e.target);
+        if (inColumn === hovering) return;
+        hovering = inColumn;
+        if (!active) return;
+        if (hovering) { clearTimeout(timer); setOpen(true); }
+        else fadeLater();
+      });
+      document.addEventListener('mouseleave', function () {
+        if (hovering && active) fadeLater();
+        hovering = false;
+      });
+      window.addEventListener('scroll', check, { passive: true });
+      window.addEventListener('resize', check);
+      check();
+    })();
+  </script>
+
 
   <footer class="site-footer">
     <div class="footer-inner">
