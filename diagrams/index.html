@@ -1313,6 +1313,30 @@
       display: none;
     }
 
+    /* the Unified Frames: a heading and a numbered list, one frame a line */
+    :is(.matrix-frames, .frames-side) .frames-head {
+      margin: 0 0 8px;
+    }
+
+    :is(.matrix-frames, .frames-side) ol {
+      margin: 0;
+      padding-left: 1.4em;
+      list-style: decimal;
+    }
+
+    :is(.matrix-frames, .frames-side) li {
+      margin: 0 0 6px;
+      padding-left: 0.2em;
+    }
+
+    :is(.matrix-frames, .frames-side) li:last-child {
+      margin-bottom: 0;
+    }
+
+    :is(.matrix-frames, .frames-side) li::before {
+      content: none;
+    }
+
     /* windows wide enough for the left column and the full-size diagram side
        by side: the title, description and Unified Frames, smaller, in a
        column on the left; the diagram, at the article's size, on the right.
@@ -1590,7 +1614,15 @@
                   <div class="matrix-tick x-low">Minimal</div>
                   <div class="matrix-tick x-high">Maximal</div>
                 </div>
-                <p class="matrix-frames"><em>Unified Frames</em>: 1. Duettmann's <a href="https://foresightinstitute.substack.com/p/defend-physical" target="_blank" rel="noopener">'multi-polar active shields'</a> and Clarke's <a href="https://80000hours.org/problem-profiles/risks-of-stable-totalitarianism/" target="_blank" rel="noopener">'stable totalitarianism'</a> (top left). 2. Nozick's <a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">‘meta-utopia’</a> (top right) and Barrat-Douglas' <a href="https://strangecities.substack.com/p/the-choice-transition" target="_blank" rel="noopener">'choice transition’</a> and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener">'societal uplift'</a> 3. Hanson's <a href="https://quillette.com/2024/04/11/beware-cultural-drift/" target="_blank" rel="noopener">'global monoculture'</a> and Drexler's <a href="https://en.wikipedia.org/wiki/Gray_goo" target="_blank" rel="noopener">'gray goo'</a> (bottom right) 4. Bostrom's (technological) <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener">'permanent plateau'</a> and Ord's <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">'unrecoverable collapse'</a> (bottom left)</p>
+                <div class="matrix-frames">
+                  <p class="frames-head"><em>Unified Frames</em></p>
+                  <ol>
+                    <li>Duettmann's <a href="https://foresightinstitute.substack.com/p/defend-physical" target="_blank" rel="noopener">'multi-polar active shields'</a> and Clarke's <a href="https://80000hours.org/problem-profiles/risks-of-stable-totalitarianism/" target="_blank" rel="noopener">'stable totalitarianism'</a> (top left)</li>
+                    <li>Nozick's <a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">‘meta-utopia’</a> and Barrat-Douglas' <a href="https://strangecities.substack.com/p/the-choice-transition" target="_blank" rel="noopener">'choice transition’</a> and <a href="https://www.lesswrong.com/posts/kvZyCJ4qMihiJpfCr/ai-for-societal-uplift-as-a-path-to-victory" target="_blank" rel="noopener">'societal uplift'</a> (top right)</li>
+                    <li>Hanson's <a href="https://quillette.com/2024/04/11/beware-cultural-drift/" target="_blank" rel="noopener">'global monoculture'</a> and Drexler's <a href="https://en.wikipedia.org/wiki/Gray_goo" target="_blank" rel="noopener">'gray goo'</a> (bottom right)</li>
+                    <li>Bostrom's (technological) <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener">'permanent plateau'</a> and Ord's <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">'unrecoverable collapse'</a> (bottom left)</li>
+                  </ol>
+                </div>
               </figure>
     </section>
 
