@@ -820,3 +820,14 @@ html[data-theme="dark"] :is(.on-band, .back-arrow, .theme-toggle, .top-nav, .ove
 html[data-theme="dark"] .on-band {
   color: var(--canvas-ink);
 }
+
+/* dashes on the orange band are white: the article's band lists, the
+   Sources bibliography, the notes in an appendix's top band */
+html.band-purple:not([data-theme]) :is(#overview, .in-band) .live-list > li::before,
+html[data-theme="dark"] :is(#overview, .in-band) .live-list > li::before,
+html.band-purple:not([data-theme]) .on-band .bib-jump::before,
+html[data-theme="dark"] .on-band .bib-jump::before,
+html.band-purple:not([data-theme]) .genealogy-top .abstract-notes li::before,
+html[data-theme="dark"] .genealogy-top .abstract-notes li::before {
+  color: #ffffff;
+}
