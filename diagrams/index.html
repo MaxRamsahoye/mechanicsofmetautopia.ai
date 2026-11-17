@@ -1291,15 +1291,30 @@
       line-height: 1.6;
     }
 
+    /* the diagram at exactly the article's size and proportions: the same
+       wrap width, centred, with the shared aspect ratio and text sizes */
     .attractors-view .matrix-wrap {
-      max-width: none;
+      /* the article's text column, centred */
+      max-width: 660px;
+      margin: 0 auto;
     }
 
-    /* wide windows: the title and description, smaller, in a column on the
-       left; the diagram beside them on the right, scaled up to the window's
-       right margin (and no taller than the window) */
-    @media (min-width: 1440px) {
+    @media (min-width: 1181px) {
+      .attractors-view .matrix-wrap {
+        width: min(1080px, 100vw - 120px);
+        max-width: none;
+        margin-left: calc((100% - min(1080px, 100vw - 120px)) / 2);
+      }
+    }
+
+    /* windows wide enough for the title column and the full-size diagram
+       side by side: the title and description, smaller, on the left; the
+       diagram, at the article's size, on the right. The pair starts 180px
+       from the window's left edge (room for the menu), or is centred when
+       there is more room than that */
+    @media (min-width: 1680px) {
       body[data-show="attractors-main"] .page-main {
+        --t1-left: max(180px, 50vw - 717px);
         display: grid;
         grid-template-columns: 100%;
         align-items: start;
@@ -1313,9 +1328,15 @@
 
       body[data-show="attractors-main"] .diagram-top {
         width: 290px;
+        /* from the main column's left edge to the pair's left edge */
+        margin-left: calc(var(--t1-left) - 50vw + 50%);
         margin-bottom: 0;
         position: sticky;
         top: 140px;
+      }
+
+      body[data-show="attractors-main"] .view-tabs {
+        left: calc(24px - var(--t1-left));
       }
 
       body[data-show="attractors-main"] .diagram-top::before {
@@ -1334,21 +1355,13 @@
       }
 
       body[data-show="attractors-main"] .attractors-view {
-        /* starts past the title column and its gap; ends 64px in from the
-           window's right edge (the main column is centred in the window) */
-        margin-left: calc((100% - var(--wide-col)) / 2 + 290px + 64px);
-        width: min(1240px, 50vw + 50% - 64px - (100% - var(--wide-col)) / 2 - 290px - 64px, max(880px, (100vh - 240px) * 0.95 + 140px));
+        width: 1080px;
+        margin-left: calc(var(--t1-left) - 50vw + 50% + 290px + 64px);
       }
 
-      /* taller than wide, with the text a little smaller, to fit beside the title */
-      body[data-show="attractors-main"] .attractors-view .matrix {
-        aspect-ratio: 0.95 / 1;
-        --m-pad: 28px;
-        --m-h4-sans: 19px;
-        --m-h4: 24px;
-        --m-sub: 17px;
-        --m-p: 16px;
-        --m-p-lh: 1.32;
+      body[data-show="attractors-main"] .attractors-view .matrix-wrap {
+        width: 1080px;
+        margin-left: 0;
       }
     }
   </style>
