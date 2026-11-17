@@ -322,35 +322,6 @@
       transform: translateY(1.5px);
     }
 
-    /* printing (and the PDF made from it): the article alone, in the light
-       theme, without the page's controls, menus or loader */
-    @media print {
-      @page { margin: 18mm 16mm; }
-
-      .loader, .frame-header, .left-controls, .corner-title, .progress-ring,
-      .scroll-top-btn, .top-nav, .find-bar, .context-menu, .copy-toast, .ce-saver,
-      .site-title, .toc, .matrix-detail {
-        display: none !important;
-      }
-
-      html, body {
-        background: #fff !important;
-      }
-
-      * {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
-
-      .matrix-figure, figure, blockquote, h2, h3, h4 {
-        break-inside: avoid;
-      }
-
-      h2, h3 {
-        break-after: avoid;
-      }
-    }
-
     /* hamburger: left of the theme toggle, opens the Pages menu */
     .menu-btn {
       display: flex;
