@@ -59,7 +59,7 @@
     '@media (max-width: 899px) { .top-nav { display: none; } }',
     'html .top-nav a.top-nav-ext { color: var(--muted, #8c8c8c); }',
     'html .top-nav a.top-nav-ext:hover { color: var(--canvas-ink); }',
-    '@media (max-width: 1279px) { .top-nav .top-nav-ext { display: none; } }'
+    '@media (max-width: 1319px) { .top-nav .top-nav-ext { display: none; } }'
   ].join('\n');
   var style = document.createElement('style');
   style.textContent = css;
@@ -69,7 +69,7 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Appendices', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'],
+    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'],
       ['Four Attractor States', 'https://maxramsahoye.github.io/momu.civilisationdesignerconsole/'],
       ['Cultural Dynamics Simulator', 'https://maxramsahoye.github.io/momu.culturaldynamicssimulator/']];
     var nav = document.createElement('nav');

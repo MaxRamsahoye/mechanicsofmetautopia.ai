@@ -42,10 +42,10 @@
       if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
     } catch (e) {}
   </script>
-  <title>Appendices — Mechanics of Meta-Utopia</title>
+  <title>Supplements — Mechanics of Meta-Utopia</title>
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Mechanics of Meta-Utopia">
-  <meta property="og:title" content="Appendices — Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Supplements — Mechanics of Meta-Utopia">
   <meta property="og:description" content="Supplementary notes to The Mechanics of Meta-Utopia.">
   <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/genealogy/">
   <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
@@ -177,7 +177,7 @@
     .essay blockquote cite a {
       font-weight: 400;
     }
-    /* no footer on the Appendices pages, as on Diagrams */
+    /* no footer on the Supplements pages, as on Diagrams */
     .site-footer {
       display: none;
     }
@@ -224,6 +224,16 @@
       outline: none;
     }
 
+    /* a group of supplements under its own heading */
+    .series-heading {
+      margin: 96px 0 28px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
     .card-kicker {
       margin: 0 0 8px;
       font-family: var(--mono-caps);
@@ -259,11 +269,11 @@
 
   <main class="page-main">
     <div class="genealogy-top wide-top on-band">
-    <h1 class="page-title"><a class="heading-link title-top" href="#">Appendices</a></h1>
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Supplements</a></h1>
     <p class="page-intro">Supplementary notes to <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>.</p>
     </div>
 
-    <section class="essay-list" aria-label="Appendices">
+    <section class="essay-list" aria-label="Supplements">
       <ol class="essay-grid">
         <li><a class="essay-card" href="political-philosophy-turn/">
           <p class="card-kicker">Appendix 1</p>
@@ -285,18 +295,22 @@
           <h2 class="card-title"><em>Post-AGI</em> Implications for Meta-Utopian Design Variables</h2>
           <p class="card-desc">How AGI could raise or lower the integrity, permeability and legibility of sub-topias, for better and for worse.</p>
         </a></li>
+      </ol>
+
+      <h2 class="series-heading" id="the-culture-series">The Culture Series</h2>
+      <ol class="essay-grid">
         <li><a class="essay-card" href="cultural-existential-risk/">
-          <p class="card-kicker">Appendix 5</p>
+          <p class="card-kicker">The Culture Series</p>
           <h2 class="card-title"><em>Minds, Machines &amp; Memes</em>: Cultural Existential Risk Prevention as Global Priority</h2>
           <p class="card-desc">A new subfield of existential risk studies oriented towards human value-alignment and post-AGI cultural dynamics.</p>
         </a></li>
         <li><a class="essay-card" href="macrostrategic-maps/">
-          <p class="card-kicker">Appendix 6</p>
+          <p class="card-kicker">The Culture Series</p>
           <h2 class="card-title"><em>Macrostrategic Maps</em>: For the Governance of Cultural Evolution in the Age of AGI</h2>
           <p class="card-desc">Foundational frames for cultural macrostrategy, from the convergence of civilisations to the cultural explosion.</p>
         </a></li>
         <li><a class="essay-card" href="dark-side-of-meta-utopia/">
-          <p class="card-kicker">Appendix 7</p>
+          <p class="card-kicker">The Culture Series</p>
           <h2 class="card-title">The Dark Side of Meta-Utopia: <em>Hierarchy, World-State &amp; Dystopia</em></h2>
           <p class="card-desc">The moral dangers of the many-worlds interpretation of the ideal civilisation design: a critique of meta-utopianism and pluralistic alignment.</p>
         </a></li>
@@ -315,7 +329,7 @@
       <p class="sitemap-heading"><a href="../list/">All Pages</a></p>
       <ol>
         <li><a href="../">Article</a></li>
-        <li><a href="../genealogy/">Appendices</a></li>
+        <li><a href="../genealogy/">Supplements</a></li>
         <li><a href="../diagrams/">Typologies</a></li>
         <li><a href="../lexicon/">Concepts</a></li>
         <li><a href="../sources/">Sources</a></li>
@@ -351,6 +365,6 @@
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
-  <script src="../assets/tools.js?v=aa8a0d24" data-search-scope=".essay-list" data-hide-until=".genealogy-top"></script>
+  <script src="../assets/tools.js?v=89025e85" data-search-scope=".essay-list" data-hide-until=".genealogy-top"></script>
 </body>
 </html>
