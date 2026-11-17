@@ -286,6 +286,43 @@
       margin-bottom: 0 !important;
     }
 
+    /* an appendix's opening paragraphs, up in the band */
+    .essay-intro {
+      max-width: 760px;
+      margin: 32px 0 0;
+      font-family: var(--serif);
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.35;
+    }
+
+    .essay-intro p {
+      margin: 0 0 14px;
+    }
+
+    .essay-intro p:last-child {
+      margin-bottom: 0;
+    }
+
+    .essay-intro ul {
+      margin: 0 0 14px;
+      padding-left: 1.2em;
+    }
+
+    .essay-intro li {
+      margin: 0 0 8px;
+    }
+
+    .essay-intro b {
+      font-weight: 700;
+    }
+
+    .essay-intro a {
+      color: inherit;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
     /* the abstract, up in the band */
     .genealogy-top .essay-abstract {
       max-width: 760px;
@@ -691,19 +728,18 @@
     <p class="essay-kicker"><a class="plain-link" href="../">Appendices</a></p>
     <h1 class="page-title"><a class="heading-link title-top" href="#">Post-AGI Implications for Meta-Utopian Design Variables</a></h1>
 
-    </div>
-
-    <article class="essay">
+    <div class="essay-intro">
       <p>The dynamics of a meta-utopian civilisation are structurally determined by the interaction between three variables:</p>
-
       <ul>
         <li><b>Integrity:</b> the intra-cultural self-reproduction of sub-topias. How efficiently cultures can maintain their beliefs, values and identity over time.</li>
         <li><b>Permeability:</b> the inter-cultural self-protection of sub-topias. How open or closed cultures are to physical migration and digital communication from other cultures.</li>
         <li><b>Legibility:</b> the extra-cultural predictive processing of sub-topias by the meta-system. How accurately a governance institution can model cultures and their interactions with each other.</li>
       </ul>
-
       <p>As a general-purpose technology, AGI could increase and decrease these variables, with both positive and negative implications depending on the moral value of the cultures in question.</p>
+    </div>
+    </div>
 
+    <article class="essay">
       <h2 id="integrity"><a class="heading-link" href="#integrity">Integrity<span class="o">:</span> Intra-Cultural Self-Reproduction</a></h2>
 
       <h3>AI<span class="o">-</span>Increased Integrity</h3>
