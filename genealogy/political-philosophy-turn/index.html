@@ -372,6 +372,115 @@
       font-style: italic;
     }
 
+    /* Appendix 7: the top band in three: the title, the abstract (darker,
+       larger), the notes */
+    .sub-band {
+      position: relative;
+      z-index: 0;
+      max-width: 760px;
+    }
+
+    .sub-band::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+
+    .band-abstract {
+      margin: 72px 0 0;
+      padding: 64px 0;
+      font-family: var(--serif);
+      font-size: clamp(22px, 0.6vw + 15px, 25px);
+      line-height: 1.45;
+    }
+
+    .band-abstract::before {
+      background: color-mix(in srgb, var(--band-bg) 86%, #000);
+    }
+
+    .band-abstract .ba-label {
+      margin: 0 0 14px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .band-abstract p {
+      margin: 0;
+    }
+
+    .band-notes {
+      padding: 48px 0 0;
+    }
+
+    .band-notes .abstract-notes {
+      margin: 0 !important;
+    }
+
+    /* Appendix 7: the closing material in full-width grey bands */
+    .grey-band {
+      position: relative;
+      z-index: 0;
+      margin: 120px 0 0;
+      padding: 72px 0 80px;
+    }
+
+    .grey-band + .grey-band {
+      margin-top: 0;
+      padding-top: 24px;
+    }
+
+    .grey-band::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: color-mix(in srgb, currentColor 5%, var(--canvas-bg));
+      z-index: -1;
+    }
+
+    .essay .grey-band h2 {
+      margin-top: 0;
+    }
+
+    .grey-band .gb-kicker {
+      margin: -8px 0 20px !important;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .essay .grey-band h4 {
+      margin: 28px 0 8px;
+      font-family: var(--sans);
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .grey-band .box-quote {
+      margin: 0 0 14px;
+      padding-left: 20px;
+      border-left: 2px solid var(--link-blue);
+      font-style: italic;
+    }
+
+    .essay .grey-band blockquote {
+      margin-top: 8px;
+    }
+
     /* the abstract, up in the band */
     .genealogy-top .essay-abstract {
       max-width: 760px;
@@ -468,16 +577,17 @@
         box-sizing: border-box;
         margin: 6px calc(-1 * (var(--sn-w) + 40px)) 18px 0;
         padding: 0 0 0 14px;
-        font-size: 13px;
-        line-height: 1.45;
+        font-size: 15px;
+        line-height: 1.5;
       }
 
       .has-sidenotes .essay-note .en-quote {
-        font-size: 12.5px;
+        font-size: 14.5px;
       }
 
       .has-sidenotes .essay-wide,
-      .has-sidenotes .essay-break {
+      .has-sidenotes .essay-break,
+      .has-sidenotes .grey-band {
         clear: both;
       }
     }

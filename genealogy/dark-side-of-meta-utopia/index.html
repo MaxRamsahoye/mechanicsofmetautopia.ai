@@ -372,6 +372,115 @@
       font-style: italic;
     }
 
+    /* Appendix 7: the top band in three: the title, the abstract (darker,
+       larger), the notes */
+    .sub-band {
+      position: relative;
+      z-index: 0;
+      max-width: 760px;
+    }
+
+    .sub-band::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      z-index: -1;
+    }
+
+    .band-abstract {
+      margin: 72px 0 0;
+      padding: 64px 0;
+      font-family: var(--serif);
+      font-size: clamp(22px, 0.6vw + 15px, 25px);
+      line-height: 1.45;
+    }
+
+    .band-abstract::before {
+      background: color-mix(in srgb, var(--band-bg) 86%, #000);
+    }
+
+    .band-abstract .ba-label {
+      margin: 0 0 14px;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .band-abstract p {
+      margin: 0;
+    }
+
+    .band-notes {
+      padding: 48px 0 0;
+    }
+
+    .band-notes .abstract-notes {
+      margin: 0 !important;
+    }
+
+    /* Appendix 7: the closing material in full-width grey bands */
+    .grey-band {
+      position: relative;
+      z-index: 0;
+      margin: 120px 0 0;
+      padding: 72px 0 80px;
+    }
+
+    .grey-band + .grey-band {
+      margin-top: 0;
+      padding-top: 24px;
+    }
+
+    .grey-band::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: color-mix(in srgb, currentColor 5%, var(--canvas-bg));
+      z-index: -1;
+    }
+
+    .essay .grey-band h2 {
+      margin-top: 0;
+    }
+
+    .grey-band .gb-kicker {
+      margin: -8px 0 20px !important;
+      font-family: var(--mono-caps);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .essay .grey-band h4 {
+      margin: 28px 0 8px;
+      font-family: var(--sans);
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .grey-band .box-quote {
+      margin: 0 0 14px;
+      padding-left: 20px;
+      border-left: 2px solid var(--link-blue);
+      font-style: italic;
+    }
+
+    .essay .grey-band blockquote {
+      margin-top: 8px;
+    }
+
     /* the abstract, up in the band */
     .genealogy-top .essay-abstract {
       max-width: 760px;
@@ -468,16 +577,17 @@
         box-sizing: border-box;
         margin: 6px calc(-1 * (var(--sn-w) + 40px)) 18px 0;
         padding: 0 0 0 14px;
-        font-size: 13px;
-        line-height: 1.45;
+        font-size: 15px;
+        line-height: 1.5;
       }
 
       .has-sidenotes .essay-note .en-quote {
-        font-size: 12.5px;
+        font-size: 14.5px;
       }
 
       .has-sidenotes .essay-wide,
-      .has-sidenotes .essay-break {
+      .has-sidenotes .essay-break,
+      .has-sidenotes .grey-band {
         clear: both;
       }
     }
@@ -776,23 +886,25 @@
     <div class="genealogy-top on-band">
     <p class="essay-kicker"><a class="plain-link" href="../">Appendices</a></p>
     <h1 class="page-title"><a class="heading-link title-top" href="#">The Dark Side of Meta-Utopia<span class="o">:</span> Hierarchy, World-State <span class="o">&amp;</span> Dystopia</a></h1>
-    <p class="essay-series">&lt; <a class="plain-link" href="https://maxramsahoye1.wixstudio.com/civmechanics/metatheory" target="_blank" rel="noopener">Metatheory</a> &gt;</p>
     <p class="essay-lede">The moral dangers of the many-worlds interpretation of the ideal civilisation design</p>
     <p class="essay-byline">by <a class="plain-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a></p>
     <p class="essay-epigraph">&ldquo;The messiness of how a political apparatus is to be controlled and limited do not fit easily into one&rsquo;s hopes for a sleek, simple meta-utopian scheme&rdquo;</p>
-      <div class="essay-abstract">
-      <p><b><em>Abstract:</em></b> In this article I critique the worldview of meta-utopianism &ndash; the vision of a pluralistic society containing multiple coexisting utopias rather than imposing a single moral framework &ndash; as fundamentally disingenuous and incoherent. I contend that meta-utopians are &ldquo;closet authoritarians&rdquo; who smuggle in liberal universalist assumptions while pretending neutrality, and further that their framework faces a problematic dilemma: either they have unstated narrow boundaries around acceptable plurality (revealing hidden authoritarianism), or they have no boundaries at all (leading to cultural relativism and moral abdication that preserves harmful ideologies). Additionally, I caution that over the long-term future, meta-utopianism operates as a covert form of cultural engineering under the guise of pluralistic values &ndash; a &ldquo;Trojan horse&rdquo; that achieves eliminationist goals through memetic manipulation rather than direct coercion. Ultimately, I warn that the civilisational commitment of meta-utopianism leads to preserving morally regressive societies and cultures (moral stagnation) under the guise of &ldquo;enlightened tolerance&rdquo;, resulting in a complicity from inaction (non-interference) against an ongoing moral (suffering) catastrophe.</p>
+    <section class="sub-band band-abstract" aria-label="Abstract">
+      <p class="ba-label">Abstract</p>
+      <p>In this article I critique the worldview of meta-utopianism &ndash; the vision of a pluralistic society containing multiple coexisting utopias rather than imposing a single moral framework &ndash; as fundamentally disingenuous and incoherent. I contend that meta-utopians are &ldquo;closet authoritarians&rdquo; who smuggle in liberal universalist assumptions while pretending neutrality, and further that their framework faces a problematic dilemma: either they have unstated narrow boundaries around acceptable plurality (revealing hidden authoritarianism), or they have no boundaries at all (leading to cultural relativism and moral abdication that preserves harmful ideologies). Additionally, I caution that over the long-term future, meta-utopianism operates as a covert form of cultural engineering under the guise of pluralistic values &ndash; a &ldquo;Trojan horse&rdquo; that achieves eliminationist goals through memetic manipulation rather than direct coercion. Ultimately, I warn that the civilisational commitment of meta-utopianism leads to preserving morally regressive societies and cultures (moral stagnation) under the guise of &ldquo;enlightened tolerance&rdquo;, resulting in a complicity from inaction (non-interference) against an ongoing moral (suffering) catastrophe.</p>
+    </section>
+    <section class="sub-band band-notes" aria-label="Notes">
       <ul class="abstract-notes">
-        <li>This (2,000-word) post is a critical response to the emerging literature on <a href="https://cybersynergetic.lovable.app/#multiprincipal" target="_blank" rel="noopener">Multi-Principal Pluralistic Alignment</a>. See <a href="https://slatestarcodex.com/2014/06/07/archipelago-and-atomic-communitarianism/" target="_blank" rel="noopener"><em>Archipelago and Atomic Communitarianism</em></a> by Scott Alexander (2014) as a paradigmatic post.</li>
-        <li>This piece&rsquo;s title is a subversive play on Nozick&rsquo;s <a href="https://en.wikipedia.org/wiki/Anarchy,_State,_and_Utopia" target="_blank" rel="noopener"><em>Anarchy, State &amp; Utopia</em></a> (1974), which coined the term &lsquo;meta-utopia&rsquo;.</li>
+          <li>This (2,000-word) post is a critical response to the emerging literature on <a href="https://cybersynergetic.lovable.app/#multiprincipal" target="_blank" rel="noopener">Multi-Principal Pluralistic Alignment</a>. See <a href="https://slatestarcodex.com/2014/06/07/archipelago-and-atomic-communitarianism/" target="_blank" rel="noopener"><em>Archipelago and Atomic Communitarianism</em></a> by Scott Alexander (2014) as a paradigmatic post.</li>
+          <li>This piece&rsquo;s title is a subversive play on Nozick&rsquo;s <a href="https://en.wikipedia.org/wiki/Anarchy,_State,_and_Utopia" target="_blank" rel="noopener"><em>Anarchy, State &amp; Utopia</em></a> (1974), which coined the term &lsquo;meta-utopia&rsquo;.</li>
       </ul>
-    </div>
+    </section>
     </div>
 
     <article class="essay has-sidenotes">
       <blockquote>
-        <p>&#10077; Utopia is a meta-utopia: the environment in which Utopian experiments may be tried out; the environment in which people are free to do their own thing; the environment which must, to a great extent, be realized first if more particular Utopian visions are to be realized stably. &#10078;</p>
-        <p>&#10077; There will not be one kind of community existing and one kind of life led in utopia. Utopia will consist of utopias, of many different and divergent communities in which people lead different kinds of lives under different institutions. Some kinds of communities will be more attractive to most than others; communities will wax and wane. People will leave some for others or spend their whole lives in one. Utopia is a framework for utopias, a place where people are at liberty to join together voluntarily to pursue and attempt to realize their own vision of the good life in the ideal community but where no one can impose his own utopian vision upon others. &#10078;</p>
+        <p>Utopia is a meta-utopia: the environment in which Utopian experiments may be tried out; the environment in which people are free to do their own thing; the environment which must, to a great extent, be realized first if more particular Utopian visions are to be realized stably.</p>
+        <p>There will not be one kind of community existing and one kind of life led in utopia. Utopia will consist of utopias, of many different and divergent communities in which people lead different kinds of lives under different institutions. Some kinds of communities will be more attractive to most than others; communities will wax and wane. People will leave some for others or spend their whole lives in one. Utopia is a framework for utopias, a place where people are at liberty to join together voluntarily to pursue and attempt to realize their own vision of the good life in the ideal community but where no one can impose his own utopian vision upon others.</p>
         <cite>&ndash; Robert Nozick, <em>Anarchy, State &amp; Utopia</em></cite>
       </blockquote>
 
@@ -805,14 +917,14 @@
       <h2 id="exemplars"><a class="heading-link" href="#exemplars">Exemplars of the Meta-Utopian Political Philosophy within AI Alignment</a></h2>
 
       <blockquote>
-        <p>&#10077; we need <em>full-stack alignment</em>, the concurrent alignment of AI systems and the institutions that shape them with what people value. This can be done without imposing a particular vision of individual or collective flourishing &#10078;</p>
+        <p>we need <em>full-stack alignment</em>, the concurrent alignment of AI systems and the institutions that shape them with what people value. This can be done without imposing a particular vision of individual or collective flourishing</p>
         <cite>&ndash; A prominent exemplar of meta-utopian political philosophy, espoused in a recent massively multi-authored paper on sociotechnical AI safety, <a href="https://www.full-stack-alignment.ai/paper#:~:text=Beneficial%20societal%20outcomes,or%20collective%20flourishing." target="_blank" rel="noopener"><em>Full-Stack Alignment: Co-Aligning AI and Institutions</em> (Edelman et al., 2025)</a>, released by <a href="https://www.meaningalignment.org/" target="_blank" rel="noopener"><em>The Meaning Alignment Institute</em></a></cite>
       </blockquote>
 
       <blockquote>
-        <p>&#10077; <em>Viatopianism</em> offers a distinctive third perspective. Unlike utopianism, it cautions against the idea of having some ultimate end-state in mind&hellip; Aiming toward some narrow conception of an ideal society would be a mistake. &#10078; <span class="q-src"><a href="https://www.forethought.org/research/viatopia" target="_blank" rel="noopener"><em>Viatopia: What sort of post-superintelligence society should we aim for?</em> (MacAskill, 2026)</a></span></p>
-        <p>&#10077; viatopia is a state of society&hellip; where many different moral points of view can flourish&hellip; &#10078;</p>
-        <p>&#10077; Call this an <em>&ldquo;easygoing liberalism&rdquo;</em> view, and consider this possible future: <em>Common-sense utopia:</em> &hellip;people&hellip; are free to do almost anything they want as long as they don&rsquo;t harm others, and free from unnecessary suffering. People can choose from a diverse range of groups and cultures to associate with&hellip; Collaboration and bargaining replace war and conflict. &#10078; <span class="q-src"><a href="https://www.forethought.org/research/better-futures" target="_blank" rel="noopener"><em>Better Futures</em> (MacAskill, 2025)</a></span></p>
+        <p><em>Viatopianism</em> offers a distinctive third perspective. Unlike utopianism, it cautions against the idea of having some ultimate end-state in mind&hellip; Aiming toward some narrow conception of an ideal society would be a mistake. <span class="q-src"><a href="https://www.forethought.org/research/viatopia" target="_blank" rel="noopener"><em>Viatopia: What sort of post-superintelligence society should we aim for?</em> (MacAskill, 2026)</a></span></p>
+        <p>viatopia is a state of society&hellip; where many different moral points of view can flourish&hellip;</p>
+        <p>Call this an <em>&ldquo;easygoing liberalism&rdquo;</em> view, and consider this possible future: <em>Common-sense utopia:</em> &hellip;people&hellip; are free to do almost anything they want as long as they don&rsquo;t harm others, and free from unnecessary suffering. People can choose from a diverse range of groups and cultures to associate with&hellip; Collaboration and bargaining replace war and conflict. <span class="q-src"><a href="https://www.forethought.org/research/better-futures" target="_blank" rel="noopener"><em>Better Futures</em> (MacAskill, 2025)</a></span></p>
         <cite>&ndash; Another major instance, from Will MacAskill, co-founder of <em>Effective Altruism</em> and director of the AI macrostrategy research institute <a href="https://www.forethought.org/" target="_blank" rel="noopener"><em>Forethought</em></a></cite>
       </blockquote>
 
@@ -822,20 +934,27 @@
 
       <p>Overall, I have noticed that meta-utopians are mistaken about the (self-perceived) morality of their (enlightened centrist) position.</p>
 
-      <ul>
-        <li><b><em>Meta-Utopianism is Universalist:</em></b> Firstly, they tend to express an aversion to &lsquo;imposing a particular vision of individual or collective flourishing&rsquo; (Full-Stack Alignment, 2025). Whilst they may not like it, meta-utopians should be self-transparent and recognise that meta-utopia or meta-alignment <em>is</em> imposing a particular vision: it is a power-move in itself to realise a liberal pluralistic world-society over competing moralistic universalist visions. Meta-utopians may claim that they can realise this through diplomacy and democracy, but at the end of the day these mechanisms of interaction are themselves backed by the threat of force, and sustained by a balance of power with mono-utopians that necessitates a pragmatic compromise.</li>
-        <li><b><em>Meta-Utopianism is Naively Liberal-Democratic &amp; Actually Machiavellian:</em></b> Second, they tend to underplay that within a meta-utopia there may still be memetic dynamics and strategic gaming underneath the surface that determine which utopias rise and fall. Part of the freedom of the meta-utopian world entails that people can move between utopias and choose which one to live in. This would require an open information ecosystem where citizens of meta-utopia can be exposed to the range of utopias available to them. Whilst each utopia may purport to be in favour of mutual co-existence, some may be more universalist, and their belief in their own value may pose a risk of more subtle competition and conflict over minds/social psychology.</li>
-        <li><b><em>Meta-Utopianism is a Tyranny of the Tolerant &amp; a Moral Stagnancy Risk:</em></b> Thirdly, they tend not to demarcate exactly where the parameters of pluralism end &ndash; erring on the side of wider boundaries rather than narrower ones &ndash; and inadvertently descend into cultural relativism that allows any and all cultures to exist (aside from monopolistic ones), as the alternative would be coercive intervention against a culture to end it. This &lsquo;Tyranny of the Tolerant or Multiplicity&rsquo; is the failure mode of meta-utopia in the same way that the &lsquo;Tyranny of the Minority &amp; Majority&rsquo; is the failure mode of mono-topia. The risk here is that a meta-utopia&rsquo;s neutrality would preserve morally regressive cultures (e.g. fundamentalist religions) that are &lsquo;trapped in history&rsquo;, so to speak, and lock them in over the long-term future, resulting in moral stagnation (vs moral progress) and localised suffering catastrophes (vs existential flourishing).</li>
-        <li><b><em>Meta-Utopianism Begs the Question:</em></b> this critique poses that meta-utopianism faces two <em>pendular</em> problems. The first is that meta-utopians have an unstated, particular conception of the parameters of plurality, such that (virtue-signalling) talk of plurality is already within a narrow frame of what is permissible. The second is that meta-utopians have no conception of the parameters of plurality, and thus, by refusing to realise a single vision, realise no vision at all &ndash; begging the question of what a good society is &ndash; and letting/legitimising whatever emerges (semi-anarchically). <b>Pluralistic Alignment</b> seems to beg the question on AI alignment, leveraging a &lsquo;strategic ignorance&rsquo; of the complexities of moral philosophy to justify a form of liberal cultural relativism; the idea is that we don&rsquo;t know what to align AI to, so we should instead align AI with the values of all groups and cultures (as if they are all equal, and as if there is no such thing as cultural evolution and moral progress, i.e. some belief and value systems that are better for people, populations and civilisation than others).</li>
-      </ul>
+      <h3>Meta-Utopianism is Universalist</h3>
+      <p>Firstly, they tend to express an aversion to &lsquo;imposing a particular vision of individual or collective flourishing&rsquo; (Full-Stack Alignment, 2025). Whilst they may not like it, meta-utopians should be self-transparent and recognise that meta-utopia or meta-alignment <em>is</em> imposing a particular vision: it is a power-move in itself to realise a liberal pluralistic world-society over competing moralistic universalist visions. Meta-utopians may claim that they can realise this through diplomacy and democracy, but at the end of the day these mechanisms of interaction are themselves backed by the threat of force, and sustained by a balance of power with mono-utopians that necessitates a pragmatic compromise.</p>
+
+      <h3>Meta-Utopianism is Naively Liberal-Democratic &amp; Actually Machiavellian</h3>
+      <p>Second, they tend to underplay that within a meta-utopia there may still be memetic dynamics and strategic gaming underneath the surface that determine which utopias rise and fall. Part of the freedom of the meta-utopian world entails that people can move between utopias and choose which one to live in. This would require an open information ecosystem where citizens of meta-utopia can be exposed to the range of utopias available to them. Whilst each utopia may purport to be in favour of mutual co-existence, some may be more universalist, and their belief in their own value may pose a risk of more subtle competition and conflict over minds/social psychology.</p>
+
+      <h3>Meta-Utopianism is a Tyranny of the Tolerant &amp; a Moral Stagnancy Risk</h3>
+      <p>Thirdly, they tend not to demarcate exactly where the parameters of pluralism end &ndash; erring on the side of wider boundaries rather than narrower ones &ndash; and inadvertently descend into cultural relativism that allows any and all cultures to exist (aside from monopolistic ones), as the alternative would be coercive intervention against a culture to end it. This &lsquo;Tyranny of the Tolerant or Multiplicity&rsquo; is the failure mode of meta-utopia in the same way that the &lsquo;Tyranny of the Minority &amp; Majority&rsquo; is the failure mode of mono-topia. The risk here is that a meta-utopia&rsquo;s neutrality would preserve morally regressive cultures (e.g. fundamentalist religions) that are &lsquo;trapped in history&rsquo;, so to speak, and lock them in over the long-term future, resulting in moral stagnation (vs moral progress) and localised suffering catastrophes (vs existential flourishing).</p>
+
+      <h3>Meta-Utopianism Begs the Question</h3>
+      <p>This critique poses that meta-utopianism faces two <em>pendular</em> problems. The first is that meta-utopians have an unstated, particular conception of the parameters of plurality, such that (virtue-signalling) talk of plurality is already within a narrow frame of what is permissible. The second is that meta-utopians have no conception of the parameters of plurality, and thus, by refusing to realise a single vision, realise no vision at all &ndash; begging the question of what a good society is &ndash; and letting/legitimising whatever emerges (semi-anarchically). <b>Pluralistic Alignment</b> seems to beg the question on AI alignment, leveraging a &lsquo;strategic ignorance&rsquo; of the complexities of moral philosophy to justify a form of liberal cultural relativism; the idea is that we don&rsquo;t know what to align AI to, so we should instead align AI with the values of all groups and cultures (as if they are all equal, and as if there is no such thing as cultural evolution and moral progress, i.e. some belief and value systems that are better for people, populations and civilisation than others).</p>
 
       <h2 id="meta-utopian-dilemma"><a class="heading-link" href="#meta-utopian-dilemma">The Meta-Utopian Dilemma</a></h2>
 
       <p>Meta-utopianism becomes incoherent by trying to have it both ways on the crucial question of boundaries.</p>
 
-      <p><b>Dark 1: Pseudo-Liberal Authoritarianism:</b> The first horn of the dilemma reveals meta-utopians as closet authoritarians: they actually do have implicit, narrow boundaries around what counts as legitimate plurality, but they refuse to acknowledge or defend these limits. When they speak of not &lsquo;imposing a single vision&rsquo; and accommodating &lsquo;diversity&rsquo;, they&rsquo;re already operating within a restricted liberal framework that excludes areas of human moral possibility &ndash; theocracies, ethnic nationalisms, revolutionary communisms, or any vision that rejects pluralism itself. Their supposed openness is actually a kind of false advertising that smuggles in substantive liberal commitments while pretending to be neutral about the good society.</p>
+      <h3>Dark 1: Pseudo-Liberal Authoritarianism</h3>
+      <p>The first horn of the dilemma reveals meta-utopians as closet authoritarians: they actually do have implicit, narrow boundaries around what counts as legitimate plurality, but they refuse to acknowledge or defend these limits. When they speak of not &lsquo;imposing a single vision&rsquo; and accommodating &lsquo;diversity&rsquo;, they&rsquo;re already operating within a restricted liberal framework that excludes areas of human moral possibility &ndash; theocracies, ethnic nationalisms, revolutionary communisms, or any vision that rejects pluralism itself. Their supposed openness is actually a kind of false advertising that smuggles in substantive liberal commitments while pretending to be neutral about the good society.</p>
 
-      <p><b>Dark 2: Self-Defeating Pluralism:</b> The second horn reveals meta-utopians as moral relativists: if their parameters are too wide and fail to make morally justified exclusions, then they end up in a world that is suboptimal. A meta-utopia that accommodates many separate visions realises no coherent vision at all. It becomes an empty container that stands for nothing because it tries to contain everything.</p>
+      <h3>Dark 2: Self-Defeating Pluralism</h3>
+      <p>The second horn reveals meta-utopians as moral relativists: if their parameters are too wide and fail to make morally justified exclusions, then they end up in a world that is suboptimal. A meta-utopia that accommodates many separate visions realises no coherent vision at all. It becomes an empty container that stands for nothing because it tries to contain everything.</p>
 
       <p>Both problems beg the question, because they avoid the fundamental task that any serious political philosophy must address: articulating and defending a conception of human flourishing. Meta-utopians either smuggle in their answer without transparency (first problem) or refuse to give a proper answer at all (second problem). Either way, they fail to engage honestly with the core question of what constitutes a good society, instead deferring to procedural rhetoric that abdicates their responsibility to seriously think through the real moral and political considerations of civilisation design.</p>
 
@@ -855,9 +974,11 @@
         <p><a class="o" href="#ref-hayek">*</a> An alternative reason given, stemming from the Hayekian tradition, poses that there is a problem of epistemic access, or an information asymmetry, between human collective intelligence and the mechanics of the social system: a highly complex adaptive system that we should not interfere with, or rather that we do so at our peril. I have written about this elsewhere as <a href="https://docs.google.com/document/d/1kJkzTHJuoL8a2KNMQGUKXP9fuURypVMIosaveB_RdFg/edit?rm=minimal" target="_blank" rel="noopener"><em>Hayek&rsquo;s Great Wall</em></a> and proposed that it is, so to speak, under siege in the &lsquo;Age of AGI&rsquo;.</p>
       </aside>
 
-      <p><b>Epistemic, Methodological &amp; Substantive Negativism in relation to Utopia:</b> we cannot know what the good society is, as we live in the bad society;<sup><a class="o" href="#note-hayek" id="ref-hayek" aria-label="Note">*</a></sup> we should not attempt to create the good society, for it risks causing greater harm than good; and further, the good society may not even exist in the first place.</p>
+      <h3>Epistemic, Methodological &amp; Substantive Negativism in relation to Utopia</h3>
+      <p>We cannot know what the good society is, as we live in the bad society;<sup><a class="o" href="#note-hayek" id="ref-hayek" aria-label="Note">*</a></sup> we should not attempt to create the good society, for it risks causing greater harm than good; and further, the good society may not even exist in the first place.</p>
 
-      <p><b>Voluntarism, Libertarianism &amp; the Non-Interference Principle:</b> autonomy is the supreme value and the violation of autonomy is the ultimate moral bad. Autonomy should be upheld, as coercion or paternalism is a greater harm than allowing to occur whatever harm free agents are causing.</p>
+      <h3>Voluntarism, Libertarianism &amp; the Non-Interference Principle</h3>
+      <p>Autonomy is the supreme value and the violation of autonomy is the ultimate moral bad. Autonomy should be upheld, as coercion or paternalism is a greater harm than allowing to occur whatever harm free agents are causing.</p>
 
       <h2 id="end-of-faith"><a class="heading-link" href="#end-of-faith">The Immortal Meme or The End of Faith?</a><sup><a class="o" href="#note-new-atheism" id="ref-new-atheism" aria-label="Note">*</a></sup></h2>
 
@@ -869,33 +990,38 @@
 
       <p>However, this strategy to create moral progress without committing moral atrocities will be perceived by the religious of the world today as a subtle form of imposition, where, instead of making people lose their belief through coercion, the secular meta-utopian is manipulating the distribution and trajectory of memetics over long-term time horizons. The uncomfortable paradox of the secular meta-utopian is that this (possibly perceived) ideologically imperialist intervention would be <em>morally good</em>.</p>
 
-      <div class="essay-box">
-        <h3>End of Faith? Example: Extended Analysis</h3>
+      <section class="grey-band">
+        <h2 id="end-of-faith-analysis"><a class="heading-link" href="#end-of-faith-analysis">End of Faith? Example: Extended Analysis</a></h2>
         <p>Even as someone genuinely committed to avoiding direct coercion, I recognise that this &ldquo;non-impositional&rdquo; strategy is potentially a sophisticated form of cultural engineering designed to gradually eliminate religious worldviews from human civilisation. In this way, liberal, multi-cultural education is not a neutral institution, but a designed memetic weapon that systematically undermines traditional religious authority in favour of rationalist, secular values.</p>
         <p>Religious communities are not being offered genuine coexistence, but a slow, painless extinction disguised as respect for their autonomy. In this way, the meta-utopian framework becomes a Trojan horse &ndash; it promises religious communities their utopian society to begin with, while gradually shaping its wider cultural environment in ways that threaten its future survival. Their children are systematically exposed to competing worldviews, critical thinking methods and Enlightenment values that criticise the worldview that religious life depends upon.</p>
         <p>This is the Machiavellianism of meta-utopianism: it&rsquo;s often more effective than direct persecution because it co-opts the language of tolerance and choice while achieving the same eliminationist goals. Religious parents can&rsquo;t even properly resist, because doing so would mark them as &ldquo;intolerant&rdquo; within the meta-utopian framework, which operates as a kind of ideological laundering scheme &ndash; allowing secular progressives to pursue their transformative agenda while maintaining the moral high ground of appearing non-coercive, when in reality they&rsquo;re just using more subtle, intergenerational methods of cultural influence.</p>
         <p>The pragmatic meta-utopian faces the excruciating tension between (1) their procedural commitments to autonomy and (2) their substantive conviction that their vision would genuinely make everyone better off, including those who currently reject it. For instance, if it&rsquo;s right that a secular, rationalist world would reduce suffering, increase human flourishing and eliminate the harmful effects of religious dogma, then the &ldquo;manipulation&rdquo; of the memetic environment is a moral cause.</p>
         <p>This leads to a recognition that respecting people&rsquo;s current preferences might actually be a form of moral cowardice. If religious worldviews genuinely trap people in cycles of guilt, limit their intellectual development, restrict their personal autonomy and perpetuate harmful social hierarchies, then allowing these systems to persist indefinitely in the name of &ldquo;tolerance&rdquo;, &ldquo;diversity&rdquo; and &ldquo;autonomy&rdquo; becomes complicity in ongoing harm. The children raised in fundamentalist communities who never get exposed to critical thinking or alternative possibilities &ndash; is their autonomy respected or denied?</p>
         <p>The paradox intensifies because this logic can justify almost any form of ideological intervention. Every authoritarian believes their system would make people better off &ldquo;if only they understood.&rdquo; But the difference is that some visions might actually be objectively superior &ndash; and if they are, then the meta-utopian commitment to preserving inferior alternatives becomes not just naive but actively harmful. This is an uncomfortable recognition, because if religion does have a net negative impact, this &ldquo;subtle imposition&rdquo; could be the most ethical path available, even though it violates the very procedural principles that make the meta-utopian seem more enlightened than crude authoritarians.</p>
-      </div>
+      </section>
 
-      <div class="essay-box">
-        <h3>Earlier Commentary on the Full-Stack Alignment Paper</h3>
+      <section class="grey-band">
+        <h2 id="full-stack-commentary"><a class="heading-link" href="#full-stack-commentary">Earlier Commentary on the Full-Stack Alignment Paper</a></h2>
         <p><a href="https://www.full-stack-alignment.ai/paper" target="_blank" rel="noopener">full-stack-alignment.ai/paper</a></p>
         <p>Broadly in favour of the (sociotechnical) paradigm MAI are using. Two issues I had with their two papers:</p>
-        <p><b>Moral Graphs vs Moral Realism:</b> seems to be simply eliciting the existing distributional landscape of values as the source of an alignment target (i.e. democratic legitimacy). But what if people have the wrong values and, worse, cannot recognise this? (i.e. like a mass psychology stealthy vice)</p>
-        <p><b>Full-Stack vs Full-Level Alignment:</b> primarily pertains to vertical alignment from individuals up to recommender systems, companies and government regulators. It seems to be missing horizontal alignment (full-level?) between micro-agents and between macro-agents (i.e. across stacks).</p>
+        <h4>Moral Graphs vs Moral Realism</h4>
+        <p>It seems to be simply eliciting the existing distributional landscape of values as the source of an alignment target (i.e. democratic legitimacy). But what if people have the wrong values and, worse, cannot recognise this? (i.e. like a mass psychology stealthy vice)</p>
+        <h4>Full-Stack vs Full-Level Alignment</h4>
+        <p>It primarily pertains to vertical alignment from individuals up to recommender systems, companies and government regulators. It seems to be missing horizontal alignment (full-level?) between micro-agents and between macro-agents (i.e. across stacks).</p>
         <p>I&rsquo;m also critical of the &lsquo;Pluralistic Alignment&rsquo; wave that MAI, the Plurality Institute, Foresight, Forethought and many other research orgs in the space are a part of.</p>
         <p class="box-quote">&ldquo;For this reason, we need full-stack alignment, the concurrent alignment of AI systems and the institutions that shape them with what people value. This can be done without imposing a particular vision of individual or collective flourishing&rdquo; (<a href="https://www.full-stack-alignment.ai/paper#:~:text=For%20this%20reason%2C%20we%20need%20full%2Dstack%20alignment" target="_blank" rel="noopener">Full-Stack</a>)</p>
         <p class="box-quote">&ldquo;the better futures perspective doesn&rsquo;t mean endorsing some narrow conception of an ideal future&hellip; viatopia is a state of society&hellip; where many different moral points of view can flourish&rdquo; (<a href="https://www.forethought.org/research/introducing-better-futures" target="_blank" rel="noopener">Better Futures</a>)</p>
         <p class="box-quote">&ldquo;democracy and collaborative technology can power infinite diversity in infinite combinations&rdquo; (<a href="https://forum.secondrenaissance.net/t/full-stack-alignment-paper-idea-from-edelman-lowe-et-al-at-meaning-alignment-institute/552/3" target="_blank" rel="noopener">Plurality</a>)</p>
-      </div>
+      </section>
 
-      <div class="essay-box">
-        <h3>Convergent Analysis from <em>What We Owe the Future</em> (found after writing the piece)</h3>
-        <p class="box-quote">&ldquo;This last point&mdash;that we need to structure global society so that cultural evolution guides the world towards better values and better societal structures&mdash;highlights an issue facing the design of a morally exploratory world that I&rsquo;ll call <strong>the lock-in paradox</strong>. We need to lock in some institutions and ideas in order to prevent a more thoroughgoing lock-in of values. One challenge is that these institutions and ideas will be morally controversial; for example, from many fundamentalist religious perspectives, the idea that we would encourage or even allow a diversity of worldviews might be regarded as abominable. Similarly, the idea that the path to the correct moral view is via reflection and good-faith debate, rather than studying the scripture of a holy book, is not one that everyone would accept. <strong>The lock-in paradox thus resembles the familiar paradox of tolerance&mdash;the necessity for liberal societies to defend themselves against intolerant views that would undermine their freedom, even if doing so requires curtailing the very tolerance they want to preserve.</strong>&rdquo;</p>
-        <p>From the section &lsquo;Building a Morally Exploratory World&rsquo;, <em>Chapter 4: Value Lock-in</em>, <em>What We Owe the Future</em> by Will MacAskill (2022)</p>
-      </div>
+      <section class="grey-band">
+        <h2 id="wwotf"><a class="heading-link" href="#wwotf">Convergent Analysis from <em>What We Owe the Future</em></a></h2>
+        <p class="gb-kicker">Found after writing the piece</p>
+        <blockquote>
+          <p>This last point&mdash;that we need to structure global society so that cultural evolution guides the world towards better values and better societal structures&mdash;highlights an issue facing the design of a morally exploratory world that I&rsquo;ll call <strong>the lock-in paradox</strong>. We need to lock in some institutions and ideas in order to prevent a more thoroughgoing lock-in of values. One challenge is that these institutions and ideas will be morally controversial; for example, from many fundamentalist religious perspectives, the idea that we would encourage or even allow a diversity of worldviews might be regarded as abominable. Similarly, the idea that the path to the correct moral view is via reflection and good-faith debate, rather than studying the scripture of a holy book, is not one that everyone would accept. <strong>The lock-in paradox thus resembles the familiar paradox of tolerance&mdash;the necessity for liberal societies to defend themselves against intolerant views that would undermine their freedom, even if doing so requires curtailing the very tolerance they want to preserve.</strong></p>
+          <cite>&ndash; From the section &lsquo;Building a Morally Exploratory World&rsquo;, <em>Chapter 4: Value Lock-in</em>, <em>What We Owe the Future</em> by Will MacAskill (2022)</cite>
+        </blockquote>
+      </section>
     </article>
   </main>
 
