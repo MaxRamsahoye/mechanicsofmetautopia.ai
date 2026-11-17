@@ -322,6 +322,35 @@
       transform: translateY(1.5px);
     }
 
+    /* printing (and the PDF made from it): the article alone, in the light
+       theme, without the page's controls, menus or loader */
+    @media print {
+      @page { margin: 18mm 16mm; }
+
+      .loader, .frame-header, .left-controls, .corner-title, .progress-ring,
+      .scroll-top-btn, .top-nav, .find-bar, .context-menu, .copy-toast, .ce-saver,
+      .site-title, .toc, .matrix-detail {
+        display: none !important;
+      }
+
+      html, body {
+        background: #fff !important;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .matrix-figure, figure, blockquote, h2, h3, h4 {
+        break-inside: avoid;
+      }
+
+      h2, h3 {
+        break-after: avoid;
+      }
+    }
+
     /* hamburger: left of the theme toggle, opens the Pages menu */
     .menu-btn {
       display: flex;
@@ -2073,6 +2102,14 @@
   </div>
 
   <div class="left-controls">
+    <a class="pdf-btn" href="The%20Mechanics%20of%20Meta-Utopia.pdf" download="The Mechanics of Meta-Utopia.pdf" aria-label="Download the article as a PDF">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 3H7a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 7 21h10a1.5 1.5 0 0 0 1.5-1.5V7.5z"/>
+        <path d="M14 3v4.5h4.5"/>
+        <g class="arrow"><path d="M12 10.5v6.5"/><path d="M9 14l3 3 3-3"/></g>
+      </svg>
+      <span class="ctl-note" aria-hidden="true">Download PDF</span>
+    </a>
     <button class="email-btn" type="button" data-email="maxjosephholly@outlook.com" aria-label="Copy the email address, maxjosephholly@outlook.com">
       <svg class="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="5.5" width="18" height="13" rx="1.5"/>
