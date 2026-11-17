@@ -569,6 +569,8 @@ html.band-black:not([data-theme]) .on-band {
   font-size: clamp(16px, calc((100vw - 48px) / 20), 22px);
   line-height: 1.35;
   text-wrap: balance;
+  /* a longer epigraph wraps to a few lines rather than widening the block */
+  max-width: 440px;
 }
 
 /* the opening quote hangs in the margin so the words line up below */
