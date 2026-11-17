@@ -99,15 +99,21 @@ const CSS = `
   blockquote { margin: 10pt 0 12pt; padding-left: 14pt; border-left: 1pt solid #000; font-size: 12pt; }
   blockquote p:last-child { margin-bottom: 0; }
   :root { --canvas-ink: #000; --canvas-bg: #fff; --muted: #8c8c8c; --canvas-accent: #e36843; --serif: 'ET Bembo', Georgia, serif; }
-  .matrix-figure { margin: 18pt 0 16pt; }
-  /* the diagram on a page of its own, turned landscape: the full version,
-     with each future's description, drawn at the site's wide size and
-     scaled to fit the page, centred on it */
+  /* the diagram on a page of its own, turned landscape, with the Unified
+     Frames beside it on the left (as on the Typology 1 page): the full
+     version, with each future's description, drawn at the site's wide size
+     and scaled to fit the page */
   @page diagram { size: A4 landscape; margin: 16mm 16mm 18mm; }
-  .matrix-figure .matrix-wrap {
+  .matrix-figure {
     page: diagram; break-before: page; break-after: page;
+    display: flex; align-items: center; gap: 9mm;
+    box-sizing: border-box; height: 175mm; margin: 0;
+  }
+  .matrix-figure .matrix-frames { flex: 0 0 68mm; margin: 0; }
+  .matrix-figure .matrix-wrap {
+    flex: none;
     --ax-l: 100px; --ax-b: 64px; --ar: 40px;
-    width: 1080px; max-width: none; margin: 0 auto; zoom: 0.68;
+    width: 1080px; max-width: none; margin: 0; zoom: 0.63;
   }
   .matrix-figure .matrix {
     aspect-ratio: 9 / 8;
