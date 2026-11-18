@@ -1608,13 +1608,13 @@
 
       body[data-show="attractors-main"] .diagram-desc {
         margin-top: 4px;
-        font-size: 17px;
+        font-size: 19px;
         line-height: 1.45;
       }
 
       body[data-show="attractors-main"] .frames-side {
         display: block;
-        margin: 28px 0 0;
+        margin: 52px 0 0;
         padding-left: 18px;
         border-left: 3px solid var(--canvas-accent);
         font-family: var(--sans);
@@ -1634,7 +1634,7 @@
         flex-direction: row;
         flex-wrap: wrap;
         gap: 14px 28px;
-        margin: 44px 0 0;
+        margin: 64px 0 0;
       }
 
       body[data-show="attractors-main"] .tab-group {
@@ -1644,6 +1644,8 @@
       body[data-show="attractors-main"] .attractors-view {
         width: 1080px;
         margin-left: calc(var(--t1-diagram) - 50vw + 50%);
+        /* a little higher, so the grid's top sits nearer the title's */
+        margin-top: -32px;
       }
 
       body[data-show="attractors-main"] .attractors-view .matrix-wrap {
