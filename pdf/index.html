@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>The Mechanics of Meta-Utopia (PDF)</title>
+  <meta name="description" content="The Mechanics of Meta-Utopia? Civilisation Design for Desirable Multi-Cultural Equilibria, as a PDF.">
+  <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png?v=2">
+  <script>
+    // the site's favicon in the theme chosen there (or the system's)
+    try {
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) t = null;
+      if ((t || sys) === 'dark') {
+        document.getElementById('favicon-ico').href = '../favicon/favicon-dark.ico?v=2';
+        document.getElementById('favicon-32').href = '../favicon/favicon-32-dark.png?v=2';
+        document.getElementById('favicon-192').href = '../favicon/favicon-192-dark.png?v=2';
+        document.getElementById('favicon-apple').href = '../favicon/apple-touch-icon-dark.png?v=2';
+      }
+    } catch (e) {}
+  </script>
+  <style>
+    /* the article's PDF, the whole window, under the site's favicon and title;
+       the browser's own PDF viewer gives the download and print buttons */
+    html, body {
+      height: 100%;
+      margin: 0;
+      background: #525659;
+    }
+
+    .pdf {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    /* where a browser cannot show a PDF in a page: a link to it */
+    .pdf-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      margin: 0;
+      font: 16px/1.5 'Inter', system-ui, sans-serif;
+      color: #fff;
+    }
+
+    .pdf-fallback a {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <object class="pdf" data="../The%20Mechanics%20of%20Meta-Utopia.pdf" type="application/pdf" aria-label="The Mechanics of Meta-Utopia, as a PDF">
+    <p class="pdf-fallback"><a href="../The%20Mechanics%20of%20Meta-Utopia.pdf" download="The Mechanics of Meta-Utopia.pdf">Download The Mechanics of Meta-Utopia (PDF)</a></p>
+  </object>
+</body>
+</html>
