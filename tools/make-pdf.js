@@ -127,6 +127,7 @@ const CSS = `
   .matrix-tick.x-low, .matrix-tick.x-high { bottom: 34px !important; }
   .matrix-frames { margin: 0 0 16pt; padding-left: 14pt; border-left: 3pt solid #e36843; font-family: 'IBM Plex Sans', sans-serif; font-size: 9.5pt; line-height: 1.55; }
   .matrix-detail { display: none !important; }
+  .matrix-caption { margin: 0 0 14pt; font-family: 'IBM Plex Sans', sans-serif; font-size: 9.5pt; line-height: 1.55; }
   .matrix-frames .frames-head { margin: 0 0 5pt; }
   .matrix-frames ol { margin: 0; padding-left: 1.4em; list-style: decimal; }
   .matrix-frames li { margin: 0 0 3pt; padding-left: 0.2em; text-indent: 0; }
@@ -151,6 +152,15 @@ const CSS = `
     const q = (s) => document.querySelector(s);
     const body = q('.article-body').cloneNode(true);
     body.querySelectorAll('button, .sidenote, .sidenote-label').forEach((n) => n.remove());
+    // the four futures diagram has its landscape page to itself: its caption
+    // follows it, at the head of the next page
+    body.querySelectorAll('.matrix-figure > figcaption').forEach((c) => {
+      const p = document.createElement('p');
+      p.className = 'matrix-caption';
+      p.innerHTML = c.innerHTML;
+      c.closest('.matrix-figure').after(p);
+      c.remove();
+    });
     // headings lose their self-links, keeping their text
     body.querySelectorAll('.heading-link').forEach((a) => a.replaceWith(...a.childNodes));
     const sections = Array.from(body.children);

@@ -1987,6 +1987,15 @@
       content: none;
     }
 
+    /* the caption under the matrix, in the text column */
+    .matrix-figure .matrix-caption {
+      max-width: 760px;
+      margin: 48px 0 0;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
     /* wide windows: the matrix breaks out of the text column, wider and taller */
     @media (min-width: 1181px) {
       .matrix-figure {
@@ -2319,6 +2328,7 @@
                   <div class="matrix-tick x-high">Maximal</div>
                 </div>
                 <div class="matrix-detail" hidden aria-live="polite"></div>
+                <figcaption class="matrix-caption">The core framework is a unification of existing disparate frames into a <a href="https://gcrinstitute.org/papers/trajectories.pdf" target="_blank" rel="noopener"><em>grand futures</em></a> typology – a canonical methodology from existential risk studies (ERS) and macrostrategy research. Principally, a paper by Bostrom <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener"><em>The Future of Humanity</em></a> (2009) that sets out four scenarios for human civilisation: extinction, recurrent collapse, plateau, and posthumanity. The 2x2 matrix implements a similar approach to the article and book <a href="https://jacobin.com/2011/12/four-futures" target="_blank" rel="noopener"><em>Four Futures</em></a> by Frase (2011, 2016) which explores four scenarios for post-AGI political economy based on the interacting variables of social structure (hierarchy vs egalitarianism) and material conditions (scarcity vs abundance): communism, rentism, socialism and exterminism.</figcaption>
               </figure>
 
             </section>
