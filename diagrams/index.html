@@ -55,7 +55,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link href="../assets/matrix.css?v=c6c67d0b" rel="stylesheet">
   <link href="../assets/site.css?v=34995492" rel="stylesheet">
   <style>
@@ -1540,8 +1540,24 @@
 
     /* the Unified Frames note, copied into the left column for the
        side-by-side layout below (shown only there) */
-    .frames-side {
+    .frames-side,
+    .caption-side {
       display: none;
+    }
+
+    /* its linked titles in Inter's own italic, without the stroke the site
+       gives ET Bembo's italics in links */
+    :is(.caption-side, .attractors-view .matrix-caption) a em {
+      -webkit-text-stroke: 0;
+    }
+
+    /* the diagram's caption: below the Unified Frames, under the diagram */
+    .attractors-view .matrix-caption {
+      max-width: 860px;
+      margin: 40px 0 0;
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.6;
     }
 
     /* the Unified Frames: a heading and a numbered list, one frame a line */
@@ -1622,8 +1638,17 @@
         line-height: 1.6;
       }
 
-      body[data-show="attractors-main"] .attractors-view .matrix-frames {
+      body[data-show="attractors-main"] .attractors-view :is(.matrix-frames, .matrix-caption) {
         display: none;
+      }
+
+      /* the caption, in the left column under the Unified Frames */
+      body[data-show="attractors-main"] .caption-side {
+        display: block;
+        margin: 32px 0 0;
+        font-family: var(--sans);
+        font-size: 14px;
+        line-height: 1.6;
       }
 
       /* the menu of typologies sits under the column, as a row, rather than
@@ -1856,6 +1881,7 @@
                     <li>Bostrom's (technological) <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener">'permanent plateau'</a> and Ord's <a href="https://www.are.na/block/9253597" target="_blank" rel="noopener">'unrecoverable collapse'</a> (bottom left)</li>
                   </ol>
                 </div>
+                <figcaption class="matrix-caption">The core framework is a unification of existing disparate frames into a <a href="https://gcrinstitute.org/papers/trajectories.pdf" target="_blank" rel="noopener"><em>grand futures</em></a> typology – a canonical methodology from existential risk studies (ERS) and macrostrategy research. Principally, a paper by Bostrom <a href="https://nickbostrom.com/papers/future.pdf" target="_blank" rel="noopener"><em>The Future of Humanity</em></a> (2009) that sets out four scenarios for human civilisation: extinction, recurrent collapse, plateau, and posthumanity. The 2x2 matrix implements a similar approach to the article and book <a href="https://jacobin.com/2011/12/four-futures" target="_blank" rel="noopener"><em>Four Futures</em></a> by Frase (2011, 2016) which explores four scenarios for post-AGI political economy based on the interacting variables of social structure (hierarchy vs egalitarianism) and material conditions (scarcity vs abundance): communism, rentism, socialism and exterminism.</figcaption>
               </figure>
     </section>
 
@@ -2449,6 +2475,14 @@
       var copy = note.cloneNode(true);
       copy.className = 'frames-side';
       head.insertAdjacentElement('afterend', copy);
+      // and the diagram's caption under it
+      var cap = document.querySelector('.attractors-view .matrix-caption');
+      if (cap) {
+        var capCopy = document.createElement('p');
+        capCopy.className = 'caption-side';
+        capCopy.innerHTML = cap.innerHTML;
+        copy.insertAdjacentElement('afterend', capCopy);
+      }
     })();
 
     // the views: All Typologies, or one diagram at its own address
