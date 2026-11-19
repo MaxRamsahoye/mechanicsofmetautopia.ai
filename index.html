@@ -294,8 +294,8 @@
       transition: background-color 0.25s ease;
     }
 
-    /* a page with a downward arrow: first of the controls, downloads the
-       article as a PDF */
+    /* a page with an arrow pointing out: first of the controls, opens the
+       article as a PDF in a new tab */
     .pdf-btn {
       display: flex;
       color: var(--muted);
@@ -312,14 +312,14 @@
       height: 20px;
     }
 
-    /* the arrow drops a little on hover */
+    /* the arrow points out, to the PDF in a new tab, and moves that way on hover */
     .pdf-btn .arrow {
       transition: transform 0.25s ease;
     }
 
     .pdf-btn:hover .arrow,
     .pdf-btn:focus-visible .arrow {
-      transform: translateY(1.5px);
+      transform: translate(1px, -1px);
     }
 
     /* hamburger: left of the theme toggle, opens the Pages menu */
@@ -2116,7 +2116,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 3H7a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 7 21h10a1.5 1.5 0 0 0 1.5-1.5V7.5z"/>
         <path d="M14 3v4.5h4.5"/>
-        <g class="arrow"><path d="M12 10.5v6.5"/><path d="M9 14l3 3 3-3"/></g>
+        <g class="arrow"><path d="M9 17l6-6"/><path d="M10.5 11H15v4.5"/></g>
       </svg>
       <span class="ctl-note" aria-hidden="true">Open PDF</span>
     </a>
