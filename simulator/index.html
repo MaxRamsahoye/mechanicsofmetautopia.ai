@@ -721,9 +721,24 @@
       .sr-full-head h2 { font-size: 25px; }
       .sr-full-head p { font-size: 20px; }
     }
+    /* no top band on this page: the corner controls and the top menu keep the
+       page's own colours whatever the band setting (as on Typologies) */
+    .genealogy-top::before { display: none; }
+    .genealogy-top { margin-bottom: 120px; }
+    html:not([data-theme]) body.no-band :is(.back-arrow, .theme-toggle, .top-nav, .over-band) {
+      --canvas-ink: #000000;
+      --muted: #8c8c8c;
+      --link-blue: #e36843;
+    }
+    html[data-theme="dark"] body.no-band :is(.back-arrow, .theme-toggle, .top-nav, .over-band) {
+      --canvas-ink: #ffffff;
+      --muted: #8c8c8c;
+      --link-blue: #d15632;
+    }
+    @media (max-width: 640px) { .genealogy-top { margin-bottom: 80px; } }
   </style>
 </head>
-<body>
+<body class="no-band">
   <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
     <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
       <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
@@ -732,7 +747,7 @@
   </a>
 
   <main class="page-main">
-    <div class="genealogy-top wide-top on-band">
+    <div class="genealogy-top wide-top">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Cultural Dynamics Simulator</a></h1>
     <p class="page-intro">A cellular automaton for topologically modelling civilisation-scale cultural dynamics across sovereign political units (&lsquo;<a class="plain-link" href="../">the mechanics of meta-utopia</a>&rsquo;). A culture crosses a border when its cultural integrity overcomes the neighbour&rsquo;s membrane impermeability, and then the neighbour&rsquo;s own cultural integrity. Initially developed as a <a class="plain-link" href="https://maxramsahoye.github.io/momu.culturaldynamicssimulator/" target="_blank" rel="noopener">separate site</a>.</p>
     </div>
