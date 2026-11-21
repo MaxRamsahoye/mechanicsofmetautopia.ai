@@ -53,7 +53,8 @@
 
   var paletteMap = {
     moral: ['#1A1A1A', '#8E8E93', '#F2F2F7'],
-    softPower: ['#B7E4C7', '#40916C', '#1B4332'],
+    // cultural integrity: red (low), orange, yellow (high), as in the earlier version
+    softPower: ['#E68A73', '#E6994D', '#FDE68A'],
     impermeability: ['#FDE68A', '#E6994D', '#A64B35'],
     cultures: PASTEL_RAINBOW
   };
@@ -109,8 +110,8 @@
   }
 
   // ---------- the written account: one panel per variable ----------
-  var proseBgColors = ['rgba(230, 138, 115, 0.06)', 'rgba(142, 142, 147, 0.06)', 'rgba(64, 145, 108, 0.06)', 'rgba(166, 75, 53, 0.06)'];
-  var proseBorders = ['var(--accent)', 'var(--moral-neu)', 'var(--vir-med)', 'var(--imp-high)'];
+  var proseBgColors = ['rgba(230, 138, 115, 0.06)', 'rgba(142, 142, 147, 0.06)', 'rgba(230, 153, 77, 0.06)', 'rgba(166, 75, 53, 0.06)'];
+  var proseBorders = ['var(--accent)', 'var(--moral-neu)', 'var(--integ-med)', 'var(--imp-high)'];
   var variableLabels = ['Cultural Affiliation', 'Sub-topia Status', 'Cultural Integrity', 'Membrane Impermeability'];
 
   function formatSection(texts, cultureColorHex) {
@@ -676,7 +677,7 @@
     updateHTMLWithAnim('scenario-main-desc', simulationEpoch === 0 || isCompleted ? desc : '', 'none');
 
     renderStatRow('moral', { key: 'moral', metricName: 'Sub-topia Status', colors: ['var(--moral-uto)', 'var(--moral-neu)', 'var(--moral-dys)'], labels: ['UTOPIAN', 'NOTOPIAN', 'DYSTOPIAN'] }, categorise(initialState, 'moral'), categorise(nodes, 'moral'));
-    renderStatRow('sp', { key: 'softPower', metricName: 'Cultural Integrity', colors: ['var(--vir-high)', 'var(--vir-med)', 'var(--vir-low)'], labels: ['HIGH', 'MED', 'LOW'] }, categorise(initialState, 'softPower'), categorise(nodes, 'softPower'));
+    renderStatRow('sp', { key: 'softPower', metricName: 'Cultural Integrity', colors: ['var(--integ-high)', 'var(--integ-med)', 'var(--integ-low)'], labels: ['HIGH', 'MED', 'LOW'] }, categorise(initialState, 'softPower'), categorise(nodes, 'softPower'));
     renderStatRow('imp', { key: 'impermeability', metricName: 'Membrane Impermeability', colors: ['var(--imp-high)', 'var(--imp-med)', 'var(--imp-low)'], labels: ['HIGH', 'MED', 'LOW'], isBorder: true }, categorise(initialState, 'impermeability'), categorise(nodes, 'impermeability'));
 
     var initCounts = {}, endCounts = {};
