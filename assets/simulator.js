@@ -2,15 +2,17 @@
 // sub-topias. A culture crosses into a neighbouring sub-topia when its
 // cultural integrity overcomes, first, the neighbour's membrane
 // impermeability and, then, the neighbour's own cultural integrity.
-// Here A passes both tests, and B is assimilated.
+// Here A passes both tests, and B is assimilated: it takes A's culture,
+// sub-topian status, integrity and membrane.
 (function () {
   var root = document.querySelector('.simr');
   if (!root) return;
   var $ = function (s) { return root.querySelector(s); };
   var $$ = function (s) { return Array.prototype.slice.call(root.querySelectorAll(s)); };
 
-  var A = { name: 'The Culture', col: '#FFB7B2', integ: 8.2, imp: 4.0 };
-  var B = { name: 'The Azad', col: '#B3E5FC', integ: 3.5, imp: 5.1 };
+  var A = { name: 'The Culture', col: '#FFB7B2', integ: 8.2, imp: 4.0, status: 'uto' };
+  var B = { name: 'The Azad', col: '#B3E5FC', integ: 3.5, imp: 5.1, status: 'dys' };
+  var STATUS = { uto: 'UTOPIAN', neu: 'NOTOPIAN', dys: 'DYSTOPIAN' };
 
   // membrane colour and weight by impermeability: yellow (open) to brown (closed)
   function impColour(v) {
@@ -25,7 +27,7 @@
 
   var els = {
     hexB: $('#sr-hex-b'), memB: $('#sr-mem-b'), memA: $('#sr-mem-a'),
-    nameB: $('#sr-name-b'), integA: $('#sr-integ-a'), integB: $('#sr-integ-b'), impB: $('#sr-imp-b'),
+    nameB: $('#sr-name-b'), statB: $('#sr-stat-b'), integA: $('#sr-integ-a'), integB: $('#sr-integ-b'), impB: $('#sr-imp-b'),
     test1: $$('.sr-t1'), test2: $$('.sr-t2'),
     markA: $('.sr-mark-a'), markB: $('.sr-mark-b'),
     items: $$('.sr-steps > li'), play: $('.sr-play')
@@ -38,6 +40,8 @@
     els.nameB.textContent = c.name.toUpperCase();
     els.integB.textContent = c.integ.toFixed(1);
     els.impB.textContent = c.imp.toFixed(1);
+    els.statB.setAttribute('class', 'sr-stat ' + c.status);
+    els.statB.querySelector('text').textContent = STATUS[c.status];
     els.markB.style.left = (c.imp * 10) + '%';
     els.markB.querySelector('b').textContent = merged ? 'A = B' : 'B';
     els.markA.classList.toggle('gone', !!merged);

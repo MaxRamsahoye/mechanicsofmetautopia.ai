@@ -277,6 +277,11 @@
     .sr-svg .t-memlab { font-size: 11px; letter-spacing: 0.1em; fill: var(--muted); }
     .sr-svg .t-memval { font-size: 24px; font-weight: 500; fill: var(--canvas-ink); transition: fill 0.4s ease; }
     .sr-svg .hl { fill: var(--link-blue); }
+    .sr-stat rect { stroke: #1A1A1A; stroke-width: 1.2; transition: fill 0.9s ease; }
+    .sr-svg .sr-stat text { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; transition: fill 0.9s ease; }
+    .sr-stat.uto rect { fill: #F2F2F7; } .sr-svg .sr-stat.uto text { fill: #1A1A1A; }
+    .sr-stat.neu rect { fill: #8E8E93; } .sr-svg .sr-stat.neu text { fill: #1A1A1A; }
+    .sr-stat.dys rect { fill: #1A1A1A; } .sr-svg .sr-stat.dys text { fill: #F2F2F7; }
     .sr-hex { stroke: none; transition: fill 0.9s ease; }
     .sr-mem { fill: none; stroke-linejoin: round; transition: stroke 0.9s ease, stroke-width 0.9s ease; }
     .sr-mem.breached { stroke-dasharray: 14 10; animation: sr-flow 1.1s linear infinite; }
@@ -365,6 +370,7 @@
       .sr-svg .t-memlab { font-size: 17px; }
       .sr-svg .t-memval { font-size: 32px; }
       .sr-svg .t-big { font-size: 56px; }
+      .sr-svg .sr-stat text { font-size: 14px; letter-spacing: 0.06em; }
       .sr-svg .sr-test .t-cmp { font-size: 22px; }
       .sr-svg .sr-test .t-verdict { display: none; }
       .sr-cards.two { grid-template-columns: minmax(0, 1fr); }
@@ -394,7 +400,7 @@
       <div class="sr-stage">
         <figure class="sr-figure">
           <svg class="sr-svg" viewBox="0 0 640 400" role="img" aria-labelledby="sr-svg-t">
-            <title id="sr-svg-t">Two hexagonal sub-topias side by side: A, The Culture, with cultural integrity 8.2 and membrane impermeability 4.0; B, The Azad, with cultural integrity 3.5 and membrane impermeability 5.1</title>
+            <title id="sr-svg-t">Two hexagonal sub-topias side by side: A, The Culture, utopian, with cultural integrity 8.2 and membrane impermeability 4.0; B, The Azad, dystopian, with cultural integrity 3.5 and membrane impermeability 5.1</title>
             <text class="t-tag" x="132" y="28">SUB-TOPIA A</text>
             <text class="t-tag" x="508" y="28">SUB-TOPIA B</text>
 
@@ -403,12 +409,14 @@
             <text class="t-name" x="132" y="138">THE CULTURE</text>
             <text class="t-small full" x="132" y="162">CULTURAL INTEGRITY</text><text class="t-small short" x="132" y="166">INTEGRITY</text>
             <text id="sr-integ-a" class="t-big" x="132" y="212">8.2</text>
+            <g class="sr-stat uto"><rect x="82" y="230" width="100" height="22" rx="11"/><text x="132" y="245">UTOPIAN</text></g>
 
             <polygon id="sr-hex-b" class="sr-hex" points="508.0,62.0 608.5,120.0 608.5,236.0 508.0,294.0 407.5,236.0 407.5,120.0" style="fill: #B3E5FC"/>
             <polygon id="sr-mem-b" class="sr-mem" points="508.0,62.0 608.5,120.0 608.5,236.0 508.0,294.0 407.5,236.0 407.5,120.0"/>
             <text id="sr-name-b" class="t-name" x="508" y="138">THE AZAD</text>
             <text class="t-small full" x="508" y="162">CULTURAL INTEGRITY</text><text class="t-small short" x="508" y="166">INTEGRITY</text>
             <text id="sr-integ-b" class="t-big" x="508" y="212">3.5</text>
+            <g id="sr-stat-b" class="sr-stat dys"><rect x="458" y="230" width="100" height="22" rx="11"/><text x="508" y="245">DYSTOPIAN</text></g>
 
             <text class="t-memlab full" x="132" y="328">MEMBRANE IMPERMEABILITY</text><text class="t-memlab short" x="132" y="328">MEMBRANE</text>
             <text class="t-memlab full" x="508" y="328">MEMBRANE IMPERMEABILITY</text><text class="t-memlab short" x="508" y="328">MEMBRANE</text>
@@ -424,8 +432,8 @@
               <text class="t-verdict" x="320" y="118">&#10003; through the membrane</text>
             </g>
 
-            <path class="sr-arrow sr-t2" d="M244,224 L458,224"/>
-            <path class="sr-head sr-t2" d="M468,224 l-13,-7 v14 z"/>
+            <path class="sr-arrow sr-t2" d="M244,224 L442,224"/>
+            <path class="sr-head sr-t2" d="M452,224 l-13,-7 v14 z"/>
             <g class="sr-test sr-t2">
               <rect class="full" x="248" y="240" width="144" height="54" rx="4"/>
               <rect class="short" x="254" y="244" width="132" height="40" rx="4"/>
@@ -441,10 +449,10 @@
         </figure>
         <div class="sr-panel">
           <ol class="sr-steps" aria-label="Steps" aria-live="polite">
-          <li><button type="button"><span class="sr-n">01</span><span class="sr-t">Two neighbouring sub-topias</span></button><p class="sr-step-text">Each hexagon is a sub-topia. Its fill is its <b>culture</b>; the number inside is its <b>cultural integrity</b>; its outline is its <b>membrane</b>, thicker and darker the more <b>impermeable</b> it is.</p><span class="sr-prog"></span></li>
+          <li><button type="button"><span class="sr-n">01</span><span class="sr-t">Two neighbouring sub-topias</span></button><p class="sr-step-text">Each hexagon is a sub-topia. Its fill is its <b>culture</b>; the number inside is its <b>cultural integrity</b>; the label beneath is its <b>sub-topian status</b>; its outline is its <b>membrane</b>, thicker and darker the more <b>impermeable</b> it is.</p><span class="sr-prog"></span></li>
           <li><button type="button"><span class="sr-n">02</span><span class="sr-t">Test 1: through the membrane</span></button><p class="sr-step-text">A&rsquo;s culture reaches B&rsquo;s border. It crosses only if A&rsquo;s cultural integrity (<b>8.2</b>) is higher than B&rsquo;s membrane impermeability (<b>5.1</b>). It is: the membrane gives way.</p><span class="sr-prog"></span></li>
           <li><button type="button"><span class="sr-n">03</span><span class="sr-t">Test 2: past B&rsquo;s own integrity</span></button><p class="sr-step-text">Inside, A&rsquo;s culture meets B&rsquo;s. It takes hold only if A&rsquo;s cultural integrity (<b>8.2</b>) is also higher than B&rsquo;s (<b>3.5</b>). It is: B cannot hold on to its own culture.</p><span class="sr-prog"></span></li>
-          <li><button type="button"><span class="sr-n">04</span><span class="sr-t">Assimilation</span></button><p class="sr-step-text">B adopts A&rsquo;s culture, and with it A&rsquo;s cultural integrity and membrane: B is now part of <b>The Culture</b>, with an integrity of <b>8.2</b> and a membrane of <b>4.0</b>.</p><span class="sr-prog"></span></li>
+          <li><button type="button"><span class="sr-n">04</span><span class="sr-t">Assimilation</span></button><p class="sr-step-text">B adopts A&rsquo;s culture, and with it A&rsquo;s sub-topian status, cultural integrity and membrane: B is now part of <b>The Culture</b>, <b>utopian</b>, with an integrity of <b>8.2</b> and a membrane of <b>4.0</b>.</p><span class="sr-prog"></span></li>
           <li><button type="button"><span class="sr-n">05</span><span class="sr-t">One larger culture</span></button><p class="sr-step-text">Two sub-topias, one culture. On a full map the same two tests run between every pair of neighbours, turn after turn, until nothing more changes.</p><span class="sr-prog"></span></li>
           </ol>
           <div class="sr-controls">
@@ -457,7 +465,7 @@
 
       <div class="sr-notes">
         <h2>The rule</h2>
-        <p>Every sub-topia carries three things: a <b>culture</b>; a <b>cultural integrity</b>, how strongly that culture holds and pulls; and a <b>membrane impermeability</b>, how closed its borders are. A culture crosses from one sub-topia into its neighbour only by passing two tests, in order.</p>
+        <p>Every sub-topia carries four things: a <b>culture</b>; a <b>sub-topian status</b>, whether it is utopian, notopian or dystopian; a <b>cultural integrity</b>, how strongly that culture holds and pulls; and a <b>membrane impermeability</b>, how closed its borders are. Only integrity and membrane decide whether a culture crosses, and its status travels with it. A culture crosses from one sub-topia into its neighbour only by passing two tests, in order.</p>
         <div class="sr-cards two">
           <div class="sr-card test">
             <p class="sr-kicker">Test 1</p>
@@ -472,7 +480,7 @@
             <p>Is it also higher than the neighbour&rsquo;s own cultural integrity? If not, it gets in but cannot take hold.</p>
           </div>
         </div>
-        <p>Above, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5. B is assimilated, and takes on A&rsquo;s culture together with A&rsquo;s integrity and membrane.</p>
+        <p>Above, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5. B is assimilated: it takes on A&rsquo;s culture together with A&rsquo;s status, integrity and membrane, and turns from dystopian to utopian.</p>
 
         <h2>Three outcomes</h2>
         <p>With B&rsquo;s membrane at 5.1, what happens depends on how A&rsquo;s integrity compares with B&rsquo;s membrane and then with B&rsquo;s integrity.</p>
@@ -496,7 +504,7 @@
             <p class="sr-kicker">Passes both</p>
             <h3>Assimilated</h3>
             <p class="sr-checks"><span class="ok">8.2 &gt; 5.1 membrane<i>&#10003;</i></span><span class="ok">8.2 &gt; 3.5 integrity<i>&#10003;</i></span></p>
-            <p>The neighbour takes on the incoming culture, with its integrity and its membrane.</p>
+            <p>The neighbour takes on the incoming culture, with its status, integrity and membrane.</p>
           </figure>
         </div>
 
@@ -553,7 +561,7 @@
 
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
-  <script src="../assets/simulator.js?v=16b4bdc4"></script>
+  <script src="../assets/simulator.js?v=37fa470e"></script>
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
   <script src="../assets/tools.js?v=88b7be40" data-search-scope=".sr-notes" data-hide-until=".genealogy-top"></script>
 </body>
