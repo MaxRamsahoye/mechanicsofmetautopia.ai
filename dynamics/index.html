@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dynamics: a hex-grid cellular model of the four post-AGI cultural attractor states, driven by cultural integrity and membrane permeability.">
+  <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png?v=2">
+  <script>
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Dynamics — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Dynamics — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Dynamics: a hex-grid cellular model of the four post-AGI cultural attractor states, driven by cultural integrity and membrane permeability.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/dynamics/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="../assets/matrix.css?v=c6c67d0b" rel="stylesheet">
+  <link href="../assets/site.css?v=34995492" rel="stylesheet">
+  <style>
+    /* light sepia band from the top of the window to just below the intro */
+    .genealogy-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 216px;
+    }
+
+    .genealogy-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -112px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    .genealogy-top .page-intro {
+      margin-bottom: 0;
+    }
+
+    /* the site name sits in the top-right corner, as on the Lexicon */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the essay, set as the article's text */
+    .essay {
+      max-width: 760px;
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.3;
+    }
+
+    .essay p {
+      margin: 15px 0;
+    }
+
+    .essay a:not(.heading-link) {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    html:not(.colour) .essay a:not(.heading-link) {
+      color: inherit;
+    }
+
+    .essay h2 {
+      margin: 88px 0 18px;
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.15em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .essay h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.45em;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    /* quotations, set in from an orange rule */
+    .essay blockquote {
+      margin: 32px 0;
+      padding-left: 28px;
+      border-left: 2px solid var(--link-blue);
+    }
+
+    .essay blockquote p {
+      margin: 0;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--mono-caps);
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay blockquote cite a {
+      font-weight: 400;
+    }
+    /* no footer on the Supplements pages, as on Diagrams */
+    .site-footer {
+      display: none;
+    }
+
+    /* the essays, as cards */
+    /* the essays, one above the other, across the wide column (as on Diagrams) */
+    .essay-list {
+      width: var(--wide-col);
+      margin-left: calc((100% - var(--wide-col)) / 2);
+      padding-bottom: 160px;
+    }
+
+    @media (max-width: 600px) {
+      .essay-list {
+        padding-bottom: 96px;
+      }
+    }
+
+    .essay-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .essay-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 26px 26px 28px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      color: inherit;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .essay-card:hover,
+    .essay-card:focus-visible {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      outline: none;
+    }
+
+    /* a group of supplements under its own heading */
+    .series-heading {
+      margin: 96px 0 28px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .series-heading.series-first {
+      margin-top: 0;
+    }
+
+    .card-kicker {
+      margin: 0 0 8px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-title {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .card-desc {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+    /* Dynamics: the hex grid on the left, its dials and readings on the right */
+    .dyn {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 48px;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .dyn {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 36px;
+      }
+    }
+
+    .dyn-stage {
+      margin: 0;
+    }
+
+    /* on wide windows the grid stays in view beside the panel */
+    @media (min-width: 961px) {
+      .dyn-stage {
+        position: sticky;
+        top: 96px;
+      }
+    }
+
+    .dyn-canvas {
+      display: block;
+      width: 100%;
+      touch-action: manipulation;
+    }
+
+    .dyn-stage figcaption {
+      margin-top: 14px;
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .dyn-panel {
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .dyn-panel h2 {
+      margin: 0 0 12px;
+      font-family: var(--mono-caps);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .dyn-block + .dyn-block {
+      margin-top: 32px;
+    }
+
+    /* the state the dials point to */
+    .dyn-state-name {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    html:not(.serif-headings) .dyn-state-name {
+      font-family: var(--sans);
+      font-size: 21px;
+      font-weight: 600;
+    }
+
+    .dyn-state-sub {
+      display: block;
+      margin: 2px 0 10px;
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 17px;
+    }
+
+    .dyn-state-desc {
+      margin: 0;
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    /* the 2x2 locator: drag or click to set both dials */
+    .dyn-locator {
+      display: block;
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      cursor: crosshair;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .dyn-locator .q { fill: var(--canvas-bg); stroke: var(--canvas-ink); stroke-width: 1; }
+    .dyn-locator .q-tl { fill: var(--m-tl, #fee4d0); }
+    .dyn-locator .q-tr { fill: var(--m-tr, #fdf8e2); }
+    .dyn-locator .q-bl { fill: var(--m-bl, #ffeae7); }
+    .dyn-locator .q-br { fill: var(--m-br, #f5f6f7); }
+    .dyn-locator .q-c { fill: var(--canvas-bg); }
+    .dyn-locator .axis { stroke: var(--canvas-ink); stroke-width: 2.5; }
+    .dyn-locator text { fill: var(--canvas-ink); font-family: var(--sans); font-size: 9.5px; text-anchor: middle; pointer-events: none; }
+    .dyn-locator .dyn-dot { fill: var(--link-blue); stroke: var(--canvas-bg); stroke-width: 2; }
+
+    .dyn-locator-key {
+      display: flex;
+      justify-content: space-between;
+      max-width: 260px;
+      margin-top: 6px;
+      font-size: 11.5px;
+      white-space: nowrap;
+      color: var(--muted);
+    }
+
+    /* the presets */
+    .dyn-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .dyn-btn {
+      padding: 7px 11px;
+      border: 1px solid color-mix(in srgb, var(--canvas-ink) 30%, transparent);
+      border-radius: 0;
+      background: none;
+      font: inherit;
+      font-size: 13px;
+      line-height: 1.3;
+      color: inherit;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .dyn-btn:hover,
+    .dyn-btn:focus-visible {
+      border-color: var(--canvas-ink);
+      outline: none;
+    }
+
+    .dyn-btn[aria-pressed="true"] {
+      border-color: var(--canvas-ink);
+      background: var(--canvas-ink);
+      color: var(--canvas-bg);
+    }
+
+    /* the two dials */
+    .dyn-dial {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 2px 12px;
+    }
+
+    .dyn-dial + .dyn-dial {
+      margin-top: 16px;
+    }
+
+    .dyn-dial label {
+      font-weight: 500;
+    }
+
+    .dyn-dial output {
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+    }
+
+    .dyn-dial input {
+      grid-column: 1 / -1;
+      width: 100%;
+      margin: 6px 0 0;
+      accent-color: var(--link-blue);
+    }
+
+    .dyn-run {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    /* the readings */
+    .dyn-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 20px;
+      margin: 0;
+    }
+
+    .dyn-stats div {
+      margin: 0;
+    }
+
+    .dyn-stats dt {
+      font-size: 12.5px;
+      color: var(--muted);
+    }
+
+    .dyn-stats dd {
+      margin: 2px 0 0;
+      font-size: 22px;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* how the model works */
+    .dyn-notes {
+      max-width: 760px;
+      margin: 96px 0 0;
+      font-family: var(--serif);
+      font-size: 19px;
+      line-height: 1.5;
+    }
+
+    .dyn-notes h2 {
+      margin: 0 0 16px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .dyn-notes p {
+      margin: 0 0 14px;
+    }
+
+    .dyn-notes ul {
+      margin: 0 0 14px;
+      padding-left: 1.2em;
+    }
+
+    .dyn-notes li {
+      margin: 0 0 8px;
+    }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="genealogy-top wide-top on-band">
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Dynamics</a></h1>
+    <p class="page-intro">A hex-grid cellular model of the four post-AGI cultural attractor states in <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>. Set a civilisation&rsquo;s cultural integrity and membrane permeability, and watch its sub-topias settle into enclosure, uplift, collapse, takeover or the clash between them.</p>
+    </div>
+
+    <section class="essay-list wide-top" aria-label="Dynamics">
+      <div class="dyn" data-state="clash">
+        <figure class="dyn-stage">
+          <canvas class="dyn-canvas" aria-label="A hex grid of sub-topias, each cell coloured by its culture; grey cells have lost theirs"></canvas>
+          <figcaption>Each hexagon is a community, coloured by its culture; grey ones have lost theirs. The heavy lines are the membranes between twelve sub-topias, heavier the less permeable. One culture is expansionist.</figcaption>
+        </figure>
+
+        <div class="dyn-panel">
+          <div class="dyn-block" aria-live="polite">
+            <h2>Attractor state</h2>
+            <p class="dyn-state-name">Clash of Civilisations</p>
+            <span class="dyn-state-sub">(Cultural Competition, Conflict &amp; Control)</span>
+            <p class="dyn-state-desc"></p>
+          </div>
+
+          <div class="dyn-block">
+            <h2>Scenarios</h2>
+            <ul class="dyn-presets">
+              <li><button class="dyn-btn" type="button" data-preset="enclosure" aria-pressed="false">Enclosure</button></li>
+              <li><button class="dyn-btn" type="button" data-preset="uplift" aria-pressed="false">Uplift</button></li>
+              <li><button class="dyn-btn" type="button" data-preset="clash" aria-pressed="true">Clash</button></li>
+              <li><button class="dyn-btn" type="button" data-preset="collapse" aria-pressed="false">Collapse</button></li>
+              <li><button class="dyn-btn" type="button" data-preset="takeover" aria-pressed="false">Takeover</button></li>
+            </ul>
+          </div>
+
+          <div class="dyn-block">
+            <h2>Design variables</h2>
+            <svg class="dyn-locator" viewBox="0 0 200 200" role="slider" aria-label="Cultural integrity and membrane permeability: drag to set both" tabindex="0">
+                <rect class="q q-tl" x="10" y="10" width="90" height="90"/>
+                <rect class="q q-tr" x="100" y="10" width="90" height="90"/>
+                <rect class="q q-bl" x="10" y="100" width="90" height="90"/>
+                <rect class="q q-br" x="100" y="100" width="90" height="90"/>
+                <rect class="q q-c" x="60" y="70" width="80" height="60"/>
+                <line class="axis" x1="10" y1="10" x2="10" y2="190"/>
+                <line class="axis" x1="10" y1="190" x2="190" y2="190"/>
+                <text x="45" y="30">Enclosure</text>
+                <text x="155" y="30">Uplift</text>
+                <text x="45" y="178">Collapse</text>
+                <text x="155" y="178">Takeover</text>
+                <text x="100" y="86">Clash</text>
+                <circle class="dyn-dot" cx="100" cy="100" r="6.5"/>
+              </svg>
+            <div class="dyn-locator-key"><span>&uarr; Cultural integrity</span><span>Membrane permeability &rarr;</span></div>
+          </div>
+
+          <div class="dyn-block">
+            <div class="dyn-dial">
+              <label for="dyn-integrity">Cultural integrity</label>
+              <output id="dyn-integrity-out" for="dyn-integrity">50</output>
+              <input id="dyn-integrity" type="range" min="0" max="100" value="50">
+            </div>
+            <div class="dyn-dial">
+              <label for="dyn-permeability">Membrane permeability</label>
+              <output id="dyn-permeability-out" for="dyn-permeability">50</output>
+              <input id="dyn-permeability" type="range" min="0" max="100" value="50">
+            </div>
+            <div class="dyn-run">
+              <button class="dyn-btn dyn-play" type="button" aria-pressed="false">Pause</button>
+              <button class="dyn-btn dyn-reset" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="dyn-block">
+            <h2>Readings</h2>
+            <dl class="dyn-stats">
+              <div><dt>Cultures</dt><dd data-stat="cultures">12</dd></div>
+              <div><dt>Effective diversity</dt><dd data-stat="diversity">12</dd></div>
+              <div><dt>Largest culture</dt><dd data-stat="largest">&ndash;</dd></div>
+              <div><dt>Culture lost</dt><dd data-stat="lost">0%</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+
+      <div class="dyn-notes">
+        <h2>How the model works</h2>
+        <p>The grid is divided into twelve sub-topias, each starting with its own home culture. At every step, a community meets one of its neighbours, and one of a few things can happen:</p>
+        <ul>
+          <li><b>Transmission.</b> A culture passes from one community to the next: within a sub-topia, its own culture at the rate of its <em>cultural integrity</em>; across a border, or a foreign culture inside it, at the rate of its <em>membrane permeability</em>.</li>
+          <li><b>Resistance.</b> A community holding its sub-topia&rsquo;s home culture resists a foreign one as strongly as its integrity, and draws lapsed or converted neighbours back to it.</li>
+          <li><b>Lapse.</b> Without integrity, a community loses its culture and turns grey, until something refills it.</li>
+          <li><b>Competition.</b> When cultures meet, the fitter tends to win; one culture is expansionist, and wins a little more often.</li>
+          <li><b>Synthesis.</b> Where integrity and permeability are both high, cultures meeting at a border sometimes blend into a new one.</li>
+        </ul>
+        <p>High integrity with closed borders seals each sub-topia (enclosure); with open borders, cultures trade and blend while each sub-topia keeps its own (uplift). Low integrity with open borders lets the expansionist culture take the map (takeover); with closed borders, cultures simply fade (collapse). In between, they compete (the clash).</p>
+        <p>The Unified Frames and the descriptions of each state are in the <a class="plain-link" href="../diagrams/#four-attractors">typology of the four attractor states</a>.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>The messiness of how a political apparatus is to be controlled and limited do not fit easily into one’s hopes for a sleek, simple [meta-]utopian scheme”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../">Article</a></li>
+        <li><a href="../genealogy/">Supplements</a></li>
+        <li><a href="../diagrams/">Typologies</a></li>
+        <li><a href="../lexicon/">Concepts</a></li>
+        <li><a href="../sources/">Sources</a></li>
+        <li><a href="../consoles/">Consoles</a></li>
+        <li><a href="../dynamics/">Dynamics</a></li>
+        <li><a href="../1.0/">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+
+  <div class="progress-pill progress-edge" data-start=".genealogy-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".genealogy-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.genealogy-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
+
+  <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
+
+  <script src="../assets/dynamics.js?v=f48954ca"></script>
+  <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
+  <script src="../assets/tools.js?v=c0fb0733" data-search-scope=".dyn-notes" data-hide-until=".genealogy-top"></script>
+</body>
+</html>
