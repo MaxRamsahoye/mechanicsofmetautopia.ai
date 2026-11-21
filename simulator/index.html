@@ -721,6 +721,10 @@
       .sr-full-head h2 { font-size: 25px; }
       .sr-full-head p { font-size: 20px; }
     }
+    /* long metric labels and culture names wrap inside their column on narrow screens */
+    .sr-full .metric-item, .sr-full .metric-text { min-width: 0; }
+    .sr-full .metric-name { overflow-wrap: anywhere; }
+    @media (max-width: 480px) { .sr-full .metrics-grid { grid-template-columns: minmax(0, 1fr); } }
     /* no top band on this page: the corner controls and the top menu keep the
        page's own colours whatever the band setting (as on Typologies) */
     .genealogy-top::before { display: none; }
@@ -735,7 +739,19 @@
       --muted: #8c8c8c;
       --link-blue: #d15632;
     }
-    @media (max-width: 640px) { .genealogy-top { margin-bottom: 80px; } }
+    /* full-width dividing lines between the sections, with equal space above and below */
+    .simr, .sr-full { --gap: 110px; --line: color-mix(in srgb, var(--canvas-ink) 16%, transparent); }
+    .genealogy-top { --gap: 110px; margin-bottom: calc(var(--gap) * 2); }
+    .genealogy-top::before { display: block; content: ''; position: absolute; top: auto; bottom: calc(var(--gap) * -1); left: 50%; width: 100vw; height: 0; transform: translateX(-50%); background: none; border-top: 1px solid color-mix(in srgb, var(--canvas-ink) 16%, transparent); }
+    .sr-notes { margin-top: calc(var(--gap) * 2); }
+    .sr-notes > h2 { position: relative; margin-top: calc(var(--gap) * 2); }
+    .sr-notes > h2:first-child { margin-top: 0; }
+    .sr-full { margin-top: calc(var(--gap) * 2); }
+    .sr-full-head h2 { position: relative; }
+    .sr-notes > h2::before, .sr-full-head h2::before { content: ''; position: absolute; left: 50%; top: calc(var(--gap) * -1); width: 100vw; transform: translateX(-50%); border-top: 1px solid var(--line); }
+    @media (max-width: 640px) {
+      .simr, .sr-full, .genealogy-top { --gap: 64px; }
+    }
   </style>
 </head>
 <body class="no-band">
