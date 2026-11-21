@@ -343,8 +343,10 @@
     .sr-card .sr-formula { margin: 0 0 14px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.5; }
     .sr-formula span { color: var(--link-blue); font-weight: 600; }
     .sr-card p { margin: 0; font-size: 17.5px; line-height: 1.45; }
-    .sr-mini { display: block; width: 100%; max-width: 260px; height: auto; margin: 6px auto 18px; overflow: visible; }
+    .sr-mini { display: block; width: 100%; max-width: 260px; height: auto; margin: 6px auto 26px; overflow: visible; }
     .sr-mini text { font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 500; fill: #1A1A1A; text-anchor: middle; }
+    .sr-mini .lab { font-family: var(--sans); font-size: 15px; font-weight: 600; fill: var(--canvas-ink); }
+    .sr-mini .sub { font-family: var(--sans); font-size: 13px; font-weight: 400; fill: var(--muted); }
     .sr-mini .x { stroke: var(--link-blue); stroke-width: 3; stroke-linecap: round; }
     .sr-card .sr-checks { margin: 0 0 14px !important; padding: 10px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font-family: 'IBM Plex Mono', monospace; font-size: 13.5px !important; line-height: 1.8 !important; }
     .sr-checks span { display: flex; justify-content: space-between; gap: 12px; }
@@ -483,28 +485,28 @@
         <p>Above, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5. B is assimilated: it takes on A&rsquo;s culture together with A&rsquo;s status, integrity and membrane, and turns from dystopian to utopian.</p>
 
         <h2>Three outcomes</h2>
-        <p>With B&rsquo;s membrane at 5.1, what happens depends on how A&rsquo;s integrity compares with B&rsquo;s membrane and then with B&rsquo;s integrity.</p>
+        <p>Keep A as it is above, with a cultural integrity of 8.2, and change its neighbour. Whether A is blocked, deflected or assimilates B depends on B&rsquo;s two numbers: its membrane impermeability, then its own cultural integrity. In each case, the number in a hexagon is its cultural integrity.</p>
         <div class="sr-cards three">
           <figure class="sr-card">
-            <svg class="sr-mini" viewBox="0 0 260 124" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#B3E5FC;stroke:rgb(227,148,75);stroke-width:8.6;stroke-linejoin:round"/><text x="62" y="68">4.6</text><text x="198" y="68">3.5</text><path d="M92,88 L141,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path class="x" d="M143,80 l10,16 M153,80 l-10,16"/></svg>
+            <svg class="sr-mini" viewBox="0 0 260 158" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(235,168,89);stroke-width:4.6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#B3E5FC;stroke:rgb(179,91,58);stroke-width:9.1;stroke-linejoin:round"/><text x="62" y="68">8.2</text><text x="198" y="68">3.5</text><text class="lab" x="62" y="146">A</text><text class="lab" x="198" y="146">B</text><text class="sub" x="62" y="164">membrane 4.0</text><text class="sub" x="198" y="164">membrane 9.0</text><path d="M92,88 L141,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path class="x" d="M143,80 l10,16 M153,80 l-10,16"/></svg>
             <p class="sr-kicker">Fails test 1</p>
             <h3>Blocked</h3>
-            <p class="sr-checks"><span class="no">4.6 &gt; 5.1 membrane<i>&#10005;</i></span><span class="no">test 2 not reached<i>&ndash;</i></span></p>
-            <p>The culture stops at the border. Nothing changes.</p>
+            <p class="sr-checks"><span class="no">8.2 &gt; 9.0 membrane<i>&#10005;</i></span><span class="no">test 2 not reached<i>&ndash;</i></span></p>
+            <p>B&rsquo;s membrane is more closed than A&rsquo;s culture is strong: A stops at the border. Nothing changes.</p>
           </figure>
           <figure class="sr-card">
-            <svg class="sr-mini" viewBox="0 0 260 124" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#B3E5FC;stroke:rgb(227,148,75);stroke-width:8.6;stroke-linejoin:round"/><text x="62" y="68">6.0</text><text x="198" y="68">7.0</text><path d="M92,88 L172,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path class="x" d="M176,80 l10,16 M186,80 l-10,16"/></svg>
+            <svg class="sr-mini" viewBox="0 0 260 158" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(235,168,89);stroke-width:4.6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#B3E5FC;stroke:rgb(229,151,77);stroke-width:5.6;stroke-linejoin:round"/><text x="62" y="68">8.2</text><text x="198" y="68">9.4</text><text class="lab" x="62" y="146">A</text><text class="lab" x="198" y="146">B</text><text class="sub" x="62" y="164">membrane 4.0</text><text class="sub" x="198" y="164">membrane 5.1</text><path d="M92,88 L172,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path class="x" d="M176,80 l10,16 M186,80 l-10,16"/></svg>
             <p class="sr-kicker">Fails test 2</p>
             <h3>Deflected</h3>
-            <p class="sr-checks"><span class="ok">6.0 &gt; 5.1 membrane<i>&#10003;</i></span><span class="no">6.0 &gt; 7.0 integrity<i>&#10005;</i></span></p>
-            <p>The culture gets through the border but cannot displace the one inside. Nothing changes.</p>
+            <p class="sr-checks"><span class="ok">8.2 &gt; 5.1 membrane<i>&#10003;</i></span><span class="no">8.2 &gt; 9.4 integrity<i>&#10005;</i></span></p>
+            <p>A gets through B&rsquo;s membrane, but B&rsquo;s own culture holds more strongly. Nothing changes.</p>
           </figure>
           <figure class="sr-card">
-            <svg class="sr-mini" viewBox="0 0 260 124" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:7.5;stroke-linejoin:round"/><text x="62" y="68">8.2</text><text x="198" y="68">8.2</text><path d="M92,88 L186,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path d="M194,88 l-12,-6.5 v13 z" style="fill:var(--link-blue)"/></svg>
+            <svg class="sr-mini" viewBox="0 0 260 158" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(235,168,89);stroke-width:4.6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#FFB7B2;stroke:rgb(235,168,89);stroke-width:4.6;stroke-linejoin:round"/><text x="62" y="68">8.2</text><text x="198" y="68">8.2</text><text class="lab" x="62" y="146">A</text><text class="lab" x="198" y="146">B</text><text class="sub" x="62" y="164">membrane 4.0</text><text class="sub" x="198" y="164">membrane 5.1 &#8594; 4.0</text><path d="M92,88 L186,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path d="M194,88 l-12,-6.5 v13 z" style="fill:var(--link-blue)"/></svg>
             <p class="sr-kicker">Passes both</p>
             <h3>Assimilated</h3>
             <p class="sr-checks"><span class="ok">8.2 &gt; 5.1 membrane<i>&#10003;</i></span><span class="ok">8.2 &gt; 3.5 integrity<i>&#10003;</i></span></p>
-            <p>The neighbour takes on the incoming culture, with its status, integrity and membrane.</p>
+            <p>The case above: B takes on A&rsquo;s culture, with its status, integrity and membrane.</p>
           </figure>
         </div>
 
