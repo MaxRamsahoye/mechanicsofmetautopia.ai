@@ -175,29 +175,12 @@
     return nodes.filter(function (o) { return DIRS.some(function (d) { return o.q === node.q + d.q && o.r === node.r + d.r; }); });
   }
 
-  // where the civilisation sits on the four-attractor diagram:
-  //   cultural integrity    = the share of sub-topias still holding their
-  //                           original culture, scaled by average cultural integrity
-  //                           (half weight): cultures that keep themselves
-  //                           and keep their pull stay high
-  //   membrane permeability = how open the membranes still standing between
-  //                           different cultures are (100 minus their average
-  //                           impermeability); with one culture left there are
-  //                           no membranes, and the map is fully permeable
+  // where the civilisation sits on the four-attractor diagram: exactly the
+  // grid's own averages, as the metrics report them
+  //   cultural integrity    = the average cultural integrity of the tiles
+  //   membrane permeability = 100 minus their average membrane impermeability
   function attractorPoint(nodeData, avgs) {
-    var kept = 0, imp = 0, pairs = 0;
-    nodeData.forEach(function (n, i) {
-      if (initialState && initialState[i] && n.cultureIndex === initialState[i].cultureIndex) kept++;
-      DIRS.forEach(function (d) {
-        var m = nodeData.find(function (o) { return o.q === n.q + d.q && o.r === n.r + d.r; });
-        if (m && m.cultureIndex !== n.cultureIndex) { imp += (n.impermeability + m.impermeability) / 2; pairs++; }
-      });
-    });
-    var retention = initialState ? kept / nodeData.length : 1;
-    return {
-      I: 100 * retention * (0.5 + 0.5 * avgs.softPower / 100),
-      P: pairs ? 100 - imp / pairs : 100
-    };
+    return { I: avgs.softPower, P: 100 - avgs.impermeability };
   }
 
   function captureEpochState(nodeData) {
@@ -219,8 +202,10 @@
   var AX = { x0: 26, x1: 206, y0: 10, y1: 190 };
   function attX(P) { return AX.x0 + (AX.x1 - AX.x0) * P / 100; }
   function attY(I) { return AX.y1 - (AX.y1 - AX.y0) * I / 100; }
+  // the state is the region of the drawn diagram the point is in: the clash
+  // box in the middle (permeability 25-75, integrity 30-70), else a quadrant
   function attractorOf(pt) {
-    if (pt.I > 30 && pt.I < 70 && pt.P > 25 && pt.P < 75) return 'clash';
+    if (pt.I >= 30 && pt.I <= 70 && pt.P >= 25 && pt.P <= 75) return 'clash';
     if (pt.I >= 50) return pt.P < 50 ? 'enclosure' : 'uplift';
     return pt.P < 50 ? 'collapse' : 'takeover';
   }
@@ -235,7 +220,7 @@
     mark.setAttribute('cy', attY(last.I).toFixed(1));
     var k = attractorOf(last);
     $('att-name').textContent = ATTRACTORS[k];
-    $('att-coords').textContent = 'Turn ' + simulationEpoch + ' \u00b7 integrity ' + Math.round(last.I) + ' \u00b7 permeability ' + Math.round(last.P);
+    $('att-coords').textContent = 'Turn ' + simulationEpoch + ' \u00b7 avg integrity ' + formatScore(last.I) + ' \u00b7 avg permeability ' + formatScore(last.P);
     sim.setAttribute('data-attractor', k);
   }
 
