@@ -72,7 +72,7 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/'], ['Dynamics', 'dynamics/']];
+    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/']];
     var nav = document.createElement('nav');
     nav.className = 'top-nav';
     nav.setAttribute('aria-label', 'Pages');
