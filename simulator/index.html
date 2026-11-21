@@ -360,6 +360,27 @@
     .sr-checks .hd { margin-top: 6px; font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
     .sr-checks .hd:first-child { margin-top: 0; }
 
+    /* two rings: nineteen sub-topias */
+    .sr-ring { display: grid; grid-template-columns: minmax(0, 520px) minmax(280px, 400px); gap: 24px 56px; align-items: center; margin: 48px 0 0; }
+    .sr-ring-svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .sr-rcell { stroke: var(--canvas-bg); stroke-width: 3; transition: fill 0.9s ease; }
+    .sr-rmem { fill: none; stroke-linejoin: round; transition: stroke 0.9s ease, stroke-width 0.9s ease; }
+    .sr-ring-svg .sr-rnum { font-family: 'IBM Plex Mono', monospace; font-size: 21px; font-weight: 500; fill: #1A1A1A; text-anchor: middle; }
+    .sr-rdot { stroke: #1A1A1A; stroke-width: 1.2; transition: fill 0.9s ease; }
+    .sr-rarrow { stroke: var(--link-blue); stroke-width: 3; stroke-linecap: round; }
+    .sr-rhead { fill: var(--link-blue); }
+    .sr-ring-arrows { animation: sr-rin 0.5s ease; }
+    @keyframes sr-rin { from { opacity: 0; } to { opacity: 1; } }
+    .sr-ring-turn { margin: 0 0 10px; font-family: 'IBM Plex Mono', monospace; font-size: 14px; color: var(--link-blue); }
+    .sr-ring-note { margin: 0; min-height: 7.5em; font-family: var(--serif); font-size: 20px; line-height: 1.45; }
+    .sr-ring-key { display: grid; grid-template-columns: auto 1fr; gap: 8px 12px; align-items: center; margin: 22px 0 0; padding: 16px 0 0; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 14px; color: var(--muted); }
+    .sr-ring-key svg { display: block; overflow: visible; }
+    .sr-ring .sr-gcontrols { margin-top: 20px; }
+    @media (max-width: 900px) {
+      .sr-ring { grid-template-columns: minmax(0, 1fr); }
+      .sr-ring-svg { max-width: 520px; margin: 0 auto; }
+      .sr-ring-note { min-height: 0; font-size: 19px; }
+    }
     /* the civilisation: three layers of one grid */
     .sr-layers { margin: 48px 0 0; }
     .sr-layers-stage { display: grid; grid-template-columns: minmax(0, 470px) minmax(260px, 1fr); gap: 0 8px; align-items: stretch; max-width: 1000px; }
@@ -552,6 +573,26 @@
 
         <h2>From two sub-topias to a civilisation</h2>
         <p>The same two tests run between every pair of neighbours on a map, all at once, turn after turn, until no more cultures change. Where membranes are high everywhere, cultures stay sealed in place: enclosure. Where membranes are low and one culture&rsquo;s integrity is far above the rest, it spreads from neighbour to neighbour: takeover. The <a class="plain-link" href="../diagrams/#four-attractors">typology of the four attractor states</a> describes where each combination leads.</p>
+        <figure class="sr-ring" aria-label="Nineteen sub-topias in two rings around a centre, running the rule turn by turn">
+          <svg class="sr-ring-svg" viewBox="0 0 520 472" role="img" aria-label="A hexagonal map of nineteen sub-topias: The Culture at the centre, the Azad around it, and two Morthanveld sub-topias on the outer ring"></svg>
+          <div class="sr-ring-panel">
+            <p class="sr-ring-turn" aria-live="polite">Start</p>
+            <p class="sr-ring-note"></p>
+            <div class="sr-ring-key">
+              <svg width="26" height="16" viewBox="0 0 26 16"><rect x="0" y="2" width="8" height="12" fill="#FFB7B2"/><rect x="9" y="2" width="8" height="12" fill="#B3E5FC"/><rect x="18" y="2" width="8" height="12" fill="#C5E1A5"/></svg><span>Fill: culture (The Culture, the Azad, the Morthanveld)</span>
+              <svg width="26" height="16" viewBox="0 0 26 16"><text x="13" y="13" text-anchor="middle" style="font: 500 12px 'IBM Plex Mono', monospace; fill: currentColor">8.2</text></svg><span>Number: cultural integrity</span>
+              <svg width="26" height="16" viewBox="0 0 26 16"><circle cx="7" cy="8" r="5" fill="#F2F2F7" stroke="#1A1A1A" stroke-width="1.2"/><circle cx="19" cy="8" r="5" fill="#1A1A1A" stroke="#1A1A1A" stroke-width="1.2"/></svg><span>Dot: sub-topian status (utopian, dystopian)</span>
+              <svg width="26" height="16" viewBox="0 0 26 16"><polygon points="7,1 13,4.5 13,11.5 7,15 1,11.5 1,4.5" fill="none" stroke="#E6994D" stroke-width="2"/><polygon points="20,1 26,4.5 26,11.5 20,15 14,11.5 14,4.5" fill="none" stroke="#A64B35" stroke-width="3.4"/></svg><span>Outline: membrane impermeability</span>
+            </div>
+            <div class="sr-gcontrols">
+              <div class="sr-btns">
+                <button class="sr-btn sr-rplay" type="button" aria-pressed="true">Play</button>
+                <button class="sr-btn sr-rstep" type="button">Step</button>
+                <button class="sr-btn sr-rreset" type="button">Reset</button>
+              </div>
+            </div>
+          </div>
+        </figure>
         <figure class="sr-layers" aria-label="Six cultures on one map, shown as three layers of the same hex grid, running the rule turn by turn">
           <div class="sr-layers-stage">
             <svg class="sr-stack" viewBox="0 0 372 490" role="img" aria-label="Three stacked layers of one hexagonal map: culture, sub-topian status, and cultural integrity with membrane impermeability"></svg>
@@ -625,7 +666,7 @@
 
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
-  <script src="../assets/simulator.js?v=3c26a4f1"></script>
+  <script src="../assets/simulator.js?v=00463efc"></script>
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
   <script src="../assets/tools.js?v=88b7be40" data-search-scope=".sr-notes" data-hide-until=".genealogy-top"></script>
 </body>

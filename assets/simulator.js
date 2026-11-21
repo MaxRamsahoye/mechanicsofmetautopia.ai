@@ -244,3 +244,116 @@
     }, { threshold: 0.4 }).observe(fig);
   }
 })();
+
+// Two rings: the rule on nineteen sub-topias, drawn like the two above.
+// The Culture at the centre takes the Azad ring by ring; the Morthanveld,
+// behind membranes of 9.0, hold.
+(function () {
+  var fig = document.querySelector('.sr-ring');
+  if (!fig) return;
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = fig.querySelector('.sr-ring-svg');
+  var C = {
+    cul: { col: '#FFB7B2', integ: 8.2, imp: 4.0, status: 'uto' },
+    aza: { col: '#B3E5FC', integ: 3.5, imp: 5.1, status: 'dys' },
+    mor: { col: '#C5E1A5', integ: 5.0, imp: 9.0, status: 'uto' }
+  };
+  var STATUS_COL = { uto: '#F2F2F7', neu: '#8E8E93', dys: '#1A1A1A' };
+  var R = 52, CX = 260, CY = 236, DIRS = [[1, 0], [1, -1], [0, -1], [-1, 0], [-1, 1], [0, 1]];
+  function impCol(v) {
+    var s = [[253, 230, 138], [230, 153, 77], [166, 75, 53]], t = v / 10;
+    var a = t < 0.5 ? s[0] : s[1], b = t < 0.5 ? s[1] : s[2], f = t < 0.5 ? t / 0.5 : (t - 0.5) / 0.5;
+    return 'rgb(' + [0, 1, 2].map(function (i) { return Math.round(a[i] + (b[i] - a[i]) * f); }).join(',') + ')';
+  }
+  function pts(x, y, r) {
+    var p = [];
+    for (var k = 0; k < 6; k++) { var an = Math.PI / 180 * (60 * k - 90); p.push((x + r * Math.cos(an)).toFixed(1) + ',' + (y + r * Math.sin(an)).toFixed(1)); }
+    return p.join(' ');
+  }
+  function el(n, a, parent) { var e = document.createElementNS(NS, n); for (var k in a) e.setAttribute(k, a[k]); parent.appendChild(e); return e; }
+
+  var cells = [], index = {};
+  for (var q = -2; q <= 2; q++) for (var r = -2; r <= 2; r++) if (Math.abs(q + r) <= 2) {
+    var c = { q: q, r: r, x: CX + R * Math.sqrt(3) * (q + r / 2), y: CY + R * 1.5 * r };
+    index[q + ',' + r] = cells.length; cells.push(c);
+  }
+  cells.forEach(function (c) { c.nbrs = DIRS.map(function (d) { return index[(c.q + d[0]) + ',' + (c.r + d[1])]; }).filter(function (i) { return i !== undefined; }); });
+  function initial() {
+    return cells.map(function (c) {
+      if (c.q === 0 && c.r === 0) return 'cul';
+      if ((c.q === 2 && c.r === -1) || (c.q === -2 && c.r === 1)) return 'mor';
+      return 'aza';
+    });
+  }
+
+  var arrows = el('g', { class: 'sr-ring-arrows' }, svg);
+  cells.forEach(function (c) {
+    var g = el('g', {}, svg);
+    c.hex = el('polygon', { points: pts(c.x, c.y, R), class: 'sr-rcell' }, g);
+    c.mem = el('polygon', { points: pts(c.x, c.y, R * 0.84), class: 'sr-rmem' }, g);
+    c.num = el('text', { x: c.x, y: c.y + 4, class: 'sr-rnum' }, g);
+    c.dot = el('circle', { cx: c.x, cy: c.y + 22, r: 5, class: 'sr-rdot' }, g);
+  });
+  svg.appendChild(arrows);
+
+  var NOTES = [
+    'The Culture (integrity <b>8.2</b>, membrane <b>4.0</b>) sits at the centre, surrounded by the Azad (<b>3.5</b>, membrane <b>5.1</b>). Two Morthanveld sub-topias (<b>5.0</b>, membrane <b>9.0</b>) sit on the outer ring.',
+    'Every Azad sub-topia touching the centre is tested against The Culture: <b>8.2 &gt; 5.1</b>, then <b>8.2 &gt; 3.5</b>. The whole first ring is assimilated at once.',
+    'The new first ring passes the same two tests into the outer ring. The Morthanveld hold: <b>8.2</b> cannot pass a membrane of <b>9.0</b>, and their own <b>5.0</b> cannot pass the Azad&rsquo;s <b>5.1</b>.'
+  ];
+  var state, turn, stable, timer = null, playing = false;
+  var noteEl = fig.querySelector('.sr-ring-note'), turnEl = fig.querySelector('.sr-ring-turn'), playBtn = fig.querySelector('.sr-rplay');
+
+  function draw(moves) {
+    state.forEach(function (k, i) {
+      var c = cells[i], d = C[k];
+      c.hex.style.fill = d.col;
+      c.mem.style.stroke = impCol(d.imp);
+      c.mem.style.strokeWidth = (1.5 + d.imp * 0.9).toFixed(1);
+      c.num.textContent = d.integ.toFixed(1);
+      c.dot.style.fill = STATUS_COL[d.status];
+    });
+    while (arrows.firstChild) arrows.removeChild(arrows.firstChild);
+    (moves || []).forEach(function (m) {
+      var a = cells[m[0]], b = cells[m[1]], dx = b.x - a.x, dy = b.y - a.y, L = Math.sqrt(dx * dx + dy * dy), ux = dx / L, uy = dy / L;
+      var x1 = a.x + ux * 26, y1 = a.y + uy * 26, x2 = b.x - ux * 30, y2 = b.y - uy * 30;
+      el('line', { x1: x1, y1: y1, x2: x2, y2: y2, class: 'sr-rarrow' }, arrows);
+      var hx = x2 + ux * 4, hy = y2 + uy * 4, px = -uy, py = ux;
+      el('polygon', { points: [hx + ux * 6, hy + uy * 6, hx - ux * 7 + px * 6, hy - uy * 7 + py * 6, hx - ux * 7 - px * 6, hy - uy * 7 - py * 6].map(function (v) { return v.toFixed(1); }).join(' ').replace(/(\S+) (\S+)/g, '$1,$2'), class: 'sr-rhead' }, arrows);
+    });
+    var n = state.filter(function (k) { return k === 'cul'; }).length;
+    turnEl.textContent = (turn === 0 ? 'Start' : 'Turn ' + turn) + ' · The Culture holds ' + n + ' of 19';
+    noteEl.innerHTML = stable ? 'Stable after two turns: no sub-topia can take another. <b>17</b> of 19 are now The Culture; the Morthanveld remain as enclaves.' : NOTES[Math.min(turn, 2)];
+  }
+  function step() {
+    if (stable) return;
+    var next = state.slice(), moves = [];
+    cells.forEach(function (c, i) {
+      var t = C[state[i]], best = -1;
+      c.nbrs.forEach(function (j) {
+        var o = C[state[j]];
+        if (o.integ > t.imp && o.integ > t.integ && (best < 0 || o.integ > C[state[best]].integ)) best = j;
+      });
+      if (best >= 0) { next[i] = state[best]; moves.push([best, i]); }
+    });
+    if (!moves.length) { stable = true; draw(); return; }
+    state = next; turn++; draw(moves);
+  }
+  function reset() { state = initial(); turn = 0; stable = false; draw(); }
+  function loop() {
+    clearTimeout(timer);
+    if (!playing) return;
+    if (stable) { timer = setTimeout(function () { reset(); timer = setTimeout(loop, 2200); }, 4200); return; }
+    timer = setTimeout(function () { step(); loop(); }, turn === 0 ? 2600 : 3200);
+  }
+  function setPlaying(p) { playing = p; playBtn.textContent = p ? 'Pause' : 'Play'; playBtn.setAttribute('aria-pressed', p ? 'false' : 'true'); loop(); }
+  playBtn.addEventListener('click', function () { setPlaying(!playing); });
+  fig.querySelector('.sr-rstep').addEventListener('click', function () { setPlaying(false); step(); });
+  fig.querySelector('.sr-rreset').addEventListener('click', function () { setPlaying(false); reset(); });
+  reset();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduce && 'IntersectionObserver' in window) {
+    var started = false;
+    new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting && !started) { started = true; setPlaying(true); } }); }, { threshold: 0.4 }).observe(fig);
+  }
+})();
