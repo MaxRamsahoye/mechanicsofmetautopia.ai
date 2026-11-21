@@ -171,6 +171,31 @@
     return nodes.filter(function (o) { return DIRS.some(function (d) { return o.q === node.q + d.q && o.r === node.r + d.r; }); });
   }
 
+  // where the civilisation sits on the four-attractor diagram:
+  //   cultural integrity    = the share of sub-topias still holding their
+  //                           original culture, scaled by average soft power
+  //                           (half weight): cultures that keep themselves
+  //                           and keep their pull stay high
+  //   membrane permeability = how open the membranes still standing between
+  //                           different cultures are (100 minus their average
+  //                           impermeability); with one culture left there are
+  //                           no membranes, and the map is fully permeable
+  function attractorPoint(nodeData, avgs) {
+    var kept = 0, imp = 0, pairs = 0;
+    nodeData.forEach(function (n, i) {
+      if (initialState && initialState[i] && n.cultureIndex === initialState[i].cultureIndex) kept++;
+      DIRS.forEach(function (d) {
+        var m = nodeData.find(function (o) { return o.q === n.q + d.q && o.r === n.r + d.r; });
+        if (m && m.cultureIndex !== n.cultureIndex) { imp += (n.impermeability + m.impermeability) / 2; pairs++; }
+      });
+    });
+    var retention = initialState ? kept / nodeData.length : 1;
+    return {
+      I: 100 * retention * (0.5 + 0.5 * avgs.softPower / 100),
+      P: pairs ? 100 - imp / pairs : 100
+    };
+  }
+
   function captureEpochState(nodeData) {
     var avgs = {};
     ['moral', 'softPower', 'impermeability'].forEach(function (m) {
@@ -178,7 +203,36 @@
     });
     var counts = new Array(7).fill(0);
     nodeData.forEach(function (n) { counts[n.cultureIndex]++; });
-    epochHistory.push({ avgs: avgs, counts: counts });
+    epochHistory.push({ avgs: avgs, counts: counts, point: attractorPoint(nodeData, avgs) });
+  }
+
+  // ---------- the four-attractor diagram, with the path so far ----------
+  var ATTRACTORS = {
+    enclosure: 'Meta-Dystopian Enclosure', uplift: 'Meta-Utopian Uplift',
+    collapse: 'Cultural Collapse', takeover: 'Mono-Cultural Takeover', clash: 'Clash of Civilisations'
+  };
+  // the plot: x from 26 to 206 (permeability), y from 10 to 190 (integrity)
+  var AX = { x0: 26, x1: 206, y0: 10, y1: 190 };
+  function attX(P) { return AX.x0 + (AX.x1 - AX.x0) * P / 100; }
+  function attY(I) { return AX.y1 - (AX.y1 - AX.y0) * I / 100; }
+  function attractorOf(pt) {
+    if (pt.I > 30 && pt.I < 70 && pt.P > 25 && pt.P < 75) return 'clash';
+    if (pt.I >= 50) return pt.P < 50 ? 'enclosure' : 'uplift';
+    return pt.P < 50 ? 'collapse' : 'takeover';
+  }
+  function drawLocator() {
+    var trail = $('att-trail'), dots = $('att-dots'), mark = $('att-mark');
+    if (!trail || !epochHistory.length) return;
+    var pts = epochHistory.map(function (e) { return e.point; });
+    trail.setAttribute('points', pts.map(function (p) { return attX(p.P).toFixed(1) + ',' + attY(p.I).toFixed(1); }).join(' '));
+    dots.innerHTML = pts.slice(0, -1).map(function (p) { return '<circle cx="' + attX(p.P).toFixed(1) + '" cy="' + attY(p.I).toFixed(1) + '" r="2"/>'; }).join('');
+    var last = pts[pts.length - 1];
+    mark.setAttribute('cx', attX(last.P).toFixed(1));
+    mark.setAttribute('cy', attY(last.I).toFixed(1));
+    var k = attractorOf(last);
+    $('att-name').textContent = ATTRACTORS[k];
+    $('att-coords').textContent = 'Turn ' + simulationEpoch + ' \u00b7 integrity ' + Math.round(last.I) + ' \u00b7 permeability ' + Math.round(last.P);
+    sim.setAttribute('data-attractor', k);
   }
 
   // a sub-topia adopts a neighbour's culture when that culture's soft power
@@ -798,6 +852,7 @@
         txt.style.fontSize = (type === 'softPower' && showImpScores ? base * (scoreScale === 10 ? 0.72 : 0.8) : base) + 'px';
       });
     });
+    drawLocator();
     ['moral', 'cultures', 'softpower', 'impermeability'].forEach(function (id) {
       var el = $('key-' + id);
       if (!el) return;

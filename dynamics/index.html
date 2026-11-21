@@ -370,6 +370,23 @@
     .key-range { font-size: 0.55rem; color: #8E8E93; margin-left: auto; opacity: 0; transition: opacity 0.3s; }
     .sim.show-ranges .key-range { opacity: 1; }
 
+    /* the four-attractor diagram: where the civilisation sits, turn by turn */
+    .att-block { margin-bottom: 2.4rem; }
+    .att-map { display: block; width: 100%; max-width: 220px; height: auto; overflow: visible; }
+    .att-q { stroke: var(--text); stroke-width: 0.8; }
+    .att-tl { fill: #fee4d0; } .att-tr { fill: #fdf8e2; } .att-bl { fill: #ffeae7; } .att-br { fill: #f5f6f7; } .att-c { fill: var(--bg); }
+    html[data-theme="dark"] .att-tl { fill: #3d2b1f; } html[data-theme="dark"] .att-tr { fill: #3a2e22; }
+    html[data-theme="dark"] .att-bl { fill: #382422; } html[data-theme="dark"] .att-br { fill: #2a2b2c; }
+    .att-map text { font-family: var(--ff-mono); font-size: 8px; text-anchor: middle; fill: var(--text); text-transform: uppercase; letter-spacing: 0.04em; }
+    .att-map .att-ax { font-size: 7px; fill: #8E8E93; }
+    .att-axis { fill: none; stroke: var(--text); stroke-width: 2.2; }
+    .att-arrow { fill: var(--text); }
+    .att-trail { fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linejoin: round; stroke-linecap: round; opacity: 0.85; }
+    .att-dots circle { fill: var(--accent); opacity: 0.55; }
+    .att-mark { fill: var(--accent); stroke: var(--bg); stroke-width: 2; transition: cx 0.6s ease, cy 0.6s ease; }
+    .att-name { margin-top: 0.9rem; font-size: 1.15rem; font-weight: 600; line-height: 1.25; }
+    .att-coords { margin-top: 0.3rem; font-family: var(--ff-mono); font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.08em; color: #8E8E93; }
+
     /* the scenario overview, the world build history and the analytics */
     .sim-report { padding-top: 6rem; }
     .overview-top-row { display: flex; justify-content: space-between; align-items: stretch; gap: 4rem; }
@@ -590,6 +607,30 @@
         </div>
 
         <div class="panel-column right-panel">
+          <div class="att-block">
+            <div class="section-header">Attractor State</div>
+            <svg class="att-map" viewBox="0 0 216 216" role="img" aria-labelledby="att-name">
+              <rect class="att-q att-tl" x="26" y="10" width="90" height="90"/>
+              <rect class="att-q att-tr" x="116" y="10" width="90" height="90"/>
+              <rect class="att-q att-bl" x="26" y="100" width="90" height="90"/>
+              <rect class="att-q att-br" x="116" y="100" width="90" height="90"/>
+              <rect class="att-q att-c" x="71" y="64" width="90" height="72"/>
+              <text x="71" y="24">Enclosure</text>
+              <text x="161" y="24">Uplift</text>
+              <text x="71" y="182">Collapse</text>
+              <text x="161" y="182">Takeover</text>
+              <text x="116" y="78">Clash</text>
+              <path class="att-axis" d="M26,190 V6 M26,190 H210"/>
+              <path class="att-arrow" d="M26,1 L22,9 L30,9 Z M215,190 L207,186 L207,194 Z"/>
+              <text class="att-ax" x="12" y="100" transform="rotate(-90 12 100)">Cultural integrity</text>
+              <text class="att-ax" x="116" y="208">Membrane permeability</text>
+              <polyline id="att-trail" class="att-trail" points=""/>
+              <g id="att-dots" class="att-dots"></g>
+              <circle id="att-mark" class="att-mark" cx="116" cy="100" r="5.5"/>
+            </svg>
+            <div class="att-name" id="att-name">&nbsp;</div>
+            <div class="att-coords" id="att-coords">&nbsp;</div>
+          </div>
           <div class="section-header">Overlay Keys</div>
           <div class="keys-panel">
             <div class="key-section" id="key-cultures"><div class="panel-label">Civilisations (Fill)</div><div id="culture-keys-container"></div></div>
@@ -722,7 +763,7 @@
 
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
-  <script src="../assets/dynamics.js?v=962af74a"></script>
+  <script src="../assets/dynamics.js?v=cefa9bac"></script>
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
   <script src="../assets/tools.js?v=c0fb0733" data-search-scope=".sim-report" data-hide-until=".genealogy-top"></script>
 </body>
