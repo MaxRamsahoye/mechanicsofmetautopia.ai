@@ -2,13 +2,16 @@
 // topologically modelling civilisation-scale cultural dynamics across
 // sovereign political units.
 //
-// Each hexagon is a sub-topia with three scores, inherited from its culture:
-//   sub-topia status        how utopian, notopian or dystopian it is
-//   soft power              its cultural pull: its power to spread and to hold
-//   border impermeability   how closed its borders are
-// Soft power does the work that memetic virality and cultural integrity did in
-// the earlier version: a neighbour's culture is adopted when its soft power
-// beats both the target's border impermeability and the target's own soft power.
+// Each hexagon is a sub-topia with three scores, inherited from its culture,
+// named as in the article's 2x2 of the four attractor states:
+//   sub-topia status          how utopian, notopian or dystopian it is
+//   cultural integrity        its culture's hold and pull: its power to keep
+//                             itself and to spread (it does the work that
+//                             memetic virality and cultural integrity did
+//                             separately in the earlier version)
+//   membrane impermeability   how closed its borders are
+// A neighbour's culture is adopted when its cultural integrity beats both the
+// target's membrane impermeability and the target's own cultural integrity.
 (function () {
   'use strict';
   var sim = document.querySelector('.sim');
@@ -56,7 +59,7 @@
   };
 
   // the three grids: cultural affiliation (top left), sub-topia status (top
-  // right) and soft power (below, between them, with the borders drawn on it)
+  // right) and cultural integrity (below, between them, with the borders drawn on it)
   var GRIDS = [
     { type: 'cultures', mesh: 'mesh-cultures', box: 'box-cultures' },
     { type: 'moral', mesh: 'mesh-main', box: 'box-main' },
@@ -108,7 +111,7 @@
   // ---------- the written account: one panel per variable ----------
   var proseBgColors = ['rgba(230, 138, 115, 0.06)', 'rgba(142, 142, 147, 0.06)', 'rgba(64, 145, 108, 0.06)', 'rgba(166, 75, 53, 0.06)'];
   var proseBorders = ['var(--accent)', 'var(--moral-neu)', 'var(--vir-med)', 'var(--imp-high)'];
-  var variableLabels = ['Cultural Affiliation', 'Sub-topia Status', 'Soft Power', 'Border Impermeability'];
+  var variableLabels = ['Cultural Affiliation', 'Sub-topia Status', 'Cultural Integrity', 'Membrane Impermeability'];
 
   function formatSection(texts, cultureColorHex) {
     return texts.map(function (t, i) {
@@ -173,7 +176,7 @@
 
   // where the civilisation sits on the four-attractor diagram:
   //   cultural integrity    = the share of sub-topias still holding their
-  //                           original culture, scaled by average soft power
+  //                           original culture, scaled by average cultural integrity
   //                           (half weight): cultures that keep themselves
   //                           and keep their pull stay high
   //   membrane permeability = how open the membranes still standing between
@@ -235,8 +238,8 @@
     sim.setAttribute('data-attractor', k);
   }
 
-  // a sub-topia adopts a neighbour's culture when that culture's soft power
-  // beats both its borders and its own soft power
+  // a sub-topia adopts a neighbour's culture when that culture's cultural integrity
+  // beats both its borders and its own cultural integrity
   function runSimulationStep() {
     var changed = false;
     simulationEpoch++;
@@ -334,7 +337,7 @@
           cultureIndex: cIdx, els: [], circles: [], txt: []
         };
         GRIDS.forEach(function (grid) {
-          // the soft power grid is always spatial, so its borders show
+          // the cultural integrity grid is always spatial, so its borders show
           var spatial = grid.type === 'softPower' || currentDensity === 'spatial';
           var sF = spatial ? spacingSpatial : 1, hS = spatial ? scaleSpatial : 1;
           var x = hexSize * (Math.sqrt(3) * q + (Math.sqrt(3) / 2) * r) * sF;
@@ -371,7 +374,7 @@
 
   function formatScore(val) { return scoreScale === 10 ? (val / 10).toFixed(1) : Math.round(val); }
 
-  // the soft power tiles show soft power, or soft power / impermeability
+  // the cultural integrity tiles show cultural integrity, or cultural integrity / impermeability
   function setImpScores(on) {
     showImpScores = on;
     $('tile-sp').classList.toggle('active', !on);
@@ -495,7 +498,7 @@
     else if (title.indexOf('Meta Dystopian Downfall') >= 0) defs.push('The entire world has collapsed into a harsh dystopia across various fractured cultures.');
     else if (title.indexOf('Meta Utopian Enclosure') >= 0) defs.push('A highly fragmented map that maintains an overall utopian standard despite pockets of dystopia.');
     else if (title.indexOf('Meta Dystopian Enclosure') >= 0) defs.push('A highly fragmented, unstable map with no single culture able to establish dominance.');
-    if (title.indexOf('Cultural Collapse') >= 0) defs.push('The soft power of the surviving societies has critically broken down.');
+    if (title.indexOf('Cultural Collapse') >= 0) defs.push('The cultural integrity of the surviving societies has critically broken down.');
     return defs.length ? defs.join(' ') : 'The civilisations have reached a stabilised cultural deadlock.';
   }
 
@@ -599,7 +602,7 @@
       else if (cMax <= 50) scenarios.push(moralAvg >= 67 ? 'Meta Utopian Enclosure with Dystopian Enclaves' : 'Meta Dystopian Enclosure');
       else if (cMax >= 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
     }
-    // without soft power, cultures cannot hold themselves together
+    // without cultural integrity, cultures cannot hold themselves together
     if (spAvg < 33.3) scenarios.push('Cultural Collapse');
     var title = scenarios.length > 1 ? scenarios.slice(0, -1).join(' and ') + ' and ' + scenarios[scenarios.length - 1] : (scenarios[0] || '');
 
@@ -637,9 +640,9 @@
       metricItem('Peak Sub-topia', maxMoral.name, formatScore(maxMoral.rawScore), 'moral', fill(maxMoral.rawScore, 'moral'), maxMoral.color) +
       metricItem('Valley Sub-topia', minMoral.name, formatScore(minMoral.rawScore), 'moral', fill(minMoral.rawScore, 'moral'), minMoral.color) +
       metricItem('Average Sub-topia', 'Global Avg', formatScore(moralAvg), 'moral', fill(moralAvg, 'moral'), null) +
-      metricItem('Peak Soft Power', maxSP.name, formatScore(maxSP.rawScore), 'softPower', fill(maxSP.rawScore, 'softPower'), maxSP.color) +
-      metricItem('Valley Soft Power', minSP.name, formatScore(minSP.rawScore), 'softPower', fill(minSP.rawScore, 'softPower'), minSP.color) +
-      metricItem('Average Soft Power', 'Global Avg', formatScore(spAvg), 'softPower', fill(spAvg, 'softPower'), null) +
+      metricItem('Peak Integrity', maxSP.name, formatScore(maxSP.rawScore), 'softPower', fill(maxSP.rawScore, 'softPower'), maxSP.color) +
+      metricItem('Valley Integrity', minSP.name, formatScore(minSP.rawScore), 'softPower', fill(minSP.rawScore, 'softPower'), minSP.color) +
+      metricItem('Average Integrity', 'Global Avg', formatScore(spAvg), 'softPower', fill(spAvg, 'softPower'), null) +
       metricItem('Peak Impermeability', maxImp.name, formatScore(maxImp.rawScore), 'impermeability', fill(maxImp.rawScore, 'impermeability'), maxImp.color) +
       metricItem('Valley Impermeability', minImp.name, formatScore(minImp.rawScore), 'impermeability', fill(minImp.rawScore, 'impermeability'), minImp.color) +
       metricItem('Avg Impermeability', 'Global Avg', formatScore(impAvg), 'impermeability', fill(impAvg, 'impermeability'), null) +
@@ -673,8 +676,8 @@
     updateHTMLWithAnim('scenario-main-desc', simulationEpoch === 0 || isCompleted ? desc : '', 'none');
 
     renderStatRow('moral', { key: 'moral', metricName: 'Sub-topia Status', colors: ['var(--moral-uto)', 'var(--moral-neu)', 'var(--moral-dys)'], labels: ['UTOPIAN', 'NOTOPIAN', 'DYSTOPIAN'] }, categorise(initialState, 'moral'), categorise(nodes, 'moral'));
-    renderStatRow('sp', { key: 'softPower', metricName: 'Soft Power', colors: ['var(--vir-high)', 'var(--vir-med)', 'var(--vir-low)'], labels: ['HIGH', 'MED', 'LOW'] }, categorise(initialState, 'softPower'), categorise(nodes, 'softPower'));
-    renderStatRow('imp', { key: 'impermeability', metricName: 'Border Impermeability', colors: ['var(--imp-high)', 'var(--imp-med)', 'var(--imp-low)'], labels: ['HIGH', 'MED', 'LOW'], isBorder: true }, categorise(initialState, 'impermeability'), categorise(nodes, 'impermeability'));
+    renderStatRow('sp', { key: 'softPower', metricName: 'Cultural Integrity', colors: ['var(--vir-high)', 'var(--vir-med)', 'var(--vir-low)'], labels: ['HIGH', 'MED', 'LOW'] }, categorise(initialState, 'softPower'), categorise(nodes, 'softPower'));
+    renderStatRow('imp', { key: 'impermeability', metricName: 'Membrane Impermeability', colors: ['var(--imp-high)', 'var(--imp-med)', 'var(--imp-low)'], labels: ['HIGH', 'MED', 'LOW'], isBorder: true }, categorise(initialState, 'impermeability'), categorise(nodes, 'impermeability'));
 
     var initCounts = {}, endCounts = {};
     initialState.forEach(function (n) {
@@ -718,7 +721,7 @@
           '<div class="prose-step"><span class="prose-step-head">End State</span>' + combinedEnd[i] + '</div>' +
           '<div class="prose-step"><span class="prose-step-head">Total Shift</span>' + combinedShift[i] + '</div>');
       }
-      // order: affiliation, status, soft power, impermeability
+      // order: affiliation, status, cultural integrity, impermeability
       updateHTMLWithAnim('combined-prose-container', '<div class="wb-row prose-row">' + formatSection(prose, PASTEL_RAINBOW[displayCults[0].index]) + '</div>', 'fade');
       drawPieChart('chart-cult-single', CULTURE_NAMES.map(function (name, i) { return { label: name, value: endCounts[name] || 0, color: PASTEL_RAINBOW[i] }; }), cultInitPie);
     }
@@ -830,7 +833,7 @@
         var el = n.els[idx], txt = n.txt[idx];
         el.style.fill = col;
         txt.style.fill = isColorDark(col) ? '#FFFFFF' : '#1A1A1A';
-        // the borders: on the soft power grid always in the overview, and
+        // the borders: on the cultural integrity grid always in the overview, and
         // wherever the impermeability overlay is on
         var bordered = type === 'softPower' ? (isSimultaneous || isImpOverlayActive) : (!isSimultaneous && isImpOverlayActive);
         if (bordered) { el.style.stroke = impCol; el.style.strokeWidth = isSimultaneous ? '2.8px' : '5px'; }
@@ -894,7 +897,7 @@
     updateDisplay();
   }
 
-  // the scenario presets: each culture's soft power and borders
+  // the scenario presets: each culture's cultural integrity and membranes
   function randomizeConfiguration() {
     press('gen-config-btn');
     isCompleted = false;

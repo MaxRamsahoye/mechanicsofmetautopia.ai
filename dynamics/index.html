@@ -339,7 +339,7 @@
     .collapsible-section { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
     .collapsible-section.visible { max-height: 250px; opacity: 1; }
 
-    /* the grids: affiliation and status above, soft power below between them */
+    /* the grids: affiliation and status above, cultural integrity below between them */
     .topo-area { display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; padding-top: 1rem; }
     .topo-label-top { font-family: var(--ff-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: #8E8E93; margin-bottom: 1rem; }
     .grid-viewport { display: flex; justify-content: center; align-items: center; width: 100%; }
@@ -495,7 +495,7 @@
   <main class="page-main">
     <div class="genealogy-top wide-top on-band">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Cultural Dynamics Simulator</a></h1>
-    <p class="page-intro">A cellular automaton for topologically modelling civilisation-scale cultural dynamics across sovereign political units, for <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>. A culture spreads to a neighbouring sub-topia when its soft power overcomes both that sub-topia&rsquo;s border impermeability and its own soft power.</p>
+    <p class="page-intro">A cellular automaton for topologically modelling civilisation-scale cultural dynamics across sovereign political units, for <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>. A culture spreads to a neighbouring sub-topia when its cultural integrity overcomes both that sub-topia&rsquo;s membrane impermeability and its own cultural integrity.</p>
     </div>
 
     <section class="sim sim-mode show-ranges essay-list" aria-label="Cultural Dynamics Simulator">
@@ -537,15 +537,15 @@
                   <div class="panel-label">Primary Overlays</div>
                   <button id="btn-cultures" class="toggle-btn" type="button" onclick="Dyn.setPrimary('cultures')">Cultural Affiliation</button>
                   <button id="btn-moral" class="toggle-btn" type="button" onclick="Dyn.setPrimary('moral')">Sub-topia Status</button>
-                  <button id="btn-softpower" class="toggle-btn" type="button" onclick="Dyn.setPrimary('softPower')">Soft Power</button>
+                  <button id="btn-softpower" class="toggle-btn" type="button" onclick="Dyn.setPrimary('softPower')">Cultural Integrity</button>
                 </div>
                 <div id="overlays-group" class="collapsible-section">
                   <div class="panel-label">Secondary Overlays</div>
                   <div class="sub-btn-group">
-                    <button id="ovl-softpower" class="sub-btn" type="button" onclick="Dyn.setSecondary('softPower')">Soft Power</button>
+                    <button id="ovl-softpower" class="sub-btn" type="button" onclick="Dyn.setSecondary('softPower')">Cultural Integrity</button>
                     <button id="ovl-moral" class="sub-btn" type="button" onclick="Dyn.setSecondary('moral')">Sub-topia Status</button>
                     <button id="ovl-cultures" class="sub-btn" type="button" onclick="Dyn.setSecondary('cultures')">Cultural Affiliation</button>
-                    <button id="ovl-impermeability" class="sub-btn" type="button" onclick="Dyn.setSecondary('impermeability')">Border Impermeability</button>
+                    <button id="ovl-impermeability" class="sub-btn" type="button" onclick="Dyn.setSecondary('impermeability')">Membrane Impermeability</button>
                   </div>
                 </div>
                 <div>
@@ -584,7 +584,7 @@
             <div class="grid-box" id="box-main"><svg class="topo-svg" viewBox="-160 -160 320 320"><g id="mesh-main"></g></svg><div class="topo-sub-label">Sub-topia Status</div></div>
             <div class="grid-box" id="box-softpower">
               <svg class="topo-svg" viewBox="-160 -160 320 320"><g id="mesh-softpower"></g></svg>
-              <div class="topo-sub-label">Soft Power, with Border Impermeability</div>
+              <div class="topo-sub-label">Cultural Integrity, with Membrane Impermeability</div>
             </div>
           </div>
           <div class="sim-grid-controls">
@@ -599,9 +599,9 @@
               <button id="range-10" class="segment" type="button" onclick="Dyn.setScoreRange(10)">1-10</button>
               <button id="range-100" class="segment active" type="button" onclick="Dyn.setScoreRange(100)">1-100</button>
             </div>
-            <div class="segmented-toggle" id="tile-toggle" aria-label="Soft power tiles">
-              <button id="tile-sp" class="segment active" type="button" onclick="Dyn.setImpScores(false)">Soft Power</button>
-              <button id="tile-sp-imp" class="segment" type="button" onclick="Dyn.setImpScores(true)">Soft Power / Imp.</button>
+            <div class="segmented-toggle" id="tile-toggle" aria-label="Cultural integrity tiles">
+              <button id="tile-sp" class="segment active" type="button" onclick="Dyn.setImpScores(false)">Integrity</button>
+              <button id="tile-sp-imp" class="segment" type="button" onclick="Dyn.setImpScores(true)">Integrity / Imp.</button>
             </div>
           </div>
         </div>
@@ -639,7 +639,7 @@
               <div class="key-item"><div class="swatch" style="color: var(--moral-neu)"></div> Notopian <span class="key-range" id="range-moral-med">0</span></div>
               <div class="key-item"><div class="swatch" style="color: var(--moral-uto)"></div> Utopian <span class="key-range" id="range-moral-high">0</span></div>
             </div>
-            <div class="key-section" id="key-softpower"><div class="panel-label">Soft Power (Fill)</div>
+            <div class="key-section" id="key-softpower"><div class="panel-label">Cultural Integrity (Fill)</div>
               <div class="key-item"><div class="swatch" style="color: var(--vir-low)"></div> Low <span class="key-range" id="range-softpower-low">0</span></div>
               <div class="key-item"><div class="swatch" style="color: var(--vir-med)"></div> Med <span class="key-range" id="range-softpower-med">0</span></div>
               <div class="key-item"><div class="swatch" style="color: var(--vir-high)"></div> High <span class="key-range" id="range-softpower-high">0</span></div>
@@ -672,8 +672,8 @@
           <div class="pie-grid">
             <div class="card-visuals"><h4>Cultural Affiliation</h4><div class="chart-cell" id="chart-cult-single"></div></div>
             <div class="card-visuals"><h4>Sub-topia Status</h4><div class="chart-cell" id="chart-moral-single"></div></div>
-            <div class="card-visuals"><h4>Soft Power</h4><div class="chart-cell" id="chart-sp-single"></div></div>
-            <div class="card-visuals"><h4>Border Impermeability</h4><div class="chart-cell" id="chart-imp-single"></div></div>
+            <div class="card-visuals"><h4>Cultural Integrity</h4><div class="chart-cell" id="chart-sp-single"></div></div>
+            <div class="card-visuals"><h4>Membrane Impermeability</h4><div class="chart-cell" id="chart-imp-single"></div></div>
           </div>
           <div class="analytics-tables">
             <div class="table-block">
@@ -693,7 +693,7 @@
               </div>
             </div>
             <div class="table-block">
-              <h4>Soft Power</h4>
+              <h4>Cultural Integrity</h4>
               <div class="card-data-container">
                 <div class="card-data-col"><h5>Init</h5><div id="cell-sp-init">&mdash;</div></div>
                 <div class="card-data-col"><h5>End</h5><div id="cell-sp-end">&mdash;</div></div>
@@ -701,7 +701,7 @@
               </div>
             </div>
             <div class="table-block">
-              <h4>Border Impermeability</h4>
+              <h4>Membrane Impermeability</h4>
               <div class="card-data-container">
                 <div class="card-data-col"><h5>Init</h5><div id="cell-imp-init">&mdash;</div></div>
                 <div class="card-data-col"><h5>End</h5><div id="cell-imp-end">&mdash;</div></div>
@@ -763,7 +763,7 @@
 
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
-  <script src="../assets/dynamics.js?v=cefa9bac"></script>
+  <script src="../assets/dynamics.js?v=53a75355"></script>
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
   <script src="../assets/tools.js?v=c0fb0733" data-search-scope=".sim-report" data-hide-until=".genealogy-top"></script>
 </body>
