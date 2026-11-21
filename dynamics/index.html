@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dynamics: a hex-grid cellular model of the four post-AGI cultural attractor states, driven by cultural integrity and membrane permeability.">
+  <meta name="description" content="Dynamics: the Cultural Dynamics Simulator, a cellular automaton for topologically modelling civilisation-scale cultural dynamics across sovereign political units.">
   <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico?v=2" sizes="any">
   <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png?v=2">
   <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png?v=2">
@@ -46,7 +46,7 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Mechanics of Meta-Utopia">
   <meta property="og:title" content="Dynamics — Mechanics of Meta-Utopia">
-  <meta property="og:description" content="Dynamics: a hex-grid cellular model of the four post-AGI cultural attractor states, driven by cultural integrity and membrane permeability.">
+  <meta property="og:description" content="Dynamics: the Cultural Dynamics Simulator, a cellular automaton for topologically modelling civilisation-scale cultural dynamics across sovereign political units.">
   <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/dynamics/">
   <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
   <meta property="og:image:type" content="image/gif">
@@ -56,8 +56,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link href="../assets/matrix.css?v=c6c67d0b" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link href="../assets/site.css?v=34995492" rel="stylesheet">
   <style>
     /* light sepia band from the top of the window to just below the intro */
@@ -262,250 +261,209 @@
       font-size: 18px;
       line-height: 1.4;
     }
-    /* Dynamics: the hex grid on the left, its dials and readings on the right */
-    .dyn {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 300px;
-      gap: 48px;
-      align-items: start;
+    /* ---------- Dynamics: the Cultural Dynamics Simulator ----------
+       its own styles, kept within .sim; its colours follow the page's theme */
+    .sim {
+      --bg: var(--canvas-bg);
+      --text: var(--canvas-ink);
+      --border-md: #E2DDD1;
+      --ff-serif: var(--serif);
+      --ff-mono: 'IBM Plex Mono', ui-monospace, monospace;
+      --accent: #E68A73;
+      --imp-low: #FDE68A; --imp-med: #E6994D; --imp-high: #A64B35;
+      --moral-dys: #1A1A1A; --moral-neu: #8E8E93; --moral-uto: #F2F2F7;
+      --vir-high: #1B4332; --vir-med: #40916C; --vir-low: #B7E4C7;
+      --sim-w: min(1440px, 100vw - 64px);
+      width: var(--sim-w);
+      margin-left: calc((100% - var(--sim-w)) / 2);
+      color: var(--text);
+      font-family: var(--ff-serif);
     }
 
-    @media (max-width: 960px) {
-      .dyn {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 36px;
-      }
+    html[data-theme="dark"] .sim { --border-md: #3A3A3C; }
+
+    .sim *, .sim *::before, .sim *::after { box-sizing: border-box; }
+    .sim button { line-height: 1.3; transition: all 0.3s ease; }
+    .sim button:hover, .sim .segment:hover { color: var(--accent); border-color: var(--accent); }
+    .sim .muted-italic { color: #8E8E93; font-style: italic; }
+
+    /* the controls along the top */
+    .sim-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1.5rem 2.5rem; padding-bottom: 1rem; }
+    .sim-head-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+    .header-controls { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .control-label { font-family: var(--ff-mono); font-size: 0.75rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; }
+    .vertical-divider { width: 1px; height: 1.2rem; background-color: var(--border-md); }
+    .split-btn-group { display: flex; flex-wrap: wrap; align-items: stretch; border: 1px solid var(--border-md); border-radius: 2px; overflow: hidden; }
+    .scenario-btn { font-family: var(--ff-mono); font-size: 0.65rem; padding: 0.55rem 0.9rem; background: transparent; border: none; color: var(--text); cursor: pointer; text-transform: uppercase; outline: none; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+    .scenario-btn.btn-main:hover, .scenario-btn.btn-secondary:hover { background: var(--accent); color: #fff; }
+    .scenario-btn.btn-main.playing { background: var(--accent); color: #fff; }
+    .scenario-btn.btn-main.completed, .scenario-btn.pressed { background: var(--vir-med); color: #fff; }
+    .scenario-btn.btn-secondary { border-left: 1px solid var(--border-md); }
+    .btn-icon-container { display: flex; align-items: center; justify-content: center; width: 12px; height: 12px; }
+    .btn-icon-container svg { width: 100%; height: 100%; fill: currentColor; }
+
+    .dropdown-wrap { position: relative; }
+    .dropdown-menu { display: none; position: absolute; top: calc(100% + 4px); left: 0; width: 100%; background: var(--bg); border: 1px solid var(--border-md); border-radius: 2px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 60; flex-direction: column; overflow: hidden; }
+    .dropdown-menu.show { display: flex; }
+    .dropdown-item { font-family: var(--ff-mono); font-size: 0.65rem; padding: 0.8rem 1.2rem; background: transparent; border: none; border-bottom: 1px solid var(--border-md); color: var(--text); cursor: pointer; text-transform: uppercase; text-align: left; outline: none; }
+    .dropdown-item:last-child { border-bottom: none; }
+    .dropdown-item:hover { background: rgba(230,138,115,0.08); color: var(--accent); }
+    .dropdown-item.active { background: var(--text); color: var(--bg); }
+
+    /* the workspace: control panel, grids, keys */
+    .workspace { display: grid; grid-template-columns: 0px 1fr 220px; gap: 3rem; align-items: stretch; padding: 2rem 0; transition: grid-template-columns 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .workspace.sidebar-open { grid-template-columns: 220px 1fr 220px; }
+    .panel-column { display: flex; flex-direction: column; justify-content: center; z-index: 10; }
+    .left-panel { position: relative; z-index: 20; }
+    .left-panel-inner-clip { width: 100%; height: 100%; overflow: hidden; }
+    .left-panel-content { width: 220px; opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; justify-content: center; height: 100%; }
+    .workspace.sidebar-open .left-panel-content { opacity: 1; transition: opacity 0.4s ease 0.15s; }
+    .sidebar-toggle-btn { position: absolute; top: 50%; left: calc(100% + 1.5rem); transform: translateY(-50%); width: 36px; height: 36px; border-radius: 50%; background: var(--bg); border: 1px solid var(--border-md); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text); z-index: 50; outline: none; padding: 0; }
+    .sidebar-toggle-btn svg { transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .workspace.sidebar-open .sidebar-toggle-btn svg { transform: rotate(180deg); }
+
+    .section-header { font-family: var(--ff-mono); font-size: 0.8rem; font-weight: 500; text-transform: uppercase; margin-bottom: 1.5rem; letter-spacing: 0.15em; border-bottom: 1px solid var(--border-md); padding-bottom: 0.5rem; }
+    .control-panel { display: flex; flex-direction: column; gap: 0.6rem; }
+    .panel-label { font-family: var(--ff-mono); font-size: 0.6rem; text-transform: uppercase; color: #8E8E93; margin-bottom: 0.8rem; letter-spacing: 0.1em; }
+    .toggle-btn { display: block; width: 100%; font-family: var(--ff-mono); font-size: 0.65rem; padding: 0.7rem; margin-bottom: 0.4rem; background: transparent; border: 1px solid var(--border-md); cursor: pointer; text-align: left; text-transform: uppercase; outline: none; color: var(--text); }
+    .toggle-btn.active { border-color: var(--text); background: var(--text); color: var(--bg); }
+    .sub-btn-group { display: flex; flex-direction: column; gap: 4px; margin-top: 0.2rem; }
+    .sub-btn { font-family: var(--ff-mono); font-size: 0.55rem; padding: 0.4rem 0.6rem; background: transparent; border: 1px solid var(--border-md); cursor: pointer; text-transform: uppercase; color: #8E8E93; text-align: left; outline: none; }
+    .sub-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(230,138,115,0.08); }
+    .sub-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .segmented-toggle { display: flex; border: 1px solid var(--border-md); border-radius: 2px; overflow: hidden; margin-bottom: 0.5rem; }
+    .segment { flex: 1; font-family: var(--ff-mono); font-size: 0.55rem; padding: 0.6rem 0.2rem; text-align: center; text-transform: uppercase; cursor: pointer; background: transparent; color: #8E8E93; border: none; outline: none; white-space: nowrap; }
+    .segment.active { background: var(--text); color: var(--bg); }
+    .segment.active:hover { color: var(--bg); }
+    .segment:disabled { opacity: 0.35; cursor: not-allowed; }
+    .collapsible-section { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.4s ease; }
+    .collapsible-section.visible { max-height: 250px; opacity: 1; }
+
+    /* the grids: affiliation and status above, soft power below between them */
+    .topo-area { display: flex; flex-direction: column; align-items: center; width: 100%; position: relative; padding-top: 1rem; }
+    .topo-label-top { font-family: var(--ff-mono); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: #8E8E93; margin-bottom: 1rem; }
+    .grid-viewport { display: flex; justify-content: center; align-items: center; width: 100%; }
+    .sim-mode .grid-viewport { display: grid; gap: 24px 48px; grid-template-columns: minmax(0, 340px) minmax(0, 340px); justify-content: center; }
+    .grid-box { display: none; flex-direction: column; align-items: center; justify-content: center; position: relative; width: 100%; }
+    .grid-box.solo { width: min(600px, 100%); }
+    .sim-mode #box-cultures { grid-column: 1; grid-row: 1; }
+    .sim-mode #box-main { grid-column: 2; grid-row: 1; }
+    .sim-mode #box-softpower { grid-column: 1 / span 2; grid-row: 2; justify-self: center; width: min(340px, 100%); }
+    .topo-svg { width: 100%; height: auto; overflow: visible; display: block; }
+    .topo-sub-label { font-family: var(--ff-mono); font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.15em; color: #8E8E93; margin-top: 1.2rem; text-align: center; }
+    .hex-cell { stroke-linejoin: round; }
+    .hex-circle { display: none; stroke: none; }
+    .sim:not(.sim-mode) .hex-circle.active { display: block; }
+    .sim.sim-ready .hex-cell { transition: fill 0.6s ease, stroke 0.6s ease, stroke-width 0.6s ease; }
+    .sim.sim-ready .hex-circle { transition: fill 0.6s ease; }
+    .hex-label { font-family: var(--ff-mono); font-weight: 500; text-anchor: middle; dominant-baseline: middle; pointer-events: none; }
+    .sim.hide-scores .hex-label { visibility: hidden; }
+
+    .sim-grid-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.4rem; justify-content: center; width: 100%; }
+    .sim-grid-controls .segmented-toggle { margin-bottom: 0; }
+    .sim-grid-controls .segment { padding: 0.35rem 0.5rem; font-size: 0.55rem; }
+
+    .key-section { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; }
+    .key-section.visible { max-height: 450px; opacity: 1; margin-bottom: 1.8rem; }
+    .key-item { display: flex; align-items: center; gap: 0.8rem; font-family: var(--ff-mono); font-size: 0.65rem; text-transform: uppercase; margin-bottom: 0.6rem; }
+    .swatch { width: 14px; height: 16px; background: currentColor; clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); flex-shrink: 0; }
+    .key-range { font-size: 0.55rem; color: #8E8E93; margin-left: auto; opacity: 0; transition: opacity 0.3s; }
+    .sim.show-ranges .key-range { opacity: 1; }
+
+    /* the scenario overview, the world build history and the analytics */
+    .sim-report { padding-top: 6rem; }
+    .overview-top-row { display: flex; justify-content: space-between; align-items: stretch; gap: 4rem; }
+    .overview-top-left { flex: 1.25; display: flex; flex-direction: column; min-width: 0; }
+    .overview-top-right { flex: 1.35; display: flex; flex-direction: column; padding-left: 3rem; border-left: 1px solid var(--border-md); min-width: 0; }
+    .block-kicker { font-family: var(--ff-mono); font-size: 0.75rem; color: #8E8E93; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1rem; }
+    #scenario-main-title { font-size: 1.85rem; line-height: 1.25; }
+    #scenario-main-desc { color: #8E8E93; font-style: italic; margin-top: 0.6rem; font-size: 1.15rem; }
+    #overview-dominant-cultures { margin-top: 3rem; }
+    .status-row { display: flex; gap: 2.5rem; margin-bottom: 3rem; flex-wrap: wrap; }
+    .status-block { display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 160px; }
+    .status-block .block-kicker { margin-bottom: 0; }
+    .status-line { display: flex; align-items: center; gap: 10px; font-size: 1.35rem; }
+    .status-line-wide { gap: 20px; }
+    .status-avg { color: #8E8E93; font-size: 1.15rem; font-style: italic; }
+    .swatch-pair { display: flex; gap: 4px; }
+    .dist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .dist-item { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; }
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem 1.5rem; }
+    .metric-item { display: flex; align-items: center; gap: 16px; }
+    .metric-text { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    .metric-label { font-family: var(--ff-mono); font-size: 0.65rem; text-transform: uppercase; color: #8E8E93; letter-spacing: 0.05em; line-height: 1; }
+    .metric-name { display: flex; align-items: center; font-size: 1.2rem; font-weight: 600; line-height: 1.1; }
+
+    .sim-section-title { font-family: var(--ff-mono); font-size: 1.05rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.15em; margin: 6rem 0 3.5rem; padding-top: 5rem; border-top: 1px solid var(--border-md); }
+    .wb-grid { display: grid; grid-template-columns: 220px 1.8fr 1.4fr; gap: 3rem; align-items: start; }
+    .wb-label { font-family: var(--ff-mono); font-size: 0.8rem; text-transform: uppercase; color: #8E8E93; letter-spacing: 0.15em; text-align: right; border-right: 1px solid var(--border-md); padding: 0.4rem 2rem 0 0; height: 100%; }
+    .wb-prose { font-size: 1.2rem; line-height: 1.6; padding-bottom: 3rem; }
+    .wb-phase { border-left: 1px solid var(--border-md); padding: 0 0 3rem 2.5rem; }
+    .wb-prose.last, .wb-phase.last { padding-bottom: 0; }
+    .wb-row { margin-bottom: 1.5rem; }
+    .phase-line { display: flex; gap: 12px; line-height: 1.5; }
+    .phase-num { font-family: var(--ff-mono); font-weight: 500; font-size: 0.95rem; margin-top: 4px; }
+    .phase-line strong { font-size: 1.1rem; }
+    .phase-def { font-size: 1.02rem; font-style: italic; opacity: 0.8; }
+
+    .analytics-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 4rem; }
+    .pie-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem 1rem; justify-items: center; }
+    .card-visuals { display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .card-visuals h4, .table-block h4 { font-family: var(--ff-mono); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; margin: 0 0 1rem; text-align: center; }
+    .table-block h4 { text-align: left; margin-bottom: 0.5rem; }
+    .chart-cell { width: 100%; height: 260px; position: relative; display: flex; flex-direction: column; align-items: center; }
+    .pie-svg { width: 220px; height: 220px; overflow: visible; display: block; margin: auto; }
+    .pie-slice-path { cursor: help; transition: opacity 0.2s, stroke-width 0.2s; }
+    .pie-tooltip { visibility: hidden; position: absolute; background: var(--text); color: var(--bg); font-family: var(--ff-mono); font-size: 11px; padding: 6px 10px; border-radius: 2px; z-index: 100; pointer-events: none; white-space: nowrap; }
+    .pie-state { font-family: var(--ff-mono); font-size: 0.65rem; text-transform: uppercase; color: #8E8E93; text-align: center; margin-top: 0.8rem; letter-spacing: 0.15em; height: 16px; }
+    .analytics-tables { display: flex; flex-direction: column; gap: 2.5rem; }
+    .card-data-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; }
+    .card-data-col { display: flex; flex-direction: column; gap: 0.4rem; min-width: 0; }
+    .card-data-col h5 { font-family: var(--ff-mono); font-size: 0.7rem; font-weight: 500; text-transform: uppercase; color: #8E8E93; margin: 0 0 0.8rem; border-bottom: 1px dotted var(--border-md); padding-bottom: 0.4rem; letter-spacing: 0.1em; }
+    .cell-row { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 8px; font-family: var(--ff-mono); font-size: 0.8rem; text-transform: uppercase; min-height: 18px; }
+    .cell-count { font-weight: 600; min-width: 24px; }
+    .cell-label { line-height: 1.3; color: #8E8E93; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .cell-shift { height: 18px; margin-bottom: 8px; font-family: var(--ff-mono); font-size: 0.8rem; font-weight: 600; line-height: 1.3; }
+
+    #combined-prose-container { padding-top: 4rem; }
+    .prose-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .prose-panel { border-left: 3px solid; padding: 1.5rem 2rem; border-radius: 0 4px 4px 0; }
+    .prose-panel-head { font-family: var(--ff-mono); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: #8E8E93; letter-spacing: 0.1em; border-bottom: 1px dashed var(--border-md); margin-bottom: 1rem; padding-bottom: 0.6rem; }
+    .prose-panel-body { font-size: 1.15rem; line-height: 1.6; }
+    .prose-step { margin-bottom: 0.9rem; }
+    .prose-step:last-child { margin-bottom: 0; }
+    .prose-step-head { display: block; margin-bottom: 0.25rem; font-family: var(--ff-mono); font-size: 0.65rem; text-transform: uppercase; color: #8E8E93; letter-spacing: 0.1em; }
+
+    @keyframes simPulse { 0% { color: var(--accent); } 100% { color: inherit; } }
+    .sim .data-pulse { animation: simPulse 0.8s ease-out forwards; }
+    @keyframes simFade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .sim .fade-in-text { animation: simFade 1s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+    /* narrower windows: the panel and keys under the grids, and the report in one column */
+    @media (max-width: 1100px) {
+      .workspace, .workspace.sidebar-open { grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
+      .workspace .topo-area { order: -1; }
+      .left-panel-content { width: 100%; opacity: 1; }
+      .left-panel-inner-clip { overflow: visible; }
+      .sidebar-toggle-btn { display: none; }
+      .control-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem 2rem; }
+      .collapsible-section { max-height: none; opacity: 1; }
+      .collapsible-section:not(.visible) { display: none; }
+      .overview-top-row { flex-direction: column; gap: 3rem; }
+      .overview-top-right { padding-left: 0; border-left: none; }
+      .analytics-grid { grid-template-columns: minmax(0, 1fr); }
+      .wb-grid { grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+      .wb-label { text-align: left; border-right: none; padding: 0; height: auto; }
+      .wb-phase { padding: 0 0 2rem 1.5rem; }
     }
 
-    .dyn-stage {
-      margin: 0;
-    }
-
-    /* on wide windows the grid stays in view beside the panel */
-    @media (min-width: 961px) {
-      .dyn-stage {
-        position: sticky;
-        top: 96px;
-      }
-    }
-
-    .dyn-canvas {
-      display: block;
-      width: 100%;
-      touch-action: manipulation;
-    }
-
-    .dyn-stage figcaption {
-      margin-top: 14px;
-      font-family: var(--sans);
-      font-size: 14px;
-      line-height: 1.5;
-      color: var(--muted);
-    }
-
-    .dyn-panel {
-      font-family: var(--sans);
-      font-size: 15px;
-      line-height: 1.5;
-    }
-
-    .dyn-panel h2 {
-      margin: 0 0 12px;
-      font-family: var(--mono-caps);
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .dyn-block + .dyn-block {
-      margin-top: 32px;
-    }
-
-    /* the state the dials point to */
-    .dyn-state-name {
-      margin: 0;
-      font-family: var(--serif);
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 1.2;
-    }
-
-    html:not(.serif-headings) .dyn-state-name {
-      font-family: var(--sans);
-      font-size: 21px;
-      font-weight: 600;
-    }
-
-    .dyn-state-sub {
-      display: block;
-      margin: 2px 0 10px;
-      font-family: var(--serif);
-      font-style: italic;
-      font-size: 17px;
-    }
-
-    .dyn-state-desc {
-      margin: 0;
-      font-family: var(--serif);
-      font-size: 17px;
-      line-height: 1.45;
-    }
-
-    /* the 2x2 locator: drag or click to set both dials */
-    .dyn-locator {
-      display: block;
-      width: 100%;
-      max-width: 260px;
-      height: auto;
-      cursor: crosshair;
-      touch-action: none;
-      user-select: none;
-    }
-
-    .dyn-locator .q { fill: var(--canvas-bg); stroke: var(--canvas-ink); stroke-width: 1; }
-    .dyn-locator .q-tl { fill: var(--m-tl, #fee4d0); }
-    .dyn-locator .q-tr { fill: var(--m-tr, #fdf8e2); }
-    .dyn-locator .q-bl { fill: var(--m-bl, #ffeae7); }
-    .dyn-locator .q-br { fill: var(--m-br, #f5f6f7); }
-    .dyn-locator .q-c { fill: var(--canvas-bg); }
-    .dyn-locator .axis { stroke: var(--canvas-ink); stroke-width: 2.5; }
-    .dyn-locator text { fill: var(--canvas-ink); font-family: var(--sans); font-size: 9.5px; text-anchor: middle; pointer-events: none; }
-    .dyn-locator .dyn-dot { fill: var(--link-blue); stroke: var(--canvas-bg); stroke-width: 2; }
-
-    .dyn-locator-key {
-      display: flex;
-      justify-content: space-between;
-      max-width: 260px;
-      margin-top: 6px;
-      font-size: 11.5px;
-      white-space: nowrap;
-      color: var(--muted);
-    }
-
-    /* the presets */
-    .dyn-presets {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 0;
-      padding: 0;
-      list-style: none;
-    }
-
-    .dyn-btn {
-      padding: 7px 11px;
-      border: 1px solid color-mix(in srgb, var(--canvas-ink) 30%, transparent);
-      border-radius: 0;
-      background: none;
-      font: inherit;
-      font-size: 13px;
-      line-height: 1.3;
-      color: inherit;
-      cursor: pointer;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
-    }
-
-    .dyn-btn:hover,
-    .dyn-btn:focus-visible {
-      border-color: var(--canvas-ink);
-      outline: none;
-    }
-
-    .dyn-btn[aria-pressed="true"] {
-      border-color: var(--canvas-ink);
-      background: var(--canvas-ink);
-      color: var(--canvas-bg);
-    }
-
-    /* the two dials */
-    .dyn-dial {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: baseline;
-      gap: 2px 12px;
-    }
-
-    .dyn-dial + .dyn-dial {
-      margin-top: 16px;
-    }
-
-    .dyn-dial label {
-      font-weight: 500;
-    }
-
-    .dyn-dial output {
-      font-variant-numeric: tabular-nums;
-      color: var(--muted);
-    }
-
-    .dyn-dial input {
-      grid-column: 1 / -1;
-      width: 100%;
-      margin: 6px 0 0;
-      accent-color: var(--link-blue);
-    }
-
-    .dyn-run {
-      display: flex;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    /* the readings */
-    .dyn-stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px 20px;
-      margin: 0;
-    }
-
-    .dyn-stats div {
-      margin: 0;
-    }
-
-    .dyn-stats dt {
-      font-size: 12.5px;
-      color: var(--muted);
-    }
-
-    .dyn-stats dd {
-      margin: 2px 0 0;
-      font-size: 22px;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* how the model works */
-    .dyn-notes {
-      max-width: 760px;
-      margin: 96px 0 0;
-      font-family: var(--serif);
-      font-size: 19px;
-      line-height: 1.5;
-    }
-
-    .dyn-notes h2 {
-      margin: 0 0 16px;
-      font-family: var(--sans);
-      font-size: 26px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.2;
-    }
-
-    .dyn-notes p {
-      margin: 0 0 14px;
-    }
-
-    .dyn-notes ul {
-      margin: 0 0 14px;
-      padding-left: 1.2em;
-    }
-
-    .dyn-notes li {
-      margin: 0 0 8px;
+    @media (max-width: 700px) {
+      .sim { --sim-w: calc(100vw - 48px); }
+      .sim-mode .grid-viewport { grid-template-columns: minmax(0, 1fr); }
+      .sim-mode #box-cultures, .sim-mode #box-main, .sim-mode #box-softpower { grid-column: 1; grid-row: auto; width: min(340px, 100%); justify-self: center; }
+      .metrics-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+      .prose-row, .dist-grid, .pie-grid { grid-template-columns: minmax(0, 1fr); }
+      .card-data-container { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 56px; }
     }
   </style>
 </head>
@@ -520,96 +478,198 @@
   <main class="page-main">
     <div class="genealogy-top wide-top on-band">
     <h1 class="page-title"><a class="heading-link title-top" href="#">Dynamics</a></h1>
-    <p class="page-intro">A hex-grid cellular model of the four post-AGI cultural attractor states in <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>. Set a civilisation&rsquo;s cultural integrity and membrane permeability, and watch its sub-topias settle into enclosure, uplift, collapse, takeover or the clash between them.</p>
+    <p class="page-intro">A cellular automaton for topologically modelling civilisation-scale cultural dynamics across sovereign political units, for <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>. A culture spreads to a neighbouring sub-topia when its soft power overcomes both that sub-topia&rsquo;s border impermeability and its own soft power.</p>
     </div>
 
-    <section class="essay-list wide-top" aria-label="Dynamics">
-      <div class="dyn" data-state="clash">
-        <figure class="dyn-stage">
-          <canvas class="dyn-canvas" aria-label="A hex grid of sub-topias, each cell coloured by its culture; grey cells have lost theirs"></canvas>
-          <figcaption>Each hexagon is a community, coloured by its culture; grey ones have lost theirs. The heavy lines are the membranes between twelve sub-topias, heavier the less permeable. One culture is expansionist.</figcaption>
-        </figure>
-
-        <div class="dyn-panel">
-          <div class="dyn-block" aria-live="polite">
-            <h2>Attractor state</h2>
-            <p class="dyn-state-name">Clash of Civilisations</p>
-            <span class="dyn-state-sub">(Cultural Competition, Conflict &amp; Control)</span>
-            <p class="dyn-state-desc"></p>
-          </div>
-
-          <div class="dyn-block">
-            <h2>Scenarios</h2>
-            <ul class="dyn-presets">
-              <li><button class="dyn-btn" type="button" data-preset="enclosure" aria-pressed="false">Enclosure</button></li>
-              <li><button class="dyn-btn" type="button" data-preset="uplift" aria-pressed="false">Uplift</button></li>
-              <li><button class="dyn-btn" type="button" data-preset="clash" aria-pressed="true">Clash</button></li>
-              <li><button class="dyn-btn" type="button" data-preset="collapse" aria-pressed="false">Collapse</button></li>
-              <li><button class="dyn-btn" type="button" data-preset="takeover" aria-pressed="false">Takeover</button></li>
-            </ul>
-          </div>
-
-          <div class="dyn-block">
-            <h2>Design variables</h2>
-            <svg class="dyn-locator" viewBox="0 0 200 200" role="slider" aria-label="Cultural integrity and membrane permeability: drag to set both" tabindex="0">
-                <rect class="q q-tl" x="10" y="10" width="90" height="90"/>
-                <rect class="q q-tr" x="100" y="10" width="90" height="90"/>
-                <rect class="q q-bl" x="10" y="100" width="90" height="90"/>
-                <rect class="q q-br" x="100" y="100" width="90" height="90"/>
-                <rect class="q q-c" x="60" y="70" width="80" height="60"/>
-                <line class="axis" x1="10" y1="10" x2="10" y2="190"/>
-                <line class="axis" x1="10" y1="190" x2="190" y2="190"/>
-                <text x="45" y="30">Enclosure</text>
-                <text x="155" y="30">Uplift</text>
-                <text x="45" y="178">Collapse</text>
-                <text x="155" y="178">Takeover</text>
-                <text x="100" y="86">Clash</text>
-                <circle class="dyn-dot" cx="100" cy="100" r="6.5"/>
-              </svg>
-            <div class="dyn-locator-key"><span>&uarr; Cultural integrity</span><span>Membrane permeability &rarr;</span></div>
-          </div>
-
-          <div class="dyn-block">
-            <div class="dyn-dial">
-              <label for="dyn-integrity">Cultural integrity</label>
-              <output id="dyn-integrity-out" for="dyn-integrity">50</output>
-              <input id="dyn-integrity" type="range" min="0" max="100" value="50">
+    <section class="sim sim-mode show-ranges essay-list" aria-label="Cultural Dynamics Simulator">
+      <div class="sim-head">
+        <div class="sim-head-controls">
+          <div class="dropdown-wrap">
+            <div class="split-btn-group">
+              <button id="scenario-dropdown-btn" class="scenario-btn" type="button" onclick="Dyn.toggleScenarioDropdown()" style="min-width: 280px; justify-content: space-between;">Civilisational Scenarios: Random <svg viewBox="0 0 24 24" width="14" height="14" style="fill: currentColor; margin-left: 8px;"><path d="M7 10l5 5 5-5z"/></svg></button>
             </div>
-            <div class="dyn-dial">
-              <label for="dyn-permeability">Membrane permeability</label>
-              <output id="dyn-permeability-out" for="dyn-permeability">50</output>
-              <input id="dyn-permeability" type="range" min="0" max="100" value="50">
-            </div>
-            <div class="dyn-run">
-              <button class="dyn-btn dyn-play" type="button" aria-pressed="false">Pause</button>
-              <button class="dyn-btn dyn-reset" type="button">Reset</button>
+            <div id="scenario-dropdown-menu" class="dropdown-menu">
+              <button class="dropdown-item active" type="button" data-mode="random" onclick="Dyn.setDynamicScenario('random')">Random</button>
+              <button class="dropdown-item" type="button" data-mode="monocultural" onclick="Dyn.setDynamicScenario('monocultural')">Monocultural Takeover</button>
+              <button class="dropdown-item" type="button" data-mode="dystopian" onclick="Dyn.setDynamicScenario('dystopian')">Meta Dystopian Enclosure</button>
+              <button class="dropdown-item" type="button" data-mode="utopian" onclick="Dyn.setDynamicScenario('utopian')">Meta Utopian Uplift</button>
             </div>
           </div>
-
-          <div class="dyn-block">
-            <h2>Readings</h2>
-            <dl class="dyn-stats">
-              <div><dt>Cultures</dt><dd data-stat="cultures">12</dd></div>
-              <div><dt>Effective diversity</dt><dd data-stat="diversity">12</dd></div>
-              <div><dt>Largest culture</dt><dd data-stat="largest">&ndash;</dd></div>
-              <div><dt>Culture lost</dt><dd data-stat="lost">0%</dd></div>
-            </dl>
+          <div class="header-controls">
+            <div class="control-label">Simulation Controls</div>
+            <div class="vertical-divider"></div>
+            <div class="split-btn-group">
+              <button id="scenario-1-btn" class="scenario-btn btn-main" type="button" onclick="Dyn.toggleScenario()"><span id="scenario-icon" class="btn-icon-container"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span> Run Simulation</button>
+              <button id="revert-btn" class="scenario-btn btn-secondary" type="button" onclick="Dyn.resetToInitial()"><span class="btn-icon-container"><svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg></span> Revert to Initial State</button>
+              <button id="gen-config-btn" class="scenario-btn btn-secondary" type="button" onclick="Dyn.randomizeConfiguration()"><span class="btn-icon-container"><svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></span> Generate New Configuration</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="dyn-notes">
-        <h2>How the model works</h2>
-        <p>The grid is divided into twelve sub-topias, each starting with its own home culture. At every step, a community meets one of its neighbours, and one of a few things can happen:</p>
-        <ul>
-          <li><b>Transmission.</b> A culture passes from one community to the next: within a sub-topia, its own culture at the rate of its <em>cultural integrity</em>; across a border, or a foreign culture inside it, at the rate of its <em>membrane permeability</em>.</li>
-          <li><b>Resistance.</b> A community holding its sub-topia&rsquo;s home culture resists a foreign one as strongly as its integrity, and draws lapsed or converted neighbours back to it.</li>
-          <li><b>Lapse.</b> Without integrity, a community loses its culture and turns grey, until something refills it.</li>
-          <li><b>Competition.</b> When cultures meet, the fitter tends to win; one culture is expansionist, and wins a little more often.</li>
-          <li><b>Synthesis.</b> Where integrity and permeability are both high, cultures meeting at a border sometimes blend into a new one.</li>
-        </ul>
-        <p>High integrity with closed borders seals each sub-topia (enclosure); with open borders, cultures trade and blend while each sub-topia keeps its own (uplift). Low integrity with open borders lets the expansionist culture take the map (takeover); with closed borders, cultures simply fade (collapse). In between, they compete (the clash).</p>
-        <p>The Unified Frames and the descriptions of each state are in the <a class="plain-link" href="../diagrams/#four-attractors">typology of the four attractor states</a>.</p>
+      <div class="workspace" id="main-workspace">
+        <div class="panel-column left-panel">
+          <button class="sidebar-toggle-btn" type="button" onclick="Dyn.toggleSidebar()" aria-label="Show or hide the control panel">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="10 8 14 12 10 16"></polyline></svg>
+          </button>
+          <div class="left-panel-inner-clip">
+            <div class="left-panel-content">
+              <div class="section-header">Control Panel</div>
+              <div class="control-panel">
+                <div>
+                  <div class="panel-label">Primary Overlays</div>
+                  <button id="btn-cultures" class="toggle-btn" type="button" onclick="Dyn.setPrimary('cultures')">Cultural Affiliation</button>
+                  <button id="btn-moral" class="toggle-btn" type="button" onclick="Dyn.setPrimary('moral')">Sub-topia Status</button>
+                  <button id="btn-softpower" class="toggle-btn" type="button" onclick="Dyn.setPrimary('softPower')">Soft Power</button>
+                </div>
+                <div id="overlays-group" class="collapsible-section">
+                  <div class="panel-label">Secondary Overlays</div>
+                  <div class="sub-btn-group">
+                    <button id="ovl-softpower" class="sub-btn" type="button" onclick="Dyn.setSecondary('softPower')">Soft Power</button>
+                    <button id="ovl-moral" class="sub-btn" type="button" onclick="Dyn.setSecondary('moral')">Sub-topia Status</button>
+                    <button id="ovl-cultures" class="sub-btn" type="button" onclick="Dyn.setSecondary('cultures')">Cultural Affiliation</button>
+                    <button id="ovl-impermeability" class="sub-btn" type="button" onclick="Dyn.setSecondary('impermeability')">Border Impermeability</button>
+                  </div>
+                </div>
+                <div>
+                  <div class="panel-label" style="margin-top: 1rem;">Meta-Settings</div>
+                  <div class="segmented-toggle" id="level-toggle-sidebar">
+                    <button id="lvl-basic" class="segment" type="button" onclick="Dyn.setSystemLevel('basic')">Basic</button>
+                    <button id="lvl-complex" class="segment" type="button" onclick="Dyn.setSystemLevel('complex')">Complex</button>
+                  </div>
+                  <div class="segmented-toggle" id="density-toggle">
+                    <button id="dens-compact" class="segment active" type="button" onclick="Dyn.setDensity('compact')">Compact</button>
+                    <button id="dens-spatial" class="segment" type="button" onclick="Dyn.setDensity('spatial')">Spatial</button>
+                  </div>
+                  <div class="segmented-toggle" id="sim-toggle">
+                    <button class="segment active" type="button" onclick="Dyn.setSimultaneous(true)">Simultaneous</button>
+                    <button class="segment" type="button" onclick="Dyn.setSimultaneous(false)">Single</button>
+                  </div>
+                  <div class="segmented-toggle" id="spectrum-toggle">
+                    <button class="segment active" id="spec-on" type="button" onclick="Dyn.setSpectrum(true)">Spectrum</button>
+                    <button class="segment" id="spec-off" type="button" onclick="Dyn.setSpectrum(false)">Simple</button>
+                  </div>
+                  <div id="spectrum-sub-group" class="collapsible-section visible">
+                    <div class="sub-btn-group">
+                      <button class="sub-btn active" id="sub-scores" type="button" onclick="Dyn.toggleScores()">Number Scores</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="topo-area">
+          <div class="topo-label-top">Topological States</div>
+          <div class="grid-viewport">
+            <div class="grid-box" id="box-cultures"><svg class="topo-svg" viewBox="-160 -160 320 320"><g id="mesh-cultures"></g></svg><div class="topo-sub-label">Cultural Affiliation</div></div>
+            <div class="grid-box" id="box-main"><svg class="topo-svg" viewBox="-160 -160 320 320"><g id="mesh-main"></g></svg><div class="topo-sub-label">Sub-topia Status</div></div>
+            <div class="grid-box" id="box-softpower">
+              <svg class="topo-svg" viewBox="-160 -160 320 320"><g id="mesh-softpower"></g></svg>
+              <div class="topo-sub-label">Soft Power, with Border Impermeability</div>
+            </div>
+          </div>
+          <div class="sim-grid-controls">
+            <div class="segmented-toggle" id="scale-toggle" style="width: 150px;">
+              <button class="segment" type="button" onclick="Dyn.setScale(1)">XS</button>
+              <button class="segment" type="button" onclick="Dyn.setScale(2)">S</button>
+              <button class="segment active" type="button" onclick="Dyn.setScale(3)">M</button>
+              <button class="segment" type="button" onclick="Dyn.setScale(4)">L</button>
+              <button class="segment" type="button" onclick="Dyn.setScale(5)">XL</button>
+            </div>
+            <div class="segmented-toggle" id="range-toggle">
+              <button id="range-10" class="segment" type="button" onclick="Dyn.setScoreRange(10)">1-10</button>
+              <button id="range-100" class="segment active" type="button" onclick="Dyn.setScoreRange(100)">1-100</button>
+            </div>
+            <div class="segmented-toggle" id="tile-toggle" aria-label="Soft power tiles">
+              <button id="tile-sp" class="segment active" type="button" onclick="Dyn.setImpScores(false)">Soft Power</button>
+              <button id="tile-sp-imp" class="segment" type="button" onclick="Dyn.setImpScores(true)">Soft Power / Imp.</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-column right-panel">
+          <div class="section-header">Overlay Keys</div>
+          <div class="keys-panel">
+            <div class="key-section" id="key-cultures"><div class="panel-label">Civilisations (Fill)</div><div id="culture-keys-container"></div></div>
+            <div class="key-section" id="key-moral"><div class="panel-label">Status (Fill)</div>
+              <div class="key-item"><div class="swatch" style="color: var(--moral-dys)"></div> Dystopian <span class="key-range" id="range-moral-low">0</span></div>
+              <div class="key-item"><div class="swatch" style="color: var(--moral-neu)"></div> Notopian <span class="key-range" id="range-moral-med">0</span></div>
+              <div class="key-item"><div class="swatch" style="color: var(--moral-uto)"></div> Utopian <span class="key-range" id="range-moral-high">0</span></div>
+            </div>
+            <div class="key-section" id="key-softpower"><div class="panel-label">Soft Power (Fill)</div>
+              <div class="key-item"><div class="swatch" style="color: var(--vir-low)"></div> Low <span class="key-range" id="range-softpower-low">0</span></div>
+              <div class="key-item"><div class="swatch" style="color: var(--vir-med)"></div> Med <span class="key-range" id="range-softpower-med">0</span></div>
+              <div class="key-item"><div class="swatch" style="color: var(--vir-high)"></div> High <span class="key-range" id="range-softpower-high">0</span></div>
+            </div>
+            <div class="key-section" id="key-impermeability"><div class="panel-label">Impermeability (Borders)</div>
+              <div class="key-item"><svg width="14" height="16" viewBox="0 0 16 18" style="flex-shrink: 0; overflow: visible;"><polygon points="8,1 15,5 15,13 8,17 1,13 1,5" fill="none" stroke="var(--imp-low)" stroke-width="2" stroke-linejoin="round"/></svg> Low <span class="key-range" id="range-imp-low">0</span></div>
+              <div class="key-item"><svg width="14" height="16" viewBox="0 0 16 18" style="flex-shrink: 0; overflow: visible;"><polygon points="8,1 15,5 15,13 8,17 1,13 1,5" fill="none" stroke="var(--imp-med)" stroke-width="2" stroke-linejoin="round"/></svg> Med <span class="key-range" id="range-imp-med">0</span></div>
+              <div class="key-item"><svg width="14" height="16" viewBox="0 0 16 18" style="flex-shrink: 0; overflow: visible;"><polygon points="8,1 15,5 15,13 8,17 1,13 1,5" fill="none" stroke="var(--imp-high)" stroke-width="2" stroke-linejoin="round"/></svg> High <span class="key-range" id="range-imp-high">0</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sim-report">
+        <div class="overview-top-row">
+          <div class="overview-top-left">
+            <div class="block-kicker">Civilisation Scale Scenario &middot; <span id="scenario-title-label">Initial State</span></div>
+            <div id="scenario-main-title">Awaiting initialisation&hellip;</div>
+            <div id="scenario-main-desc">&hellip;</div>
+            <div id="overview-dominant-cultures"></div>
+          </div>
+          <div class="overview-top-right" id="overview-major-metrics"></div>
+        </div>
+
+        <h2 class="sim-section-title">World Build History</h2>
+        <div id="world-building-content"><div class="muted-italic">Awaiting simulation data&hellip;</div></div>
+
+        <h2 class="sim-section-title">Data Analytics</h2>
+        <div class="analytics-grid">
+          <div class="pie-grid">
+            <div class="card-visuals"><h4>Cultural Affiliation</h4><div class="chart-cell" id="chart-cult-single"></div></div>
+            <div class="card-visuals"><h4>Sub-topia Status</h4><div class="chart-cell" id="chart-moral-single"></div></div>
+            <div class="card-visuals"><h4>Soft Power</h4><div class="chart-cell" id="chart-sp-single"></div></div>
+            <div class="card-visuals"><h4>Border Impermeability</h4><div class="chart-cell" id="chart-imp-single"></div></div>
+          </div>
+          <div class="analytics-tables">
+            <div class="table-block">
+              <h4>Cultural Affiliation</h4>
+              <div class="card-data-container">
+                <div class="card-data-col"><h5>Init</h5><div id="cell-cult-init">&mdash;</div></div>
+                <div class="card-data-col"><h5>End</h5><div id="cell-cult-end">&mdash;</div></div>
+                <div class="card-data-col"><h5>Shift</h5><div id="cell-cult-shift">&mdash;</div></div>
+              </div>
+            </div>
+            <div class="table-block">
+              <h4>Sub-topia Status</h4>
+              <div class="card-data-container">
+                <div class="card-data-col"><h5>Init</h5><div id="cell-moral-init">&mdash;</div></div>
+                <div class="card-data-col"><h5>End</h5><div id="cell-moral-end">&mdash;</div></div>
+                <div class="card-data-col"><h5>Shift</h5><div id="cell-moral-shift">&mdash;</div></div>
+              </div>
+            </div>
+            <div class="table-block">
+              <h4>Soft Power</h4>
+              <div class="card-data-container">
+                <div class="card-data-col"><h5>Init</h5><div id="cell-sp-init">&mdash;</div></div>
+                <div class="card-data-col"><h5>End</h5><div id="cell-sp-end">&mdash;</div></div>
+                <div class="card-data-col"><h5>Shift</h5><div id="cell-sp-shift">&mdash;</div></div>
+              </div>
+            </div>
+            <div class="table-block">
+              <h4>Border Impermeability</h4>
+              <div class="card-data-container">
+                <div class="card-data-col"><h5>Init</h5><div id="cell-imp-init">&mdash;</div></div>
+                <div class="card-data-col"><h5>End</h5><div id="cell-imp-end">&mdash;</div></div>
+                <div class="card-data-col"><h5>Shift</h5><div id="cell-imp-shift">&mdash;</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="combined-prose-container"></div>
       </div>
     </section>
   </main>
@@ -662,8 +722,8 @@
 
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
-  <script src="../assets/dynamics.js?v=f48954ca"></script>
+  <script src="../assets/dynamics.js?v=962af74a"></script>
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
-  <script src="../assets/tools.js?v=c0fb0733" data-search-scope=".dyn-notes" data-hide-until=".genealogy-top"></script>
+  <script src="../assets/tools.js?v=c0fb0733" data-search-scope=".sim-report" data-hide-until=".genealogy-top"></script>
 </body>
 </html>

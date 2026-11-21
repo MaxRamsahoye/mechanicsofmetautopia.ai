@@ -1,370 +1,895 @@
-// Dynamics: a hex-grid cellular model of the four post-AGI cultural attractor
-// states. The grid is divided into sub-topias (each with its own home culture);
-// every cell carries a culture, or none. Two dials set the dynamics:
+// Dynamics: the Cultural Dynamics Simulator, a cellular automaton for
+// topologically modelling civilisation-scale cultural dynamics across
+// sovereign political units.
 //
-//   cultural integrity (I)    how strongly a sub-topia reproduces its own
-//                             culture: its cells pass it on, resist foreign
-//                             cultures, and return to it after a lapse
-//   membrane permeability (P) how freely cultures cross the borders between
-//                             sub-topias, and spread once inside
-//
-// Without integrity, cells lose their culture (they fade to grey) unless
-// something refills them. One culture is expansionist: it wins contests a
-// little more often. Where integrity and permeability are both high, cultures
-// meeting at a border sometimes blend into a new one.
+// Each hexagon is a sub-topia with three scores, inherited from its culture:
+//   sub-topia status        how utopian, notopian or dystopian it is
+//   soft power              its cultural pull: its power to spread and to hold
+//   border impermeability   how closed its borders are
+// Soft power does the work that memetic virality and cultural integrity did in
+// the earlier version: a neighbour's culture is adopted when its soft power
+// beats both the target's border impermeability and the target's own soft power.
 (function () {
-  var root = document.querySelector('.dyn');
-  if (!root) return;
+  'use strict';
+  var sim = document.querySelector('.sim');
+  if (!sim) return;
+  var $ = function (id) { return document.getElementById(id); };
+  var SVGNS = 'http://www.w3.org/2000/svg';
 
-  var canvas = root.querySelector('.dyn-canvas');
-  var ctx = canvas.getContext('2d');
-  var iRange = root.querySelector('#dyn-integrity');
-  var pRange = root.querySelector('#dyn-permeability');
-  var iOut = root.querySelector('#dyn-integrity-out');
-  var pOut = root.querySelector('#dyn-permeability-out');
-  var playBtn = root.querySelector('.dyn-play');
-  var resetBtn = root.querySelector('.dyn-reset');
-  var presetBtns = root.querySelectorAll('[data-preset]');
-  var locator = root.querySelector('.dyn-locator');
-  var dot = root.querySelector('.dyn-dot');
-  var stateName = root.querySelector('.dyn-state-name');
-  var stateSub = root.querySelector('.dyn-state-sub');
-  var stateDesc = root.querySelector('.dyn-state-desc');
-  var stat = {
-    cultures: root.querySelector('[data-stat="cultures"]'),
-    diversity: root.querySelector('[data-stat="diversity"]'),
-    largest: root.querySelector('[data-stat="largest"]'),
-    lost: root.querySelector('[data-stat="lost"]')
+  var nodes = [];
+  var initialState = null;
+  var phaseHistory = [];
+  var proseLog = [];
+  var epochHistory = [];
+  var simulationEpoch = 0;
+  var activePrimary = 'softPower';
+  var activeSecondary = null;
+  var isImpOverlayActive = true;
+  var isSimultaneous = true;
+  var isSpectrum = true;
+  var currentDensity = 'compact';
+  var showScores = true;
+  var showImpScores = false;
+  var currentLayers = 3;
+  var isPlaying = false;
+  var isCompleted = false;
+  var scoreScale = 100;
+  var simInterval = null;
+  var currentLevel = 'basic';
+  var activeScenarioMode = 'random';
+
+  var PASTEL_RAINBOW = ['#FFB7B2', '#FFDAC1', '#FFF9C4', '#C5E1A5', '#B3E5FC', '#C5CAE9', '#D1C4E9'];
+  var CULTURE_NAMES = ['The Culture', 'The Idirans', 'The Homomda', 'The Morthanveld', 'The Azad', 'The Gzilt', 'The Sublimed'];
+  var rnd = function () { return Math.random() * 100; };
+
+  var cultureScores = {
+    moral: PASTEL_RAINBOW.map(rnd),
+    softPower: PASTEL_RAINBOW.map(rnd),
+    impermeability: PASTEL_RAINBOW.map(rnd)
   };
 
-  var COLS = 40, ROWS = 40, N = COLS * ROWS, REGIONS = 12, LOST = -1, MAXC = 600;
-  var LOSS = 0.05;
-
-  // the five scenarios: where each sits on the two dials, and what it is
-  var PRESETS = {
-    enclosure: { I: 0.92, P: 0.03, name: 'Meta-Dystopian Enclosure', sub: 'Localised lock-ins', desc: 'Every sub-topia is a closed system: its culture holds, and nothing crosses its borders. The map freezes into sealed blocks of colour.' },
-    uplift: { I: 0.88, P: 0.62, name: 'Meta-Utopian Uplift', sub: 'Epistemic Equilibria', desc: 'Borders open enough for exchange, but sub-topias protected enough to keep their identity: cultures trade and blend at their borders, and no one culture takes over.' },
-    collapse: { I: 0.12, P: 0.04, name: 'Cultural Collapse', sub: 'Permanent Plateau', desc: 'Sub-topias lose their coherent identity, and closed borders stop anything new arriving: cultures fade to grey and nothing replaces them.' },
-    takeover: { I: 0.12, P: 0.92, name: 'Mono-Cultural Takeover', sub: 'Gray Goo', desc: 'Weak integrity and open borders: the expansionist culture breaks out of its sub-topia and colonises the others, until one colour covers the map.' },
-    clash: { I: 0.5, P: 0.5, name: 'Clash of Civilisations', sub: 'Cultural Competition, Conflict & Control', desc: 'An underdetermined, hybrid condition: cultures compete across shifting fronts, some sub-topias are overrun, some hold, and some lose their culture.' }
+  var paletteMap = {
+    moral: ['#1A1A1A', '#8E8E93', '#F2F2F7'],
+    softPower: ['#B7E4C7', '#40916C', '#1B4332'],
+    impermeability: ['#FDE68A', '#E6994D', '#A64B35'],
+    cultures: PASTEL_RAINBOW
   };
 
-  var I = PRESETS.clash.I, P = PRESETS.clash.P;
-  var running = true, inView = true;
+  // the three grids: cultural affiliation (top left), sub-topia status (top
+  // right) and soft power (below, between them, with the borders drawn on it)
+  var GRIDS = [
+    { type: 'cultures', mesh: 'mesh-cultures', box: 'box-cultures' },
+    { type: 'moral', mesh: 'mesh-main', box: 'box-main' },
+    { type: 'softPower', mesh: 'mesh-softpower', box: 'box-softpower' }
+  ];
 
-  // ---------- the grid: pointy-top hexagons, odd rows shifted right ----------
-  var nb = new Array(N);
-  var cube = new Array(N);
-  (function () {
-    var EVEN = [[1, 0], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
-    var ODD = [[1, 0], [1, -1], [0, -1], [-1, 0], [0, 1], [1, 1]];
-    for (var r = 0; r < ROWS; r++) {
-      for (var c = 0; c < COLS; c++) {
-        var i = r * COLS + c, list = [], d = (r & 1) ? ODD : EVEN;
-        for (var k = 0; k < 6; k++) {
-          var cc = c + d[k][0], rr = r + d[k][1];
-          if (cc >= 0 && cc < COLS && rr >= 0 && rr < ROWS) list.push(rr * COLS + cc);
-        }
-        nb[i] = list;
-        var x = c - (r - (r & 1)) / 2;
-        cube[i] = [x, r, -x - r];
-      }
-    }
-  })();
+  var ICONS = {
+    play: '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',
+    pause: '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>',
+    check: '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>'
+  };
+  var CARET = '<svg viewBox="0 0 24 24" width="14" height="14" style="fill: currentColor; margin-left: 8px;"><path d="M7 10l5 5 5-5z"/></svg>';
 
-  function hexDist(a, b) {
-    return Math.max(Math.abs(cube[a][0] - cube[b][0]), Math.abs(cube[a][1] - cube[b][1]), Math.abs(cube[a][2] - cube[b][2]));
+  var SCENARIO_NAMES = {
+    random: 'Random',
+    monocultural: 'Monocultural Takeover',
+    dystopian: 'Meta Dystopian Enclosure',
+    utopian: 'Meta Utopian Uplift'
+  };
+
+  function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+  function baseStroke() { return isDark() ? '#3A3A3C' : '#E2DDD1'; }
+
+  // ---------- the scenario menu ----------
+  function toggleScenarioDropdown() {
+    if (isPlaying) return;
+    $('scenario-dropdown-menu').classList.toggle('show');
   }
 
-  // ---------- state ----------
-  var reg = new Int16Array(N);
-  var cul = new Int16Array(N);
-  var count = new Int32Array(MAXC);
-  var colR = new Float32Array(MAXC), colG = new Float32Array(MAXC), colB = new Float32Array(MAXC);
-  var fit = new Float32Array(MAXC);
-  var lostCount = 0;
-  var borders = [];
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('#scenario-dropdown-btn')) $('scenario-dropdown-menu').classList.remove('show');
+  });
 
-  function hsl(h, s, l) {
-    s /= 100; l /= 100;
-    var k = function (n) { return (n + h / 30) % 12; };
-    var a = s * Math.min(l, 1 - l);
-    var f = function (n) { return l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1))); };
-    return [f(0) * 255, f(8) * 255, f(4) * 255];
-  }
-
-  var HUES = [8, 30, 50, 85, 135, 168, 192, 214, 244, 272, 302, 334];
-
-  function setCell(i, c) {
-    var old = cul[i];
-    if (old === c) return;
-    if (old === LOST) lostCount--; else count[old]--;
-    if (c === LOST) lostCount++; else count[c]++;
-    cul[i] = c;
-  }
-
-  function newCulture() {
-    for (var c = REGIONS; c < MAXC; c++) if (count[c] === 0) return c;
-    return -1;
-  }
-
-  function seed() {
-    // the sub-topias: twelve seeds kept apart, every cell joining its nearest
-    var seeds = [], tries = 0;
-    while (seeds.length < REGIONS && tries < 5000) {
-      var s = Math.floor(Math.random() * N), ok = true;
-      for (var q = 0; q < seeds.length; q++) if (hexDist(s, seeds[q]) < 8) { ok = false; break; }
-      if (ok) seeds.push(s);
-      tries++;
-    }
-    while (seeds.length < REGIONS) seeds.push(Math.floor(Math.random() * N));
-    for (var i = 0; i < N; i++) {
-      var best = 0, bd = 1e9;
-      for (var q2 = 0; q2 < REGIONS; q2++) {
-        var d = hexDist(i, seeds[q2]) + Math.random() * 0.9;
-        if (d < bd) { bd = d; best = q2; }
-      }
-      reg[i] = best;
-    }
-    // each sub-topia's home culture; the first is expansionist
-    count.fill(0);
-    var order = HUES.slice().sort(function () { return Math.random() - 0.5; });
-    for (var r = 0; r < REGIONS; r++) {
-      var rgb = hsl(order[r], 58, r % 2 ? 66 : 54);
-      colR[r] = rgb[0]; colG[r] = rgb[1]; colB[r] = rgb[2];
-      fit[r] = r === 0 ? 1.7 : 0.9 + Math.random() * 0.2;
-    }
-    lostCount = 0;
-    for (var j = 0; j < N; j++) { cul[j] = reg[j]; count[reg[j]]++; }
-    // the borders between sub-topias, once
-    borders = [];
-    for (var a = 0; a < N; a++) {
-      for (var k = 0; k < nb[a].length; k++) {
-        var b = nb[a][k];
-        if (b > a && reg[a] !== reg[b]) borders.push([a, b]);
-      }
-    }
-    layout();
-  }
-
-  // ---------- one update: a cell meets a neighbour ----------
-  function step(i) {
-    var c = cul[i], home = reg[i];
-    // integrity: a sub-topia draws its cells back to its own culture
-    if (c !== home && count[home] > 0 && Math.random() < I * (c === LOST ? 0.06 : 0.03)) {
-      // only if a neighbour still carries it
-      var nn = nb[i];
-      for (var k = 0; k < nn.length; k++) if (cul[nn[k]] === home) { setCell(i, home); return; }
-    }
-    // without integrity, culture lapses
-    if (c !== LOST && Math.random() < (1 - I) * LOSS) { setCell(i, LOST); return; }
-
-    var j = nb[i][Math.floor(Math.random() * nb[i].length)];
-    var d = cul[j];
-    if (d === LOST || d === c) return;
-    var border = reg[j] !== home;
-    // transmission: across a border by permeability; within a sub-topia its
-    // own culture by integrity (weak integrity reproduces it poorly), a
-    // foreign one by permeability
-    var t = border ? P : (d === home ? Math.pow(I, 1.5) : Math.max(P, 0.15));
-    if (Math.random() >= t) return;
-    if (c !== LOST) {
-      // at an open border between protected sub-topias, cultures blend
-      if (border && Math.random() < I * P * 0.12) {
-        var n = newCulture();
-        if (n >= 0) {
-          var w = 0.5, jit = 14;
-          colR[n] = colR[c] * w + colR[d] * (1 - w) + (Math.random() - 0.5) * jit;
-          colG[n] = colG[c] * w + colG[d] * (1 - w) + (Math.random() - 0.5) * jit;
-          colB[n] = colB[c] * w + colB[d] * (1 - w) + (Math.random() - 0.5) * jit;
-          fit[n] = (fit[c] + fit[d]) / 2;
-          setCell(i, n);
-          return;
-        }
-      }
-      // a rooted cell resists foreign cultures, as strongly as its integrity
-      if (c === home && Math.random() < I * 0.92) return;
-      // a contest, weighted by each culture's fitness
-      if (Math.random() > fit[d] / (fit[c] + fit[d])) return;
-    }
-    setCell(i, d);
-  }
-
-  // ---------- drawing ----------
-  var R = 10, W = 0, H = 0, dpr = 1, centres = new Float32Array(N * 2), hexPath = null;
-
-  function layout() {
-    var cssW = canvas.parentNode.clientWidth;
-    R = cssW / (Math.sqrt(3) * (COLS + 0.5));
-    W = cssW;
-    H = R * (1.5 * (ROWS - 1) + 2);
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
-    canvas.style.height = H + 'px';
-    var w = Math.sqrt(3) * R;
-    for (var r = 0; r < ROWS; r++) {
-      for (var c = 0; c < COLS; c++) {
-        var i = r * COLS + c;
-        centres[2 * i] = w * (c + 0.5 + ((r & 1) ? 0.5 : 0));
-        centres[2 * i + 1] = R + r * 1.5 * R;
-      }
-    }
-    hexPath = [];
-    for (var k = 0; k < 6; k++) {
-      var a = Math.PI / 180 * (60 * k - 30);
-      hexPath.push([Math.cos(a) * R, Math.sin(a) * R]);
-    }
-    draw();
-  }
-
-  function css(name, fallback) {
-    var v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-    return v || fallback;
-  }
-
-  function draw() {
-    if (!hexPath) return;
-    var dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    var bg = css('--canvas-bg', dark ? '#000' : '#fff');
-    var ink = css('--canvas-ink', dark ? '#fff' : '#000');
-    var lost = dark ? '#2b2b2b' : '#e4e2de';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
-    var shade = dark ? 0.78 : 1;
-    for (var i = 0; i < N; i++) {
-      var c = cul[i], x = centres[2 * i], y = centres[2 * i + 1];
-      ctx.fillStyle = c === LOST ? lost : 'rgb(' + (colR[c] * shade | 0) + ',' + (colG[c] * shade | 0) + ',' + (colB[c] * shade | 0) + ')';
-      ctx.beginPath();
-      ctx.moveTo(x + hexPath[0][0], y + hexPath[0][1]);
-      for (var k = 1; k < 6; k++) ctx.lineTo(x + hexPath[k][0], y + hexPath[k][1]);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = bg;
-      ctx.lineWidth = 0.6;
-      ctx.stroke();
-    }
-    // the membranes: heavier the less permeable
-    ctx.strokeStyle = ink;
-    ctx.globalAlpha = 0.18 + 0.82 * (1 - P);
-    ctx.lineWidth = 0.8 + 2.4 * (1 - P);
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    for (var e = 0; e < borders.length; e++) {
-      var a = borders[e][0], b = borders[e][1];
-      var ax = centres[2 * a], ay = centres[2 * a + 1], bx = centres[2 * b], by = centres[2 * b + 1];
-      // the shared edge: perpendicular to the line between centres, at its midpoint
-      var mx = (ax + bx) / 2, my = (ay + by) / 2, dx = bx - ax, dy = by - ay, len = Math.sqrt(dx * dx + dy * dy);
-      var hx = -dy / len * R / 2, hy = dx / len * R / 2;
-      ctx.moveTo(mx - hx, my - hy);
-      ctx.lineTo(mx + hx, my + hy);
-    }
-    ctx.stroke();
-    ctx.globalAlpha = 1;
-  }
-
-  // ---------- the readings ----------
-  function readings() {
-    var alive = 0, largest = 0, h = 0, filled = N - lostCount;
-    for (var c = 0; c < MAXC; c++) {
-      if (count[c] > 0) {
-        alive++;
-        if (count[c] > largest) largest = count[c];
-        if (filled > 0) { var p = count[c] / filled; h -= p * Math.log(p); }
-      }
-    }
-    stat.cultures.textContent = alive;
-    stat.diversity.textContent = filled ? Math.exp(h).toFixed(1) : '0';
-    stat.largest.textContent = Math.round(100 * largest / N) + '%';
-    stat.lost.textContent = Math.round(100 * lostCount / N) + '%';
-  }
-
-  // ---------- the dials ----------
-  function nearest() {
-    if (Math.abs(I - 0.5) < 0.17 && Math.abs(P - 0.5) < 0.17) return 'clash';
-    if (I >= 0.5) return P < 0.5 ? 'enclosure' : 'uplift';
-    return P < 0.5 ? 'collapse' : 'takeover';
-  }
-
-  function showState() {
-    var k = nearest(), s = PRESETS[k];
-    stateName.textContent = s.name;
-    stateSub.textContent = '(' + s.sub + ')';
-    stateDesc.textContent = s.desc;
-    root.setAttribute('data-state', k);
-    presetBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.preset === k ? 'true' : 'false'); });
-  }
-
-  function setDials(i, p, fromRange) {
-    I = Math.max(0, Math.min(1, i));
-    P = Math.max(0, Math.min(1, p));
-    if (!fromRange) { iRange.value = Math.round(I * 100); pRange.value = Math.round(P * 100); }
-    iOut.textContent = Math.round(I * 100);
-    pOut.textContent = Math.round(P * 100);
-    dot.setAttribute('cx', (10 + P * 180).toFixed(1));
-    dot.setAttribute('cy', (10 + (1 - I) * 180).toFixed(1));
-    showState();
-    draw();
-  }
-
-  iRange.addEventListener('input', function () { setDials(iRange.value / 100, P, true); });
-  pRange.addEventListener('input', function () { setDials(I, pRange.value / 100, true); });
-
-  presetBtns.forEach(function (b) {
-    b.addEventListener('click', function () {
-      var s = PRESETS[b.dataset.preset];
-      setDials(s.I, s.P);
+  function setDynamicScenario(mode) {
+    activeScenarioMode = mode;
+    $('scenario-dropdown-btn').innerHTML = 'Civilisational Scenarios: ' + SCENARIO_NAMES[mode] + ' ' + CARET;
+    document.querySelectorAll('#scenario-dropdown-menu .dropdown-item').forEach(function (el) {
+      el.classList.toggle('active', el.dataset.mode === mode);
     });
-  });
-
-  // the locator: a point on the 2x2, dragged or clicked
-  function fromPointer(e) {
-    var r = locator.getBoundingClientRect();
-    var x = (e.clientX - r.left) / r.width * 200, y = (e.clientY - r.top) / r.height * 200;
-    setDials(1 - (y - 10) / 180, (x - 10) / 180);
+    $('scenario-dropdown-menu').classList.remove('show');
+    randomizeConfiguration();
   }
-  var dragging = false;
-  locator.addEventListener('pointerdown', function (e) { dragging = true; locator.setPointerCapture(e.pointerId); fromPointer(e); });
-  locator.addEventListener('pointermove', function (e) { if (dragging) fromPointer(e); });
-  locator.addEventListener('pointerup', function () { dragging = false; });
-  locator.addEventListener('pointercancel', function () { dragging = false; });
 
-  playBtn.addEventListener('click', function () {
-    running = !running;
-    playBtn.textContent = running ? 'Pause' : 'Play';
-    playBtn.setAttribute('aria-pressed', running ? 'false' : 'true');
-  });
-  resetBtn.addEventListener('click', function () { seed(); readings(); });
+  function hexToRgba(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + alpha + ')';
+  }
+
+  // ---------- the written account: one panel per variable ----------
+  var proseBgColors = ['rgba(230, 138, 115, 0.06)', 'rgba(142, 142, 147, 0.06)', 'rgba(64, 145, 108, 0.06)', 'rgba(166, 75, 53, 0.06)'];
+  var proseBorders = ['var(--accent)', 'var(--moral-neu)', 'var(--vir-med)', 'var(--imp-high)'];
+  var variableLabels = ['Cultural Affiliation', 'Sub-topia Status', 'Soft Power', 'Border Impermeability'];
+
+  function formatSection(texts, cultureColorHex) {
+    return texts.map(function (t, i) {
+      var bg = proseBgColors[i], border = proseBorders[i];
+      if (i === 0 && cultureColorHex) { bg = hexToRgba(cultureColorHex, 0.08); border = cultureColorHex; }
+      return '<div class="prose-panel" style="background: ' + bg + '; border-left-color: ' + border + ';">' +
+        '<div class="prose-panel-head">' + variableLabels[i] + '</div>' +
+        '<div class="prose-panel-body">' + t + '</div></div>';
+    }).join('');
+  }
+
+  function toggleSidebar() { $('main-workspace').classList.toggle('sidebar-open'); }
+
+  function updateHTMLWithAnim(elId, html, animType) {
+    var el = $(elId);
+    if (!el) return;
+    if (el._rawHTML !== html) {
+      el._rawHTML = html;
+      el.innerHTML = html;
+      el.classList.remove('data-pulse', 'fade-in-text');
+      void el.offsetWidth;
+      if (animType === 'pulse') el.classList.add('data-pulse');
+      else if (animType === 'fade') {
+        var rows = el.querySelectorAll('.wb-row');
+        if (rows.length) rows[rows.length - 1].classList.add('fade-in-text');
+      }
+    }
+  }
+
+  function generatePlaceholderExp() {
+    var one = '<div class="prose-step"><span class="prose-step-head">Initial State</span><span class="muted-italic">Calculating initial distribution across the grid...</span></div>' +
+      '<div class="prose-step"><span class="prose-step-head">End State</span><span class="muted-italic">Waiting for epoch completion to determine final distribution.</span></div>' +
+      '<div class="prose-step"><span class="prose-step-head">Total Shift</span><span class="muted-italic">Comparison will be available once simulation concludes.</span></div>';
+    return '<div class="wb-row prose-row">' + formatSection([one, one, one, one], null) + '</div>';
+  }
 
   // ---------- running ----------
-  var frame = 0;
-  function tick() {
-    if (running && inView && !document.hidden) {
-      var n = N;
-      for (var k = 0; k < n; k++) step(Math.floor(Math.random() * N));
-      draw();
-      if (++frame % 8 === 0) readings();
+  function toggleScenario() {
+    if (isCompleted) { resetToInitial(); return; }
+    isPlaying = !isPlaying;
+    var btn = $('scenario-1-btn'), icon = $('scenario-icon');
+    if (isPlaying) {
+      btn.classList.add('playing');
+      btn.classList.remove('completed');
+      btn.lastChild.textContent = ' In-Progress';
+      icon.innerHTML = ICONS.pause;
+      simInterval = setInterval(runSimulationStep, 800);
+    } else {
+      btn.classList.remove('playing');
+      btn.lastChild.textContent = ' Run Simulation';
+      icon.innerHTML = ICONS.play;
+      clearInterval(simInterval);
+      simInterval = null;
     }
-    requestAnimationFrame(tick);
+    updateButtonStates();
   }
 
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { inView = es[0].isIntersecting; }).observe(canvas);
-  }
-  var resizeTimer;
-  window.addEventListener('resize', function () { clearTimeout(resizeTimer); resizeTimer = setTimeout(layout, 120); });
-  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-
-  // reduced motion: start paused
-  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    running = false;
-    playBtn.textContent = 'Play';
-    playBtn.setAttribute('aria-pressed', 'true');
+  var DIRS = [{ q: 1, r: 0 }, { q: 1, r: -1 }, { q: 0, r: -1 }, { q: -1, r: 0 }, { q: -1, r: 1 }, { q: 0, r: 1 }];
+  function getNeighbors(node) {
+    return nodes.filter(function (o) { return DIRS.some(function (d) { return o.q === node.q + d.q && o.r === node.r + d.r; }); });
   }
 
-  seed();
-  setDials(I, P);
-  readings();
-  requestAnimationFrame(tick);
+  function captureEpochState(nodeData) {
+    var avgs = {};
+    ['moral', 'softPower', 'impermeability'].forEach(function (m) {
+      avgs[m] = nodeData.reduce(function (s, n) { return s + n[m]; }, 0) / nodeData.length;
+    });
+    var counts = new Array(7).fill(0);
+    nodeData.forEach(function (n) { counts[n.cultureIndex]++; });
+    epochHistory.push({ avgs: avgs, counts: counts });
+  }
+
+  // a sub-topia adopts a neighbour's culture when that culture's soft power
+  // beats both its borders and its own soft power
+  function runSimulationStep() {
+    var changed = false;
+    simulationEpoch++;
+    var next = nodes.map(function (n) { return Object.assign({}, n); });
+    nodes.forEach(function (target, index) {
+      var winner = null;
+      getNeighbors(target).forEach(function (origin) {
+        if (origin.cultureIndex === target.cultureIndex) return;
+        if (origin.softPower > target.impermeability && origin.softPower > target.softPower) {
+          if (!winner || origin.softPower > winner.softPower) winner = origin;
+        }
+      });
+      if (winner) {
+        changed = true;
+        next[index].cultureIndex = winner.cultureIndex;
+        next[index].softPower = winner.softPower;
+        next[index].impermeability = winner.impermeability;
+        next[index].moral = winner.moral;
+      }
+    });
+    nodes.forEach(function (n, i) { n.cultureIndex = next[i].cultureIndex; n.softPower = next[i].softPower; n.impermeability = next[i].impermeability; n.moral = next[i].moral; });
+    captureEpochState(nodes);
+    updateDisplay();
+    if (!changed) completeSimulation();
+  }
+
+  function completeSimulation() {
+    isPlaying = false; isCompleted = true;
+    clearInterval(simInterval); simInterval = null;
+    var btn = $('scenario-1-btn');
+    btn.classList.remove('playing'); btn.classList.add('completed');
+    btn.lastChild.textContent = ' Completed'; $('scenario-icon').innerHTML = ICONS.check;
+    updateDisplay();
+    updateButtonStates();
+  }
+
+  function setSystemLevel(mode) {
+    if (isPlaying) return;
+    currentLevel = mode;
+    if (isCompleted) { randomizeConfiguration(); return; }
+    isSimultaneous = true;
+    sim.classList.add('sim-mode');
+    if (mode === 'basic') { setScale(2); setScoreRange(10); } else { setScale(4); setScoreRange(100); }
+    setSpectrum(true);
+    showScores = true;
+    updateDisplay();
+  }
+
+  // ---------- colour ----------
+  function interpolateColor(c1, c2, f) {
+    var h = function (x) { return x.toString(16).padStart(2, '0'); };
+    var r1 = parseInt(c1.substring(1, 3), 16), g1 = parseInt(c1.substring(3, 5), 16), b1 = parseInt(c1.substring(5, 7), 16);
+    var r2 = parseInt(c2.substring(1, 3), 16), g2 = parseInt(c2.substring(3, 5), 16), b2 = parseInt(c2.substring(5, 7), 16);
+    return '#' + h(Math.round(r1 + f * (r2 - r1))) + h(Math.round(g1 + f * (g2 - g1))) + h(Math.round(b1 + f * (b2 - b1)));
+  }
+
+  function getSpectrumColor(val, palette, type) {
+    if (type === 'cultures') return palette[val % palette.length];
+    if (!isSpectrum) return val < 33.3 ? palette[0] : (val < 66.6 ? palette[1] : palette[2]);
+    if (val <= 50) return interpolateColor(palette[0], palette[1], val / 50);
+    return interpolateColor(palette[1], palette[2], (val - 50) / 50);
+  }
+
+  function isColorDark(hex) {
+    if (!hex || hex === 'transparent' || hex.indexOf('var') === 0) return false;
+    var r = parseInt(hex.substring(1, 3), 16), g = parseInt(hex.substring(3, 5), 16), b = parseInt(hex.substring(5, 7), 16);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b < 140;
+  }
+
+  function setDensity(mode) {
+    currentDensity = mode;
+    $('dens-compact').classList.toggle('active', mode === 'compact');
+    $('dens-spatial').classList.toggle('active', mode === 'spatial');
+    initGrids(currentLayers);
+  }
+
+  // ---------- the grids ----------
+  function initGrids(layers) {
+    sim.classList.remove('sim-ready');
+    GRIDS.forEach(function (g) { $(g.mesh).innerHTML = ''; });
+    nodes = []; phaseHistory = []; proseLog = []; epochHistory = []; simulationEpoch = 0;
+
+    var hexSize = 15 * (1 + (5 - layers) * 0.35) * (isSimultaneous ? 1.1 : 1.25);
+    var spacingSpatial = 1.08;
+    var scaleSpatial = layers <= 2 ? 0.92 : (0.91 - (layers - 3) * 0.03);
+
+    for (var q = -layers; q <= layers; q++) {
+      for (var r = Math.max(-layers, -q - layers); r <= Math.min(layers, -q + layers); r++) {
+        var cIdx = Math.floor(Math.random() * 7);
+        var node = {
+          q: q, r: r, chessId: String.fromCharCode(65 + q + layers) + (r + layers + 1),
+          softPower: cultureScores.softPower[cIdx],
+          impermeability: cultureScores.impermeability[cIdx],
+          moral: cultureScores.moral[cIdx],
+          cultureIndex: cIdx, els: [], circles: [], txt: []
+        };
+        GRIDS.forEach(function (grid) {
+          // the soft power grid is always spatial, so its borders show
+          var spatial = grid.type === 'softPower' || currentDensity === 'spatial';
+          var sF = spatial ? spacingSpatial : 1, hS = spatial ? scaleSpatial : 1;
+          var x = hexSize * (Math.sqrt(3) * q + (Math.sqrt(3) / 2) * r) * sF;
+          var y = hexSize * (1.5 * r) * sF;
+          var g = document.createElementNS(SVGNS, 'g'); g.setAttribute('transform', 'translate(' + x + ', ' + y + ')');
+          var h = document.createElementNS(SVGNS, 'polygon');
+          var pts = [];
+          for (var a = 0; a < 6; a++) { var ang = Math.PI / 3 * a + Math.PI / 6; pts.push(Math.cos(ang) * hexSize + ',' + Math.sin(ang) * hexSize); }
+          h.setAttribute('points', pts.join(' ')); h.setAttribute('class', 'hex-cell'); h.setAttribute('transform', 'scale(' + hS + ')');
+          if (!spatial) h.style.strokeWidth = '0.5px';
+          var circ = document.createElementNS(SVGNS, 'circle'); circ.setAttribute('r', hexSize * 0.2); circ.setAttribute('class', 'hex-circle');
+          var t = document.createElementNS(SVGNS, 'text'); t.setAttribute('class', 'hex-label');
+          t.style.fontSize = (5.5 * (hexSize / 15)) + 'px';
+          t.dataset.base = 5.5 * (hexSize / 15);
+          g.appendChild(h); g.appendChild(circ); g.appendChild(t); $(grid.mesh).appendChild(g);
+          node.els.push(h); node.circles.push(circ); node.txt.push(t);
+        });
+        nodes.push(node);
+      }
+    }
+    initialState = nodes.map(function (n) { return { q: n.q, r: n.r, chessId: n.chessId, softPower: n.softPower, impermeability: n.impermeability, moral: n.moral, cultureIndex: n.cultureIndex }; });
+    captureEpochState(initialState);
+    updateHTMLWithAnim('combined-prose-container', generatePlaceholderExp(), 'none');
+    updateDisplay();
+    setTimeout(function () { sim.classList.add('sim-ready'); }, 50);
+  }
+
+  function setScoreRange(range) {
+    scoreScale = range;
+    $('range-10').classList.toggle('active', range === 10);
+    $('range-100').classList.toggle('active', range === 100);
+    updateDisplay();
+  }
+
+  function formatScore(val) { return scoreScale === 10 ? (val / 10).toFixed(1) : Math.round(val); }
+
+  // the soft power tiles show soft power, or soft power / impermeability
+  function setImpScores(on) {
+    showImpScores = on;
+    $('tile-sp').classList.toggle('active', !on);
+    $('tile-sp-imp').classList.toggle('active', on);
+    updateDisplay();
+  }
+
+  function updateButtonStates() {
+    var primaryIds = { cultures: 'btn-cultures', moral: 'btn-moral', softPower: 'btn-softpower' };
+    var secondaryIds = { cultures: 'ovl-cultures', moral: 'ovl-moral', softPower: 'ovl-softpower' };
+    $('lvl-basic').classList.toggle('active', currentLevel === 'basic');
+    $('lvl-complex').classList.toggle('active', currentLevel === 'complex');
+    document.querySelectorAll('#scale-toggle .segment, #level-toggle-sidebar .segment').forEach(function (b) { b.disabled = isPlaying; });
+    var dd = $('scenario-dropdown-btn');
+    dd.disabled = isPlaying; dd.style.opacity = isPlaying ? '0.35' : '1'; dd.style.cursor = isPlaying ? 'not-allowed' : 'pointer';
+    Object.keys(primaryIds).forEach(function (k) { $(primaryIds[k]).classList.toggle('active', !isSimultaneous && activePrimary === k); });
+    Object.keys(secondaryIds).forEach(function (k) {
+      var b = $(secondaryIds[k]);
+      b.classList.toggle('active', activeSecondary === k);
+      b.disabled = isSimultaneous || activePrimary === k;
+    });
+    var impBtn = $('ovl-impermeability');
+    impBtn.classList.toggle('active', isImpOverlayActive);
+    impBtn.disabled = isSimultaneous;
+    $('spec-on').classList.toggle('active', isSpectrum);
+    $('spec-off').classList.toggle('active', !isSpectrum);
+    var st = $('sim-toggle').children;
+    st[0].classList.toggle('active', isSimultaneous);
+    st[1].classList.toggle('active', !isSimultaneous);
+    $('dens-compact').classList.toggle('active', currentDensity === 'compact');
+    $('dens-spatial').classList.toggle('active', currentDensity === 'spatial');
+  }
+
+  // ---------- doughnut charts ----------
+  function drawPieChart(containerId, data, initData) {
+    var container = $(containerId);
+    if (!container) return;
+    container.innerHTML = '';
+    var total = data.reduce(function (s, d) { return s + d.value; }, 0);
+    var initTotal = initData ? initData.reduce(function (s, d) { return s + d.value; }, 0) : total;
+    if (total === 0 && (!initData || initTotal === 0)) { container.innerHTML = '—'; return; }
+
+    var svg = document.createElementNS(SVGNS, 'svg');
+    svg.setAttribute('viewBox', '-24 -24 48 48');
+    svg.setAttribute('class', 'pie-svg');
+    var tooltip = document.createElement('div'); tooltip.className = 'pie-tooltip'; container.appendChild(tooltip);
+    var stateLabel = document.createElement('div'); stateLabel.className = 'pie-state';
+    var isBorders = containerId === 'chart-imp-single';
+    var useData = initData || data;
+    var slices = useData.map(function (d, i) {
+      var initP = d.value / (initTotal || 1), targetP = data[i].value / (total || 1);
+      return { label: data[i].label, color: data[i].color, initP: initP, targetP: targetP, currentP: initP };
+    });
+    var activeHover = null;
+    var renderTip = function () { if (activeHover) tooltip.textContent = activeHover.label + ': ' + Math.round(activeHover.currentP * 100) + '%'; };
+
+    slices.forEach(function (slice) {
+      var path = document.createElementNS(SVGNS, 'path');
+      path.setAttribute('class', 'pie-slice-path');
+      path.style.strokeLinejoin = 'round';
+      if (isBorders) { path.style.fill = 'transparent'; path.style.stroke = slice.color; path.style.strokeWidth = '1.2'; }
+      else { path.style.fill = slice.color; path.style.stroke = 'var(--bg)'; path.style.strokeWidth = '1'; }
+      var place = function (e) { var rc = container.getBoundingClientRect(); tooltip.style.left = (e.clientX - rc.left + 12) + 'px'; tooltip.style.top = (e.clientY - rc.top + 12) + 'px'; };
+      path.addEventListener('mouseenter', function (e) { activeHover = slice; if (isBorders) path.style.strokeWidth = '2'; else path.style.opacity = '0.75'; tooltip.style.visibility = 'visible'; renderTip(); place(e); });
+      path.addEventListener('mousemove', function (e) { if (activeHover) place(e); });
+      path.addEventListener('mouseleave', function () { activeHover = null; if (isBorders) path.style.strokeWidth = '1.2'; else path.style.opacity = '1'; tooltip.style.visibility = 'hidden'; });
+      slice.el = path; svg.appendChild(path);
+    });
+    container.appendChild(svg);
+    container.appendChild(stateLabel);
+
+    var isEndState = false, lastToggle = performance.now(), anim = null;
+    function wedge(start, pct, inner, outer, gap) {
+      pct = Math.max(0, Math.min(1, pct));
+      if (pct <= 0.001) return '';
+      if (pct >= 0.999) return 'M 0 -' + outer + ' A ' + outer + ' ' + outer + ' 0 1 1 0 ' + outer + ' A ' + outer + ' ' + outer + ' 0 1 1 0 -' + outer + ' Z M 0 -' + inner + ' A ' + inner + ' ' + inner + ' 0 1 0 0 ' + inner + ' A ' + inner + ' ' + inner + ' 0 1 0 0 -' + inner + ' Z';
+      var s = start + gap / 2, p = Math.max(0, pct - gap);
+      if (p <= 0) return '';
+      var a1 = s * 2 * Math.PI - Math.PI / 2, a2 = (s + p) * 2 * Math.PI - Math.PI / 2, large = p > 0.5 ? 1 : 0;
+      return 'M ' + Math.cos(a1) * outer + ' ' + Math.sin(a1) * outer + ' A ' + outer + ' ' + outer + ' 0 ' + large + ' 1 ' + Math.cos(a2) * outer + ' ' + Math.sin(a2) * outer +
+        ' L ' + Math.cos(a2) * inner + ' ' + Math.sin(a2) * inner + ' A ' + inner + ' ' + inner + ' 0 ' + large + ' 0 ' + Math.cos(a1) * inner + ' ' + Math.sin(a1) * inner + ' Z';
+    }
+    function animate() {
+      var progress = Math.min((performance.now() - lastToggle) / 1200, 1);
+      var ease = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      var acc = 0, visible = slices.filter(function (s) { return s.currentP > 0.01; }).length;
+      slices.forEach(function (slice) {
+        var a = isEndState ? slice.initP : slice.targetP, b = isEndState ? slice.targetP : slice.initP;
+        slice.currentP = initData ? a + (b - a) * ease : slice.targetP;
+        var gap = (isBorders && visible > 1 && slice.currentP < 0.99) ? 0.08 : 0;
+        slice.el.setAttribute('d', wedge(acc, slice.currentP, 12, 20, gap));
+        acc += slice.currentP;
+      });
+      renderTip();
+      if (progress < 1) anim = requestAnimationFrame(animate);
+    }
+    if (initData) {
+      var toggle = function () {
+        isEndState = !isEndState; lastToggle = performance.now();
+        stateLabel.textContent = isEndState ? 'End State' : 'Initial State';
+        if (anim) cancelAnimationFrame(anim);
+        animate();
+      };
+      setTimeout(toggle, 100);
+      var id = setInterval(function () { if (!container.contains(svg)) { clearInterval(id); return; } toggle(); }, 2800);
+    } else {
+      stateLabel.textContent = 'Initial Conditions';
+      animate();
+    }
+  }
+
+  function getScenarioDefinition(title) {
+    var defs = [];
+    if (title.indexOf('Utopian Takeover') >= 0) defs.push('Absolute global harmony under a single culture.');
+    else if (title.indexOf('Utopian Hegemony') >= 0) defs.push('Absolute global harmony under a single culture in its final stabilised form.');
+    else if (title.indexOf('Dystopian Takeover') >= 0) defs.push('Totalitarian control by a single culture.');
+    else if (title.indexOf('Dystopian Hegemony') >= 0) defs.push('Totalitarian control by a single culture in its final stabilised form.');
+    else if (title.indexOf('Mono Cultural Takeover') >= 0) defs.push(title.indexOf('Resistant Enclaves') >= 0 ? 'One culture controls the majority of the map, though small pockets of resistance endure.' : 'A single culture has entirely assimilated the map.');
+    else if (title.indexOf('Mono Cultural Hegemony') >= 0) defs.push(title.indexOf('Resistant Enclaves') >= 0 ? 'One culture permanently wields overwhelming influence, though marginal resistance remains.' : 'A single dominant culture wields overwhelming permanent influence over the board.');
+    else if (title.indexOf('Meta Utopian Uplift') >= 0) defs.push('A peaceful, prosperous world shared by multiple distinct cultures.');
+    else if (title.indexOf('Meta Dystopian Downfall') >= 0) defs.push('The entire world has collapsed into a harsh dystopia across various fractured cultures.');
+    else if (title.indexOf('Meta Utopian Enclosure') >= 0) defs.push('A highly fragmented map that maintains an overall utopian standard despite pockets of dystopia.');
+    else if (title.indexOf('Meta Dystopian Enclosure') >= 0) defs.push('A highly fragmented, unstable map with no single culture able to establish dominance.');
+    if (title.indexOf('Cultural Collapse') >= 0) defs.push('The soft power of the surviving societies has critically broken down.');
+    return defs.length ? defs.join(' ') : 'The civilisations have reached a stabilised cultural deadlock.';
+  }
+
+  var hexClip = 'clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);';
+  function swatch(color, w, h, extra) { return '<div style="width: ' + w + 'px; height: ' + h + 'px; background: ' + color + '; ' + hexClip + ' flex-shrink: 0;' + (extra || '') + '"></div>'; }
+  function statusColorFor(m) { return m >= 67 ? 'var(--moral-uto)' : (m <= 33 ? 'var(--moral-dys)' : 'var(--moral-neu)'); }
+
+  // ---------- the analytics and the written account ----------
+  var combinedInit = [], combinedEnd = [], combinedShift = [];
+
+  function updateCulturalAnalytics() {
+    if (!initialState || !nodes.length) return;
+    var totalNodes = nodes.length;
+
+    var formatCellWithKey = function (label, color, count, opacity, isBorder) {
+      var c = count !== null ? '<span class="cell-count">' + count + '</span>' : '<span class="cell-count"></span>';
+      var sw = isBorder
+        ? '<svg width="12" height="14" viewBox="0 0 16 18" style="flex-shrink: 0; overflow: visible; margin-top: 1px;"><polygon points="8,1 15,5 15,13 8,17 1,13 1,5" fill="none" stroke="' + color + '" stroke-width="2" stroke-linejoin="round"/></svg>'
+        : swatch(color, 10, 12, ' margin-right: 2px; margin-top: 1px;');
+      return '<div class="cell-row" style="opacity: ' + (opacity == null ? 1 : opacity) + ';">' + c + sw + '<span class="cell-label">' + label + '</span></div>';
+    };
+    var getShiftDiv = function (a, b, opacity) {
+      var d = b - a, color = '#8E8E93', sign = '';
+      if (d > 0) { color = '#40916C'; sign = '+'; } else if (d < 0) color = '#A64B35';
+      return '<div class="cell-shift" style="opacity: ' + (opacity == null ? 1 : opacity) + '; color: ' + color + ';">(' + (d === 0 ? '0' : sign + d) + ')</div>';
+    };
+    var categorise = function (set, key) {
+      var c = { high: 0, med: 0, low: 0 };
+      set.forEach(function (n) { var v = n[key]; if (v >= 67) c.high++; else if (v <= 33) c.low++; else c.med++; });
+      return c;
+    };
+    var statText = function (config, a, b) {
+      var name = config.metricName.toLowerCase(), L = config.labels.map(function (l) { return l.toLowerCase(); });
+      var parts = [];
+      [['high', 0], ['med', 1], ['low', 2]].forEach(function (k) {
+        var d = b[k[0]] - a[k[0]];
+        if (d !== 0) parts.push('<strong>' + (d > 0 ? '+' : '') + d + '</strong> ' + L[k[1]]);
+      });
+      var diff;
+      if (!parts.length) diff = 'The distribution of ' + name + ' remained completely stable with no net changes.';
+      else if (parts.length === 1) diff = 'The only change in ' + name + ' was a shift of ' + parts[0] + ' regions.';
+      else if (parts.length === 2) diff = 'Net changes in ' + name + ' consisted of ' + parts[0] + ' regions and ' + parts[1] + ' regions.';
+      else diff = 'Net changes in ' + name + ' consisted of ' + parts[0] + ' regions, ' + parts[1] + ' regions, and ' + parts[2] + ' regions.';
+      var moral = config.key === 'moral';
+      var init = moral
+        ? 'The simulation began with <strong>' + a.high + '</strong> regions holding a ' + L[0] + ' ' + name + ', <strong>' + a.med + '</strong> with a ' + L[1] + ' status, and <strong>' + a.low + '</strong> with a ' + L[2] + ' status.'
+        : 'The simulation began with <strong>' + a.high + '</strong> regions showing ' + L[0] + ' ' + name + ', <strong>' + a.med + '</strong> with ' + L[1] + ' levels, and <strong>' + a.low + '</strong> with ' + L[2] + ' levels.';
+      var end = moral
+        ? 'By the end of the simulation, the distribution shifted to <strong>' + b.high + '</strong> regions with a ' + L[0] + ' ' + name + ', <strong>' + b.med + '</strong> with a ' + L[1] + ' status, and <strong>' + b.low + '</strong> with a ' + L[2] + ' status.'
+        : 'By the end of the simulation, the distribution shifted to <strong>' + b.high + '</strong> regions demonstrating ' + L[0] + ' ' + name + ', <strong>' + b.med + '</strong> with ' + L[1] + ' levels, and <strong>' + b.low + '</strong> with ' + L[2] + ' levels.';
+      return { init: init, end: end, shift: diff };
+    };
+
+    combinedInit = []; combinedEnd = []; combinedShift = [];
+
+    var renderStatRow = function (id, config, a, b) {
+      var data = [
+        { label: config.labels[0], color: config.colors[0], i: a.high, e: b.high },
+        { label: config.labels[1], color: config.colors[1], i: a.med, e: b.med },
+        { label: config.labels[2], color: config.colors[2], i: a.low, e: b.low }
+      ];
+      var initPie = data.map(function (d) { return { label: d.label, value: d.i, color: d.color }; });
+      data.sort(function (x, y) { return isCompleted ? y.e - x.e : y.i - x.i; });
+      updateHTMLWithAnim('cell-' + id + '-init', data.map(function (d) { return formatCellWithKey(d.label, d.color, d.i, 1, config.isBorder); }).join(''), 'pulse');
+      if (isCompleted) {
+        updateHTMLWithAnim('cell-' + id + '-end', data.map(function (d) { return formatCellWithKey(d.label, d.color, d.e, 1, config.isBorder); }).join(''), 'pulse');
+        updateHTMLWithAnim('cell-' + id + '-shift', data.map(function (d) { return getShiftDiv(d.i, d.e); }).join(''), 'pulse');
+        var t = statText(config, a, b);
+        combinedInit.push(t.init); combinedEnd.push(t.end); combinedShift.push(t.shift);
+        var endPie = [{ label: config.labels[0], value: b.high, color: config.colors[0] }, { label: config.labels[1], value: b.med, color: config.colors[1] }, { label: config.labels[2], value: b.low, color: config.colors[2] }];
+        drawPieChart('chart-' + id + '-single', endPie, initPie);
+      } else {
+        updateHTMLWithAnim('cell-' + id + '-end', '—', 'pulse');
+        updateHTMLWithAnim('cell-' + id + '-shift', '—', 'pulse');
+        drawPieChart('chart-' + id + '-single', initPie);
+      }
+    };
+
+    var uCount = 0, dCount = 0, nCount = 0, uSum = 0, dSum = 0, nSum = 0, spSum = 0, impSum = 0, moralSum = 0;
+    var cultStats = {};
+    CULTURE_NAMES.forEach(function (name, i) { cultStats[name] = { count: 0, moralSum: 0, index: i }; });
+    nodes.forEach(function (n) {
+      if (n.moral >= 67) { uCount++; uSum += n.moral; } else if (n.moral <= 33) { dCount++; dSum += n.moral; } else { nCount++; nSum += n.moral; }
+      var c = cultStats[CULTURE_NAMES[n.cultureIndex]]; c.count++; c.moralSum += n.moral;
+      spSum += n.softPower; impSum += n.impermeability; moralSum += n.moral;
+    });
+    var uPct = uCount / totalNodes * 100, dPct = dCount / totalNodes * 100, nPct = nCount / totalNodes * 100;
+    var spAvg = spSum / totalNodes, impAvg = impSum / totalNodes, moralAvg = moralSum / totalNodes;
+    var sorted = Object.keys(cultStats).map(function (k) { return [k, cultStats[k]]; }).filter(function (e) { return e[1].count > 0; }).sort(function (a, b) { return b[1].count - a[1].count; });
+    var cMax = sorted.length ? sorted[0][1].count / totalNodes * 100 : 0;
+
+    var scenarios = [];
+    if (cMax === 100) {
+      if (uPct === 100) scenarios.push(isCompleted ? 'Utopian Hegemony' : 'Utopian Takeover');
+      else if (dPct === 100) scenarios.push(isCompleted ? 'Dystopian Hegemony' : 'Dystopian Takeover');
+      else scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
+    } else {
+      if (uPct === 100) scenarios.push('Meta Utopian Uplift');
+      else if (dPct === 100) scenarios.push('Meta Dystopian Downfall');
+      if (cMax > 50 && cMax < 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony with Resistant Enclaves' : 'Mono Cultural Takeover with Resistant Enclaves');
+      else if (cMax <= 50) scenarios.push(moralAvg >= 67 ? 'Meta Utopian Enclosure with Dystopian Enclaves' : 'Meta Dystopian Enclosure');
+      else if (cMax >= 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
+    }
+    // without soft power, cultures cannot hold themselves together
+    if (spAvg < 33.3) scenarios.push('Cultural Collapse');
+    var title = scenarios.length > 1 ? scenarios.slice(0, -1).join(' and ') + ' and ' + scenarios[scenarios.length - 1] : (scenarios[0] || '');
+
+    var moralLabel = function (v) { return v >= 67 ? 'Utopian' : (v <= 33 ? 'Dystopian' : 'Notopian'); };
+    var moralNoun = function (v) { return v >= 67 ? 'Utopia' : (v <= 33 ? 'Dystopia' : 'Notopia'); };
+    var extreme = function (key, max) {
+      var best = max ? -1 : Infinity, idx = -1;
+      cultureScores[key].forEach(function (v, i) { if (max ? v > best : v < best) { best = v; idx = i; } });
+      return { name: CULTURE_NAMES[idx], color: PASTEL_RAINBOW[idx], rawScore: best };
+    };
+    var fill = function (v, key) { return getSpectrumColor(v, paletteMap[key], key); };
+
+    var metricItem = function (label, name, val, type, metricColor, cultureColor) {
+      var pts = [];
+      for (var a = 0; a < 6; a++) { var ang = Math.PI / 3 * a + Math.PI / 6; pts.push(Math.cos(ang) * 22 + ',' + Math.sin(ang) * 22); }
+      var f = metricColor, s = baseStroke(), sw = '1.5px', tc = isColorDark(f) ? '#FFFFFF' : '#1A1A1A';
+      if (type === 'impermeability') { f = 'transparent'; s = metricColor; sw = '4px'; tc = 'var(--text)'; }
+      var dot = (type !== 'moral' && type !== 'cultures' && cultureColor) ? swatch(cultureColor, 10, 12, ' margin-right: 6px; margin-top: 1px;') : '';
+      return '<div class="metric-item"><svg viewBox="-26 -26 52 52" width="52" height="52" style="overflow: visible; flex-shrink: 0;">' +
+        '<polygon points="' + pts.join(' ') + '" fill="' + f + '" stroke="' + s + '" stroke-width="' + sw + '" stroke-linejoin="round"/>' +
+        '<text x="0" y="1" text-anchor="middle" dominant-baseline="middle" font-family="var(--ff-mono)" font-weight="500" font-size="13px" fill="' + tc + '">' + val + '</text></svg>' +
+        '<div class="metric-text"><div class="metric-label">' + label + '</div><div class="metric-name">' + dot + '<span>' + name + '</span></div></div></div>';
+    };
+
+    var dom = sorted.length ? sorted[0][1] : null;
+    var domMoral = dom ? dom.moralSum / dom.count : 0;
+    var maxMoral = extreme('moral', true), minMoral = extreme('moral', false);
+    var maxSP = extreme('softPower', true), minSP = extreme('softPower', false);
+    var maxImp = extreme('impermeability', true), minImp = extreme('impermeability', false);
+
+    var major = '<div class="block-kicker">Major Metrics</div><div class="metrics-grid">' +
+      metricItem('Dominant Culture', sorted.length ? sorted[0][0] : 'None', sorted.length ? Math.round(dom.count / totalNodes * 100) + '%' : '0%', 'cultures', sorted.length ? PASTEL_RAINBOW[dom.index] : 'var(--bg)') +
+      metricItem('Dominant Status', moralLabel(domMoral), formatScore(domMoral), 'moral', fill(domMoral, 'moral')) +
+      metricItem('Meta-Topia Status', moralLabel(moralAvg), formatScore(moralAvg), 'moral', fill(moralAvg, 'moral')) +
+      metricItem('Peak Sub-topia', maxMoral.name, formatScore(maxMoral.rawScore), 'moral', fill(maxMoral.rawScore, 'moral'), maxMoral.color) +
+      metricItem('Valley Sub-topia', minMoral.name, formatScore(minMoral.rawScore), 'moral', fill(minMoral.rawScore, 'moral'), minMoral.color) +
+      metricItem('Average Sub-topia', 'Global Avg', formatScore(moralAvg), 'moral', fill(moralAvg, 'moral'), null) +
+      metricItem('Peak Soft Power', maxSP.name, formatScore(maxSP.rawScore), 'softPower', fill(maxSP.rawScore, 'softPower'), maxSP.color) +
+      metricItem('Valley Soft Power', minSP.name, formatScore(minSP.rawScore), 'softPower', fill(minSP.rawScore, 'softPower'), minSP.color) +
+      metricItem('Average Soft Power', 'Global Avg', formatScore(spAvg), 'softPower', fill(spAvg, 'softPower'), null) +
+      metricItem('Peak Impermeability', maxImp.name, formatScore(maxImp.rawScore), 'impermeability', fill(maxImp.rawScore, 'impermeability'), maxImp.color) +
+      metricItem('Valley Impermeability', minImp.name, formatScore(minImp.rawScore), 'impermeability', fill(minImp.rawScore, 'impermeability'), minImp.color) +
+      metricItem('Avg Impermeability', 'Global Avg', formatScore(impAvg), 'impermeability', fill(impAvg, 'impermeability'), null) +
+      '</div>';
+    updateHTMLWithAnim('overview-major-metrics', major, 'none');
+
+    var avgStr = function (c, s) { return formatScore(c > 0 ? s / c : 0); };
+    var statusBlock = function (label, pct, avg, color, border) {
+      return '<div class="status-block"><div class="block-kicker">' + label + '</div><div class="status-line">' + swatch(color, 20, 23, border ? ' border: 1px solid rgba(142, 142, 147, 0.2);' : '') +
+        '<span><strong>' + Math.round(pct) + '%</strong> <span class="status-avg">— Avg Rating: ' + avg + '</span></span></div></div>';
+    };
+    var html = '<div class="status-row">' + statusBlock('Utopian', uPct, avgStr(uCount, uSum), 'var(--moral-uto)') + statusBlock('Dystopian', dPct, avgStr(dCount, dSum), 'var(--moral-dys)', true) + statusBlock('Notopian', nPct, avgStr(nCount, nSum), 'var(--moral-neu)') + '</div>';
+    html += '<div class="status-row">';
+    ['Dominant Culture', 'Secondary Culture', 'Tertiary Culture'].forEach(function (t, k) {
+      if (k >= sorted.length) return;
+      var d = sorted[k][1], m = d.moralSum / d.count;
+      html += '<div class="status-block"><div class="block-kicker">' + t + '</div><div class="status-line status-line-wide"><div class="swatch-pair">' + swatch(PASTEL_RAINBOW[d.index], 20, 23) + swatch(statusColorFor(m), 20, 23) + '</div>' +
+        '<span><strong>' + Math.round(d.count / totalNodes * 100) + '%</strong> ' + sorted[k][0] + ' &mdash; ' + moralNoun(m) + '</span></div></div>';
+    });
+    html += '</div><div class="block-kicker">Complete Cultural Distribution</div><div class="dist-grid">';
+    sorted.forEach(function (e) {
+      var d = e[1], m = d.moralSum / d.count;
+      html += '<div class="dist-item"><div class="swatch-pair">' + swatch(PASTEL_RAINBOW[d.index], 14, 16) + swatch(statusColorFor(m), 14, 16) + '</div><span><strong>' + Math.round(d.count / totalNodes * 100) + '%</strong> ' + e[0] + ' &mdash; ' + moralNoun(m) + '</span></div>';
+    });
+    html += '</div>';
+    updateHTMLWithAnim('overview-dominant-cultures', html, 'none');
+
+    var desc = getScenarioDefinition(title);
+    updateHTMLWithAnim('scenario-main-title', '<strong>' + title + '</strong>', 'none');
+    updateHTMLWithAnim('scenario-title-label', simulationEpoch === 0 ? 'Initial State' : (isCompleted ? 'Terminal State' : 'Current Trajectory'), 'none');
+    updateHTMLWithAnim('scenario-main-desc', simulationEpoch === 0 || isCompleted ? desc : '', 'none');
+
+    renderStatRow('moral', { key: 'moral', metricName: 'Sub-topia Status', colors: ['var(--moral-uto)', 'var(--moral-neu)', 'var(--moral-dys)'], labels: ['UTOPIAN', 'NOTOPIAN', 'DYSTOPIAN'] }, categorise(initialState, 'moral'), categorise(nodes, 'moral'));
+    renderStatRow('sp', { key: 'softPower', metricName: 'Soft Power', colors: ['var(--vir-high)', 'var(--vir-med)', 'var(--vir-low)'], labels: ['HIGH', 'MED', 'LOW'] }, categorise(initialState, 'softPower'), categorise(nodes, 'softPower'));
+    renderStatRow('imp', { key: 'impermeability', metricName: 'Border Impermeability', colors: ['var(--imp-high)', 'var(--imp-med)', 'var(--imp-low)'], labels: ['HIGH', 'MED', 'LOW'], isBorder: true }, categorise(initialState, 'impermeability'), categorise(nodes, 'impermeability'));
+
+    var initCounts = {}, endCounts = {};
+    initialState.forEach(function (n) {
+      var name = CULTURE_NAMES[n.cultureIndex];
+      if (!initCounts[name]) initCounts[name] = { count: 0, moralSum: 0, index: n.cultureIndex };
+      initCounts[name].count++; initCounts[name].moralSum += n.moral;
+    });
+    nodes.forEach(function (n) { var name = CULTURE_NAMES[n.cultureIndex]; endCounts[name] = (endCounts[name] || 0) + 1; });
+    var displayCults = Object.keys(initCounts).map(function (k) { return { name: k, index: initCounts[k].index, initCount: initCounts[k].count, endCount: isCompleted ? (endCounts[k] || 0) : null }; })
+      .sort(function (a, b) { return isCompleted ? b.endCount - a.endCount : b.initCount - a.initCount; });
+
+    updateHTMLWithAnim('cell-cult-init', displayCults.map(function (d) { return formatCellWithKey(d.name, PASTEL_RAINBOW[d.index], d.initCount, d.initCount === 0 ? 0.4 : 1); }).join(''), 'pulse');
+    var cultInitPie = CULTURE_NAMES.map(function (name, i) { return { label: name, value: initCounts[name] ? initCounts[name].count : 0, color: PASTEL_RAINBOW[i] }; });
+
+    if (!isCompleted) {
+      updateHTMLWithAnim('cell-cult-end', '—', 'pulse');
+      updateHTMLWithAnim('cell-cult-shift', '—', 'pulse');
+      drawPieChart('chart-cult-single', cultInitPie);
+    } else {
+      updateHTMLWithAnim('cell-cult-end', displayCults.map(function (d) { return formatCellWithKey(d.name, PASTEL_RAINBOW[d.index], d.endCount, d.endCount === 0 ? 0.4 : 1); }).join(''), 'pulse');
+      updateHTMLWithAnim('cell-cult-shift', displayCults.map(function (d) { return getShiftDiv(d.initCount, d.endCount, d.endCount === 0 && d.initCount === 0 ? 0.4 : 1); }).join(''), 'pulse');
+
+      var list = function (arr) { return arr.length === 2 ? arr[0] + ' and ' + arr[1] : arr.slice(0, -1).join(', ') + ', and ' + arr[arr.length - 1]; };
+      var initC = displayCults.filter(function (d) { return d.initCount > 0; }).sort(function (a, b) { return b.initCount - a.initCount; });
+      var initParts = initC.map(function (c) { return '<strong>' + c.name + '</strong> (' + c.initCount + ')'; });
+      combinedInit.unshift(initParts.length === 1 ? 'The map started as a complete monolith, with ' + initParts[0] + ' controlling all regions.' : 'Initially, the map was divided ' + (initParts.length === 2 ? 'between ' : 'among ') + list(initParts) + '.');
+      var endC = displayCults.filter(function (d) { return d.endCount > 0; });
+      var endParts = endC.map(function (c) { return '<strong>' + c.name + '</strong> (' + c.endCount + ')'; });
+      var endText = endParts.length === 1 ? 'By the end, ' + endParts[0] + ' achieved total hegemony, controlling all regions.' : (endParts.length === 2 ? 'By the end, only ' + list(endParts) + ' remained.' : 'By the end, surviving cultures included ' + list(endParts) + '.');
+      if (endC.length < initC.length) endText += ' All other cultures were eliminated.';
+      combinedEnd.unshift(endText);
+      var shiftParts = endC.map(function (c) {
+        var d = c.endCount - c.initCount;
+        return d !== 0 ? '<strong>' + c.name + '</strong> saw a net shift of <strong>' + (d > 0 ? '+' : '') + d + '</strong> regions' : '<strong>' + c.name + '</strong> maintained their original count of <strong>' + c.initCount + '</strong> regions';
+      });
+      combinedShift.unshift('Throughout the simulation, ' + (shiftParts.length === 1 ? shiftParts[0] : (shiftParts.length === 2 ? shiftParts[0] + ', while ' + shiftParts[1] : list(shiftParts))) + '.');
+
+      var prose = [];
+      for (var i = 0; i < 4; i++) {
+        prose.push('<div class="prose-step"><span class="prose-step-head">Initial State</span>' + combinedInit[i] + '</div>' +
+          '<div class="prose-step"><span class="prose-step-head">End State</span>' + combinedEnd[i] + '</div>' +
+          '<div class="prose-step"><span class="prose-step-head">Total Shift</span>' + combinedShift[i] + '</div>');
+      }
+      // order: affiliation, status, soft power, impermeability
+      updateHTMLWithAnim('combined-prose-container', '<div class="wb-row prose-row">' + formatSection(prose, PASTEL_RAINBOW[displayCults[0].index]) + '</div>', 'fade');
+      drawPieChart('chart-cult-single', CULTURE_NAMES.map(function (name, i) { return { label: name, value: endCounts[name] || 0, color: PASTEL_RAINBOW[i] }; }), cultInitPie);
+    }
+
+    // the world build history
+    var initDom = '';
+    if (displayCults.length) {
+      var top = [].concat(displayCults).sort(function (a, b) { return b.initCount - a.initCount; });
+      var st = initCounts[top[0].name];
+      initDom = 'The geopolitical landscape begins with <strong>' + top[0].name + '</strong> exerting primary influence over ' + Math.round(top[0].initCount / totalNodes * 100) + '% of the topology. This establishes a foundational <strong>' + moralLabel(st.moralSum / st.count).toLowerCase() + '</strong> societal baseline.';
+      if (top.length > 1) initDom += ' Resistance from <strong>' + top[1].name + '</strong> at ' + Math.round(top[1].initCount / totalNodes * 100) + '% introduces the initial cultural friction.';
+    }
+    var domName = sorted.length ? sorted[0][0] : '', domPct = sorted.length ? Math.round(sorted[0][1].count / totalNodes * 100) : 0;
+    if (!phaseHistory.length) { phaseHistory.push(title); proseLog.push(initDom); }
+    else if (phaseHistory[phaseHistory.length - 1] !== title && !isCompleted) {
+      phaseHistory.push(title);
+      var T = [
+        function (s, n, p) { return 'As generations progress, cycles of colonisation and assimilation begin reshaping the map. A <strong>' + s + '</strong> emerges as <strong>' + n + '</strong> advances their territorial control to ' + p + '%, while opposing enclaves either integrate or fortify their resistance.'; },
+        function (s, n, p) { return 'Further shifts in ideological dominance push the topology toward a <strong>' + s + '</strong>, with <strong>' + n + '</strong> expanding its influence to ' + p + '%.'; },
+        function (s, n, p) { return 'The cultural landscape undergoes significant upheaval, transitioning into a <strong>' + s + '</strong> as <strong>' + n + '</strong> secures ' + p + '% of the global territory.'; },
+        function (s, n, p) { return 'Continued assimilation dynamics drive the world into a <strong>' + s + '</strong>, establishing <strong>' + n + '</strong> at a formidable ' + p + '% footprint.'; }
+      ];
+      proseLog.push(T[Math.max(0, phaseHistory.length - 2) % T.length](title, domName, domPct));
+    }
+    if (isCompleted && !proseLog.some(function (p) { return p.indexOf('The world has permanently stabilised') === 0; })) {
+      var es = cultStats[domName];
+      proseLog.push('The world has permanently stabilised into a <strong>' + title + '</strong>. <strong>' + domName + '</strong> has established final hegemony, successfully colonising ' + domPct + '% of the map. Remaining resistance has been permanently marginalised, cementing a <strong>' + (es && es.count ? moralLabel(es.moralSum / es.count) : 'Notopian').toLowerCase() + '</strong> global standard.');
+    }
+    var phaseBlock = function (name, i) {
+      return '<div class="phase-line"><span class="phase-num">0' + i + '</span><div><strong>' + name + '</strong><br><span class="phase-def">' + getScenarioDefinition(name) + '</span></div></div>';
+    };
+    var muted = function (t) { return '<div class="muted-italic">' + t + '</div>'; };
+    var initPhase = phaseHistory.length ? phaseBlock(phaseHistory[0], 1) : '—';
+    var transProse, transPhase, endProse, endPhase;
+    if (!isCompleted) {
+      transProse = proseLog.length > 1 ? proseLog.slice(1).map(function (p, i, a) { return '<div class="wb-row' + (i === a.length - 1 ? ' fade-in-text' : '') + '">' + p + '</div>'; }).join('') : muted('Monitoring topological shift events...');
+      transPhase = phaseHistory.length > 1 ? phaseHistory.slice(1).map(function (p, i, a) { return '<div class="wb-row' + (i === a.length - 1 ? ' fade-in-text' : '') + '">' + phaseBlock(p, i + 2) + '</div>'; }).join('') : muted('—');
+      endProse = muted('Awaiting generational stabilisation...');
+      endPhase = muted('—');
+    } else {
+      var tp = proseLog.slice(1, -1), tph = phaseHistory.slice(1);
+      transProse = tp.length ? tp.map(function (p) { return '<div class="wb-row">' + p + '</div>'; }).join('') : '<em>Stable conversion recorded. No intermediate epochs tracked.</em>';
+      transPhase = tp.length ? tph.map(function (p, i) { return '<div class="wb-row">' + phaseBlock(p, i + 2) + '</div>'; }).join('') : '<em>—</em>';
+      endProse = '<div class="wb-row fade-in-text">' + proseLog[proseLog.length - 1] + '</div>';
+      endPhase = '<div class="wb-row fade-in-text">' + phaseBlock(title, phaseHistory.length ? tph.length + 2 : 2) + '</div>';
+    }
+    var row = function (label, prose, phase, last) {
+      return '<div class="wb-label">' + label + '</div><div class="wb-prose' + (last ? ' last' : '') + '">' + prose + '</div><div class="wb-phase' + (last ? ' last' : '') + '">' + phase + '</div>';
+    };
+    updateHTMLWithAnim('world-building-content', '<div class="wb-grid">' + row('Initial Conditions', initDom, initPhase) + row('Transitional Phases', transProse, transPhase) + row('End-State Resolution', endProse, endPhase, true) + '</div>', 'fade');
+  }
+
+  // ---------- overlays and modes ----------
+  function setPrimary(type) {
+    if (isSimultaneous) setSimultaneous(false);
+    activePrimary = type;
+    if (activePrimary === activeSecondary) activeSecondary = null;
+    isImpOverlayActive = type === 'softPower';
+    updateDisplay();
+  }
+  function setSecondary(type) {
+    if (isSimultaneous || type === activePrimary) return;
+    if (type === 'impermeability') isImpOverlayActive = !isImpOverlayActive;
+    else { activeSecondary = activeSecondary === type ? null : type; if (activeSecondary && showScores) toggleScores(); }
+    updateDisplay();
+  }
+  function setSimultaneous(val) {
+    isSimultaneous = val;
+    if (val) { activeSecondary = null; isImpOverlayActive = true; }
+    sim.classList.toggle('sim-mode', val);
+    initGrids(currentLayers);
+  }
+  function toggleScores() {
+    if (!isSpectrum) return;
+    showScores = !showScores;
+    if (showScores) activeSecondary = null;
+    sim.classList.toggle('hide-scores', !showScores);
+    $('sub-scores').classList.toggle('active', showScores);
+    updateDisplay();
+  }
+
+  function updateDisplay() {
+    var stroke = baseStroke();
+    updateButtonStates();
+    updateCulturalAnalytics();
+    sim.classList.toggle('show-ranges', showScores && isSpectrum);
+    $('overlays-group').classList.toggle('visible', !isSimultaneous);
+    $('spectrum-sub-group').classList.toggle('visible', isSpectrum);
+    var m = scoreScale / 100, dp = scoreScale === 10 ? 1 : 0;
+    ['moral', 'softpower', 'imp'].forEach(function (t) {
+      [['low', 0, 33], ['med', 34, 66], ['high', 67, 100]].forEach(function (r) {
+        var el = $('range-' + t + '-' + r[0]);
+        if (el) el.textContent = (r[1] * m).toFixed(dp) + '-' + (r[2] * m).toFixed(dp);
+      });
+    });
+    GRIDS.forEach(function (g) {
+      var el = $(g.box);
+      el.style.display = isSimultaneous || g.type === activePrimary ? 'flex' : 'none';
+      el.classList.toggle('solo', !isSimultaneous && g.type === activePrimary);
+    });
+
+    nodes.forEach(function (n) {
+      GRIDS.forEach(function (grid, idx) {
+        var type = grid.type;
+        if (!isSimultaneous && type !== activePrimary) return;
+        var val = type === 'cultures' ? n.cultureIndex : n[type];
+        var col = getSpectrumColor(val, paletteMap[type], type);
+        var impCol = getSpectrumColor(n.impermeability, paletteMap.impermeability, 'impermeability');
+        var el = n.els[idx], txt = n.txt[idx];
+        el.style.fill = col;
+        txt.style.fill = isColorDark(col) ? '#FFFFFF' : '#1A1A1A';
+        // the borders: on the soft power grid always in the overview, and
+        // wherever the impermeability overlay is on
+        var bordered = type === 'softPower' ? (isSimultaneous || isImpOverlayActive) : (!isSimultaneous && isImpOverlayActive);
+        if (bordered) { el.style.stroke = impCol; el.style.strokeWidth = isSimultaneous ? '2.8px' : '5px'; }
+        else { el.style.stroke = stroke; el.style.strokeWidth = isSimultaneous ? '1.4px' : '2px'; }
+        if (!isSimultaneous && activeSecondary) {
+          var sVal = activeSecondary === 'cultures' ? n.cultureIndex : n[activeSecondary];
+          n.circles[idx].style.fill = getSpectrumColor(sVal, paletteMap[activeSecondary], activeSecondary);
+          n.circles[idx].classList.add('active');
+        } else n.circles[idx].classList.remove('active');
+        var label = '';
+        if (isSimultaneous || (showScores && isSpectrum)) {
+          if (type === 'cultures') label = n.cultureIndex + 1;
+          else if (type === 'softPower' && showImpScores) label = formatScore(n.softPower) + '/' + formatScore(n.impermeability);
+          else label = formatScore(val);
+        }
+        txt.textContent = label;
+        // two scores in a tile: a little smaller, to fit
+        var base = parseFloat(txt.dataset.base) || 5.5;
+        txt.style.fontSize = (type === 'softPower' && showImpScores ? base * (scoreScale === 10 ? 0.72 : 0.8) : base) + 'px';
+      });
+    });
+    ['moral', 'cultures', 'softpower', 'impermeability'].forEach(function (id) {
+      var el = $('key-' + id);
+      if (!el) return;
+      var on = isSimultaneous || activePrimary === id || activeSecondary === id ||
+        (id === 'softpower' && (activePrimary === 'softPower' || activeSecondary === 'softPower')) ||
+        (id === 'impermeability' && isImpOverlayActive);
+      el.classList.toggle('visible', on);
+    });
+  }
+
+  function setSpectrum(v) {
+    isSpectrum = v;
+    if (!v && showScores) { showScores = false; sim.classList.add('hide-scores'); $('sub-scores').classList.remove('active'); }
+    updateDisplay();
+  }
+
+  function setScale(l) {
+    if (isPlaying) return;
+    currentLayers = l;
+    if (isCompleted) { randomizeConfiguration(); return; }
+    document.querySelectorAll('#scale-toggle .segment').forEach(function (b, i) { b.classList.toggle('active', i === l - 1); });
+    initGrids(l);
+  }
+
+  function press(id) { var b = $(id); b.classList.add('pressed'); setTimeout(function () { b.classList.remove('pressed'); }, 400); }
+
+  function resetToInitial() {
+    press('revert-btn');
+    isCompleted = false; phaseHistory = []; proseLog = []; epochHistory = []; simulationEpoch = 0;
+    updateHTMLWithAnim('combined-prose-container', generatePlaceholderExp(), 'none');
+    var btn = $('scenario-1-btn');
+    btn.classList.remove('playing', 'completed');
+    if (isPlaying) toggleScenario();
+    if (!initialState) return;
+    initialState.forEach(function (s, i) { nodes[i].cultureIndex = s.cultureIndex; nodes[i].softPower = s.softPower; nodes[i].impermeability = s.impermeability; nodes[i].moral = s.moral; });
+    captureEpochState(nodes);
+    btn.lastChild.textContent = ' Run Simulation';
+    $('scenario-icon').innerHTML = ICONS.play;
+    updateDisplay();
+  }
+
+  // the scenario presets: each culture's soft power and borders
+  function randomizeConfiguration() {
+    press('gen-config-btn');
+    isCompleted = false;
+    if (isPlaying) toggleScenario();
+    var rand = function (a, b) { return a + Math.random() * (b - a); };
+    if (activeScenarioMode === 'random') {
+      cultureScores.moral = PASTEL_RAINBOW.map(rnd);
+      cultureScores.softPower = PASTEL_RAINBOW.map(rnd);
+      cultureScores.impermeability = PASTEL_RAINBOW.map(rnd);
+    } else if (activeScenarioMode === 'monocultural') {
+      var w = Math.floor(Math.random() * 7);
+      cultureScores.moral = PASTEL_RAINBOW.map(rnd);
+      cultureScores.softPower = PASTEL_RAINBOW.map(function (_, i) { return i === w ? rand(95, 100) : rand(0, 40); });
+      cultureScores.impermeability = PASTEL_RAINBOW.map(function (_, i) { return i === w ? rand(50, 70) : rand(0, 30); });
+    } else {
+      var utopian = activeScenarioMode === 'utopian';
+      cultureScores.moral = PASTEL_RAINBOW.map(function () { return utopian ? rand(67, 100) : rand(0, 33); });
+      var roles = ['A', 'A', 'A', 'F', 'F', 'W', 'W'].sort(function () { return Math.random() - 0.5; });
+      cultureScores.softPower = []; cultureScores.impermeability = [];
+      roles.forEach(function (role) {
+        if (role === 'A') { cultureScores.softPower.push(rand(80, 100)); cultureScores.impermeability.push(rand(20, 50)); }        // aggressor: strong pull, open borders
+        else if (role === 'F') { cultureScores.softPower.push(rand(40, 60)); cultureScores.impermeability.push(rand(80, 100)); }  // fortress: closed borders
+        else { cultureScores.softPower.push(rand(10, 30)); cultureScores.impermeability.push(rand(10, 30)); }                    // weak
+      });
+    }
+    initGrids(currentLayers);
+    var btn = $('scenario-1-btn');
+    btn.classList.remove('playing', 'completed');
+    btn.lastChild.textContent = ' Run Simulation';
+    $('scenario-icon').innerHTML = ICONS.play;
+    updateDisplay();
+  }
+
+  // the page's light and dark themes
+  new MutationObserver(function () { updateDisplay(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  window.Dyn = {
+    toggleScenarioDropdown: toggleScenarioDropdown, setDynamicScenario: setDynamicScenario,
+    toggleScenario: toggleScenario, resetToInitial: resetToInitial, randomizeConfiguration: randomizeConfiguration,
+    toggleSidebar: toggleSidebar, setPrimary: setPrimary, setSecondary: setSecondary,
+    setSystemLevel: setSystemLevel, setDensity: setDensity, setSimultaneous: setSimultaneous,
+    setSpectrum: setSpectrum, toggleScores: toggleScores, setScale: setScale, setScoreRange: setScoreRange,
+    setImpScores: setImpScores
+  };
+
+  var keys = $('culture-keys-container');
+  CULTURE_NAMES.forEach(function (name, i) {
+    var item = document.createElement('div'); item.className = 'key-item';
+    item.innerHTML = '<div class="swatch" style="color: ' + PASTEL_RAINBOW[i] + '"></div> ' + name + ' <span class="key-range">' + (i + 1) + '</span>';
+    keys.appendChild(item);
+  });
+  setSystemLevel('basic');
 })();
