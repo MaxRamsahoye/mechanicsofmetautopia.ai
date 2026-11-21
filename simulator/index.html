@@ -262,70 +262,118 @@
       line-height: 1.4;
     }
     /* Simulator: two sub-topias, the takeover rule step by step */
-    .simr { --mono: 'IBM Plex Mono', ui-monospace, monospace; }
-    .sr-figure { margin: 0; }
-    .sr-svg { display: block; width: 100%; max-width: 960px; height: auto; margin: 0 auto; overflow: visible; }
-    .sr-svg text { font-family: var(--mono); fill: var(--canvas-ink); }
-    .sr-svg .t-name { font-size: 13px; letter-spacing: 0.08em; text-anchor: middle; fill: #1A1A1A; }
-    .sr-svg .t-small { font-size: 11px; letter-spacing: 0.08em; text-anchor: middle; fill: #1A1A1A; opacity: 0.7; }
-    .sr-svg .t-big { font-size: 52px; font-weight: 500; text-anchor: middle; fill: #1A1A1A; }
-    .sr-svg .t-label { font-family: var(--sans); font-size: 15px; font-weight: 600; text-anchor: middle; }
-    .sr-svg .t-note { font-family: var(--sans); font-size: 13px; text-anchor: middle; fill: var(--muted); }
-    .sr-svg .leader { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
-    .sr-hex { transition: fill 0.9s ease; stroke: none; }
+    .simr { --mono: 'IBM Plex Mono', ui-monospace, monospace; --rule: color-mix(in srgb, var(--canvas-ink) 16%, transparent); --tint: color-mix(in srgb, var(--link-blue) 7%, transparent); }
+
+    /* the stage: diagram beside the steps */
+    .sr-stage { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(300px, 1fr); gap: 56px; align-items: center; }
+    .sr-figure { margin: 0; min-width: 0; }
+    .sr-svg { display: block; width: 100%; height: auto; overflow: visible; }
+    .sr-svg text { font-family: var(--mono); fill: #1A1A1A; text-anchor: middle; }
+    .sr-svg .t-tag { font-family: var(--sans); font-size: 14px; font-weight: 600; letter-spacing: 0.1em; fill: var(--canvas-ink); }
+    .sr-svg .t-name { font-size: 13.5px; letter-spacing: 0.1em; }
+    .sr-svg .t-small { font-size: 10.5px; letter-spacing: 0.1em; opacity: 0.66; }
+    .sr-svg .short { display: none; }
+    .sr-svg .t-big { font-size: 50px; font-weight: 500; transition: fill 0.4s ease; }
+    .sr-svg .t-memlab { font-size: 11px; letter-spacing: 0.1em; fill: var(--muted); }
+    .sr-svg .t-memval { font-size: 24px; font-weight: 500; fill: var(--canvas-ink); transition: fill 0.4s ease; }
+    .sr-svg .hl { fill: var(--link-blue); }
+    .sr-hex { stroke: none; transition: fill 0.9s ease; }
     .sr-mem { fill: none; stroke-linejoin: round; transition: stroke 0.9s ease, stroke-width 0.9s ease; }
-    .sr-mem.breached { stroke-dasharray: 16 12; animation: sr-flow 1.2s linear infinite; }
-    @keyframes sr-flow { to { stroke-dashoffset: -56; } }
-
-    /* the two tests: arrows drawn in, verdicts faded in */
-    .sr-arrow { fill: none; stroke: var(--link-blue); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 220; stroke-dashoffset: 220; transition: stroke-dashoffset 0.9s ease; }
+    .sr-mem.breached { stroke-dasharray: 14 10; animation: sr-flow 1.1s linear infinite; }
+    @keyframes sr-flow { to { stroke-dashoffset: -48; } }
+    .sr-arrow { fill: none; stroke: var(--link-blue); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 220; stroke-dashoffset: 220; transition: stroke-dashoffset 0.8s ease; }
     .sr-arrow.on { stroke-dashoffset: 0; }
-    .sr-head { fill: var(--link-blue); opacity: 0; transition: opacity 0.3s ease 0.7s; }
+    .sr-head { fill: var(--link-blue); opacity: 0; transition: opacity 0.25s ease 0.6s; }
     .sr-head.on { opacity: 1; }
-    .sr-test { opacity: 0; transform: translateY(6px); transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s; }
-    .sr-test.on { opacity: 1; transform: none; }
+    .sr-test { opacity: 0; transition: opacity 0.45s ease 0.55s; }
+    .sr-test.on { opacity: 1; }
     .sr-test rect { fill: var(--canvas-bg); stroke: var(--link-blue); stroke-width: 1.5; }
-    .sr-test .t-cmp { font-size: 17px; font-weight: 600; text-anchor: middle; }
-    .sr-test .t-verdict { font-family: var(--sans); font-size: 12.5px; text-anchor: middle; fill: var(--link-blue); }
+    .sr-svg .sr-test .t-cmp { font-size: 17px; font-weight: 600; fill: var(--canvas-ink); }
+    .sr-svg .sr-test .t-verdict { font-family: var(--sans); font-size: 11.5px; fill: var(--link-blue); }
 
-    @media (max-width: 640px) {
-      .sr-svg { width: calc(100% + 24px); margin: 0 -12px; }
-      .sr-svg .t-label { font-size: 22px; }
-      .sr-svg .t-note { font-size: 15.5px; }
-      .sr-svg .t-small { font-size: 13px; }
-      .sr-svg .t-name { font-size: 17px; }
-      .sr-test .t-cmp { font-size: 21px; }
-      .sr-test .t-verdict { display: none; }
-      .sr-caption { margin-top: 24px; padding: 18px 18px 20px; }
-      .sr-table { font-size: 16px; }
-      .sr-table th, .sr-table td { padding: 10px 8px; }
-    }
+    /* the membrane scale */
+    .sr-scale { max-width: 440px; margin: 26px auto 0; font-family: var(--sans); font-size: 12px; color: var(--muted); }
+    .sr-scale-lab { margin: 0 0 30px; font-family: var(--mono-caps); font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; }
+    .sr-scale-bar { position: relative; height: 8px; border-radius: 4px; background: linear-gradient(90deg, rgb(253,230,138), rgb(230,153,77) 50%, rgb(166,75,53)); }
+    .sr-mark { position: absolute; bottom: 0; width: 0; transition: left 0.9s ease, opacity 0.4s ease; }
+    .sr-mark::after { content: ''; position: absolute; left: -1px; bottom: -3px; width: 2px; height: 14px; background: var(--canvas-ink); }
+    .sr-mark b { position: absolute; bottom: 14px; left: 0; transform: translateX(-50%); font-weight: 600; color: var(--canvas-ink); white-space: nowrap; }
+    .sr-mark.gone { opacity: 0; }
+    .sr-scale-ends { display: flex; justify-content: space-between; margin-top: 8px; }
 
-    /* the caption and the controls */
-    .sr-caption { max-width: 760px; margin: 36px auto 0; padding: 22px 26px 24px; border-left: 4px solid var(--link-blue); background: color-mix(in srgb, var(--link-blue) 6%, transparent); }
-    .sr-step-num { margin: 0 0 6px; font-family: var(--mono-caps); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-    .sr-step-title { margin: 0 0 8px; font-family: var(--serif); font-size: 24px; font-weight: 700; line-height: 1.2; }
-    html:not(.serif-headings) .sr-step-title { font-family: var(--sans); font-size: 21px; font-weight: 600; }
-    .sr-step-text { margin: 0; font-family: var(--serif); font-size: 19px; line-height: 1.5; min-height: 3em; }
-    .sr-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px; max-width: 760px; margin: 18px auto 0; font-family: var(--sans); }
-    .sr-btns { display: flex; gap: 8px; }
-    .sr-btn { padding: 7px 12px; border: 1px solid color-mix(in srgb, var(--canvas-ink) 30%, transparent); background: none; font: inherit; font-size: 13px; color: inherit; cursor: pointer; }
+    /* the steps */
+    .sr-panel { min-width: 0; }
+    .sr-steps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+    .sr-steps > li { position: relative; border-bottom: 1px solid var(--rule); }
+    .sr-steps button { display: flex; align-items: baseline; gap: 14px; width: 100%; padding: 14px 4px; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; font-family: var(--sans); font-size: 15.5px; font-weight: 500; line-height: 1.3; }
+    .sr-steps button:focus-visible { outline: 2px solid var(--link-blue); outline-offset: -2px; }
+    .sr-n { flex: none; width: 22px; font-family: var(--mono); font-size: 13px; color: var(--muted); }
+    .sr-steps > li:not(.on) .sr-t { color: var(--muted); }
+    @media (hover: hover) { .sr-steps > li:not(.on) button:hover .sr-t { color: var(--canvas-ink); } }
+    .sr-steps > li.on .sr-n { color: var(--link-blue); font-weight: 600; }
+    .sr-steps > li.on .sr-t { font-weight: 600; }
+    .sr-step-text { display: none; margin: -4px 0 0; padding: 0 4px 16px 40px; font-family: var(--serif); font-size: 18px; line-height: 1.45; }
+    .sr-steps > li.on .sr-step-text { display: block; }
+    .sr-prog { position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--link-blue); }
+    .sr-steps > li.on .sr-prog { width: 0; }
+    .sr-prog.run { animation: sr-prog linear forwards; }
+    @keyframes sr-prog { from { width: 0; } to { width: 100%; } }
+    .sr-controls { display: flex; gap: 8px; margin-top: 20px; }
+    .sr-btn { padding: 8px 14px; border: 1px solid color-mix(in srgb, var(--canvas-ink) 30%, transparent); background: none; font-family: var(--sans); font-size: 13px; color: inherit; cursor: pointer; }
     .sr-btn:hover, .sr-btn:focus-visible { border-color: var(--canvas-ink); outline: none; }
-    .sr-dots { display: flex; gap: 8px; }
-    .sr-dot { width: 11px; height: 11px; padding: 0; border: 1.5px solid var(--canvas-ink); border-radius: 50%; background: none; cursor: pointer; }
-    .sr-dot.on { background: var(--canvas-ink); }
+    .sr-play { min-width: 72px; }
 
     /* the explanation */
-    .sr-notes { max-width: 760px; margin: 96px auto 0; font-family: var(--serif); font-size: 19px; line-height: 1.5; }
-    .sr-notes h2 { margin: 48px 0 16px; font-family: var(--sans); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
-    .sr-notes h2:first-child { margin-top: 0; }
-    .sr-notes p { margin: 0 0 14px; }
-    .sr-notes ol { margin: 0 0 14px; padding-left: 1.4em; }
-    .sr-notes li { margin: 0 0 8px; }
-    .sr-table { width: 100%; margin: 8px 0 18px; border-collapse: collapse; font-size: 17px; }
-    .sr-table th, .sr-table td { padding: 12px 14px; border-top: 1px solid var(--canvas-ink); border-bottom: 1px solid var(--canvas-ink); text-align: left; vertical-align: top; }
-    .sr-table thead th { font-family: var(--sans); font-size: 14px; font-weight: 600; }
-    .sr-table td:first-child { font-weight: 700; white-space: nowrap; }
+    .sr-notes { margin-top: 120px; font-family: var(--serif); font-size: 19px; line-height: 1.5; }
+    .sr-notes > h2 { margin: 88px 0 18px; font-family: var(--sans); font-size: 28px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+    .sr-notes > h2:first-child { margin-top: 0; }
+    .sr-notes > p { max-width: 760px; margin: 0 0 16px; }
+    .sr-cards { display: grid; gap: 20px; margin: 28px 0 24px; }
+    .sr-cards.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sr-cards.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sr-card { margin: 0; padding: 24px 26px 26px; border: 1px solid var(--rule); }
+    .sr-card.test { border: 0; border-top: 3px solid var(--link-blue); background: var(--tint); }
+    .sr-kicker, .sr-card .sr-kicker { margin: 0 0 6px; font-family: var(--mono-caps); font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+    .sr-card h3 { margin: 0 0 12px; font-family: var(--sans); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+    .sr-card .sr-formula { margin: 0 0 14px; font-family: 'IBM Plex Mono', monospace; font-size: 15px; line-height: 1.5; }
+    .sr-formula span { color: var(--link-blue); font-weight: 600; }
+    .sr-card p { margin: 0; font-size: 17.5px; line-height: 1.45; }
+    .sr-mini { display: block; width: 100%; max-width: 260px; height: auto; margin: 6px auto 18px; overflow: visible; }
+    .sr-mini text { font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 500; fill: #1A1A1A; text-anchor: middle; }
+    .sr-mini .x { stroke: var(--link-blue); stroke-width: 3; stroke-linecap: round; }
+    .sr-card .sr-checks { margin: 0 0 14px !important; padding: 10px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); font-family: 'IBM Plex Mono', monospace; font-size: 13.5px !important; line-height: 1.8 !important; }
+    .sr-checks span { display: flex; justify-content: space-between; gap: 12px; }
+    .sr-checks .ok { color: var(--canvas-ink); }
+    .sr-checks .no { color: var(--muted); }
+    .sr-checks .no i { color: var(--link-blue); }
+    .sr-checks i { font-style: normal; font-weight: 600; }
+
+    @media (max-width: 1100px) {
+      .sr-stage { grid-template-columns: minmax(0, 1fr); gap: 36px; }
+      .sr-figure { width: 100%; max-width: 720px; margin: 0 auto; }
+      .sr-panel { max-width: 640px; width: 100%; margin: 0 auto; }
+      .sr-cards.three { grid-template-columns: minmax(0, 1fr); max-width: 640px; }
+      .sr-cards.three .sr-card { display: grid; grid-template-columns: 200px minmax(0, 1fr); column-gap: 28px; align-items: start; }
+      .sr-cards.three .sr-mini { grid-row: 1 / 5; grid-column: 1; margin: 4px 0 0; }
+    }
+    @media (max-width: 640px) {
+      .sr-svg .t-tag { font-size: 21px; }
+      .sr-svg .t-name { font-size: 18px; letter-spacing: 0.04em; }
+      .sr-svg .t-small { font-size: 16px; }
+      .sr-svg .full { display: none; }
+      .sr-svg .short { display: block; }
+      .sr-svg .t-memlab { font-size: 17px; }
+      .sr-svg .t-memval { font-size: 32px; }
+      .sr-svg .t-big { font-size: 56px; }
+      .sr-svg .sr-test .t-cmp { font-size: 22px; }
+      .sr-svg .sr-test .t-verdict { display: none; }
+      .sr-cards.two { grid-template-columns: minmax(0, 1fr); }
+      .sr-cards.three .sr-card { display: block; }
+      .sr-cards.three .sr-mini { margin: 6px auto 18px; }
+      .sr-card { padding: 20px 20px 22px; }
+      .sr-notes { margin-top: 88px; }
+      .sr-notes > h2 { margin-top: 64px; font-size: 25px; }
+    }
   </style>
 </head>
 <body>
@@ -343,91 +391,114 @@
     </div>
 
     <section class="essay-list wide-top simr" aria-label="Simulator">
-      <figure class="sr-figure">
-        <svg class="sr-svg" viewBox="128 34 644 440" role="img" aria-labelledby="sr-title-svg">
-            <title id="sr-title-svg">Two hexagonal sub-topias side by side: A, The Culture, with cultural integrity 8.2 and membrane impermeability 4.0; B, The Azad, with cultural integrity 3.5 and membrane impermeability 5.1</title>
-            <!-- labels above -->
-            <text class="t-label" x="260" y="58">Sub-topia A</text>
-            <text class="t-label" x="640" y="58">Sub-topia B</text>
-            <path class="leader" d="M260,66 V114"/>
-            <path class="leader" d="M640,66 V114"/>
+      <div class="sr-stage">
+        <figure class="sr-figure">
+          <svg class="sr-svg" viewBox="0 0 640 400" role="img" aria-labelledby="sr-svg-t">
+            <title id="sr-svg-t">Two hexagonal sub-topias side by side: A, The Culture, with cultural integrity 8.2 and membrane impermeability 4.0; B, The Azad, with cultural integrity 3.5 and membrane impermeability 5.1</title>
+            <text class="t-tag" x="132" y="28">SUB-TOPIA A</text>
+            <text class="t-tag" x="508" y="28">SUB-TOPIA B</text>
 
-            <!-- A -->
-            <polygon class="sr-hex" points="260.0,120.0 372.6,185.0 372.6,315.0 260.0,380.0 147.4,315.0 147.4,185.0" style="fill: #FFB7B2"/>
-            <polygon id="sr-mem-a" class="sr-mem" points="260.0,120.0 372.6,185.0 372.6,315.0 260.0,380.0 147.4,315.0 147.4,185.0"/>
-            <text class="t-name" x="260" y="206">THE CULTURE</text>
-            <text class="t-small" x="260" y="232">CULTURAL INTEGRITY</text>
-            <text class="t-big" x="260" y="284">8.2</text>
+            <polygon class="sr-hex" points="132.0,62.0 232.5,120.0 232.5,236.0 132.0,294.0 31.5,236.0 31.5,120.0" style="fill: #FFB7B2"/>
+            <polygon id="sr-mem-a" class="sr-mem" points="132.0,62.0 232.5,120.0 232.5,236.0 132.0,294.0 31.5,236.0 31.5,120.0"/>
+            <text class="t-name" x="132" y="138">THE CULTURE</text>
+            <text class="t-small full" x="132" y="162">CULTURAL INTEGRITY</text><text class="t-small short" x="132" y="166">INTEGRITY</text>
+            <text id="sr-integ-a" class="t-big" x="132" y="212">8.2</text>
 
-            <!-- B -->
-            <polygon id="sr-hex-b" class="sr-hex" points="640.0,120.0 752.6,185.0 752.6,315.0 640.0,380.0 527.4,315.0 527.4,185.0" style="fill: #B3E5FC"/>
-            <polygon id="sr-mem-b" class="sr-mem" points="640.0,120.0 752.6,185.0 752.6,315.0 640.0,380.0 527.4,315.0 527.4,185.0"/>
-            <text id="sr-name-b" class="t-name" x="640" y="206">THE AZAD</text>
-            <text class="t-small" x="640" y="232">CULTURAL INTEGRITY</text>
-            <text id="sr-integ-b" class="t-big" x="640" y="284">3.5</text>
+            <polygon id="sr-hex-b" class="sr-hex" points="508.0,62.0 608.5,120.0 608.5,236.0 508.0,294.0 407.5,236.0 407.5,120.0" style="fill: #B3E5FC"/>
+            <polygon id="sr-mem-b" class="sr-mem" points="508.0,62.0 608.5,120.0 608.5,236.0 508.0,294.0 407.5,236.0 407.5,120.0"/>
+            <text id="sr-name-b" class="t-name" x="508" y="138">THE AZAD</text>
+            <text class="t-small full" x="508" y="162">CULTURAL INTEGRITY</text><text class="t-small short" x="508" y="166">INTEGRITY</text>
+            <text id="sr-integ-b" class="t-big" x="508" y="212">3.5</text>
 
-            <!-- the membranes, labelled below -->
-            <path class="leader" d="M260,386 V424"/>
-            <path class="leader" d="M640,386 V424"/>
-            <text class="t-note" x="260" y="442">Membrane impermeability 4.0</text>
-            <text id="sr-imp-b" class="t-note" x="640" y="442">Membrane impermeability 5.1</text>
-            <text class="t-note" x="260" y="462">(the outline)</text>
-            <text class="t-note" x="640" y="462">(the outline)</text>
+            <text class="t-memlab full" x="132" y="328">MEMBRANE IMPERMEABILITY</text><text class="t-memlab short" x="132" y="328">MEMBRANE</text>
+            <text class="t-memlab full" x="508" y="328">MEMBRANE IMPERMEABILITY</text><text class="t-memlab short" x="508" y="328">MEMBRANE</text>
+            <text class="t-memval" x="132" y="358">4.0</text>
+            <text id="sr-imp-b" class="t-memval" x="508" y="358">5.1</text>
 
-            <!-- test 1: A's integrity against B's membrane -->
-            <path id="sr-arrow-1" class="sr-arrow" d="M383,216 L521,216"/>
-            <path id="sr-head-1" class="sr-head" d="M531,216 l-13,-7 v14 z"/>
-            <g id="sr-test-1" class="sr-test">
-              <rect x="372" y="122" width="156" height="66" rx="4"/>
-              <text class="t-cmp" x="450" y="150">8.2 &gt; 5.1</text>
-              <text class="t-verdict" x="450" y="172">&#10003; through the membrane</text>
+            <path class="sr-arrow sr-t1" d="M244,152 L400,152"/>
+            <path class="sr-head sr-t1" d="M410,152 l-13,-7 v14 z"/>
+            <g class="sr-test sr-t1">
+              <rect class="full" x="248" y="74" width="144" height="54" rx="4"/>
+              <rect class="short" x="254" y="78" width="132" height="40" rx="4"/>
+              <text class="t-cmp" x="320" y="98">8.2 &gt; 5.1</text>
+              <text class="t-verdict" x="320" y="118">&#10003; through the membrane</text>
             </g>
 
-            <!-- test 2: A's integrity against B's own -->
-            <path id="sr-arrow-2" class="sr-arrow" d="M383,302 L588,302"/>
-            <path id="sr-head-2" class="sr-head" d="M598,302 l-13,-7 v14 z"/>
-            <g id="sr-test-2" class="sr-test">
-              <rect x="372" y="320" width="156" height="66" rx="4"/>
-              <text class="t-cmp" x="450" y="348">8.2 &gt; 3.5</text>
-              <text class="t-verdict" x="450" y="370">&#10003; past B&rsquo;s integrity</text>
+            <path class="sr-arrow sr-t2" d="M244,224 L458,224"/>
+            <path class="sr-head sr-t2" d="M468,224 l-13,-7 v14 z"/>
+            <g class="sr-test sr-t2">
+              <rect class="full" x="248" y="240" width="144" height="54" rx="4"/>
+              <rect class="short" x="254" y="244" width="132" height="40" rx="4"/>
+              <text class="t-cmp" x="320" y="264">8.2 &gt; 3.5</text>
+              <text class="t-verdict" x="320" y="284">&#10003; past B&rsquo;s integrity</text>
             </g>
           </svg>
-        <figcaption class="sr-caption" aria-live="polite">
-          <p class="sr-step-num">Step 1 of 5</p>
-          <p class="sr-step-title"></p>
-          <p class="sr-step-text"></p>
-        </figcaption>
-      </figure>
-      <div class="sr-controls">
-        <div class="sr-btns">
-          <button class="sr-btn sr-back" type="button" aria-label="Previous step">&larr; Back</button>
-          <button class="sr-btn sr-play" type="button" aria-pressed="false">Pause</button>
-          <button class="sr-btn sr-next" type="button" aria-label="Next step">Next &rarr;</button>
-          <button class="sr-btn sr-restart" type="button">Restart</button>
-        </div>
-        <div class="sr-dots" role="group" aria-label="Steps">
-          <button class="sr-dot" type="button" aria-label="Step 1"></button><button class="sr-dot" type="button" aria-label="Step 2"></button><button class="sr-dot" type="button" aria-label="Step 3"></button><button class="sr-dot" type="button" aria-label="Step 4"></button><button class="sr-dot" type="button" aria-label="Step 5"></button>
+          <div class="sr-scale" aria-hidden="true">
+            <p class="sr-scale-lab">Membrane impermeability</p>
+            <div class="sr-scale-bar"><span class="sr-mark sr-mark-a"><b>A</b></span><span class="sr-mark sr-mark-b" style="left: 51%"><b>B</b></span></div>
+            <div class="sr-scale-ends"><span>0 &middot; open</span><span>10 &middot; closed</span></div>
+          </div>
+        </figure>
+        <div class="sr-panel">
+          <ol class="sr-steps" aria-label="Steps" aria-live="polite">
+          <li><button type="button"><span class="sr-n">01</span><span class="sr-t">Two neighbouring sub-topias</span></button><p class="sr-step-text">Each hexagon is a sub-topia. Its fill is its <b>culture</b>; the number inside is its <b>cultural integrity</b>; its outline is its <b>membrane</b>, thicker and darker the more <b>impermeable</b> it is.</p><span class="sr-prog"></span></li>
+          <li><button type="button"><span class="sr-n">02</span><span class="sr-t">Test 1: through the membrane</span></button><p class="sr-step-text">A&rsquo;s culture reaches B&rsquo;s border. It crosses only if A&rsquo;s cultural integrity (<b>8.2</b>) is higher than B&rsquo;s membrane impermeability (<b>5.1</b>). It is: the membrane gives way.</p><span class="sr-prog"></span></li>
+          <li><button type="button"><span class="sr-n">03</span><span class="sr-t">Test 2: past B&rsquo;s own integrity</span></button><p class="sr-step-text">Inside, A&rsquo;s culture meets B&rsquo;s. It takes hold only if A&rsquo;s cultural integrity (<b>8.2</b>) is also higher than B&rsquo;s (<b>3.5</b>). It is: B cannot hold on to its own culture.</p><span class="sr-prog"></span></li>
+          <li><button type="button"><span class="sr-n">04</span><span class="sr-t">Assimilation</span></button><p class="sr-step-text">B adopts A&rsquo;s culture, and with it A&rsquo;s cultural integrity and membrane: B is now part of <b>The Culture</b>, with an integrity of <b>8.2</b> and a membrane of <b>4.0</b>.</p><span class="sr-prog"></span></li>
+          <li><button type="button"><span class="sr-n">05</span><span class="sr-t">One larger culture</span></button><p class="sr-step-text">Two sub-topias, one culture. On a full map the same two tests run between every pair of neighbours, turn after turn, until nothing more changes.</p><span class="sr-prog"></span></li>
+          </ol>
+          <div class="sr-controls">
+            <button class="sr-btn sr-back" type="button" aria-label="Previous step">&larr; Back</button>
+            <button class="sr-btn sr-play" type="button" aria-pressed="false">Pause</button>
+            <button class="sr-btn sr-next" type="button" aria-label="Next step">Next &rarr;</button>
+          </div>
         </div>
       </div>
 
       <div class="sr-notes">
         <h2>The rule</h2>
-        <p>Every sub-topia carries three things: a <b>culture</b>, a <b>cultural integrity</b> (how strongly its culture holds and pulls) and a <b>membrane impermeability</b> (how closed its borders are). When two sub-topias are neighbours, a culture crosses from one to the other only by passing two tests, in order:</p>
-        <ol>
-          <li><b>The membrane.</b> Is the incoming culture&rsquo;s cultural integrity higher than the neighbour&rsquo;s membrane impermeability? If not, it is stopped at the border.</li>
-          <li><b>The culture inside.</b> Is it also higher than the neighbour&rsquo;s own cultural integrity? If not, it gets in but cannot take hold.</li>
-        </ol>
-        <p>Here, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5: B is assimilated, and takes on A&rsquo;s culture together with A&rsquo;s integrity and membrane.</p>
+        <p>Every sub-topia carries three things: a <b>culture</b>; a <b>cultural integrity</b>, how strongly that culture holds and pulls; and a <b>membrane impermeability</b>, how closed its borders are. A culture crosses from one sub-topia into its neighbour only by passing two tests, in order.</p>
+        <div class="sr-cards two">
+          <div class="sr-card test">
+            <p class="sr-kicker">Test 1</p>
+            <h3>The membrane</h3>
+            <p class="sr-formula">integrity<sub>A</sub> <span>&gt;</span> membrane<sub>B</sub></p>
+            <p>Is the incoming culture&rsquo;s cultural integrity higher than the neighbour&rsquo;s membrane impermeability? If not, it is stopped at the border.</p>
+          </div>
+          <div class="sr-card test">
+            <p class="sr-kicker">Test 2</p>
+            <h3>The culture inside</h3>
+            <p class="sr-formula">integrity<sub>A</sub> <span>&gt;</span> integrity<sub>B</sub></p>
+            <p>Is it also higher than the neighbour&rsquo;s own cultural integrity? If not, it gets in but cannot take hold.</p>
+          </div>
+        </div>
+        <p>Above, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5. B is assimilated, and takes on A&rsquo;s culture together with A&rsquo;s integrity and membrane.</p>
 
         <h2>Three outcomes</h2>
-        <table class="sr-table">
-          <thead><tr><th scope="col">Outcome</th><th scope="col">When</th><th scope="col">What happens</th></tr></thead>
-          <tbody>
-            <tr><td>Blocked</td><td>Integrity &le; the neighbour&rsquo;s membrane</td><td>The culture stops at the border; nothing changes.</td></tr>
-            <tr><td>Deflected</td><td>Integrity &gt; the membrane, but &le; the neighbour&rsquo;s integrity</td><td>The culture crosses the border but cannot displace the one inside; nothing changes.</td></tr>
-            <tr><td>Assimilated</td><td>Integrity &gt; the membrane and &gt; the neighbour&rsquo;s integrity</td><td>The neighbour takes on the incoming culture, with its integrity and membrane.</td></tr>
-          </tbody>
-        </table>
+        <p>With B&rsquo;s membrane at 5.1, what happens depends on how A&rsquo;s integrity compares with B&rsquo;s membrane and then with B&rsquo;s integrity.</p>
+        <div class="sr-cards three">
+          <figure class="sr-card">
+            <svg class="sr-mini" viewBox="0 0 260 124" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#B3E5FC;stroke:rgb(227,148,75);stroke-width:8.6;stroke-linejoin:round"/><text x="62" y="68">4.6</text><text x="198" y="68">3.5</text><path d="M92,88 L141,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path class="x" d="M143,80 l10,16 M153,80 l-10,16"/></svg>
+            <p class="sr-kicker">Fails test 1</p>
+            <h3>Blocked</h3>
+            <p class="sr-checks"><span class="no">4.6 &gt; 5.1 membrane<i>&#10005;</i></span><span class="no">test 2 not reached<i>&ndash;</i></span></p>
+            <p>The culture stops at the border. Nothing changes.</p>
+          </figure>
+          <figure class="sr-card">
+            <svg class="sr-mini" viewBox="0 0 260 124" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#B3E5FC;stroke:rgb(227,148,75);stroke-width:8.6;stroke-linejoin:round"/><text x="62" y="68">6.0</text><text x="198" y="68">7.0</text><path d="M92,88 L172,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path class="x" d="M176,80 l10,16 M186,80 l-10,16"/></svg>
+            <p class="sr-kicker">Fails test 2</p>
+            <h3>Deflected</h3>
+            <p class="sr-checks"><span class="ok">6.0 &gt; 5.1 membrane<i>&#10003;</i></span><span class="no">6.0 &gt; 7.0 integrity<i>&#10005;</i></span></p>
+            <p>The culture gets through the border but cannot displace the one inside. Nothing changes.</p>
+          </figure>
+          <figure class="sr-card">
+            <svg class="sr-mini" viewBox="0 0 260 124" aria-hidden="true"><polygon points="62.0,8.0 108.8,35.0 108.8,89.0 62.0,116.0 15.2,89.0 15.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:6;stroke-linejoin:round"/><polygon points="198.0,8.0 244.8,35.0 244.8,89.0 198.0,116.0 151.2,89.0 151.2,35.0" style="fill:#FFB7B2;stroke:rgb(244,197,111);stroke-width:7.5;stroke-linejoin:round"/><text x="62" y="68">8.2</text><text x="198" y="68">8.2</text><path d="M92,88 L186,88" style="stroke:var(--link-blue);stroke-width:3;fill:none;stroke-linecap:round"/><path d="M194,88 l-12,-6.5 v13 z" style="fill:var(--link-blue)"/></svg>
+            <p class="sr-kicker">Passes both</p>
+            <h3>Assimilated</h3>
+            <p class="sr-checks"><span class="ok">8.2 &gt; 5.1 membrane<i>&#10003;</i></span><span class="ok">8.2 &gt; 3.5 integrity<i>&#10003;</i></span></p>
+            <p>The neighbour takes on the incoming culture, with its integrity and its membrane.</p>
+          </figure>
+        </div>
 
         <h2>From two sub-topias to a civilisation</h2>
         <p>The same two tests run between every pair of neighbours on a map, all at once, turn after turn, until no more cultures change. Where membranes are high everywhere, cultures stay sealed in place: enclosure. Where membranes are low and one culture&rsquo;s integrity is far above the rest, it spreads from neighbour to neighbour: takeover. The <a class="plain-link" href="../diagrams/#four-attractors">typology of the four attractor states</a> describes where each combination leads.</p>
@@ -482,7 +553,7 @@
 
   <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
 
-  <script src="../assets/simulator.js?v=62b83693"></script>
+  <script src="../assets/simulator.js?v=16b4bdc4"></script>
   <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
   <script src="../assets/tools.js?v=88b7be40" data-search-scope=".sr-notes" data-hide-until=".genealogy-top"></script>
 </body>
