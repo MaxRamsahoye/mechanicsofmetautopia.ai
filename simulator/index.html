@@ -750,7 +750,8 @@
     .sr-notes > h2:first-child { margin-top: 0; }
     .sr-full { margin-top: calc(var(--gap) * 2); }
     .sr-full-head h2 { position: relative; }
-    .sr-notes > h2::before, .sr-full-head h2::before { content: ''; position: absolute; left: 50%; top: calc(var(--gap) * -1); width: 100vw; transform: translateX(-50%); border-top: 1px solid var(--line); }
+    .sr-notes .sr-subhead { position: relative; max-width: none; margin-top: calc(var(--gap) * 2); }
+    .sr-notes > h2::before, .sr-full-head h2::before, .sr-notes .sr-subhead::before { content: ''; position: absolute; left: 50%; top: calc(var(--gap) * -1); width: 100vw; transform: translateX(-50%); border-top: 1px solid var(--line); }
     @media (max-width: 640px) {
       .simr, .sr-full, .genealogy-top { --gap: 64px; }
     }
@@ -838,7 +839,7 @@
       </div>
 
       <div class="sr-notes">
-        <h2>The rule</h2>
+        <h2>The Rule</h2>
         <p>Every sub-topia carries four things: a <b>culture</b>; a <b>sub-topian status</b>, whether it is utopian, notopian or dystopian; a <b>cultural integrity</b>, how strongly that culture holds and pulls; and a <b>membrane impermeability</b>, how closed its borders are. Only integrity and membrane decide whether a culture crosses, and its status travels with it. A culture crosses from one sub-topia into its neighbour only by passing two tests, in order. The tests run in both directions at once: A against B, and B against A.</p>
         <div class="sr-cards two">
           <div class="sr-card test">
@@ -856,7 +857,7 @@
         </div>
         <p>Above, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5, while B&rsquo;s integrity of 3.5 cannot get through A&rsquo;s membrane of 4.0. B is assimilated: it takes on A&rsquo;s culture together with A&rsquo;s status, integrity and membrane, and turns from dystopian to utopian.</p>
 
-        <h2>Three outcomes</h2>
+        <h2>Three Outcomes</h2>
         <p>Keep A as it is above, with a cultural integrity of 8.2 and a membrane of 4.0, and change its neighbour. Whether A is blocked, deflected or assimilates B depends on B&rsquo;s two numbers: its membrane impermeability, then its own cultural integrity. Each card also tests B against A: a B with an integrity above 8.2 would pass both tests and take over A instead. In each case, the number in a hexagon is its cultural integrity.</p>
         <div class="sr-cards three">
           <figure class="sr-card">
@@ -882,7 +883,7 @@
           </figure>
         </div>
 
-        <h2>From two sub-topias to a civilisation</h2>
+        <h2>From Two Sub-Topias to a Civilisation</h2>
         <p>The same two tests run between every pair of neighbours on a map, all at once, turn after turn, until no more cultures change. Where membranes are high everywhere, cultures stay sealed in place: enclosure. Where membranes are low and one culture&rsquo;s integrity is far above the rest, it spreads from neighbour to neighbour: takeover. The <a class="plain-link" href="../diagrams/#four-attractors">typology of the four attractor states</a> describes where each combination leads.</p>
         <figure class="sr-ring" aria-label="Nineteen sub-topias in two rings around a centre, running the rule turn by turn">
           <svg class="sr-ring-svg" viewBox="0 0 520 472" role="img" aria-label="A hexagonal map of nineteen sub-topias: The Culture at the centre, the Azad around it, and two Morthanveld sub-topias on the outer ring"></svg>
@@ -904,7 +905,7 @@
             </div>
           </div>
         </figure>
-        <h3 class="sr-subhead">Three layers of one map</h3>
+        <h3 class="sr-subhead">Three Layers of One Map</h3>
         <p>A sub-topia&rsquo;s four properties can be read off a single hexagon, as above, or separated into layers, as in the Cultural Dynamics Simulator. Here one map of sixty-one sub-topias is drawn three times: by <b>culture</b>, by <b>sub-topian status</b>, and by <b>cultural integrity</b>, with each <b>membrane</b> drawn on it. When a sub-topia is assimilated it changes on all three layers at once, since it takes on the incoming culture&rsquo;s status, integrity and membrane together. The layers show what a single view hides: where the strong and the weak cultures lie, and how closed each border is, as the map changes.</p>
         <figure class="sr-layers" aria-label="Six cultures on one map, shown as three layers of the same hex grid, running the rule turn by turn">
           <div class="sr-layers-stage">
@@ -929,7 +930,7 @@
           <figcaption>Six cultures on one map, shown as three layers of the same grid. Each turn, every sub-topia is tested against each of its neighbours and takes on the strongest culture that passes both tests. The Culture and the Gzilt, equal in integrity, spread until they meet and stand off; the Morthanveld, behind a membrane of 9.0 that no culture&rsquo;s integrity can pass, is never entered.</figcaption>
         </figure>
         <div class="sr-states">
-          <h3 class="sr-subhead">The attractor states</h3>
+          <h3 class="sr-subhead">The Attractor States</h3>
           <p>Each state of the <a class="plain-link" href="../diagrams/#four-attractors">2&times;2</a> is a different starting world for the same two tests. Below, nineteen sub-topias are set at the integrity and permeability of each state, and left to run: what each world becomes follows from the rule alone. Permeability is the inverse of membrane impermeability: a closed membrane is a high number.</p>
           <div class="sr-sbar">
             <div class="sr-skey">
