@@ -175,12 +175,63 @@
     return nodes.filter(function (o) { return DIRS.some(function (d) { return o.q === node.q + d.q && o.r === node.r + d.r; }); });
   }
 
-  // where the civilisation sits on the four-attractor diagram: exactly the
-  // grid's own averages, as the metrics report them
-  //   cultural integrity    = the average cultural integrity of the tiles
-  //   membrane permeability = 100 minus their average membrane impermeability
-  function attractorPoint(nodeData, avgs) {
-    return { I: avgs.softPower, P: 100 - avgs.impermeability };
+  // where the civilisation sits on the four-attractor diagram, calibrated to
+  // the Civilisation Scale Scenario in the report: the same measures and the
+  // same thresholds decide the region, so the diagram and the report agree.
+  //   the largest culture's share of the map (cMax), the share of utopian
+  //   sub-topias (uPct), the average status (moralAvg) and the average
+  //   cultural integrity (spAvg), all on the 0-100 scale
+  function scenarioMeasures(nodeData) {
+    var n = nodeData.length, counts = new Array(7).fill(0), u = 0, moral = 0, sp = 0;
+    nodeData.forEach(function (d) { counts[d.cultureIndex]++; if (d.moral >= 67) u++; moral += d.moral; sp += d.softPower; });
+    return { cMax: Math.max.apply(null, counts) / n * 100, uPct: u / n * 100, moralAvg: moral / n, spAvg: sp / n };
+  }
+  //   75%+ of the map one culture: takeover (with or without collapse)
+  //   50-75%: a takeover with resistant enclaves, still contested: clash
+  //   integrity below a third otherwise: collapse
+  //   every sub-topia utopian: uplift; otherwise fragmented: enclosure
+  function scenarioRegion(m) {
+    if (m.cMax >= 75) return 'takeover';
+    if (m.spAvg < 33.3) return 'collapse';
+    if (m.cMax > 50) return 'clash';
+    if (m.uPct === 100) return 'uplift';
+    return 'enclosure';
+  }
+  // the Civilisation Scale Scenario's title, shared by the report and the
+  // four-attractor diagram so the two always read the same
+  function scenarioTitle(nodeData) {
+    var m = scenarioMeasures(nodeData), cMax = m.cMax, uPct = m.uPct, moralAvg = m.moralAvg, spAvg = m.spAvg;
+    var dPct = nodeData.filter(function (d) { return d.moral <= 33; }).length / nodeData.length * 100;
+    var scenarios = [];
+    if (cMax === 100) {
+      if (uPct === 100) scenarios.push(isCompleted ? 'Utopian Hegemony' : 'Utopian Takeover');
+      else if (dPct === 100) scenarios.push(isCompleted ? 'Dystopian Hegemony' : 'Dystopian Takeover');
+      else scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
+    } else {
+      if (uPct === 100) scenarios.push('Meta Utopian Uplift');
+      else if (dPct === 100) scenarios.push('Meta Dystopian Downfall');
+      if (cMax > 50 && cMax < 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony with Resistant Enclaves' : 'Mono Cultural Takeover with Resistant Enclaves');
+      else if (cMax <= 50) scenarios.push(moralAvg >= 67 ? 'Meta Utopian Enclosure with Dystopian Enclaves' : 'Meta Dystopian Enclosure');
+      else if (cMax >= 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
+    }
+    // without cultural integrity, cultures cannot hold themselves together
+    if (spAvg < 33.3) scenarios.push('Cultural Collapse');
+    var title = scenarios.length > 1 ? scenarios.slice(0, -1).join(' and ') + ' and ' + scenarios[scenarios.length - 1] : (scenarios[0] || '');
+    return title;
+  }
+
+  // each region's area of the drawn diagram (permeability P, integrity I);
+  // within it the marker moves right as one culture's share grows and up as
+  // integrity rises
+  var REGION_BOX = {
+    enclosure: { P: [5, 22], I: [75, 95] }, uplift: { P: [78, 95], I: [75, 95] },
+    collapse: { P: [5, 22], I: [5, 25] }, takeover: { P: [78, 95], I: [5, 25] },
+    clash: { P: [30, 70], I: [35, 65] }
+  };
+  function attractorPoint(nodeData) {
+    var m = scenarioMeasures(nodeData), k = scenarioRegion(m), b = REGION_BOX[k];
+    var lerp = function (r, t) { return r[0] + (r[1] - r[0]) * Math.max(0, Math.min(1, t)); };
+    return { P: lerp(b.P, m.cMax / 100), I: lerp(b.I, m.spAvg / 100), region: k, m: m };
   }
 
   function captureEpochState(nodeData) {
@@ -190,7 +241,7 @@
     });
     var counts = new Array(7).fill(0);
     nodeData.forEach(function (n) { counts[n.cultureIndex]++; });
-    epochHistory.push({ avgs: avgs, counts: counts, point: attractorPoint(nodeData, avgs) });
+    epochHistory.push({ avgs: avgs, counts: counts, point: attractorPoint(nodeData) });
   }
 
   // ---------- the four-attractor diagram, with the path so far ----------
@@ -202,13 +253,6 @@
   var AX = { x0: 26, x1: 206, y0: 10, y1: 190 };
   function attX(P) { return AX.x0 + (AX.x1 - AX.x0) * P / 100; }
   function attY(I) { return AX.y1 - (AX.y1 - AX.y0) * I / 100; }
-  // the state is the region of the drawn diagram the point is in: the clash
-  // box in the middle (permeability 25-75, integrity 30-70), else a quadrant
-  function attractorOf(pt) {
-    if (pt.I >= 30 && pt.I <= 70 && pt.P >= 25 && pt.P <= 75) return 'clash';
-    if (pt.I >= 50) return pt.P < 50 ? 'enclosure' : 'uplift';
-    return pt.P < 50 ? 'collapse' : 'takeover';
-  }
   function drawLocator() {
     var trail = $('att-trail'), dots = $('att-dots'), mark = $('att-mark');
     if (!trail || !epochHistory.length) return;
@@ -218,9 +262,10 @@
     var last = pts[pts.length - 1];
     mark.setAttribute('cx', attX(last.P).toFixed(1));
     mark.setAttribute('cy', attY(last.I).toFixed(1));
-    var k = attractorOf(last);
-    $('att-name').textContent = ATTRACTORS[k];
-    $('att-coords').textContent = 'Turn ' + simulationEpoch + ' \u00b7 avg integrity ' + formatScore(last.I) + ' \u00b7 avg permeability ' + formatScore(last.P);
+    var k = last.region, m = last.m;
+    $('att-name').textContent = scenarioTitle(nodes);
+    $('att-name').setAttribute('data-region', ATTRACTORS[k]);
+    $('att-coords').textContent = 'Turn ' + simulationEpoch + ' \u00b7 largest culture ' + Math.round(m.cMax) + '% \u00b7 utopian ' + Math.round(m.uPct) + '% \u00b7 avg integrity ' + formatScore(m.spAvg);
     sim.setAttribute('data-attractor', k);
   }
 
@@ -576,21 +621,7 @@
     var sorted = Object.keys(cultStats).map(function (k) { return [k, cultStats[k]]; }).filter(function (e) { return e[1].count > 0; }).sort(function (a, b) { return b[1].count - a[1].count; });
     var cMax = sorted.length ? sorted[0][1].count / totalNodes * 100 : 0;
 
-    var scenarios = [];
-    if (cMax === 100) {
-      if (uPct === 100) scenarios.push(isCompleted ? 'Utopian Hegemony' : 'Utopian Takeover');
-      else if (dPct === 100) scenarios.push(isCompleted ? 'Dystopian Hegemony' : 'Dystopian Takeover');
-      else scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
-    } else {
-      if (uPct === 100) scenarios.push('Meta Utopian Uplift');
-      else if (dPct === 100) scenarios.push('Meta Dystopian Downfall');
-      if (cMax > 50 && cMax < 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony with Resistant Enclaves' : 'Mono Cultural Takeover with Resistant Enclaves');
-      else if (cMax <= 50) scenarios.push(moralAvg >= 67 ? 'Meta Utopian Enclosure with Dystopian Enclaves' : 'Meta Dystopian Enclosure');
-      else if (cMax >= 75) scenarios.push(isCompleted ? 'Mono Cultural Hegemony' : 'Mono Cultural Takeover');
-    }
-    // without cultural integrity, cultures cannot hold themselves together
-    if (spAvg < 33.3) scenarios.push('Cultural Collapse');
-    var title = scenarios.length > 1 ? scenarios.slice(0, -1).join(' and ') + ' and ' + scenarios[scenarios.length - 1] : (scenarios[0] || '');
+    var title = scenarioTitle(nodes);
 
     var moralLabel = function (v) { return v >= 67 ? 'Utopian' : (v <= 33 ? 'Dystopian' : 'Notopian'); };
     var moralNoun = function (v) { return v >= 67 ? 'Utopia' : (v <= 33 ? 'Dystopia' : 'Notopia'); };
