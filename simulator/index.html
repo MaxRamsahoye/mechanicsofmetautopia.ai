@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" class="hide-scrollbar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Simulator: how one sub-topia takes over another, step by step: cultural integrity against membrane impermeability, then against cultural integrity.">
+  <link id="favicon-ico" rel="icon" href="../favicon/favicon-light.ico?v=2" sizes="any">
+  <link id="favicon-32" rel="icon" type="image/png" sizes="32x32" href="../favicon/favicon-32-light.png?v=2">
+  <link id="favicon-192" rel="icon" type="image/png" sizes="192x192" href="../favicon/favicon-192-light.png?v=2">
+  <link id="favicon-apple" rel="apple-touch-icon" href="../favicon/apple-touch-icon-light.png?v=2">
+  <script>
+    try {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        // a refresh always lands at the top of the page, even with a section in the address
+        var navType = (performance.getEntriesByType && (performance.getEntriesByType('navigation')[0] || {}).type) || '';
+        if (navType === 'reload' && location.hash) history.replaceState(null, '', location.pathname + location.search);
+        if (navType === 'reload') window.addEventListener('load', function () { window.scrollTo(0, 0); });
+    } catch (e) {}
+    try {
+      var navEntry = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+      // arriving from another page of this site (its own folder: another site may share the address), or a refresh, or back/forward: fade in
+      var fromSite = false;
+      try { fromSite = !!document.referrer && (function (r, s) { return r.origin === s.origin && r.pathname.indexOf(s.pathname) === 0; })(new URL(document.referrer), new URL('../', location.href)); } catch (e) {}
+      // browsers with cross-document view transitions crossfade between pages
+      // themselves; the others fade out and in (and so does a refresh)
+      var vt = 'CSSViewTransitionRule' in window;
+      if (vt) document.documentElement.classList.add('vt');
+      if ((fromSite || (navEntry && navEntry.type !== 'navigate')) && (!vt || (navEntry && navEntry.type === 'reload'))) document.documentElement.classList.add('page-entering');
+    } catch (e) {}
+    try {
+      // no theme chosen yet: follow the system setting
+      var sys = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      var t = localStorage.getItem('mm.theme');
+      // a theme chosen with t holds only until the system setting changes
+      if (t && localStorage.getItem('mm.themeSystem') !== sys) { t = null; localStorage.removeItem('mm.theme'); }
+      t = t || sys;
+      if (t === 'dark') document.documentElement.setAttribute('data-theme', t);
+      if (localStorage.getItem('mm.blueLinks') !== 'off') document.documentElement.classList.add('colour');  // blue links (c): on by default
+      if (localStorage.getItem('mm.headings') !== 'sans') document.documentElement.classList.add('serif-headings');
+      // the band colour (b): midnight purple by default, or sepia, midnight blue or black
+      var band = localStorage.getItem('mm.bandColour') || 'purple';
+      if (band === 'purple' || band === 'midnight' || band === 'black') document.documentElement.classList.add('band-' + band);
+    } catch (e) {}
+  </script>
+  <title>Simulator — Mechanics of Meta-Utopia</title>
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Mechanics of Meta-Utopia">
+  <meta property="og:title" content="Simulator — Mechanics of Meta-Utopia">
+  <meta property="og:description" content="Simulator: how one sub-topia takes over another, step by step: cultural integrity against membrane impermeability, then against cultural integrity.">
+  <meta property="og:url" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/simulator/">
+  <meta property="og:image" content="https://maxramsahoye.github.io/mechanicsofmetautopia.ai/preview-card.gif?v=2">
+  <meta property="og:image:type" content="image/gif">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Animated circular hexagonal grid">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="../assets/site.css?v=34995492" rel="stylesheet">
+  <style>
+    /* light sepia band from the top of the window to just below the intro */
+    .genealogy-top {
+      position: relative;
+      z-index: 0;
+      margin-bottom: 216px;
+    }
+
+    .genealogy-top::before {
+      content: '';
+      position: absolute;
+      top: -180px;
+      bottom: -112px;
+      left: 50%;
+      width: 100vw;
+      transform: translateX(-50%);
+      background: var(--band-bg);
+      z-index: -1;
+    }
+
+    .genealogy-top .page-intro {
+      margin-bottom: 0;
+    }
+
+    /* the site name sits in the top-right corner, as on the Lexicon */
+    .site-title,
+    body.footer-in-view .site-title {
+      position: absolute;
+      z-index: 10;
+      top: 32px;
+      right: 40px;
+      left: auto;
+      bottom: auto;
+      margin: 0;
+      text-align: right;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 960px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 26px;
+        right: 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .site-title,
+      body.footer-in-view .site-title {
+        top: 22px;
+      }
+    }
+
+    /* the essay, set as the article's text */
+    .essay {
+      max-width: 760px;
+      font-size: clamp(20px, 0.485vw + 14.3px, 23px);
+      line-height: 1.3;
+    }
+
+    .essay p {
+      margin: 15px 0;
+    }
+
+    .essay a:not(.heading-link) {
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+    }
+
+    html:not(.colour) .essay a:not(.heading-link) {
+      color: inherit;
+    }
+
+    .essay h2 {
+      margin: 88px 0 18px;
+      font-family: var(--sans);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      font-size: 1.15em;
+      line-height: 1.2;
+    }
+
+    html.serif-headings .essay h2 {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 1.45em;
+      letter-spacing: 0;
+      -webkit-text-stroke: 0.4px currentColor;
+    }
+
+    /* quotations, set in from an orange rule */
+    .essay blockquote {
+      margin: 32px 0;
+      padding-left: 28px;
+      border-left: 2px solid var(--link-blue);
+    }
+
+    .essay blockquote p {
+      margin: 0;
+      font-size: 0.95em;
+      line-height: 1.4;
+    }
+
+    .essay blockquote cite {
+      display: block;
+      margin-top: 14px;
+      font-family: var(--mono-caps);
+      font-size: 15px;
+      font-style: normal;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .essay blockquote cite a {
+      font-weight: 400;
+    }
+    /* no footer on the Supplements pages, as on Diagrams */
+    .site-footer {
+      display: none;
+    }
+
+    /* the essays, as cards */
+    /* the essays, one above the other, across the wide column (as on Diagrams) */
+    .essay-list {
+      width: var(--wide-col);
+      margin-left: calc((100% - var(--wide-col)) / 2);
+      padding-bottom: 160px;
+    }
+
+    @media (max-width: 600px) {
+      .essay-list {
+        padding-bottom: 96px;
+      }
+    }
+
+    .essay-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .essay-card {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 26px 26px 28px;
+      border: 1.5px solid color-mix(in srgb, currentColor 28%, transparent);
+      color: inherit;
+      text-decoration: none;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    .essay-card:hover,
+    .essay-card:focus-visible {
+      border-color: var(--link-blue);
+      background: color-mix(in srgb, var(--link-blue) 8%, transparent);
+      outline: none;
+    }
+
+    /* a group of supplements under its own heading */
+    .series-heading {
+      margin: 96px 0 28px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .series-heading.series-first {
+      margin-top: 0;
+    }
+
+    .card-kicker {
+      margin: 0 0 8px;
+      font-family: var(--mono-caps);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .card-title {
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 27px;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .card-desc {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+    /* Simulator: two sub-topias, the takeover rule step by step */
+    .simr { --mono: 'IBM Plex Mono', ui-monospace, monospace; }
+    .sr-figure { margin: 0; }
+    .sr-svg { display: block; width: 100%; max-width: 960px; height: auto; margin: 0 auto; overflow: visible; }
+    .sr-svg text { font-family: var(--mono); fill: var(--canvas-ink); }
+    .sr-svg .t-name { font-size: 13px; letter-spacing: 0.08em; text-anchor: middle; fill: #1A1A1A; }
+    .sr-svg .t-small { font-size: 11px; letter-spacing: 0.08em; text-anchor: middle; fill: #1A1A1A; opacity: 0.7; }
+    .sr-svg .t-big { font-size: 52px; font-weight: 500; text-anchor: middle; fill: #1A1A1A; }
+    .sr-svg .t-label { font-family: var(--sans); font-size: 15px; font-weight: 600; text-anchor: middle; }
+    .sr-svg .t-note { font-family: var(--sans); font-size: 13px; text-anchor: middle; fill: var(--muted); }
+    .sr-svg .leader { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 2 3; fill: none; }
+    .sr-hex { transition: fill 0.9s ease; stroke: none; }
+    .sr-mem { fill: none; stroke-linejoin: round; transition: stroke 0.9s ease, stroke-width 0.9s ease; }
+    .sr-mem.breached { stroke-dasharray: 16 12; animation: sr-flow 1.2s linear infinite; }
+    @keyframes sr-flow { to { stroke-dashoffset: -56; } }
+
+    /* the two tests: arrows drawn in, verdicts faded in */
+    .sr-arrow { fill: none; stroke: var(--link-blue); stroke-width: 3.5; stroke-linecap: round; stroke-dasharray: 220; stroke-dashoffset: 220; transition: stroke-dashoffset 0.9s ease; }
+    .sr-arrow.on { stroke-dashoffset: 0; }
+    .sr-head { fill: var(--link-blue); opacity: 0; transition: opacity 0.3s ease 0.7s; }
+    .sr-head.on { opacity: 1; }
+    .sr-test { opacity: 0; transform: translateY(6px); transition: opacity 0.5s ease 0.6s, transform 0.5s ease 0.6s; }
+    .sr-test.on { opacity: 1; transform: none; }
+    .sr-test rect { fill: var(--canvas-bg); stroke: var(--link-blue); stroke-width: 1.5; }
+    .sr-test .t-cmp { font-size: 17px; font-weight: 600; text-anchor: middle; }
+    .sr-test .t-verdict { font-family: var(--sans); font-size: 12.5px; text-anchor: middle; fill: var(--link-blue); }
+
+    @media (max-width: 640px) {
+      .sr-svg { width: calc(100% + 24px); margin: 0 -12px; }
+      .sr-svg .t-label { font-size: 22px; }
+      .sr-svg .t-note { font-size: 15.5px; }
+      .sr-svg .t-small { font-size: 13px; }
+      .sr-svg .t-name { font-size: 17px; }
+      .sr-test .t-cmp { font-size: 21px; }
+      .sr-test .t-verdict { display: none; }
+      .sr-caption { margin-top: 24px; padding: 18px 18px 20px; }
+      .sr-table { font-size: 16px; }
+      .sr-table th, .sr-table td { padding: 10px 8px; }
+    }
+
+    /* the caption and the controls */
+    .sr-caption { max-width: 760px; margin: 36px auto 0; padding: 22px 26px 24px; border-left: 4px solid var(--link-blue); background: color-mix(in srgb, var(--link-blue) 6%, transparent); }
+    .sr-step-num { margin: 0 0 6px; font-family: var(--mono-caps); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+    .sr-step-title { margin: 0 0 8px; font-family: var(--serif); font-size: 24px; font-weight: 700; line-height: 1.2; }
+    html:not(.serif-headings) .sr-step-title { font-family: var(--sans); font-size: 21px; font-weight: 600; }
+    .sr-step-text { margin: 0; font-family: var(--serif); font-size: 19px; line-height: 1.5; min-height: 3em; }
+    .sr-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px; max-width: 760px; margin: 18px auto 0; font-family: var(--sans); }
+    .sr-btns { display: flex; gap: 8px; }
+    .sr-btn { padding: 7px 12px; border: 1px solid color-mix(in srgb, var(--canvas-ink) 30%, transparent); background: none; font: inherit; font-size: 13px; color: inherit; cursor: pointer; }
+    .sr-btn:hover, .sr-btn:focus-visible { border-color: var(--canvas-ink); outline: none; }
+    .sr-dots { display: flex; gap: 8px; }
+    .sr-dot { width: 11px; height: 11px; padding: 0; border: 1.5px solid var(--canvas-ink); border-radius: 50%; background: none; cursor: pointer; }
+    .sr-dot.on { background: var(--canvas-ink); }
+
+    /* the explanation */
+    .sr-notes { max-width: 760px; margin: 96px auto 0; font-family: var(--serif); font-size: 19px; line-height: 1.5; }
+    .sr-notes h2 { margin: 48px 0 16px; font-family: var(--sans); font-size: 26px; font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+    .sr-notes h2:first-child { margin-top: 0; }
+    .sr-notes p { margin: 0 0 14px; }
+    .sr-notes ol { margin: 0 0 14px; padding-left: 1.4em; }
+    .sr-notes li { margin: 0 0 8px; }
+    .sr-table { width: 100%; margin: 8px 0 18px; border-collapse: collapse; font-size: 17px; }
+    .sr-table th, .sr-table td { padding: 12px 14px; border-top: 1px solid var(--canvas-ink); border-bottom: 1px solid var(--canvas-ink); text-align: left; vertical-align: top; }
+    .sr-table thead th { font-family: var(--sans); font-size: 14px; font-weight: 600; }
+    .sr-table td:first-child { font-weight: 700; white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <a class="back-arrow" href="../" aria-label="Back to the article" data-direct>
+    <svg viewBox="0 0 26 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="butt" stroke-linejoin="miter">
+      <path d="M10,1.5 L5,6 L18,6 A4,4 0 0 1 18,14 L1,14"/>
+      <path d="M10,10.5 L5,6"/>
+    </svg>
+  </a>
+
+  <main class="page-main">
+    <div class="genealogy-top wide-top on-band">
+    <h1 class="page-title"><a class="heading-link title-top" href="#">Simulator</a></h1>
+    <p class="page-intro">How one sub-topia takes over another in the cellular automaton of <a class="plain-link" href="../"><em>The Mechanics of Meta-Utopia</em></a>: a culture crosses a border when its cultural integrity overcomes the neighbour&rsquo;s membrane impermeability, and then the neighbour&rsquo;s own cultural integrity.</p>
+    </div>
+
+    <section class="essay-list wide-top simr" aria-label="Simulator">
+      <figure class="sr-figure">
+        <svg class="sr-svg" viewBox="128 34 644 440" role="img" aria-labelledby="sr-title-svg">
+            <title id="sr-title-svg">Two hexagonal sub-topias side by side: A, The Culture, with cultural integrity 8.2 and membrane impermeability 4.0; B, The Azad, with cultural integrity 3.5 and membrane impermeability 5.1</title>
+            <!-- labels above -->
+            <text class="t-label" x="260" y="58">Sub-topia A</text>
+            <text class="t-label" x="640" y="58">Sub-topia B</text>
+            <path class="leader" d="M260,66 V114"/>
+            <path class="leader" d="M640,66 V114"/>
+
+            <!-- A -->
+            <polygon class="sr-hex" points="260.0,120.0 372.6,185.0 372.6,315.0 260.0,380.0 147.4,315.0 147.4,185.0" style="fill: #FFB7B2"/>
+            <polygon id="sr-mem-a" class="sr-mem" points="260.0,120.0 372.6,185.0 372.6,315.0 260.0,380.0 147.4,315.0 147.4,185.0"/>
+            <text class="t-name" x="260" y="206">THE CULTURE</text>
+            <text class="t-small" x="260" y="232">CULTURAL INTEGRITY</text>
+            <text class="t-big" x="260" y="284">8.2</text>
+
+            <!-- B -->
+            <polygon id="sr-hex-b" class="sr-hex" points="640.0,120.0 752.6,185.0 752.6,315.0 640.0,380.0 527.4,315.0 527.4,185.0" style="fill: #B3E5FC"/>
+            <polygon id="sr-mem-b" class="sr-mem" points="640.0,120.0 752.6,185.0 752.6,315.0 640.0,380.0 527.4,315.0 527.4,185.0"/>
+            <text id="sr-name-b" class="t-name" x="640" y="206">THE AZAD</text>
+            <text class="t-small" x="640" y="232">CULTURAL INTEGRITY</text>
+            <text id="sr-integ-b" class="t-big" x="640" y="284">3.5</text>
+
+            <!-- the membranes, labelled below -->
+            <path class="leader" d="M260,386 V424"/>
+            <path class="leader" d="M640,386 V424"/>
+            <text class="t-note" x="260" y="442">Membrane impermeability 4.0</text>
+            <text id="sr-imp-b" class="t-note" x="640" y="442">Membrane impermeability 5.1</text>
+            <text class="t-note" x="260" y="462">(the outline)</text>
+            <text class="t-note" x="640" y="462">(the outline)</text>
+
+            <!-- test 1: A's integrity against B's membrane -->
+            <path id="sr-arrow-1" class="sr-arrow" d="M383,216 L521,216"/>
+            <path id="sr-head-1" class="sr-head" d="M531,216 l-13,-7 v14 z"/>
+            <g id="sr-test-1" class="sr-test">
+              <rect x="372" y="122" width="156" height="66" rx="4"/>
+              <text class="t-cmp" x="450" y="150">8.2 &gt; 5.1</text>
+              <text class="t-verdict" x="450" y="172">&#10003; through the membrane</text>
+            </g>
+
+            <!-- test 2: A's integrity against B's own -->
+            <path id="sr-arrow-2" class="sr-arrow" d="M383,302 L588,302"/>
+            <path id="sr-head-2" class="sr-head" d="M598,302 l-13,-7 v14 z"/>
+            <g id="sr-test-2" class="sr-test">
+              <rect x="372" y="320" width="156" height="66" rx="4"/>
+              <text class="t-cmp" x="450" y="348">8.2 &gt; 3.5</text>
+              <text class="t-verdict" x="450" y="370">&#10003; past B&rsquo;s integrity</text>
+            </g>
+          </svg>
+        <figcaption class="sr-caption" aria-live="polite">
+          <p class="sr-step-num">Step 1 of 5</p>
+          <p class="sr-step-title"></p>
+          <p class="sr-step-text"></p>
+        </figcaption>
+      </figure>
+      <div class="sr-controls">
+        <div class="sr-btns">
+          <button class="sr-btn sr-back" type="button" aria-label="Previous step">&larr; Back</button>
+          <button class="sr-btn sr-play" type="button" aria-pressed="false">Pause</button>
+          <button class="sr-btn sr-next" type="button" aria-label="Next step">Next &rarr;</button>
+          <button class="sr-btn sr-restart" type="button">Restart</button>
+        </div>
+        <div class="sr-dots" role="group" aria-label="Steps">
+          <button class="sr-dot" type="button" aria-label="Step 1"></button><button class="sr-dot" type="button" aria-label="Step 2"></button><button class="sr-dot" type="button" aria-label="Step 3"></button><button class="sr-dot" type="button" aria-label="Step 4"></button><button class="sr-dot" type="button" aria-label="Step 5"></button>
+        </div>
+      </div>
+
+      <div class="sr-notes">
+        <h2>The rule</h2>
+        <p>Every sub-topia carries three things: a <b>culture</b>, a <b>cultural integrity</b> (how strongly its culture holds and pulls) and a <b>membrane impermeability</b> (how closed its borders are). When two sub-topias are neighbours, a culture crosses from one to the other only by passing two tests, in order:</p>
+        <ol>
+          <li><b>The membrane.</b> Is the incoming culture&rsquo;s cultural integrity higher than the neighbour&rsquo;s membrane impermeability? If not, it is stopped at the border.</li>
+          <li><b>The culture inside.</b> Is it also higher than the neighbour&rsquo;s own cultural integrity? If not, it gets in but cannot take hold.</li>
+        </ol>
+        <p>Here, A&rsquo;s integrity of 8.2 beats B&rsquo;s membrane of 5.1, and then B&rsquo;s integrity of 3.5: B is assimilated, and takes on A&rsquo;s culture together with A&rsquo;s integrity and membrane.</p>
+
+        <h2>Three outcomes</h2>
+        <table class="sr-table">
+          <thead><tr><th scope="col">Outcome</th><th scope="col">When</th><th scope="col">What happens</th></tr></thead>
+          <tbody>
+            <tr><td>Blocked</td><td>Integrity &le; the neighbour&rsquo;s membrane</td><td>The culture stops at the border; nothing changes.</td></tr>
+            <tr><td>Deflected</td><td>Integrity &gt; the membrane, but &le; the neighbour&rsquo;s integrity</td><td>The culture crosses the border but cannot displace the one inside; nothing changes.</td></tr>
+            <tr><td>Assimilated</td><td>Integrity &gt; the membrane and &gt; the neighbour&rsquo;s integrity</td><td>The neighbour takes on the incoming culture, with its integrity and membrane.</td></tr>
+          </tbody>
+        </table>
+
+        <h2>From two sub-topias to a civilisation</h2>
+        <p>The same two tests run between every pair of neighbours on a map, all at once, turn after turn, until no more cultures change. Where membranes are high everywhere, cultures stay sealed in place: enclosure. Where membranes are low and one culture&rsquo;s integrity is far above the rest, it spreads from neighbour to neighbour: takeover. The <a class="plain-link" href="../diagrams/#four-attractors">typology of the four attractor states</a> describes where each combination leads.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+    <div class="footer-head">
+    <p class="footer-subtitle"><em><span class="hang">“</span>The messiness of how a political apparatus is to be controlled and limited do not fit easily into one’s hopes for a sleek, simple [meta-]utopian scheme”</em></p>
+    <p class="footer-title"><a class="heading-link" href="../">mechanicsofmetautopia.ai</a></p>
+    <p class="footer-author">A project by <a class="author-link" href="https://maxramsahoye.github.io/max/" target="_blank" rel="noopener">Max Ramsahoye</a> on civilisation design</p>
+    </div>
+    <nav class="footer-sitemap" aria-label="Sitemap">
+      <p class="sitemap-heading"><a href="../list/">All Pages</a></p>
+      <ol>
+        <li><a href="../">Article</a></li>
+        <li><a href="../genealogy/">Supplements</a></li>
+        <li><a href="../diagrams/">Typologies</a></li>
+        <li><a href="../lexicon/">Concepts</a></li>
+        <li><a href="../sources/">Sources</a></li>
+        <li><a href="../consoles/">Consoles</a></li><li><a href="../simulator/">Simulator</a></li>
+        <li><a href="../1.0/">Version 1.0</a></li>
+        <li><a class="footer-contact" href="mailto:maxjosephholly@outlook.com" data-email="maxjosephholly@outlook.com">Contact</a></li>
+      </ol>
+    </nav>
+    </div>
+  </footer>
+
+
+  <div class="progress-pill progress-edge" data-start=".genealogy-top" data-start-offset="88" aria-hidden="true">
+    <div class="progress-pill-fill"></div>
+  </div>
+
+  <button class="scroll-top-btn" type="button" aria-label="Scroll to top" data-show-after=".genealogy-top">
+    <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round">
+      <polygon points="14,9.078 20.328,18.922 14,15.969 7.672,18.922"/>
+    </svg>
+  </button>
+
+  <script>
+    // the up arrow shows once the top section has scrolled away
+    (function () {
+      var upBtn = document.querySelector('.scroll-top-btn');
+      var band = document.querySelector('.genealogy-top');
+      function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
+      window.addEventListener('scroll', showUp, { passive: true });
+      showUp();
+    })();
+  </script>
+
+  <a class="site-title" href="../">Mechanics of<br>Meta-Utopia</a>
+
+  <script src="../assets/simulator.js?v=62b83693"></script>
+  <script src="../assets/site.js?v=eb0b6127" data-base="../"></script>
+  <script src="../assets/tools.js?v=88b7be40" data-search-scope=".sr-notes" data-hide-until=".genealogy-top"></script>
+</body>
+</html>
