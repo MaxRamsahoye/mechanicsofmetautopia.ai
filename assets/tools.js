@@ -59,7 +59,6 @@
     // seven pages: closer together on narrower windows, and out of the way of
     // the corner title below 1024px
     '@media (max-width: 1199px) { .top-nav { gap: 22px; } }',
-    '@media (max-width: 1099px) { .top-nav { gap: 14px; } }',
     '@media (max-width: 1023px) { .top-nav { display: none; } }',
     'html .top-nav a.top-nav-ext { color: var(--muted, #8c8c8c); }',
     'html .top-nav a.top-nav-ext:hover { color: var(--canvas-ink); }',
@@ -73,7 +72,9 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/'], ['Simulator', 'simulator/'], ['Design', 'design/']];
+    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/']];
+    // the in-site consoles count as the Consoles section
+    var sectionOf = { 'simulator/': 'consoles/', 'design/': 'consoles/' };
     var nav = document.createElement('nav');
     nav.className = 'top-nav';
     nav.setAttribute('aria-label', 'Pages');
@@ -91,6 +92,9 @@
       a.textContent = pg[0];
       // a section's subpages keep its menu entry marked
       if (url.pathname === location.pathname || (pg[1] && !external && location.pathname.indexOf(url.pathname) === 0)) a.setAttribute('aria-current', 'page');
+      Object.keys(sectionOf).forEach(function (k) {
+        if (sectionOf[k] === pg[1] && location.pathname.indexOf(new URL(k, base).pathname) === 0) a.setAttribute('aria-current', 'page');
+      });
       nav.appendChild(a);
     });
     document.body.insertBefore(nav, document.body.firstChild);
