@@ -96,6 +96,26 @@ html[data-theme="dark"] {
   color: var(--canvas-ink);
 }
 
+/* selecting text on a band: a white highlight, with the band's own text
+   colour. Written out rather than taken from --selection-bg, since browsers
+   read the variables in ::selection from the page root, not the band. Not on
+   pages without a band, nor on the light sepia band, where white would vanish. */
+:is(html.band-purple:not([data-theme]), html[data-theme="dark"]) body:not(.no-band) :is(.genealogy-top, #overview, .in-band) ::selection,
+:is(html.band-purple:not([data-theme]), html[data-theme="dark"]) body:not(.no-band) :is(.genealogy-top, #overview, .in-band)::selection {
+  background: rgba(255, 255, 255, 0.55);
+  color: #000000;
+}
+:is(html.band-midnight, html.band-black):not([data-theme]) body:not(.no-band) :is(.genealogy-top, #overview, .in-band) ::selection,
+:is(html.band-midnight, html.band-black):not([data-theme]) body:not(.no-band) :is(.genealogy-top, #overview, .in-band)::selection {
+  background: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+}
+.site-footer ::selection,
+.site-footer::selection {
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--inverse-ink);
+}
+
 html {
   background: var(--canvas-bg);
 }
