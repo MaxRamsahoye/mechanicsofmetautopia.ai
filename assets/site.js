@@ -512,3 +512,123 @@
     pointer.y = e.clientY;
   }, { passive: true });
 })();
+
+// Sidenotes on the Supplements, in the article's style: the asterisk notes of
+// an essay with .has-sidenotes become numbered notes, the reference and the
+// note's label linked both ways, the note and its sentence highlighted
+// together on hover; in the right margin on wide windows, and gathered as
+// Endnotes at the end of the essay on narrower ones.
+(function () {
+  var essay = document.querySelector('.essay.has-sidenotes');
+  if (!essay) return;
+  var notes = Array.prototype.slice.call(essay.querySelectorAll('.essay-note'));
+  if (!notes.length) return;
+
+  function findSentenceStart(textBefore) {
+    var boundary = /[.!?]+["'’”)\]]*\s+/g, start = 0, m;
+    while ((m = boundary.exec(textBefore))) {
+      var wordBefore = textBefore.slice(0, m.index).match(/(\S+)$/);
+      var word = wordBefore ? wordBefore[1] : '';
+      if (/^(?:[A-Z]\.)*[A-Z]$/.test(word)) continue;
+      if (/^(?:e\.g|i\.e|etc|vs|cf|Mr|Mrs|Ms|Dr|St)$/i.test(word)) continue;
+      start = m.index + m[0].length;
+    }
+    return start;
+  }
+  // the sentence a reference closes is highlighted with its note
+  function wrapAnchorSentence(ref, num) {
+    var block = ref.closest('p, li');
+    if (!block) return;
+    var before = document.createRange();
+    before.setStart(block, 0);
+    before.setEndBefore(ref);
+    var offset = findSentenceStart(before.toString());
+    var walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT), node, startNode = null, startOffset = 0;
+    while ((node = walker.nextNode())) {
+      if (node.compareDocumentPosition(ref) & Node.DOCUMENT_POSITION_PRECEDING) break;
+      if (offset <= node.length) { startNode = node; startOffset = offset; break; }
+      offset -= node.length;
+    }
+    if (!startNode) return;
+    var range = document.createRange();
+    if (startNode.parentNode === block) range.setStart(startNode, startOffset);
+    else {
+      var top = startNode;
+      while (top.parentNode !== block) top = top.parentNode;
+      range.setStartBefore(top);
+    }
+    range.setEndAfter(ref);
+    var span = document.createElement('span');
+    span.className = 'note-anchor';
+    span.setAttribute('data-note', num);
+    try { range.surroundContents(span); } catch (err) {}
+  }
+
+  var parts = {};
+  notes.forEach(function (note, i) {
+    var num = i + 1, key = 'sn-' + num;
+    // the reference in the text: an asterisk in a superscript, or none
+    var old = note.id ? essay.querySelector('a[href="#' + note.id + '"]') : null;
+    var ref = document.createElement('a');
+    ref.className = 'sn-ref';
+    ref.id = 'ref-' + key;
+    ref.href = '#' + key;
+    ref.textContent = num;
+    ref.setAttribute('aria-label', 'Note ' + num);
+    if (old) {
+      var sup = old.parentNode.tagName === 'SUP' ? old.parentNode : old;
+      sup.parentNode.replaceChild(ref, sup);
+    } else {
+      // a note with no reference attaches to the end of the paragraph before it
+      var prev = note.previousElementSibling;
+      while (prev && !/^(P|LI|H[2-4])$/.test(prev.tagName)) prev = prev.previousElementSibling;
+      if (!prev) return;
+      prev.appendChild(ref);
+    }
+    // the note: its asterisk marker becomes the numbered label
+    note.id = key;
+    note.classList.add('sn');
+    note.setAttribute('role', 'note');
+    var marker = note.querySelector('.o');
+    if (marker) {
+      var after = marker.nextSibling;
+      if (after && after.nodeType === 3) after.textContent = after.textContent.replace(/^\s+/, '');
+      marker.parentNode.removeChild(marker);
+    }
+    var label = document.createElement('a');
+    label.className = 'sn-label';
+    label.href = '#ref-' + key;
+    label.textContent = num + '.';
+    label.setAttribute('aria-label', 'Back to note ' + num + ' in the text');
+    note.insertBefore(label, note.firstChild);
+    wrapAnchorSentence(ref, num);
+    parts[num] = [ref, note, label, essay.querySelector('.note-anchor[data-note="' + num + '"]')].filter(Boolean);
+    [ref, label].forEach(function (el) {
+      ['mouseenter', 'focus'].forEach(function (t) { el.addEventListener(t, function () { setActive(num, true); }); });
+      ['mouseleave', 'blur'].forEach(function (t) { el.addEventListener(t, function () { setActive(num, false); }); });
+    });
+  });
+  function setActive(num, on) { (parts[num] || []).forEach(function (el) { el.classList.toggle('note-active', on); }); }
+
+  // narrower windows: the notes gathered at the end of the essay
+  var homes = notes.map(function (el) { return { el: el, parent: el.parentNode, next: el.nextSibling }; });
+  var end = document.createElement('section');
+  end.className = 'sn-endnotes';
+  end.setAttribute('aria-label', 'Endnotes');
+  end.innerHTML = '<p class="sn-endnotes-heading">Endnotes</p>';
+  essay.appendChild(end);
+  var mq = window.matchMedia('(max-width: 1279px)'), mode = null;
+  function setMode(narrow) {
+    if (narrow === mode) return;
+    mode = narrow;
+    if (narrow) homes.forEach(function (h) { end.appendChild(h.el); });
+    // back in place, last first, so notes that sat side by side keep their order
+    else homes.slice().reverse().forEach(function (h) {
+      var next = h.next && h.next.parentNode === h.parent ? h.next : (h.parent === essay ? end : null);
+      h.parent.insertBefore(h.el, next);
+    });
+    end.classList.toggle('has-notes', narrow);
+  }
+  setMode(mq.matches);
+  if (mq.addEventListener) mq.addEventListener('change', function (e) { setMode(e.matches); });
+})();
