@@ -2040,6 +2040,26 @@
       --note-highlight: #fde4d9;
     }
 
+    /* selecting text on a band: a white highlight, with the band's own text
+       colour (as in site.css). Written out rather than taken from
+       --selection-bg, since browsers read the variables in ::selection from
+       the page root, not the band. Not on the light sepia band. */
+    :is(html.band-purple:not([data-theme]), html[data-theme="dark"]) :is(#overview, .in-band) ::selection,
+    :is(html.band-purple:not([data-theme]), html[data-theme="dark"]) :is(#overview, .in-band)::selection {
+      background: rgba(255, 255, 255, 0.55);
+      color: #000000;
+    }
+    :is(html.band-midnight, html.band-black):not([data-theme]) :is(#overview, .in-band) ::selection,
+    :is(html.band-midnight, html.band-black):not([data-theme]) :is(#overview, .in-band)::selection {
+      background: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+    }
+    .site-footer ::selection,
+    .site-footer::selection {
+      background: rgba(255, 255, 255, 0.45);
+      color: var(--inverse-ink);
+    }
+
     /* the default band (b): orange, with dark text */
     html.band-purple:not([data-theme]) {
       --link-blue: #e36843;
