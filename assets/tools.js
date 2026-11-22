@@ -59,6 +59,7 @@
     // seven pages: closer together on narrower windows, and out of the way of
     // the corner title below 1024px
     '@media (max-width: 1199px) { .top-nav { gap: 22px; } }',
+    '@media (max-width: 1099px) { .top-nav { gap: 14px; } }',
     '@media (max-width: 1023px) { .top-nav { display: none; } }',
     'html .top-nav a.top-nav-ext { color: var(--muted, #8c8c8c); }',
     'html .top-nav a.top-nav-ext:hover { color: var(--canvas-ink); }',
@@ -72,7 +73,7 @@
 
   (function () {
     var base = new URL('../', script.src);
-    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/'], ['Simulator', 'simulator/']];
+    var pages = [['Article', ''], ['Supplements', 'genealogy/'], ['Typologies', 'diagrams/'], ['Concepts', 'lexicon/'], ['Sources', 'sources/'], ['Consoles', 'consoles/'], ['Simulator', 'simulator/'], ['Design', 'design/']];
     var nav = document.createElement('nav');
     nav.className = 'top-nav';
     nav.setAttribute('aria-label', 'Pages');
