@@ -532,50 +532,39 @@
       position: relative;
     }
 
+    /* one honeycomb, blended into whatever lies beneath it, so only its lines
+       show (never the square of the GIF): white lines (inverted, screened)
+       or black lines (multiplied). Light theme: white-on-orange, then black
+       on the canvas; dark theme: black-on-orange, then white on the canvas */
     .loader-stack .loader-gif {
       display: block;
       transition: opacity 0.8s ease-in-out;
+    }
+
+    .loader-gif-open,
+    html[data-theme="dark"] .loader-gif-theme {
+      filter: invert(1);
+      mix-blend-mode: screen;
+    }
+
+    .loader-gif-theme,
+    html[data-theme="dark"] .loader-gif-open {
+      filter: none;
+      mix-blend-mode: multiply;
     }
 
     .loader-gif-theme {
       position: absolute;
       inset: 0;
       opacity: 0;
-      mix-blend-mode: multiply;
-    }
-
-    html[data-theme="dark"] .loader-gif-theme {
-      filter: invert(1) hue-rotate(180deg);
-      mix-blend-mode: screen;
     }
 
     .loader.loader-theme .loader-gif-theme {
       opacity: 1;
     }
 
-    .loader.loader-theme .loader-gif-orange,
-    .loader.loader-theme .loader-gif-dark {
+    .loader.loader-theme .loader-gif-open {
       opacity: 0;
-    }
-
-    /* the dark theme opens black-on-orange */
-    .loader-gif-dark {
-      position: absolute;
-      inset: 0;
-      display: none !important;
-    }
-
-    html[data-theme="dark"] .loader-gif-dark {
-      display: block !important;
-    }
-
-    html[data-theme="dark"] .loader:not(.loader-theme) .loader-gif-orange {
-      opacity: 0;
-    }
-
-    .loader.loader-done {
-      opacity: 0;
-      pointer-events: none;
     }
 
     .loader-gif {
@@ -2491,9 +2480,8 @@
 <body>
   <div class="loader" aria-hidden="true">
     <div class="loader-stack">
-      <img class="loader-gif loader-gif-orange" src="Hex%20Grid%20Circular%20Orange%20White.gif" alt="">
+      <img class="loader-gif loader-gif-open" src="Hex%20Grid%20Circular.gif" alt="">
       <img class="loader-gif loader-gif-theme" src="Hex%20Grid%20Circular.gif" alt="">
-      <img class="loader-gif loader-gif-dark" src="Hex%20Grid%20Circular%20Orange%20Black.gif" alt="">
     </div>
   </div>
   <noscript><style>.loader { display: none; }</style></noscript>
