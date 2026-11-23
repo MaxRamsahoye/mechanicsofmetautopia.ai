@@ -518,9 +518,43 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      /* orange, with the honeycomb in white */
+      /* it opens in orange, with the honeycomb in white, then turns to the
+       theme's colours once the page has loaded, before fading away */
       background: #e36843;
+      transition: opacity 0.8s ease-in-out, background-color 0.8s ease-in-out;
+    }
+
+    .loader.loader-theme {
+      background: var(--canvas-bg);
+    }
+
+    .loader-stack {
+      position: relative;
+    }
+
+    .loader-stack .loader-gif {
+      display: block;
       transition: opacity 0.8s ease-in-out;
+    }
+
+    .loader-gif-theme {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      mix-blend-mode: multiply;
+    }
+
+    html[data-theme="dark"] .loader-gif-theme {
+      filter: invert(1) hue-rotate(180deg);
+      mix-blend-mode: screen;
+    }
+
+    .loader.loader-theme .loader-gif-theme {
+      opacity: 1;
+    }
+
+    .loader.loader-theme .loader-gif-orange {
+      opacity: 0;
     }
 
     .loader.loader-done {
@@ -2440,7 +2474,10 @@
 </head>
 <body>
   <div class="loader" aria-hidden="true">
-    <img class="loader-gif" src="Hex%20Grid%20Circular%20Orange%20White.gif" alt="">
+    <div class="loader-stack">
+      <img class="loader-gif loader-gif-orange" src="Hex%20Grid%20Circular%20Orange%20White.gif" alt="">
+      <img class="loader-gif loader-gif-theme" src="Hex%20Grid%20Circular.gif" alt="">
+    </div>
   </div>
   <noscript><style>.loader { display: none; }</style></noscript>
   <script>
@@ -2472,7 +2509,14 @@
         document.body.classList.remove('loading-active');
         setTimeout(function () { loader.remove(); }, 800);
       }
-      function start() { setTimeout(finish, 1500); }
+      // orange for at least 0.8 seconds, then the theme's colours
+      var opened = Date.now();
+      function start() {
+        setTimeout(function () {
+          loader.classList.add('loader-theme');
+          setTimeout(finish, 1500);
+        }, Math.max(0, 800 - (Date.now() - opened)));
+      }
       if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
     })();
   </script>
