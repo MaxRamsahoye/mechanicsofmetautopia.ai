@@ -1536,6 +1536,40 @@
       letter-spacing: 0;
       -webkit-text-stroke: 0.4px currentColor;
     }
+    /* the Endnotes heading opens and closes them */
+    .en-toggle {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 0.35em;
+      padding: 0;
+      border: 0;
+      background: none;
+      font: inherit;
+      letter-spacing: inherit;
+      color: inherit;
+      -webkit-text-stroke: inherit;
+      cursor: pointer;
+    }
+    .en-toggle::after {
+      content: '';
+      width: 0.42em;
+      height: 0.42em;
+      border-right: 2px solid var(--canvas-accent);
+      border-bottom: 2px solid var(--canvas-accent);
+      transform: translateY(-0.2em) rotate(-45deg);
+      transition: transform 0.25s ease;
+    }
+    .en-toggle[aria-expanded="true"]::after {
+      transform: translateY(-0.3em) rotate(45deg);
+    }
+    .en-toggle:hover,
+    .en-toggle:focus-visible {
+      color: var(--canvas-accent);
+      outline: none;
+    }
+    .letter-notes .endnotes-heading { margin-bottom: 0; }
+    .letter-notes #letter-list { margin-top: 18px; }
+
     /* quotations in the endnotes, set in */
     .letter-notes .sn-q {
       margin: 10px 0 10px 1.6em;
@@ -2884,8 +2918,8 @@
     </div>
 
     <div class="endnotes has-notes letter-notes" id="letter-notes">
-      <h2 class="endnotes-heading">Endnotes</h2>
-      <ol>
+      <h2 class="endnotes-heading"><button class="en-toggle" type="button" aria-expanded="true" aria-controls="letter-list">Endnotes</button></h2>
+      <ol id="letter-list">
         <li id="enote-a"><a class="endnote-back" href="#eref-a" aria-label="Back to endnote a in the text">a.</a> Outside of the philosopher&rsquo;s armchair, the Future of Life Institute and the Foresight Institute&rsquo;s Existential Hope initiative have respectively run a <a href="https://worldbuild.ai/" target="_blank" rel="noopener">Worldbuilding Contest</a> for &lsquo;imagining positive futures with artificial intelligence&rsquo; and an open-access <a href="https://worlds.existentialhope.com/existential-hope-worldbuilding-course/" target="_blank" rel="noopener">AI Futures Worldbuilding course</a> for anyone to &lsquo;explore hopeful futures&mdash;and the steps we can take to make them real&rsquo;.</li>
         <li id="enote-b"><a class="endnote-back" href="#eref-b" aria-label="Back to endnote b in the text">b.</a> Foresight view &lsquo;civilisation as the relevant superintelligence&rsquo; (<a href="https://research.google/pubs/cyber-nano-and-agi-risks-decentralized-approaches-to-reducing-risks/" target="_blank" rel="noopener"><em>Cyber, Nano, and AGI Risks</em></a>):<span class="sn-q">&ldquo;If the problem of superintelligence were a purely new problem with no historical precedent, there is little relevance to truly learn from history. But human institutions are already non-human intelligences with which we cooperate and against which we defend ourselves. Depending on the nature of the institution, they can be well aligned or badly aligned with human interests&hellip; The superintelligence of civilization is already emergent from the interplay of human and machine intelligences. Within our multipolar civilization, as machines get more intelligent, they will contribute more to the overall intelligence of our civilization.&rdquo;</span> (<a href="https://www.lesswrong.com/posts/bHgp7CcqW4Drw8am4/preface-3#:~:text=The%20superintelligence%20of%20civilization%20is%20already%20emergent%20from%20the%20interplay%20of%20human%20and%20machine%20intelligences.%20Within%20our%20multipolar%20civilization%2C%20as%20machines%20get%20more%20intelligent%2C%20they%20will%20contribute%20more%20to%20the%20overall%20intelligence%20of%20our%20civilization.%C2%A0" target="_blank" rel="noopener">Preface to <em>Gaming the Future</em></a>)</li>
         <li id="enote-c"><a class="endnote-back" href="#eref-c" aria-label="Back to endnote c in the text">c.</a> A potentially relevant piece of recent work here is <a href="https://youtu.be/AFGs6TbXjyI?si=cz2jhYUvjTUVP-F5" target="_blank" rel="noopener"><em>Scaling Rational Cooperative Intelligence for Pluralistic AI Futures</em></a> by Xuan (2026):<span class="sn-q">&ldquo;One plausible extrapolation of current AI trends is that we are headed towards pluralistic AI futures: scenarios where a plethora of AI agents, systems, and services are deployed towards various ends by various actors. How can we influence this process so that it occurs not just safely &ndash; avoiding AI-powered conflict and anti-human equilibria &ndash; but also in the direction of mutual flourishing?&rdquo;</span></li>
@@ -3172,10 +3206,29 @@
         setEndnotesMode(e.matches);
       });
 
+      // The Endnotes start closed behind their heading; a lettered marker in
+      // the text (or a link straight to a note) opens them. Without the
+      // script they show in full.
+      (function () {
+        var toggle = document.querySelector('.en-toggle');
+        var list = document.getElementById('letter-list');
+        if (!toggle || !list) return;
+        function setOpen(open) {
+          list.hidden = !open;
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        setOpen(/^#enote-/.test(location.hash));
+        toggle.addEventListener('click', function () { setOpen(list.hidden); });
+        Array.prototype.forEach.call(document.querySelectorAll('.endnote-ref'), function (ref) {
+          ref.addEventListener('click', function () { setOpen(true); });
+        });
+        window.addEventListener('hashchange', function () { if (/^#enote-/.test(location.hash)) setOpen(true); });
+      })();
+
       // A note with a quotation or a second paragraph shows its opening, with
       // a Read more toggle for the rest (a note that opens with a quotation
       // shows the quotation). Without the script, every note shows in full.
-      Array.prototype.forEach.call(document.querySelectorAll('.sidenote, .letter-notes li'), function (note) {
+      Array.prototype.forEach.call(document.querySelectorAll('.sidenote'), function (note) {
         if (note.classList.contains('sn-full') || !note.querySelector('.sn-q, .sn-p')) return;
         var nodes = Array.prototype.filter.call(note.childNodes, function (n) {
           return !(n.nodeType === 1 && (n.classList.contains('sidenote-label') || n.classList.contains('endnote-back')));
