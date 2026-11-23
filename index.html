@@ -578,6 +578,50 @@
       }
     }
 
+    /* after the loading screen: the top section fades in, line by line */
+    html.hero-wait .frame-header,
+    html.hero-wait .article-header .article-author,
+    html.hero-wait .article-header .title-line,
+    html.hero-wait .article-header .article-subtitle,
+    html.hero-wait .article-header > .next-screen {
+      opacity: 0;
+    }
+
+    html.hero-in .frame-header,
+    html.hero-in .article-header > .next-screen {
+      animation: hero-fade 1.2s ease-out backwards;
+    }
+
+    html.hero-in .article-header .article-author,
+    html.hero-in .article-header .title-line,
+    html.hero-in .article-header .article-subtitle {
+      animation: hero-rise 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) backwards;
+    }
+
+    html.hero-in .article-header .article-author { animation-delay: 0.25s; }
+    html.hero-in .article-header .title-line:nth-child(1) { animation-delay: 0.4s; }
+    html.hero-in .article-header .title-line:nth-child(2) { animation-delay: 0.52s; }
+    html.hero-in .article-header .title-line:nth-child(3) { animation-delay: 0.64s; }
+    html.hero-in .article-header .article-subtitle { animation-delay: 0.85s; }
+    html.hero-in .frame-header { animation-delay: 1s; }
+    html.hero-in .article-header > .next-screen { animation-delay: 1.3s; }
+
+    @keyframes hero-fade {
+      from { opacity: 0; }
+    }
+
+    @keyframes hero-rise {
+      from { opacity: 0; transform: translateY(10px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html.hero-in .article-header .article-author,
+      html.hero-in .article-header .title-line,
+      html.hero-in .article-header .article-subtitle {
+        animation-name: hero-fade;
+      }
+    }
+
     body.loading-active {
       overflow: hidden;
     }
@@ -2506,7 +2550,11 @@
       // as in version 1: the hex grid turns until the page has loaded, holds
       // for a moment, then fades away
       document.body.classList.add('loading-active');
+      document.documentElement.classList.add('hero-wait');
       function finish() {
+        // the top section fades in as the loading screen fades away
+        document.documentElement.classList.remove('hero-wait');
+        document.documentElement.classList.add('hero-in');
         // The page script plays the completion chord on this.
         window.loaderComplete = true;
         document.dispatchEvent(new Event('loadercomplete'));
