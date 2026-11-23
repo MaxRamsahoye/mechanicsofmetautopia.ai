@@ -483,6 +483,43 @@
       margin-top: 8px;
     }
 
+    /* the grey bands start closed behind their headings; the heading (or a
+       link to it) opens them. Without the script they show in full. */
+    .gb-toggle {
+      display: inline-block;
+      width: 0.42em;
+      height: 0.42em;
+      margin-left: 0.4em;
+      padding: 0;
+      font-size: inherit;
+      border: 0;
+      border-right: 2px solid var(--link-blue);
+      border-bottom: 2px solid var(--link-blue);
+      background: none;
+      vertical-align: 0.12em;
+      transform: rotate(-45deg);
+      transition: transform 0.25s ease;
+      cursor: pointer;
+    }
+    .gb-toggle[aria-expanded="true"] {
+      transform: translateY(-0.12em) rotate(45deg);
+    }
+    .grey-band.gb-closed {
+      padding-bottom: 48px;
+    }
+    .grey-band.gb-closed + .grey-band {
+      padding-top: 8px;
+    }
+    .essay .grey-band.gb-closed h2 {
+      margin-bottom: 0;
+    }
+    .grey-band h2 .heading-link:hover + .gb-toggle,
+    .gb-toggle:hover,
+    .gb-toggle:focus-visible {
+      border-color: currentColor;
+      outline: none;
+    }
+
     /* Appendix 7 (The Dark Side of Meta-Utopia): a larger epigraph with more
        room above it and the byline; a shorter end to the top band; the grey
        bands run straight into the site footer */
@@ -1038,16 +1075,18 @@
 
       <section class="grey-band">
         <h2 id="end-of-faith-analysis"><a class="heading-link" href="#end-of-faith-analysis">End of Faith? Example: Extended Analysis</a></h2>
+        <div class="gb-body" id="end-of-faith-analysis-body">
         <p>Even as someone genuinely committed to avoiding direct coercion, I recognise that this &ldquo;non-impositional&rdquo; strategy is potentially a sophisticated form of cultural engineering designed to gradually eliminate religious worldviews from human civilisation. In this way, liberal, multi-cultural education is not a neutral institution, but a designed memetic weapon that systematically undermines traditional religious authority in favour of rationalist, secular values.</p>
         <p>Religious communities are not being offered genuine coexistence, but a slow, painless extinction disguised as respect for their autonomy. In this way, the meta-utopian framework becomes a Trojan horse &ndash; it promises religious communities their utopian society to begin with, while gradually shaping its wider cultural environment in ways that threaten its future survival. Their children are systematically exposed to competing worldviews, critical thinking methods and Enlightenment values that criticise the worldview that religious life depends upon.</p>
         <p>This is the Machiavellianism of meta-utopianism: it&rsquo;s often more effective than direct persecution because it co-opts the language of tolerance and choice while achieving the same eliminationist goals. Religious parents can&rsquo;t even properly resist, because doing so would mark them as &ldquo;intolerant&rdquo; within the meta-utopian framework, which operates as a kind of ideological laundering scheme &ndash; allowing secular progressives to pursue their transformative agenda while maintaining the moral high ground of appearing non-coercive, when in reality they&rsquo;re just using more subtle, intergenerational methods of cultural influence.</p>
         <p>The pragmatic meta-utopian faces the excruciating tension between (1) their procedural commitments to autonomy and (2) their substantive conviction that their vision would genuinely make everyone better off, including those who currently reject it. For instance, if it&rsquo;s right that a secular, rationalist world would reduce suffering, increase human flourishing and eliminate the harmful effects of religious dogma, then the &ldquo;manipulation&rdquo; of the memetic environment is a moral cause.</p>
         <p>This leads to a recognition that respecting people&rsquo;s current preferences might actually be a form of moral cowardice. If religious worldviews genuinely trap people in cycles of guilt, limit their intellectual development, restrict their personal autonomy and perpetuate harmful social hierarchies, then allowing these systems to persist indefinitely in the name of &ldquo;tolerance&rdquo;, &ldquo;diversity&rdquo; and &ldquo;autonomy&rdquo; becomes complicity in ongoing harm. The children raised in fundamentalist communities who never get exposed to critical thinking or alternative possibilities &ndash; is their autonomy respected or denied?</p>
-        <p>The paradox intensifies because this logic can justify almost any form of ideological intervention. Every authoritarian believes their system would make people better off &ldquo;if only they understood.&rdquo; But the difference is that some visions might actually be objectively superior &ndash; and if they are, then the meta-utopian commitment to preserving inferior alternatives becomes not just naive but actively harmful. This is an uncomfortable recognition, because if religion does have a net negative impact, this &ldquo;subtle imposition&rdquo; could be the most ethical path available, even though it violates the very procedural principles that make the meta-utopian seem more enlightened than crude authoritarians.</p>
+        <p>The paradox intensifies because this logic can justify almost any form of ideological intervention. Every authoritarian believes their system would make people better off &ldquo;if only they understood.&rdquo; But the difference is that some visions might actually be objectively superior &ndash; and if they are, then the meta-utopian commitment to preserving inferior alternatives becomes not just naive but actively harmful. This is an uncomfortable recognition, because if religion does have a net negative impact, this &ldquo;subtle imposition&rdquo; could be the most ethical path available, even though it violates the very procedural principles that make the meta-utopian seem more enlightened than crude authoritarians.</p>        </div>
       </section>
 
       <section class="grey-band">
         <h2 id="full-stack-commentary"><a class="heading-link" href="#full-stack-commentary">Earlier Commentary on the Full-Stack Alignment Paper</a></h2>
+        <div class="gb-body" id="full-stack-commentary-body">
         <p><a href="https://www.full-stack-alignment.ai/paper" target="_blank" rel="noopener">full-stack-alignment.ai/paper</a></p>
         <p>Broadly in favour of the (sociotechnical) paradigm MAI are using. Two issues I had with their two papers:</p>
         <h4>Moral Graphs vs Moral Realism</h4>
@@ -1057,16 +1096,17 @@
         <p>I&rsquo;m also critical of the &lsquo;Pluralistic Alignment&rsquo; wave that MAI, the Plurality Institute, Foresight, Forethought and many other research orgs in the space are a part of.</p>
         <p class="box-quote">&ldquo;For this reason, we need full-stack alignment, the concurrent alignment of AI systems and the institutions that shape them with what people value. This can be done without imposing a particular vision of individual or collective flourishing&rdquo; (<a href="https://www.full-stack-alignment.ai/paper#:~:text=For%20this%20reason%2C%20we%20need%20full%2Dstack%20alignment" target="_blank" rel="noopener">Full-Stack</a>)</p>
         <p class="box-quote">&ldquo;the better futures perspective doesn&rsquo;t mean endorsing some narrow conception of an ideal future&hellip; viatopia is a state of society&hellip; where many different moral points of view can flourish&rdquo; (<a href="https://www.forethought.org/research/introducing-better-futures" target="_blank" rel="noopener">Better Futures</a>)</p>
-        <p class="box-quote">&ldquo;democracy and collaborative technology can power infinite diversity in infinite combinations&rdquo; (<a href="https://forum.secondrenaissance.net/t/full-stack-alignment-paper-idea-from-edelman-lowe-et-al-at-meaning-alignment-institute/552/3" target="_blank" rel="noopener">Plurality</a>)</p>
+        <p class="box-quote">&ldquo;democracy and collaborative technology can power infinite diversity in infinite combinations&rdquo; (<a href="https://forum.secondrenaissance.net/t/full-stack-alignment-paper-idea-from-edelman-lowe-et-al-at-meaning-alignment-institute/552/3" target="_blank" rel="noopener">Plurality</a>)</p>        </div>
       </section>
 
       <section class="grey-band">
         <h2 id="wwotf"><a class="heading-link" href="#wwotf">Convergent Analysis from <em>What We Owe the Future</em></a></h2>
+        <div class="gb-body" id="wwotf-body">
         <p class="gb-kicker">Found after writing the piece</p>
         <blockquote>
           <p>This last point&mdash;that we need to structure global society so that cultural evolution guides the world towards better values and better societal structures&mdash;highlights an issue facing the design of a morally exploratory world that I&rsquo;ll call <strong>the lock-in paradox</strong>. We need to lock in some institutions and ideas in order to prevent a more thoroughgoing lock-in of values. One challenge is that these institutions and ideas will be morally controversial; for example, from many fundamentalist religious perspectives, the idea that we would encourage or even allow a diversity of worldviews might be regarded as abominable. Similarly, the idea that the path to the correct moral view is via reflection and good-faith debate, rather than studying the scripture of a holy book, is not one that everyone would accept. <strong>The lock-in paradox thus resembles the familiar paradox of tolerance&mdash;the necessity for liberal societies to defend themselves against intolerant views that would undermine their freedom, even if doing so requires curtailing the very tolerance they want to preserve.</strong></p>
           <cite>&ndash; From the section &lsquo;Building a Morally Exploratory World&rsquo;, <em>Chapter 4: Value Lock-in</em>, <em>What We Owe the Future</em> by Will MacAskill (2022)</cite>
-        </blockquote>
+        </blockquote>        </div>
       </section>
     </article>
   </main>
@@ -1114,6 +1154,36 @@
       function showUp() { upBtn.classList.toggle('visible', band.getBoundingClientRect().bottom < 0); }
       window.addEventListener('scroll', showUp, { passive: true });
       showUp();
+    })();
+  </script>
+
+  <script>
+    // the grey bands start closed behind their headings
+    (function () {
+      Array.prototype.forEach.call(document.querySelectorAll('.grey-band'), function (band) {
+        var h = band.querySelector('h2'), body = band.querySelector('.gb-body');
+        if (!h || !body) return;
+        var link = h.querySelector('.heading-link');
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'gb-toggle';
+        btn.setAttribute('aria-controls', body.id);
+        h.appendChild(btn);
+        function setOpen(open) {
+          if (open) body.removeAttribute('hidden'); else body.setAttribute('hidden', 'until-found');
+          band.classList.toggle('gb-closed', !open);
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          btn.setAttribute('aria-label', (open ? 'Hide ' : 'Show ') + h.textContent.trim());
+        }
+        setOpen(location.hash === '#' + h.id);
+        btn.addEventListener('click', function () { setOpen(band.classList.contains('gb-closed')); });
+        if (link) link.addEventListener('click', function () {
+          if (band.classList.contains('gb-closed')) setOpen(true);
+          else if (location.hash === '#' + h.id) { setOpen(false); }
+        });
+        body.addEventListener('beforematch', function () { setOpen(true); });
+        window.addEventListener('hashchange', function () { if (location.hash === '#' + h.id) setOpen(true); });
+      });
     })();
   </script>
 
