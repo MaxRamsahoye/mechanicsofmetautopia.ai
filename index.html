@@ -1427,7 +1427,7 @@
       float: none;
       margin: 0;
       pointer-events: none;
-      transition: opacity 0.6s ease-in-out, top 0.35s ease;
+      transition: opacity 0.6s ease-in-out;
     }
     body.sn-layout .article-body .sidenote.note-in-view {
       pointer-events: auto;
@@ -3043,40 +3043,62 @@
           p.left = i % 2 === 1;
           p.note.classList.toggle('sn-left', p.left);
         });
-        var frame = null, GAP = 24, TOP = 90, BOTTOM = 24;
+        var frame = null, GAP = 24;
+        // the layout, worked out once for the whole page (and again only when
+        // the page changes size, or a note opens): each note at its
+        // reference; notes that would collide join one group, an equal gap
+        // between them, set where it lies nearest their references overall
+        // (their average offset), never above the notes' own section. Scrolling
+        // only fades notes in and out; nothing moves.
         function place() {
           frame = null;
           if (!document.body.classList.contains('sn-layout')) return;
-          var base = column.getBoundingClientRect().top, vh = window.innerHeight;
-          var shown = [];
+          var base = column.getBoundingClientRect().top;
+          pairs.forEach(function (p) {
+            p.want = p.ref.getBoundingClientRect().top - base - 3;
+            p.h = p.note.offsetHeight;
+            var section = p.ref.closest('section');
+            p.floor = section ? section.getBoundingClientRect().top - base : -Infinity;
+          });
+          [true, false].forEach(function (left) {
+            var blocks = [];
+            pairs.filter(function (p) { return p.left === left; }).forEach(function (p) {
+              var blk = { items: [p], floor: p.floor };
+              settle(blk);
+              blocks.push(blk);
+              // merge back while a group would run into the one above it
+              while (blocks.length > 1) {
+                var prev = blocks[blocks.length - 2], cur = blocks[blocks.length - 1];
+                if (prev.start + prev.height + GAP <= cur.start) break;
+                blocks.splice(blocks.length - 2, 2, merge(prev, cur));
+              }
+            });
+            blocks.forEach(function (blk) {
+              var run = 0;
+              blk.items.forEach(function (p) { p.y = blk.start + run; run += p.h + GAP; });
+            });
+          });
+          pairs.forEach(function (p) { p.note.style.top = Math.round(p.y) + 'px'; });
+          show();
+        }
+        function settle(blk) {
+          var run = 0, sum = 0;
+          blk.items.forEach(function (p) { sum += p.want - run; run += p.h + GAP; });
+          blk.height = run - GAP;
+          blk.start = Math.max(sum / blk.items.length, blk.floor);
+        }
+        function merge(a, b) {
+          var blk = { items: a.items.concat(b.items), floor: a.floor };
+          settle(blk);
+          return blk;
+        }
+        // scrolling: a note shows while its reference is on screen
+        function show() {
+          if (!document.body.classList.contains('sn-layout')) return;
+          var vh = window.innerHeight;
           pairs.forEach(function (p) {
             var r = p.ref.getBoundingClientRect();
-            p.want = r.top - base - 3;
-            p.on = r.bottom > 70 && r.top < vh - 20;
-            p.y = p.want;
-            if (p.on) shown.push(p);
-          });
-          // each side's notes on screen as one column, an equal gap between
-          // them, set where it lies nearest its references overall (their
-          // average offset); kept inside the window where it fits, and never
-          // above the window's top or the notes' own section
-          [true, false].forEach(function (left) {
-            var side = shown.filter(function (p) { return p.left === left; });
-            if (!side.length) return;
-            var run = 0, sum = 0;
-            side.forEach(function (p) { p.at = run; sum += p.want - run; run += p.note.offsetHeight + GAP; });
-            var height = run - GAP;
-            var start = sum / side.length;
-            var section = side[0].ref.closest('section');
-            var floor = Math.max(TOP - base, section ? section.getBoundingClientRect().top - base : -Infinity);
-            var ceiling = vh - base - BOTTOM;
-            if (start + height > ceiling) start = ceiling - height;
-            if (start < floor) start = floor;
-            side.forEach(function (p) { p.y = start + p.at; });
-          });
-          pairs.forEach(function (p) {
-            p.note.style.top = Math.round(p.y) + 'px';
-            p.note.classList.toggle('note-in-view', p.on);
+            p.note.classList.toggle('note-in-view', r.bottom > 0 && r.top < vh);
           });
         }
         function schedule() { if (!frame) frame = requestAnimationFrame(place); }
@@ -3091,8 +3113,9 @@
         }
         setLayout();
         wideQuery.addEventListener('change', setLayout);
-        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('scroll', show, { passive: true });
         window.addEventListener('resize', schedule);
+        if (window.ResizeObserver) new ResizeObserver(schedule).observe(column);
         window.addEventListener('load', schedule);
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
       })();
