@@ -580,6 +580,8 @@
 
     /* after the loading screen: the top section fades in, line by line */
     html.hero-wait .frame-header,
+    html.hero-wait .top-nav,
+    html.hero-wait .left-controls,
     html.hero-wait .article-header .article-author,
     html.hero-wait .article-header .title-line,
     html.hero-wait .article-header .article-subtitle,
@@ -588,6 +590,8 @@
     }
 
     html.hero-in .frame-header,
+    html.hero-in .top-nav,
+    html.hero-in .left-controls,
     html.hero-in .article-header > .next-screen {
       animation: hero-fade 1.2s ease-out backwards;
     }
@@ -603,7 +607,9 @@
     html.hero-in .article-header .title-line:nth-child(2) { animation-delay: 0.52s; }
     html.hero-in .article-header .title-line:nth-child(3) { animation-delay: 0.64s; }
     html.hero-in .article-header .article-subtitle { animation-delay: 0.85s; }
-    html.hero-in .frame-header { animation-delay: 1s; }
+    html.hero-in .frame-header,
+    html.hero-in .top-nav,
+    html.hero-in .left-controls { animation-delay: 1s; }
     html.hero-in .article-header > .next-screen { animation-delay: 1.3s; }
 
     @keyframes hero-fade {
