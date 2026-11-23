@@ -518,7 +518,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--canvas-bg);
+      /* orange, with the honeycomb in white */
+      background: #e36843;
       transition: opacity 0.8s ease-in-out;
     }
 
@@ -530,12 +531,6 @@
     .loader-gif {
       width: 360px;
       height: auto;
-      mix-blend-mode: multiply;
-    }
-
-    html[data-theme="dark"] .loader-gif {
-      filter: invert(1) hue-rotate(180deg);
-      mix-blend-mode: screen;
     }
 
     @media (max-width: 1024px) {
@@ -2445,7 +2440,7 @@
 </head>
 <body>
   <div class="loader" aria-hidden="true">
-    <img class="loader-gif" src="Hex%20Grid%20Circular%20Orange.gif" alt="">
+    <img class="loader-gif" src="Hex%20Grid%20Circular%20Orange%20White.gif" alt="">
   </div>
   <noscript><style>.loader { display: none; }</style></noscript>
   <script>
