@@ -485,39 +485,46 @@
 
     /* the grey bands start closed behind their headings; the heading (or a
        link to it) opens them. Without the script they show in full. */
-    .gb-toggle {
+    .gb-last {
+      white-space: nowrap;
+    }
+    .gb-last::after {
+      content: '';
       display: inline-block;
       width: 0.42em;
       height: 0.42em;
       margin-left: 0.4em;
-      padding: 0;
-      font-size: inherit;
-      border: 0;
       border-right: 2px solid var(--link-blue);
       border-bottom: 2px solid var(--link-blue);
-      background: none;
       vertical-align: 0.12em;
-      transform: rotate(-45deg);
-      transition: transform 0.25s ease;
-      cursor: pointer;
-    }
-    .gb-toggle[aria-expanded="true"] {
       transform: translateY(-0.12em) rotate(45deg);
+      transition: transform 0.25s ease;
+    }
+    .gb-closed .gb-last::after {
+      transform: rotate(-45deg);
+    }
+    .grey-band h2 .heading-link:hover .gb-last::after,
+    .grey-band h2:has(.gb-toggle:focus-visible) .gb-last::after {
+      border-color: currentColor;
+    }
+    .gb-toggle {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      border: 0;
     }
     .grey-band.gb-closed {
-      padding-bottom: 48px;
+      padding-bottom: 72px;
     }
     .grey-band.gb-closed + .grey-band {
       padding-top: 8px;
     }
     .essay .grey-band.gb-closed h2 {
       margin-bottom: 0;
-    }
-    .grey-band h2 .heading-link:hover + .gb-toggle,
-    .gb-toggle:hover,
-    .gb-toggle:focus-visible {
-      border-color: currentColor;
-      outline: none;
     }
 
     /* Appendix 7 (The Dark Side of Meta-Utopia): a larger epigraph with more
@@ -1160,6 +1167,21 @@
         var h = band.querySelector('h2'), body = band.querySelector('.gb-body');
         if (!h || !body) return;
         var link = h.querySelector('.heading-link');
+        if (link) {
+          var t = link;
+          while (t.lastChild && t.lastChild.nodeType === 1) t = t.lastChild;
+          var tn = t.lastChild;
+          if (tn && tn.nodeType === 3) {
+            var m = tn.data.match(/^([\s\S]*?)(\S+\s*)$/);
+            if (m) {
+              tn.data = m[1];
+              var last = document.createElement('span');
+              last.className = 'gb-last';
+              last.textContent = m[2];
+              t.appendChild(last);
+            }
+          }
+        }
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'gb-toggle';
@@ -1173,9 +1195,10 @@
         }
         setOpen(location.hash === '#' + h.id);
         btn.addEventListener('click', function () { setOpen(band.classList.contains('gb-closed')); });
-        if (link) link.addEventListener('click', function () {
-          if (band.classList.contains('gb-closed')) setOpen(true);
-          else if (location.hash === '#' + h.id) { setOpen(false); }
+        if (link) link.addEventListener('click', function (e) {
+          if (band.classList.contains('gb-closed')) { setOpen(true); return; }
+          e.preventDefault();
+          setOpen(false);
         });
         body.addEventListener('beforematch', function () { setOpen(true); });
         window.addEventListener('hashchange', function () { if (location.hash === '#' + h.id) setOpen(true); });
