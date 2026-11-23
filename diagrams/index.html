@@ -1052,14 +1052,14 @@
     .tree-lines {
       display: block;
       width: 100%;
-      height: 56px;
-      margin: 10px 0 14px;
+      height: 64px;
+      margin: 10px 0;
       overflow: visible;
     }
 
     .tree-lines line {
       stroke: var(--canvas-ink);
-      stroke-width: 2.2;
+      stroke-width: 1.5;
       vector-effect: non-scaling-stroke;
     }
 
@@ -1084,39 +1084,38 @@
 
     .tn-title {
       display: block;
-      font-size: 16px;
-      font-weight: 400;
+      font-size: 17px;
+      font-weight: 600;
       line-height: 1.3;
     }
 
     .tree-root .tn-title {
-      font-size: 17px;
+      font-size: 19px;
     }
 
     .tn-sub {
       display: block;
-      margin-top: 1px;
-      font-size: 14px;
+      margin-top: 2px;
+      font-size: 15px;
       line-height: 1.35;
     }
 
     .tn-note {
       display: block;
-      margin-top: 1px;
+      margin-top: 8px;
       font-size: 14px;
-      line-height: 1.35;
-    }
-
-    /* the highlighted branches, in orange */
-    .tn-accent {
-      color: var(--link-blue);
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--muted);
     }
 
     .tn-leviathan {
       display: block;
-      margin-top: 14px;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
       font-size: 14px;
-      font-style: italic;
+      font-weight: 600;
     }
 
     @media (max-width: 700px) {
@@ -1131,6 +1130,12 @@
       .tn-title { font-size: 14px; }
       .tree-root .tn-title { font-size: 16px; }
       .tn-sub, .tn-note, .tn-leviathan { font-size: 12px; }
+    }
+
+    /* the highlighted branches, in orange (notes too) */
+    .tn-accent,
+    .tn-accent .tn-note {
+      color: var(--link-blue);
     }
 
     /* the writing between the diagrams */
@@ -2196,7 +2201,7 @@
 
       <figure class="tree" aria-label="Cultural existential risk and its two failure modes">
         <div class="tree-root"><span class="tn-title">Cultural Existential Risk</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(Extreme Homogenisation)</span></div>
           <div class="tree-kid"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(Extreme Heterogenisation)</span></div>
@@ -2218,7 +2223,7 @@
 
       <figure class="tree" aria-label="Global monoculture scenarios">
         <div class="tree-root tn-accent"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(extreme homogenisation)</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Runaway Replicators</span><span class="tn-sub">(Memetic Explosion)</span><span class="tn-note">d/acc spears win</span></div>
           <div class="tree-kid"><span class="tn-title">Soft Superpower</span><span class="tn-sub">(US or China Takeover)</span><span class="tn-note">Western/Eastern cultural hegemony</span></div>
@@ -2238,7 +2243,7 @@
 
       <figure class="tree" aria-label="Global polyculture scenarios">
         <div class="tree-root"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(extreme heterogenisation)</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid tn-accent"><span class="tn-title">Meta-Dystopia</span><span class="tn-sub">(Local Stable Dystopias)</span><span class="tn-note">d/acc shields win</span></div>
           <div class="tree-kid"><span class="tn-title">Perpetual Pluralism</span><span class="tn-sub">(Evolutionary Stage 1: Variation &gt; Selection)</span></div>
@@ -2264,7 +2269,7 @@
 
       <figure class="tree" aria-label="The narrow cultural corridor">
         <div class="tree-root"><span class="tn-title">The Narrow Cultural Corridor</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Benevolent Paternalism</span><span class="tn-sub">Guiding Hand</span><span class="tn-note">&Eacute;tatiste</span><span class="tn-leviathan">The Despotic Leviathan</span></div>
           <div class="tree-kid"><span class="tn-title">Autopoetic Alignment</span><span class="tn-sub">Many Hands (Goddess Durga)</span><span class="tn-note">Concert&eacute;e</span><span class="tn-leviathan">The Self-Regulating Leviathan</span></div>
@@ -2285,7 +2290,7 @@
 
       <figure class="tree" aria-label="The motivations of pluralistic libertarianism">
         <div class="tree-root"><span class="tn-kicker">Motivations</span><span class="tn-title">Pluralistic Libertarianism</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Moral Pluralism</span><span class="tn-sub">Ideal Theory</span><span class="tn-note">multiple legitimate moralities exist and are equal in moral status</span></div>
           <div class="tree-kid"><span class="tn-title">Political Realism</span><span class="tn-sub">Realpolitik</span><span class="tn-note">cooperation and compromise are preferable to competition and conflict</span></div>
@@ -2303,7 +2308,7 @@
 
       <figure class="tree" aria-label="The motivations of benevolent paternalism">
         <div class="tree-root"><span class="tn-kicker">Motivations</span><span class="tn-title">Benevolent Paternalism</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Moral Realism</span><span class="tn-sub">Ideal Theory</span><span class="tn-note">one true morality exists</span></div>
           <div class="tree-kid"><span class="tn-title">Political Idealism</span><span class="tn-sub">Utopian Social Engineering</span><span class="tn-note">the state has the moral imperative to create the good society</span></div>
@@ -2323,7 +2328,7 @@
 
       <figure class="tree" aria-label="Value alignment">
         <div class="tree-root"><span class="tn-title">Value Alignment</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
         <div class="tree-kids" style="--n: 2">
           <div class="tree-kid"><span class="tn-title">Pluralistic Alignment</span><span class="tn-note">pluralism</span></div>
           <div class="tree-kid"><span class="tn-title">Monolithic Alignment</span><span class="tn-note">monism</span></div>
@@ -2332,7 +2337,7 @@
 
       <figure class="tree" aria-label="Monolithic alignment">
         <div class="tree-root"><span class="tn-title">Monolithic Alignment</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Human Alignment</span><span class="tn-note">biological humans</span></div>
           <div class="tree-kid"><span class="tn-title">Post-human Alignment</span><span class="tn-note">digital minds, ems</span></div>
@@ -2342,7 +2347,7 @@
 
       <figure class="tree" aria-label="Pluralistic alignment">
         <div class="tree-root"><span class="tn-title">Pluralistic Alignment</span></div>
-        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
+        <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
         <div class="tree-kids" style="--n: 3">
           <div class="tree-kid"><span class="tn-title">Multi-Substrate (Sentiocentric) Alignment</span><span class="tn-note">all forms of sentient minds: &lsquo;beings&rsquo;</span></div>
           <div class="tree-kid"><span class="tn-title">Multi-Cultural Alignment</span><span class="tn-note">all world-cultures (epistemology, ontology, axiology): &lsquo;ideas&rsquo;</span></div>

@@ -2126,67 +2126,112 @@
       content: none;
     }
 
-    /* the typologies as trees, as in the source diagrams: a parent with
-       lines fanning out to its branches */
-    .at-tree {
+    /* tree diagrams, as in the source document: open labels, with lines
+       fanning out from the parent to each of its branches */
+    .tree {
       margin: 72px 0;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--sans, 'Inter', sans-serif);
       text-align: center;
-      color: var(--canvas-ink);
     }
-    .at-tree.at-follow { margin-top: -8px; }
-    .at-root {
+
+    .tree-root {
       width: fit-content;
       max-width: 360px;
       margin: 0 auto;
+      padding: 0 12px;
     }
-    .at-lines {
+
+    .tree-lines {
       display: block;
       width: 100%;
-      height: 56px;
-      margin: 10px 0 14px;
+      height: 64px;
+      margin: 10px 0;
       overflow: visible;
     }
-    .at-lines line {
+
+    .tree-lines line {
       stroke: var(--canvas-ink);
-      stroke-width: 2.2;
+      stroke-width: 1.5;
       vector-effect: non-scaling-stroke;
     }
-    .at-kids {
+
+    .tree-kids {
       display: grid;
       grid-template-columns: repeat(var(--n), minmax(0, 1fr));
-      gap: 0 18px;
     }
-    .at-tree .at-kids[style*="--n: 2"] {
-      width: 100%;
+
+    .tree-kid {
+      padding: 0 14px;
     }
-    .at-title {
+
+    .tn-kicker {
       display: block;
-      font-size: 16px;
-      font-weight: 400;
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tn-title {
+      display: block;
+      font-size: 17px;
+      font-weight: 600;
       line-height: 1.3;
     }
-    .at-root .at-title { font-size: 17px; }
-    .at-sub {
+
+    .tree-root .tn-title {
+      font-size: 19px;
+    }
+
+    .tn-sub {
       display: block;
-      margin-top: 1px;
-      font-size: 14px;
+      margin-top: 2px;
+      font-size: 15px;
       line-height: 1.35;
     }
-    .at-lev {
+
+    .tn-note {
       display: block;
-      margin-top: 14px;
+      margin-top: 8px;
       font-size: 14px;
       font-style: italic;
+      line-height: 1.4;
+      color: var(--muted);
     }
-    .at-accent { color: var(--canvas-accent); }
+
+    .tn-leviathan {
+      display: block;
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
     @media (max-width: 700px) {
-      .at-tree { margin: 56px 0; }
-      .at-kids { gap: 0 8px; }
-      .at-lines { height: 40px; }
-      .at-title { font-size: 13.5px; }
-      .at-root .at-title { font-size: 15px; }
-      .at-sub, .at-lev { font-size: 12px; }
+      .tree-kid {
+        padding: 0 5px;
+      }
+
+      .tree-lines {
+        height: 44px;
+      }
+
+      .tn-title { font-size: 14px; }
+      .tree-root .tn-title { font-size: 16px; }
+      .tn-sub, .tn-note, .tn-leviathan { font-size: 12px; }
+    }
+
+    /* the highlighted branches, in orange (notes too) */
+    .tn-accent,
+    .tn-accent .tn-note {
+      color: var(--canvas-accent);
+    }
+    .tree.at-follow { margin-top: -8px; }
+    @media (max-width: 700px) {
+      .tree { margin: 56px 0; }
     }
 
     /* the honeycomb GIF above section 1, with its caption */
@@ -2599,10 +2644,10 @@
         <p>From this semi-stable multi-cultural equilibrium, AGI could be a disruptive force: an <em>accelerative</em> force that escalates soft-power competition (AI-augmented clash of civilisations); a <em>stabilising</em> force that regulates the balance of soft-power between states (meta-utopian uplift); or a <em>terminal</em> force that enables one state to achieve cultural hegemony or all states to lock-down (monocultural takeover & meta-dystopian enclosure).</p>
             </section>
             <section id="takeover">
-              <figure class="at-tree" aria-label="Global monoculture: three scenarios">
-          <div class="at-root"><div class="at-node at-accent"><span class="at-title">Global Monoculture</span><span class="at-sub">(extreme homogenisation)</span></div></div>
-          <svg class="at-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/></svg>
-          <div class="at-kids" style="--n: 3"><div class="at-node"><span class="at-title">Runaway Replicators</span><span class="at-sub">(Memetic Explosion)</span><span class="at-sub">d/acc spears win</span></div><div class="at-node"><span class="at-title">Soft Superpower</span><span class="at-sub">(US or China Takeover)</span><span class="at-sub">Western/Eastern cultural hegemony</span></div><div class="at-node"><span class="at-title">Unilateral Utopia</span><span class="at-sub">(Flawed Realisation)</span><span class="at-sub">single-vision of the good society</span></div></div>
+              <figure class="tree" aria-label="Global monoculture: three scenarios">
+          <div class="tree-root tn-accent"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(extreme homogenisation)</span></div>
+          <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
+          <div class="tree-kids" style="--n: 3"><div class="tree-kid"><span class="tn-title">Runaway Replicators</span><span class="tn-sub">(Memetic Explosion)</span><span class="tn-note">d/acc spears win</span></div><div class="tree-kid"><span class="tn-title">Soft Superpower</span><span class="tn-sub">(US or China Takeover)</span><span class="tn-note">Western/Eastern cultural hegemony</span></div><div class="tree-kid"><span class="tn-title">Unilateral Utopia</span><span class="tn-sub">(Flawed Realisation)</span><span class="tn-note">single-vision of the good society</span></div></div>
         </figure>
               <h2 data-toc="Mono-Cultural Takeover"><a class="heading-link" href="#takeover">3. Mono-Cultural Takeover: Gray Goo</a></h2>
 
@@ -2626,10 +2671,10 @@
         <p>A single utopian vision of the good society becomes universally adopted and brings itself into existence, representing a <a href="https://existential-risk.com/concept.pdf" target="_blank" rel="noopener"><em>flawed realisation</em></a> (Bostrom) of civilisations (meta-utopian) cultural potential. Even if the utopia realised is indeed a utopia and not a <em>desired dystopia</em> (Ord), the fact that it is only one utopia in the design space of possible utopias means that civilisation has failed to align with the <a href="https://www.lesswrong.com/w/complexity-of-value" target="_blank" rel="noopener"><em>complexity of value</em></a> (Yudkowsky) and the future contains less richness than what otherwise could have been. AGI-assisted <a href="https://www.lesswrong.com/w/coherent-blended-volition" target="_blank" rel="noopener"><em>coherent blended volition</em></a> (CBV) could form a hybrid world-culture that is deemed desirable to all subcultures, but that still misses out on potential values that no one holds or that future cultures could have arrived at through more expansive and extensive reflective processes.</p>
             </section>
             <section id="enclosure">
-              <figure class="at-tree" aria-label="Global polyculture: three scenarios">
-          <div class="at-root"><div class="at-node"><span class="at-title">Global Polyculture</span><span class="at-sub">(extreme heterogenisation)</span></div></div>
-          <svg class="at-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/></svg>
-          <div class="at-kids" style="--n: 3"><div class="at-node at-accent"><span class="at-title">Meta-Dystopia</span><span class="at-sub">(Local Stable Dystopias)</span><span class="at-sub">d/acc shields win</span></div><div class="at-node"><span class="at-title">Perpetual Pluralism</span><span class="at-sub">(Evolutionary Stage 1: Variation &gt; Selection)</span></div><div class="at-node"><span class="at-title">Cosmic Drift</span><span class="at-sub">(Alien Accessible Universes, Distance-Secure Diversity)</span><span class="at-sub">distance accelerationism</span></div></div>
+              <figure class="tree" aria-label="Global polyculture: three scenarios">
+          <div class="tree-root"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(extreme heterogenisation)</span></div>
+          <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
+          <div class="tree-kids" style="--n: 3"><div class="tree-kid tn-accent"><span class="tn-title">Meta-Dystopia</span><span class="tn-sub">(Local Stable Dystopias)</span><span class="tn-note">d/acc shields win</span></div><div class="tree-kid"><span class="tn-title">Perpetual Pluralism</span><span class="tn-sub">(Evolutionary Stage 1: Variation &gt; Selection)</span></div><div class="tree-kid"><span class="tn-title">Cosmic Drift</span><span class="tn-sub">(Alien Accessible Universes, Distance-Secure Diversity)</span><span class="tn-note">distance accelerationism</span></div></div>
         </figure>
               <h2 data-toc="Meta-Dystopian Enclosure"><a class="heading-link" href="#enclosure">4. Meta-Dystopian Enclosure: Localised Lock-Ins</a></h2>
 
@@ -2661,10 +2706,10 @@
         <p>If the meta-system could be composed solely of sub-utopias, the lesser moral catastrophe here is a condition of <strong><em>perpetual pluralism</em></strong>: where cultural variation persists indefinitely with no reflective selection process to optimise the parameters of civilisation, refining the set of subutopias to include only the most morally advanced to realise moral progress.</p>
             </section>
             <section id="collapse">
-              <figure class="at-tree" aria-label="Cultural collapse: three kinds">
-          <div class="at-root"><div class="at-node"><span class="at-title">Cultural Collapse</span></div></div>
-          <svg class="at-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/></svg>
-          <div class="at-kids" style="--n: 3"><div class="at-node"><span class="at-title">Recoverable Collapse</span></div><div class="at-node at-accent"><span class="at-title">Unrecoverable Collapse</span></div><div class="at-node"><span class="at-title">Recurrent Collapse</span></div></div>
+              <figure class="tree" aria-label="Cultural collapse: three kinds">
+          <div class="tree-root"><span class="tn-title">Cultural Collapse</span></div>
+          <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
+          <div class="tree-kids" style="--n: 3"><div class="tree-kid"><span class="tn-title">Recoverable Collapse</span></div><div class="tree-kid tn-accent"><span class="tn-title">Unrecoverable Collapse</span></div><div class="tree-kid"><span class="tn-title">Recurrent Collapse</span></div></div>
         </figure>
               <h2 data-toc="Cultural Collapse"><a class="heading-link" href="#collapse">5. Cultural Collapse: Permanent Plateau</a></h2>
 
@@ -2679,10 +2724,10 @@
         <p><strong>Recurrent Collapse (Eternal Return):</strong> a cyclical condition where civilisation repeatedly achieves a level of cultural progress, only to collapse before achieving stability. The mechanisms for internal social reproduction are chronically unstable, leading to predictable, recurring failures. This represents a failure to reach a stable equilibrium in the civilisation design space.</p>
             </section>
             <section id="uplift">
-              <figure class="at-tree" aria-label="Meta-utopia: regression or progression">
-          <div class="at-root"><div class="at-node at-accent"><span class="at-title">Meta-Utopia</span><span class="at-sub">(multi-cultural equilibria)</span></div></div>
-          <svg class="at-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/></svg>
-          <div class="at-kids" style="--n: 3"><div class="at-node"><span class="at-title">Regression to Meta-Dystopia</span><span class="at-sub">(local lock-ins)</span></div><div class="at-node"><span class="at-title">Progression to Syntopia</span><span class="at-sub">(multi-cultural synthesis)</span></div><div class="at-node"><span class="at-title">Regression to Monocultural Takeover</span><span class="at-sub">(grey goo)</span></div></div>
+              <figure class="tree" aria-label="Meta-utopia: regression or progression">
+          <div class="tree-root tn-accent"><span class="tn-title">Meta-Utopia</span><span class="tn-sub">(multi-cultural equilibria)</span></div>
+          <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
+          <div class="tree-kids" style="--n: 3"><div class="tree-kid"><span class="tn-title">Regression to Meta-Dystopia</span><span class="tn-sub">(local lock-ins)</span></div><div class="tree-kid"><span class="tn-title">Progression to Syntopia</span><span class="tn-sub">(multi-cultural synthesis)</span></div><div class="tree-kid"><span class="tn-title">Regression to Monocultural Takeover</span><span class="tn-sub">(grey goo)</span></div></div>
         </figure>
               <h2 data-toc="Meta-Utopian Uplift"><a class="heading-link" href="#uplift">6. Meta-Utopian Uplift: Multi-Cultural Equilibria</a></h2>
 
@@ -2704,15 +2749,15 @@
 
               <p>Based on the scenarios introduced in this research article, we can derive fundamental frames for the governance of cultural evolution in the Age of AGI: navigating the <em>Narrow Cultural Corridor</em> and solving <em>the Symmetry Problem</em>.</p>
         
-        <figure class="at-tree" aria-label="Cultural existential risk and its two failure modes">
-          <div class="at-root"><div class="at-node"><span class="at-title">Cultural Existential Risk</span></div></div>
-          <svg class="at-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/></svg>
-          <div class="at-kids" style="--n: 2"><div class="at-node"><span class="at-title">Global Monoculture</span><span class="at-sub">(Extreme Homogenisation)</span></div><div class="at-node"><span class="at-title">Global Polyculture</span><span class="at-sub">(Extreme Heterogenisation)</span></div></div>
+        <figure class="tree" aria-label="Cultural existential risk and its two failure modes">
+          <div class="tree-root"><span class="tn-title">Cultural Existential Risk</span></div>
+          <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="25.000" y2="100"/><line x1="50" y1="0" x2="75.000" y2="100"/></svg>
+          <div class="tree-kids" style="--n: 2"><div class="tree-kid"><span class="tn-title">Global Monoculture</span><span class="tn-sub">(Extreme Homogenisation)</span></div><div class="tree-kid"><span class="tn-title">Global Polyculture</span><span class="tn-sub">(Extreme Heterogenisation)</span></div></div>
         </figure>
-        <figure class="at-tree at-follow" aria-label="The Narrow Cultural Corridor: three approaches">
-          <div class="at-root"><div class="at-node"><span class="at-title">The Narrow Cultural Corridor</span></div></div>
-          <svg class="at-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="34" y2="100"/><line x1="50" y1="0" x2="66" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/></svg>
-          <div class="at-kids" style="--n: 3"><div class="at-node"><span class="at-title">Benevolent Paternalism</span><span class="at-sub">Guiding Hand</span><span class="at-sub">&Eacute;tatiste</span><span class="at-lev">The Despotic Leviathan</span></div><div class="at-node"><span class="at-title">Autopoetic Alignment</span><span class="at-sub">Many Hands (Goddess Durga)</span><span class="at-sub">Concert&eacute;e</span><span class="at-lev">The Self-Regulating Leviathan</span></div><div class="at-node"><span class="at-title">Pluralistic Libertarianism</span><span class="at-sub">Invisible Hand</span><span class="at-sub">Laissez-faire</span><span class="at-lev">The Absentee Leviathan</span></div></div>
+        <figure class="tree at-follow" aria-label="The Narrow Cultural Corridor: three approaches">
+          <div class="tree-root"><span class="tn-title">The Narrow Cultural Corridor</span></div>
+          <svg class="tree-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><line x1="50" y1="0" x2="16.667" y2="100"/><line x1="50" y1="0" x2="50.000" y2="100"/><line x1="50" y1="0" x2="83.333" y2="100"/></svg>
+          <div class="tree-kids" style="--n: 3"><div class="tree-kid"><span class="tn-title">Benevolent Paternalism</span><span class="tn-sub">Guiding Hand</span><span class="tn-note">&Eacute;tatiste</span><span class="tn-leviathan">The Despotic Leviathan</span></div><div class="tree-kid"><span class="tn-title">Autopoetic Alignment</span><span class="tn-sub">Many Hands (Goddess Durga)</span><span class="tn-note">Concert&eacute;e</span><span class="tn-leviathan">The Self-Regulating Leviathan</span></div><div class="tree-kid"><span class="tn-title">Pluralistic Libertarianism</span><span class="tn-sub">Invisible Hand</span><span class="tn-note">Laissez-faire</span><span class="tn-leviathan">The Absentee Leviathan</span></div></div>
         </figure>
         <h3>Navigating the ‘Narrow Cultural Corridor’: Libertarianism vs Paternalism</h3>
         <p>The governance of cultural evolution must navigate between <em>pluralistic libertarianism</em>, a minimalist <em>laissez-faire</em> approach which allows a <em>global poly-culture</em> (extreme heterogenisation) to persist without progress and <em>benevolent paternalism</em>, a maximalist <em>interventionist</em> approach which enforces a <em>global monoculture</em> (extreme homogenisation), ending multi-cultural diversity. Both lead to moral stagnation and the flawed realisation of civilisation’s potential.</p>
