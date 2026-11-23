@@ -2986,7 +2986,7 @@
           p.left = i % 2 === 1;
           p.note.classList.toggle('sn-left', p.left);
         });
-        var frame = null, GAP = 18, TOP = 90, BOTTOM = 24;
+        var frame = null, GAP = 24, TOP = 90, BOTTOM = 24;
         function place() {
           frame = null;
           if (!document.body.classList.contains('sn-layout')) return;
@@ -2999,20 +2999,23 @@
             p.y = p.want;
             if (p.on) shown.push(p);
           });
+          // each side's notes on screen as one column, an equal gap between
+          // them, set where it lies nearest its references overall (their
+          // average offset); kept inside the window where it fits, and never
+          // above the window's top or the notes' own section
           [true, false].forEach(function (left) {
             var side = shown.filter(function (p) { return p.left === left; });
-            var bottom = -Infinity;
-            side.forEach(function (p) {
-              p.y = Math.max(p.want, bottom + GAP);
-              bottom = p.y + p.note.offsetHeight;
-            });
             if (!side.length) return;
-            var over = bottom - (vh - base - BOTTOM);
-            // not above the window's top, nor above the notes' own section
+            var run = 0, sum = 0;
+            side.forEach(function (p) { p.at = run; sum += p.want - run; run += p.note.offsetHeight + GAP; });
+            var height = run - GAP;
+            var start = sum / side.length;
             var section = side[0].ref.closest('section');
             var floor = Math.max(TOP - base, section ? section.getBoundingClientRect().top - base : -Infinity);
-            var lift = Math.min(over, side[0].y - floor);
-            if (lift > 0) side.forEach(function (p) { p.y -= lift; });
+            var ceiling = vh - base - BOTTOM;
+            if (start + height > ceiling) start = ceiling - height;
+            if (start < floor) start = floor;
+            side.forEach(function (p) { p.y = start + p.at; });
           });
           pairs.forEach(function (p) {
             p.note.style.top = Math.round(p.y) + 'px';
