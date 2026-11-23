@@ -2516,9 +2516,11 @@
       }
       // In time with the honeycomb's ripples (one per 2-second loop of the
       // GIF): the colours change as the first ripple ends (or the first to
-      // end once the page has loaded), centred on the moment between two
-      // ripples; the page shows as the next ripple ends.
-      var RIPPLE = 2000, SHIFT = 500;   // a ripple; the colour change
+      // end once the page has loaded); the page fades in as the next ripple
+      // ends.
+      // a ripple; when the colour change starts (from the end of a ripple),
+      // and the fade to the page (from the end of the next)
+      var RIPPLE = 2000, CHANGE_AT = 0, FADE_AT = -300;
       var gif = loader.querySelector('.loader-gif-open');
       var began = null, loaded = false, scheduled = false;
       function begin() { if (began === null) began = Date.now(); plan(); }
@@ -2527,9 +2529,9 @@
         scheduled = true;
         var elapsed = Date.now() - began;
         // the first ripple end with time still to start the change before it
-        var end = RIPPLE * Math.max(1, Math.ceil((elapsed + SHIFT / 2) / RIPPLE));
-        setTimeout(function () { loader.classList.add('loader-theme'); }, end - SHIFT / 2 - elapsed);
-        setTimeout(finish, end + RIPPLE - elapsed);
+        var end = RIPPLE * Math.max(1, Math.ceil(elapsed / RIPPLE));
+        setTimeout(function () { loader.classList.add('loader-theme'); }, end + CHANGE_AT - elapsed);
+        setTimeout(finish, end + RIPPLE + FADE_AT - elapsed);
       }
       if (!gif || gif.complete) begin(); else {
         gif.addEventListener('load', begin);
