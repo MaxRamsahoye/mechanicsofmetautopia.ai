@@ -2002,12 +2002,21 @@
       margin: 0 auto;
     }
     .hex-figure figcaption {
-      max-width: 620px;
-      margin: 28px auto 0;
+      margin: 28px 0 0;
       font-family: 'IBM Plex Sans', sans-serif;
       font-size: 16px;
       line-height: 1.6;
       color: var(--muted);
+    }
+    /* the caption's text is narrowed, not the caption, so its note floats
+       from the text column's edge like every other note */
+    .hex-figure .hex-cap {
+      display: block;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+    .hex-figure .sidenote {
+      text-align: left;
     }
 
     /* the caption under the matrix, in the text column */
@@ -2317,7 +2326,7 @@
         <p>As we see it, this is the ultimate project of steering towards <em>desirable civilisational equilibria</em> – and as such, it will inevitably be beyond the scope of this material to provide a sufficient answer. Nonetheless, we aim to formulate the primary constraints, criteria and catastrophes for such a world-system and in doing so formalise an ambitious paradigm for future <em><a href="https://civilizationemerging.com/category/civilization-design/" target="_blank" rel="noopener">civilisation design</a></em> and <em><a href="https://gradual-disempowerment.ai/mitigating-the-risk" target="_blank" rel="noopener">civilisation alignment</a></em> research. The most useful starting point for our purposes is Hanson’s short essay <a href="https://www.overcomingbias.com/p/utopias-garden-world-and-wallhtml" target="_blank" rel="noopener"><em>Utopia’s Garden, World, and Wall</em></a> (2020), which we turn to next.</p>
         <figure class="hex-figure">
           <img src="Hex%20Grid%20Circular.gif" width="400" height="400" loading="lazy" alt="An animated honeycomb of hexagonal tiles forming a circle, each tile a self-contained sub-utopia within a wider civilisation">
-          <figcaption>An abstract representation of &lsquo;meta-utopia&rsquo; using (civilisation-style) hex tiles in a honeycomb-structure to represent self-contained sub-utopias within a wider global civilisation.</figcaption>
+          <figcaption><span class="sidenote" id="note-3" role="note"><a class="sidenote-label" href="#ref-3" aria-label="Back to note 3 in the text"></a>Hex-tiles structure the map and mechanics of Sid Meier&rsquo;s <em>Civilization</em> series: &lsquo;4X&rsquo; strategy video games characterised by four core gameplay loops: eXplore, eXpand, eXploit, and eXterminate. 4X cultural dynamics characterise how cultures explore the design space of memes, expand their memetic influence, exploit populations as hosts, and ultimately exterminate rival variants.</span><span class="hex-cap">An abstract representation of &lsquo;meta-utopia&rsquo; using (civilisation-style) hex tiles in a honeycomb-structure to represent self-contained sub-utopias within a wider global civilisation.<a class="sidenote-ref" id="ref-3" href="#note-3" aria-label="Note 3"></a></span></figcaption>
         </figure>
             </section>
             <section id="mechanics">
