@@ -521,7 +521,7 @@
       /* it opens in orange, with the honeycomb in white, then turns to the
        theme's colours once the page has loaded, before fading away */
       background: #e36843;
-      transition: opacity 0.8s ease-in-out, background-color 0.8s ease-in-out;
+      transition: opacity 0.8s ease-in-out, background-color 0.5s ease-in-out;
     }
 
     .loader.loader-theme {
@@ -538,7 +538,7 @@
        on the canvas; dark theme: black-on-orange, then white on the canvas */
     .loader-stack .loader-gif {
       display: block;
-      transition: opacity 0.8s ease-in-out;
+      transition: opacity 0.5s ease-in-out;
     }
 
     .loader-gif-open,
@@ -2514,14 +2514,28 @@
         document.body.classList.remove('loading-active');
         setTimeout(function () { loader.remove(); }, 800);
       }
-      // orange for at least 0.8 seconds, then the theme's colours
-      var opened = Date.now();
-      function start() {
-        setTimeout(function () {
-          loader.classList.add('loader-theme');
-          setTimeout(finish, 1500);
-        }, Math.max(0, 800 - (Date.now() - opened)));
+      // In time with the honeycomb's ripples (one per 2-second loop of the
+      // GIF): the colours change as the first ripple ends (or the first to
+      // end once the page has loaded), centred on the moment between two
+      // ripples; the page shows as the next ripple ends.
+      var RIPPLE = 2000, SHIFT = 500;   // a ripple; the colour change
+      var gif = loader.querySelector('.loader-gif-open');
+      var began = null, loaded = false, scheduled = false;
+      function begin() { if (began === null) began = Date.now(); plan(); }
+      function plan() {
+        if (began === null || !loaded || scheduled) return;
+        scheduled = true;
+        var elapsed = Date.now() - began;
+        // the first ripple end with time still to start the change before it
+        var end = RIPPLE * Math.max(1, Math.ceil((elapsed + SHIFT / 2) / RIPPLE));
+        setTimeout(function () { loader.classList.add('loader-theme'); }, end - SHIFT / 2 - elapsed);
+        setTimeout(finish, end + RIPPLE - elapsed);
       }
+      if (!gif || gif.complete) begin(); else {
+        gif.addEventListener('load', begin);
+        gif.addEventListener('error', begin);
+      }
+      function start() { loaded = true; plan(); }
       if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
     })();
   </script>
