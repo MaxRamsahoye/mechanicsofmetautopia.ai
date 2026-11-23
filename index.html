@@ -692,21 +692,21 @@
       }
     }
 
-    /* once the page's header has scrolled away: the site's name in the
-       top-right corner, as the other pages have it, until the footer
-       reaches it */
+    /* from section 1 on: the site's name in the top-left corner, until the
+       footer reaches it */
     .corner-title {
       position: fixed;
-      top: 33px;
-      right: calc(var(--frame-margin) + 24px);
+      /* top left, beside the progress ring and level with its middle */
+      top: 26px;
+      left: calc(var(--frame-margin) + 84px);
       z-index: 40;
       font-family: 'IBM Plex Sans', sans-serif;
-      font-size: 15px;
+      font-size: 16.5px;
       font-weight: 500;
       line-height: 1.15;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      text-align: right;
+      text-align: left;
       color: var(--canvas-ink);
       text-decoration: none;
       opacity: 0;
@@ -3493,10 +3493,13 @@
         var isWide = scrollTop > 10;
         document.body.classList.toggle('wide', isWide);
         document.body.classList.toggle('past-overview', pastOverviewRule);
-        // the name in the top-right corner: shown once the header has gone,
-        // until the footer reaches it; light while a band is beneath it
+        // the name in the top-left corner: shown from section 1 on (with the
+        // contents menu), until the footer reaches it; light while a band is
+        // beneath it
         var footerAtTop = footerEl.getBoundingClientRect().top < 110;
-        document.body.classList.toggle('corner-shown', scrollTop > 120 && !footerAtTop);
+        var sectionOne = document.getElementById('mechanics');
+        var fromSectionOne = sectionOne ? sectionOne.getBoundingClientRect().top < window.innerHeight * 0.5 : scrollTop > 120;
+        document.body.classList.toggle('corner-shown', fromSectionOne && !footerAtTop);
         var onBand = Array.prototype.some.call(document.querySelectorAll('#overview, .in-band'), function (b) {
           var r = b.getBoundingClientRect();
           return r.top <= 45 && r.bottom >= 45;
