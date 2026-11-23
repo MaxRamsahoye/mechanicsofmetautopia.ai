@@ -621,12 +621,12 @@
   function setMode(narrow) {
     if (narrow === mode) return;
     mode = narrow;
-    if (narrow) homes.forEach(function (h) { end.appendChild(h.el); });
-    // back in place, last first, so notes that sat side by side keep their order
-    else homes.slice().reverse().forEach(function (h) {
-      var next = h.next && h.next.parentNode === h.parent ? h.next : (h.parent === essay ? end : null);
-      h.parent.insertBefore(h.el, next);
+    // a placeholder keeps each note's place while it is among the Endnotes
+    if (narrow) homes.forEach(function (h) {
+      if (!h.ph) { h.ph = document.createComment('note'); h.el.parentNode.insertBefore(h.ph, h.el); }
+      end.appendChild(h.el);
     });
+    else homes.forEach(function (h) { if (h.ph && h.ph.parentNode) h.ph.parentNode.insertBefore(h.el, h.ph.nextSibling); });
     end.classList.toggle('has-notes', narrow);
   }
   setMode(mq.matches);

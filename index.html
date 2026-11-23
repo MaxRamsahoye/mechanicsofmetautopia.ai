@@ -1415,6 +1415,59 @@
       transition: opacity 0.2s ease;
     }
 
+    /* wide windows with the note layout: notes placed beside their
+       references (the floats above are the fallback without it) */
+    body.sn-layout .article-body {
+      position: relative;
+      --sn-off: 120px;
+    }
+    body.sn-layout .article-body .sidenote {
+      position: absolute;
+      left: calc(100% + var(--sn-off));
+      float: none;
+      margin: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease-in-out, top 0.35s ease;
+    }
+    body.sn-layout .article-body .sidenote.note-in-view {
+      pointer-events: auto;
+    }
+    @media (max-width: 1800px) {
+      body.sn-layout .article-body { --sn-off: 40px; }
+    }
+
+    /* markers, labels and links in notes look the same wherever the note
+       sits (the paragraph-link rule would otherwise make them bold) */
+    .article-body .sidenote-ref,
+    .article-body .sidenote-label {
+      color: var(--canvas-accent);
+      font-weight: 400;
+      text-decoration: none;
+    }
+    .article-body .sidenote-ref:hover,
+    .article-body .sidenote-label:hover {
+      color: var(--canvas-ink);
+    }
+    .article-body .sidenote-ref.note-active,
+    .article-body .sidenote-label.note-active {
+      color: var(--canvas-ink);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+    .article-body .sidenote a:not(.sidenote-label) {
+      font-weight: 400;
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    /* quotations and second paragraphs inside a note */
+    .sidenote .sn-q { display: block; margin: 6px 0; font-style: italic; }
+    .sidenote .sn-q em { font-style: normal; }
+    .sidenote .sn-p { display: block; margin-top: 8px; }
+
     /* a note inside a dashed list keeps its own, unhung indent */
     .sidenote { text-indent: 0; }
 
@@ -2310,23 +2363,23 @@
             <section id="intro">
               <h2 data-toc="Introduction"><a class="heading-link" href="#intro">0. Introduction: The Utopian Turn</a></h2>
 
-              <p>In recent years, Effective Altruism (EA) has undergone a <em>‘utopian turn’</em> with thought leaders broadening their horizons <em><a href="https://www.forethought.org/research/beyond-existential-risk" target="_blank" rel="noopener">beyond existential risk</a></em> to <em>existential flourishing</em>, from the end of the world to the beginning of <em>better futures</em>. Whilst a discourse on dystopia and utopia has always been present within the wider <em>futurist</em> culture surrounding EA, this discourse is now coming to the forefront in the light of the transformative potential of AGI.</p>
-        <p>Principally, the <em>next-generation macrostrategy</em> institute <em>Forethought</em>, directed by MacAskill (co-founder of EA), have initiated a research agenda for navigating ‘the transition to a <em>post-AGI society</em>’ oriented around the novel frame of <em><a href="https://www.forethought.org/research/viatopia" target="_blank" rel="noopener">Viatopia</a></em>. A major desideratum for <em>Viatopia</em> is that it constitutes ‘a state of society… where many different moral points of view can flourish’.<a class="sidenote-ref" id="ref-1" href="#note-1" aria-label="Note 1"></a><span class="sidenote" id="note-1" role="note"><a class="sidenote-label" href="#ref-1" aria-label="Back to note 1 in the text"></a>This has been elaborated more recently by MacAskill in <a href="https://www.forethought.org/research/the-saturation-view" target="_blank" rel="noopener"><em>The Saturation View</em></a> of population ethics.</span> Here, MacAskill’s <em>Viatopia</em> can be genealogically situated as a higher-level <em>conceptual engineering</em> incorporating Nozick’s <em><a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">Meta-Utopia</a></em>: the ideal world-society according to libertarian political philosophy which proposes that ‘utopia will consist of utopias, of many different and divergent communities’.</p>
-        <p>Based on a review of the literature within the <em>PARA-academic sphere</em> – the Progress (studies), AI alignment, Rationalist and Effective Altruist research communities – <em>meta-utopia</em>, as originally envisioned by Nozick, has arguably become the closest to a consensus view on what form a desirable <em>post-AGI society</em> should take and what a positive AI future would look like. Major materials representative of this consensus include:</p>
+              <p>In recent years, Effective Altruism (EA) has undergone a <em>‘utopian turn’</em><a class="sidenote-ref" id="ref-1" href="#note-1" aria-label="Note 1"></a><span class="sidenote" id="note-1" role="note"><a class="sidenote-label" href="#ref-1" aria-label="Back to note 1 in the text"></a>Outside of EA, Rutger Bregman, founder of the <a href="https://forum.effectivealtruism.org/posts/Hb94qCjN6ugE357oT/the-strange-shortage-of-moral-optimizers" target="_blank" rel="noopener">&lsquo;alter-EA&rsquo;</a> (The School for) Moral Ambition, has written of &lsquo;The Return of Utopia&rsquo; in his book <em>Utopia for Realists</em>.</span> with thought leaders broadening their horizons <em><a href="https://www.forethought.org/research/beyond-existential-risk" target="_blank" rel="noopener">beyond existential risk</a></em> to <em>existential flourishing</em>, from the end of the world to the beginning of <em>better futures</em>. Whilst a discourse on dystopia and utopia has always been present within the wider <em>futurist</em> culture surrounding EA,<a class="sidenote-ref" id="ref-2" href="#note-2" aria-label="Note 2"></a><span class="sidenote" id="note-2" role="note"><a class="sidenote-label" href="#ref-2" aria-label="Back to note 2 in the text"></a>Within posthumanist thought see Bostrom&rsquo;s <a href="https://nickbostrom.com/utopia" target="_blank" rel="noopener"><em>Letter from Utopia</em></a> (2008) and Pearce&rsquo;s <a href="https://www.paradise-engineering.com/heaven.htm" target="_blank" rel="noopener"><em>paradise engineering</em></a> (1995) for positive visions, as well as Hanson&rsquo;s <a href="https://ageofem.com/" target="_blank" rel="noopener"><em>Age of Em</em></a> (2016) and Iain M. Banks&rsquo;s <a href="https://iainbanks.co.uk/the-works/surface-detail/" target="_blank" rel="noopener"><em>Surface Detail</em></a> (2010) as suffering catastrophes in fiction (digital minds in Malthusian conditions and virtual hells).</span> this discourse is now coming to the forefront in the light of the transformative potential of AGI.<a class="sidenote-ref" id="ref-3" href="#note-3" aria-label="Note 3"></a><span class="sidenote" id="note-3" role="note"><a class="sidenote-label" href="#ref-3" aria-label="Back to note 3 in the text"></a>Our project is in part to make a valuable contribution towards guiding this new wave of utopian thought across the movement and out into the world it seeks to change.</span></p>
+        <p>Principally, the <em>next-generation macrostrategy</em> institute <em>Forethought</em>, directed by MacAskill (co-founder of EA), have initiated a research agenda for navigating ‘the transition to a <em>post-AGI society</em>’ oriented around the novel frame of <em><a href="https://www.forethought.org/research/viatopia" target="_blank" rel="noopener">Viatopia</a></em>. A major desideratum for <em>Viatopia</em> is that it constitutes ‘a state of society… where many different moral points of view can flourish’.<a class="sidenote-ref" id="ref-4" href="#note-4" aria-label="Note 4"></a><span class="sidenote" id="note-4" role="note"><a class="sidenote-label" href="#ref-4" aria-label="Back to note 4 in the text"></a>This has been elaborated more recently by MacAskill in <a href="https://www.forethought.org/research/the-saturation-view" target="_blank" rel="noopener"><em>The Saturation View</em></a> of population ethics.</span> Here, MacAskill’s <em>Viatopia</em> can be genealogically situated as a higher-level <em>conceptual engineering</em><a class="sidenote-ref" id="ref-5" href="#note-5" aria-label="Note 5"></a><span class="sidenote" id="note-5" role="note"><a class="sidenote-label" href="#ref-5" aria-label="Back to note 5 in the text"></a><span class="sn-q">&ldquo;Conceptual engineering is the design, implementation, and evaluation of concepts&hellip;&rdquo;</span> <a href="https://philpapers.org/archive/CHAWIC-3.pdf" target="_blank" rel="noopener">(Chalmers, 2020)</a>. Recursively, the term <em>conceptual engineering</em> is itself a result of conceptual engineering. Conceptual engineering is arguably the principal methodology of philosophy as a discipline.</span> incorporating Nozick’s <em><a href="https://iep.utm.edu/noz-poli/#:~:text=Instead%2C%20he%20turns,of%20cultural%20relativism." target="_blank" rel="noopener">Meta-Utopia</a></em>: the ideal world-society according to libertarian political philosophy which proposes that ‘utopia will consist of utopias, of many different and divergent communities’.</p>
+        <p>Based on a review of the literature within the <em>PARA-academic sphere</em> – the Progress (studies), AI alignment, Rationalist and Effective Altruist research communities – <em>meta-utopia</em>, as originally envisioned by Nozick, has arguably become the closest to a consensus view on what form a desirable <em>post-AGI society</em> should take and what a positive AI future would look like.<a class="sidenote-ref" id="ref-6" href="#note-6" aria-label="Note 6"></a><span class="sidenote" id="note-6" role="note"><a class="sidenote-label" href="#ref-6" aria-label="Back to note 6 in the text"></a>Outside of the philosopher&rsquo;s armchair, the Future of Life Institute and the Foresight Institute&rsquo;s Existential Hope initiative have respectively run a <a href="https://worldbuild.ai/" target="_blank" rel="noopener">Worldbuilding Contest</a> for &lsquo;imagining positive futures with artificial intelligence&rsquo; and an open-access <a href="https://worlds.existentialhope.com/existential-hope-worldbuilding-course/" target="_blank" rel="noopener">AI Futures Worldbuilding course</a> for anyone to &lsquo;explore hopeful futures&mdash;and the steps we can take to make them real&rsquo;.</span> Major materials representative of this consensus include:</p>
         <ul class="dash-list live-list">
           <li>Alexander’s <a href="https://slatestarcodex.com/2014/06/07/archipelago-and-atomic-communitarianism/" target="_blank" rel="noopener"><em>Archipelago & Atomic Communitarianism</em></a> (2014)</li>
-          <li>Duettmann’s <a href="https://www.lesswrong.com/s/9SJM9cdgapDybPksi" target="_blank" rel="noopener"><em>Gaming the Future: Technologies for Intelligent Voluntary Cooperation</em></a>&nbsp;(2022)</li>
+          <li>Duettmann’s <a href="https://www.lesswrong.com/s/9SJM9cdgapDybPksi" target="_blank" rel="noopener"><em>Gaming the Future: Technologies for Intelligent Voluntary Cooperation</em></a>&nbsp;(2022)<a class="sidenote-ref" id="ref-7" href="#note-7" aria-label="Note 7"></a><span class="sidenote" id="note-7" role="note"><a class="sidenote-label" href="#ref-7" aria-label="Back to note 7 in the text"></a>Foresight view &lsquo;civilisation as the relevant superintelligence&rsquo; (<a href="https://research.google/pubs/cyber-nano-and-agi-risks-decentralized-approaches-to-reducing-risks/" target="_blank" rel="noopener"><em>Cyber, Nano, and AGI Risks</em></a>):<span class="sn-q">&ldquo;If the problem of superintelligence were a purely new problem with no historical precedent, there is little relevance to truly learn from history. But human institutions are already non-human intelligences with which we cooperate and against which we defend ourselves. Depending on the nature of the institution, they can be well aligned or badly aligned with human interests&hellip; The superintelligence of civilization is already emergent from the interplay of human and machine intelligences. Within our multipolar civilization, as machines get more intelligent, they will contribute more to the overall intelligence of our civilization.&rdquo;</span> (<a href="https://www.lesswrong.com/posts/bHgp7CcqW4Drw8am4/preface-3#:~:text=The%20superintelligence%20of%20civilization%20is%20already%20emergent%20from%20the%20interplay%20of%20human%20and%20machine%20intelligences.%20Within%20our%20multipolar%20civilization%2C%20as%20machines%20get%20more%20intelligent%2C%20they%20will%20contribute%20more%20to%20the%20overall%20intelligence%20of%20our%20civilization.%C2%A0" target="_blank" rel="noopener">Preface to <em>Gaming the Future</em></a>)</span></li>
           <li>Tang’s <a href="https://www.plurality.institute/blog-posts/book-launch-plurality-the-future-of-collaborative-technology-and-democracy-by-e-glen-weyl-audrey-tang-and-the-plurality-community" target="_blank" rel="noopener"><em>Plurality: The Future of Collaborative Technology and Democracy</em></a> (2024).</li>
           <li>Buterin’s <a href="https://vitalik.eth.limo/general/2025/12/17/societies.html" target="_blank" rel="noopener"><em>Let a Thousand Societies Bloom</em></a> (2025)</li>
           <li>Agnew’s <a href="https://youtu.be/BdBviVWhar8?si=jhwHIX1sFcsAn0wE" target="_blank" rel="noopener"><em>Experimental Societies: Prototyping Social Structures for the Future</em></a> (2019)</li>
           <li>Delaney &amp; Taylor’s <a href="https://www.forethought.org/research/nightwatchmen" target="_blank" rel="noopener"><em>A Nightwatchman on Every Probe: Superintelligent Surveillance to Prevent Galactic Anarchy</em></a> (2026)</li>
-          <li>Banks’s <a href="https://theculture.adactio.com/" target="_blank" rel="noopener"><em>A Few Notes on The Culture</em></a> (1994)<a class="sidenote-ref" id="ref-2" href="#note-2" aria-label="Note 2"></a><span class="sidenote" id="note-2" role="note"><a class="sidenote-label" href="#ref-2" aria-label="Back to note 2 in the text"></a>Banks&rsquo;s essay is not a text from the <em>PARA-academic sphere</em>, but his <em>Culture</em> series has been a highly influential science-fiction representation of a post-ASI, cosmic, meta-utopia for those within it.</span></li>
+          <li>Banks’s <a href="https://theculture.adactio.com/" target="_blank" rel="noopener"><em>A Few Notes on The Culture</em></a> (1994)<a class="sidenote-ref" id="ref-8" href="#note-8" aria-label="Note 8"></a><span class="sidenote" id="note-8" role="note"><a class="sidenote-label" href="#ref-8" aria-label="Back to note 8 in the text"></a>Banks&rsquo;s essay is not a text from the <em>PARA-academic sphere</em>, but his <em>Culture</em> series has been a highly influential science-fiction representation of a post-ASI, cosmic, meta-utopia for those within it.</span></li>
         </ul>
-        <p>Despite this there has been minimal research to critically and systematically examine the <em>mechanics of meta-utopia</em>: how a future post-AGI world-system, as a sociotechnical architecture, functions to mediate the interaction between multiple cultures (epistemologies, ontologies, axiologies) and translate the <em><a href="https://www.lesswrong.com/w/complexity-of-value" target="_blank" rel="noopener">complexity of values</a></em> into a dynamic, <em><a href="https://plato.stanford.edu/entries/rawls/#StaOveCon" target="_blank" rel="noopener">overlapping consensus</a></em>. In other words, how (post-)humanity can sustain a <em>progressive form of pluralism</em> at a civilisational-scale, over long-term time horizons (geopolitically and spatio-temporally).</p>
-        <p>As we see it, this is the ultimate project of steering towards <em>desirable civilisational equilibria</em> – and as such, it will inevitably be beyond the scope of this material to provide a sufficient answer. Nonetheless, we aim to formulate the primary constraints, criteria and catastrophes for such a world-system and in doing so formalise an ambitious paradigm for future <em><a href="https://civilizationemerging.com/category/civilization-design/" target="_blank" rel="noopener">civilisation design</a></em> and <em><a href="https://gradual-disempowerment.ai/mitigating-the-risk" target="_blank" rel="noopener">civilisation alignment</a></em> research. The most useful starting point for our purposes is Hanson’s short essay <a href="https://www.overcomingbias.com/p/utopias-garden-world-and-wallhtml" target="_blank" rel="noopener"><em>Utopia’s Garden, World, and Wall</em></a> (2020), which we turn to next.</p>
+        <p>Despite this there has been minimal research to critically and systematically examine the <em>mechanics of meta-utopia</em>: how a future post-AGI world-system, as a sociotechnical architecture, functions to mediate the interaction between multiple cultures (epistemologies, ontologies, axiologies) and translate the <em><a href="https://www.lesswrong.com/w/complexity-of-value" target="_blank" rel="noopener">complexity of values</a></em> into a dynamic, <em><a href="https://plato.stanford.edu/entries/rawls/#StaOveCon" target="_blank" rel="noopener">overlapping consensus</a></em>.<a class="sidenote-ref" id="ref-9" href="#note-9" aria-label="Note 9"></a><span class="sidenote" id="note-9" role="note"><a class="sidenote-label" href="#ref-9" aria-label="Back to note 9 in the text"></a>Rawls&rsquo;s procedure of &lsquo;reflective equilibrium&rsquo; and goal of &lsquo;overlapping consensus&rsquo; parallel the ASI alignment proposal of Coherent Blended Volition (CBV):<span class="sn-q">&ldquo;CBV proposes a creative blending process that produces new, harmonious value systems that all participants would recognize as adequately representing their contributions.&rdquo;</span> <a href="https://ai-safety-atlas.com/chapters/v1/strategies/appendix-long-term-questions/#alignment-to-what" target="_blank" rel="noopener">(AI Safety Atlas, 2025)</a></span> In other words, how (post-)humanity can sustain a <em>progressive form of pluralism</em> at a civilisational-scale, over long-term time horizons (geopolitically and spatio-temporally).<a class="sidenote-ref" id="ref-10" href="#note-10" aria-label="Note 10"></a><span class="sidenote" id="note-10" role="note"><a class="sidenote-label" href="#ref-10" aria-label="Back to note 10 in the text"></a>A potentially relevant piece of recent work here is <a href="https://youtu.be/AFGs6TbXjyI?si=cz2jhYUvjTUVP-F5" target="_blank" rel="noopener"><em>Scaling Rational Cooperative Intelligence for Pluralistic AI Futures</em></a> by Xuan (2026):<span class="sn-q">&ldquo;One plausible extrapolation of current AI trends is that we are headed towards pluralistic AI futures: scenarios where a plethora of AI agents, systems, and services are deployed towards various ends by various actors. How can we influence this process so that it occurs not just safely &ndash; avoiding AI-powered conflict and anti-human equilibria &ndash; but also in the direction of mutual flourishing?&rdquo;</span></span></p>
+        <p>As we see it, this is the ultimate project of steering towards <em>desirable civilisational equilibria</em><a class="sidenote-ref" id="ref-11" href="#note-11" aria-label="Note 11"></a><span class="sidenote" id="note-11" role="note"><a class="sidenote-label" href="#ref-11" aria-label="Back to note 11 in the text"></a>&lsquo;Post-AGI Civilizational Equilibria&rsquo; is the framing for an <a href="https://post-agi.org/" target="_blank" rel="noopener">ongoing workshop series</a> and a <a href="https://princint.ai/programs/fellowship/#:~:text=Post%2DAGI%20Civilisation%20Dynamics" target="_blank" rel="noopener">new PIBBSS track</a> at the frontier of AI macrostrategy. An associated agenda introduced in <a href="https://gradual-disempowerment.ai/" target="_blank" rel="noopener"><em>Gradual Disempowerment</em></a> is civilisation alignment:<span class="sn-q">&ldquo;&hellip; we need fundamental research into what might be called &ldquo;ecosystem alignment&rdquo; &ndash; understanding how to maintain human values and agency within complex socio-technical systems. This goes beyond traditional approaches to AI alignment focused on individual systems, and beyond traditional institutional design focused purely on human actors. We need new frameworks for thinking about the alignment of an entire civilization.&rdquo;</span></span> – and as such, it will inevitably be beyond the scope of this material to provide a sufficient answer. Nonetheless, we aim to formulate the primary constraints, criteria and catastrophes for such a world-system and in doing so formalise an ambitious paradigm for future <em><a href="https://civilizationemerging.com/category/civilization-design/" target="_blank" rel="noopener">civilisation design</a></em><a class="sidenote-ref" id="ref-12" href="#note-12" aria-label="Note 12"></a><span class="sidenote" id="note-12" role="note"><a class="sidenote-label" href="#ref-12" aria-label="Back to note 12 in the text"></a><a href="https://civilizationemerging.com/category/civilization-design/" target="_blank" rel="noopener"><em>Civilisation Design</em></a> is a frame employed by <a href="https://civilizationemerging.com/" target="_blank" rel="noopener">Daniel Schmachtenberger</a> oriented towards identifying <a href="https://civilizationemerging.com/new-economics-series-1/" target="_blank" rel="noopener">&lsquo;design criteria&rsquo;</a> for a viable world-system: one that ensures survival and flourishing over the long-term future. MacAskill&rsquo;s <a href="https://www.forethought.org/research/viatopia" target="_blank" rel="noopener"><em>Viatopia</em></a> is a recent precedent in this area, detailing &lsquo;societal primary goods&rsquo; and &lsquo;conditions that enable society to steer itself&rsquo; as key desiderata.<span class="sn-p">In the <a href="https://www.lesswrong.com/posts/tnWRXkcDi5Tw9rzXw/the-design-space-of-minds-in-general" target="_blank" rel="noopener">design space</a> of civilisations, what currently exists is just one possibility among many. If we are to survive this century and flourish throughout those that come after, we will need to explore what alternatives are available to us. Through this process, if we are lucky and diligent we may just happen upon a &lsquo;civilisation that would stand the test of time&rsquo;. I call this search in the civilisational design space, the search for <em>Civilisation X</em>.</span></span> and <em><a href="https://gradual-disempowerment.ai/mitigating-the-risk" target="_blank" rel="noopener">civilisation alignment</a></em> research. The most useful starting point for our purposes is Hanson’s short essay <a href="https://www.overcomingbias.com/p/utopias-garden-world-and-wallhtml" target="_blank" rel="noopener"><em>Utopia’s Garden, World, and Wall</em></a> (2020), which we turn to next.</p>
         <figure class="hex-figure">
           <img src="Hex%20Grid%20Circular.gif" width="400" height="400" loading="lazy" alt="An animated honeycomb of hexagonal tiles forming a circle, each tile a self-contained sub-utopia within a wider civilisation">
-          <figcaption><span class="sidenote" id="note-3" role="note"><a class="sidenote-label" href="#ref-3" aria-label="Back to note 3 in the text"></a>Hex-tiles structure the map and mechanics of Sid Meier&rsquo;s <em>Civilization</em> series: &lsquo;4X&rsquo; strategy video games characterised by four core gameplay loops: eXplore, eXpand, eXploit, and eXterminate. 4X cultural dynamics characterise how cultures explore the design space of memes, expand their memetic influence, exploit populations as hosts, and ultimately exterminate rival variants.</span><span class="hex-cap">An abstract representation of &lsquo;meta-utopia&rsquo; using (civilisation-style) hex tiles in a honeycomb-structure to represent self-contained sub-utopias within a wider global civilisation.<a class="sidenote-ref" id="ref-3" href="#note-3" aria-label="Note 3"></a></span></figcaption>
+          <figcaption><span class="sidenote" id="note-13" role="note"><a class="sidenote-label" href="#ref-13" aria-label="Back to note 13 in the text"></a>Hex-tiles structure the map and mechanics of Sid Meier&rsquo;s <em>Civilization</em> series: &lsquo;4X&rsquo; strategy video games characterised by four core gameplay loops: eXplore, eXpand, eXploit, and eXterminate. 4X cultural dynamics characterise how cultures explore the design space of memes, expand their memetic influence, exploit populations as hosts, and ultimately exterminate rival variants.</span><span class="hex-cap">An abstract representation of &lsquo;meta-utopia&rsquo; using (civilisation-style) hex tiles in a honeycomb-structure to represent self-contained sub-utopias within a wider global civilisation.<a class="sidenote-ref" id="ref-13" href="#note-13" aria-label="Note 13"></a></span></figcaption>
         </figure>
             </section>
             <section id="mechanics">
@@ -2811,12 +2864,19 @@
         notesAreEndnotes = isEndnotes;
         if (isEndnotes) {
           sidenoteHomes.forEach(function (home) {
+            // a placeholder keeps the note's place, since the text after it
+            // may since have been wrapped into a sentence highlight
+            if (!home.ph) {
+              home.ph = document.createComment('note');
+              home.el.parentNode.insertBefore(home.ph, home.el);
+            }
             endnotesContainer.appendChild(home.el);
           });
           endnotesContainer.classList.toggle('has-notes', sidenoteHomes.length > 0);
         } else {
           sidenoteHomes.forEach(function (home) {
-            home.parent.insertBefore(home.el, home.next);
+            // only notes that were moved to the Endnotes go back
+            if (home.ph && home.ph.parentNode) home.ph.parentNode.insertBefore(home.el, home.ph.nextSibling);
           });
           endnotesContainer.classList.remove('has-notes');
         }
@@ -2826,6 +2886,69 @@
       endnotesQuery.addEventListener('change', function (e) {
         setEndnotesMode(e.matches);
       });
+
+      // Wide windows: each note sits level with its reference. The notes whose
+      // references are on screen are stacked so none overlap, and lifted, if
+      // need be, to fit the window; the rest wait, hidden, beside their own
+      // references. So every note appears next to its sentence as it is read,
+      // however many notes a passage has.
+      (function () {
+        var column = document.querySelector('.article-body');
+        var wideQuery = window.matchMedia('(min-width: 1181px)');
+        var refs = Array.prototype.slice.call(document.querySelectorAll('.sidenote-ref'));
+        if (!column || !refs.length) return;
+        var pairs = refs.map(function (ref) {
+          return { ref: ref, note: document.getElementById(ref.id.replace('ref-', 'note-')) };
+        }).filter(function (p) { return p.note; });
+        var frame = null, GAP = 18, TOP = 90, BOTTOM = 24;
+        function place() {
+          frame = null;
+          if (!document.body.classList.contains('sn-layout')) return;
+          var base = column.getBoundingClientRect().top, vh = window.innerHeight;
+          var shown = [];
+          pairs.forEach(function (p) {
+            var r = p.ref.getBoundingClientRect();
+            p.want = r.top - base - 3;
+            p.on = r.bottom > 70 && r.top < vh - 20;
+            p.y = p.want;
+            if (p.on) shown.push(p);
+          });
+          var bottom = -Infinity;
+          shown.forEach(function (p) {
+            p.y = Math.max(p.want, bottom + GAP);
+            bottom = p.y + p.note.offsetHeight;
+          });
+          if (shown.length) {
+            var over = bottom - (vh - base - BOTTOM);
+            // not above the window's top, nor above the notes' own section
+            var section = shown[0].ref.closest('section');
+            var floor = Math.max(TOP - base, section ? section.getBoundingClientRect().top - base : -Infinity);
+            var room = shown[0].y - floor;
+            var lift = Math.min(over, room);
+            if (lift > 0) shown.forEach(function (p) { p.y -= lift; });
+          }
+          pairs.forEach(function (p) {
+            p.note.style.top = Math.round(p.y) + 'px';
+            p.note.classList.toggle('note-in-view', p.on);
+          });
+        }
+        function schedule() { if (!frame) frame = requestAnimationFrame(place); }
+        function setLayout() {
+          var on = wideQuery.matches;
+          document.body.classList.toggle('sn-layout', on);
+          pairs.forEach(function (p) {
+            p.note.style.transitionDelay = '0ms';
+            if (!on) { p.note.style.top = ''; }
+          });
+          schedule();
+        }
+        setLayout();
+        wideQuery.addEventListener('change', setLayout);
+        window.addEventListener('scroll', schedule, { passive: true });
+        window.addEventListener('resize', schedule);
+        window.addEventListener('load', schedule);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(schedule);
+      })();
 
       var sidenoteRefs = Array.prototype.slice.call(document.querySelectorAll('.sidenote-ref'));
       var SIDENOTE_STAGGER_MS = 350;
@@ -2839,7 +2962,7 @@
 
         function refreshNoteVisibility(num) {
           var note = document.getElementById('note-' + num);
-          if (!note) return;
+          if (!note || document.body.classList.contains('sn-layout')) return;
           var show = !!(refOnScreen[num] && noteOnScreen[num]);
           if (show === note.classList.contains('note-in-view')) return;
           if (show) {
