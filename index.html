@@ -2613,12 +2613,17 @@
         setTimeout(function () { loader.remove(); }, 800);
       }
       // In time with the honeycomb's ripples (one per 2-second loop of the
-      // GIF): the colours change as the first ripple ends (or the first to
-      // end once the page has loaded); the page fades in as the next ripple
-      // ends.
+      // GIF). By default the loader shows in the theme's colours for one
+      // ripple (or until the first ripple to end once the page has loaded),
+      // and the page fades in as it ends.
+      // Kept as a backup, ORANGE_OPENING = true: it opens in orange (white
+      // or black lines) for a ripple, the colours change as that ripple ends,
+      // and the page fades in as the next one ends.
+      var ORANGE_OPENING = false;
       // a ripple; when the colour change starts (from the end of a ripple),
       // and the fade to the page (from the end of the next)
       var RIPPLE = 2000, CHANGE_AT = 0, FADE_AT = -300;
+      if (!ORANGE_OPENING) loader.classList.add('loader-theme');
       var gif = loader.querySelector('.loader-gif-open');
       var began = null, loaded = false, scheduled = false;
       function begin() { if (began === null) began = Date.now(); plan(); }
@@ -2626,8 +2631,14 @@
         if (began === null || !loaded || scheduled) return;
         scheduled = true;
         var elapsed = Date.now() - began;
-        // the first ripple end with time still to start the change before it
+        // the first ripple to end once the page has loaded
         var end = RIPPLE * Math.max(1, Math.ceil(elapsed / RIPPLE));
+        if (!ORANGE_OPENING) {
+          // (with room for the fade to start before it ends)
+          if (end + FADE_AT < elapsed) end += RIPPLE;
+          setTimeout(finish, end + FADE_AT - elapsed);
+          return;
+        }
         setTimeout(function () { loader.classList.add('loader-theme'); }, end + CHANGE_AT - elapsed);
         setTimeout(finish, end + RIPPLE + FADE_AT - elapsed);
       }
