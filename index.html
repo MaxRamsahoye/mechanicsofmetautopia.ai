@@ -2653,7 +2653,7 @@
         <p>As we see it, this is the ultimate project of steering towards <em>desirable civilisational equilibria</em><a class="endnote-ref" id="eref-d" href="#enote-d" aria-label="Endnote d">d</a> – and as such, it will inevitably be beyond the scope of this material to provide a sufficient answer. Nonetheless, we aim to formulate the primary constraints, criteria and catastrophes for such a world-system and in doing so formalise an ambitious paradigm for future <em><a href="https://civilizationemerging.com/category/civilization-design/" target="_blank" rel="noopener">civilisation design</a></em><a class="endnote-ref" id="eref-e" href="#enote-e" aria-label="Endnote e">e</a> and <em><a href="https://gradual-disempowerment.ai/mitigating-the-risk" target="_blank" rel="noopener">civilisation alignment</a></em> research. The most useful starting point for our purposes is Hanson’s short essay <a href="https://www.overcomingbias.com/p/utopias-garden-world-and-wallhtml" target="_blank" rel="noopener"><em>Utopia’s Garden, World, and Wall</em></a> (2020), which we turn to next.</p>
         <figure class="hex-figure">
           <img src="Hex%20Grid%20Circular.gif" width="400" height="400" loading="lazy" alt="An animated honeycomb of hexagonal tiles forming a circle, each tile a self-contained sub-utopia within a wider civilisation">
-          <figcaption><span class="sidenote" id="note-8" role="note"><a class="sidenote-label" href="#ref-8" aria-label="Back to note 8 in the text"></a>Hex-tiles structure the map and mechanics of Sid Meier&rsquo;s <em>Civilization</em> series: &lsquo;4X&rsquo; strategy video games characterised by four core gameplay loops: eXplore, eXpand, eXploit, and eXterminate. 4X cultural dynamics characterise how cultures explore the design space of memes, expand their memetic influence, exploit populations as hosts, and ultimately exterminate rival variants.</span><span class="hex-cap">An abstract representation of &lsquo;meta-utopia&rsquo; using (civilisation-style) hex tiles in a honeycomb-structure to represent self-contained sub-utopias within a wider global civilisation.<a class="sidenote-ref" id="ref-8" href="#note-8" aria-label="Note 8"></a></span></figcaption>
+          <figcaption><span class="sidenote" id="note-8" role="note" data-side="right" data-centre-on=".hex-figure img"><a class="sidenote-label" href="#ref-8" aria-label="Back to note 8 in the text"></a>Hex-tiles structure the map and mechanics of Sid Meier&rsquo;s <em>Civilization</em> series: &lsquo;4X&rsquo; strategy video games characterised by four core gameplay loops: eXplore, eXpand, eXploit, and eXterminate. 4X cultural dynamics characterise how cultures explore the design space of memes, expand their memetic influence, exploit populations as hosts, and ultimately exterminate rival variants.</span><span class="hex-cap">An abstract representation of &lsquo;meta-utopia&rsquo; using (civilisation-style) hex tiles in a honeycomb-structure to represent self-contained sub-utopias within a wider global civilisation.<a class="sidenote-ref" id="ref-8" href="#note-8" aria-label="Note 8"></a></span></figcaption>
         </figure>
             </section>
             <section id="mechanics">
@@ -3284,7 +3284,9 @@
         var tocFrom = document.getElementById('mechanics');
         pairs.forEach(function (p, i) {
           var beforeToc = !tocFrom || !!(tocFrom.compareDocumentPosition(p.ref) & Node.DOCUMENT_POSITION_PRECEDING);
-          p.left = beforeToc && i % 2 === 1;
+          // (a note can name its side, and an element to centre on)
+          p.left = p.note.dataset.side ? p.note.dataset.side === 'left' : beforeToc && i % 2 === 1;
+          p.centre = p.note.dataset.centreOn ? document.querySelector(p.note.dataset.centreOn) : null;
           p.note.classList.toggle('sn-left', p.left);
         });
         var frame = null, GAP = 24;
@@ -3299,8 +3301,13 @@
           if (!document.body.classList.contains('sn-layout')) return;
           var base = column.getBoundingClientRect().top;
           pairs.forEach(function (p) {
-            p.want = p.ref.getBoundingClientRect().top - base - 3;
             p.h = p.note.offsetHeight;
+            if (p.centre) {
+              var c = p.centre.getBoundingClientRect();
+              p.want = c.top + c.height / 2 - base - p.h / 2;
+            } else {
+              p.want = p.ref.getBoundingClientRect().top - base - 3;
+            }
             var section = p.ref.closest('section');
             p.floor = section ? section.getBoundingClientRect().top - base : -Infinity;
           });
