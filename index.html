@@ -1432,6 +1432,15 @@
     body.sn-layout .article-body .sidenote.note-in-view {
       pointer-events: auto;
     }
+    body.sn-layout .article-body .sidenote.sn-left {
+      left: auto;
+      right: calc(100% + var(--sn-off));
+    }
+    /* if the contents menu opens while a left note is on screen, the note steps aside */
+    body.sn-layout.toc-open .article-body .sidenote.sn-left {
+      opacity: 0;
+      pointer-events: none;
+    }
     @media (max-width: 1800px) {
       body.sn-layout .article-body { --sn-off: 40px; }
     }
@@ -2746,7 +2755,7 @@
         tocNav.style.display = 'none';
       }
 
-      // the menu shows once the Overview is scrolled past (not over the
+      // the menu shows once section 1 is reached (not over the
       // footer), fades after 1.5 seconds, and comes back while the pointer is
       // in the empty column left of the text, or on the menu itself
       (function () {
@@ -2761,8 +2770,12 @@
           clearTimeout(timer);
           timer = setTimeout(function () { if (!hovering) setOpen(false); }, TOC_HOLD);
         }
+        // the menu begins with section 1 (the Introduction's left margin
+        // holds notes): once its top reaches the middle of the window
+        var firstSection = document.getElementById('mechanics');
         function check() {
-          var now = overview.getBoundingClientRect().bottom < 0 &&
+          var now = (firstSection ? firstSection.getBoundingClientRect().top < window.innerHeight * 0.5
+                                  : overview.getBoundingClientRect().bottom < 0) &&
             !(footer && footer.getBoundingClientRect().top < window.innerHeight);
           if (now === active) return;
           active = now;
@@ -2968,6 +2981,11 @@
         var pairs = refs.map(function (ref) {
           return { ref: ref, note: document.getElementById(ref.id.replace('ref-', 'note-')) };
         }).filter(function (p) { return p.note; });
+        // every other note in the left margin: notes 2, 4, 6 and so on
+        pairs.forEach(function (p, i) {
+          p.left = i % 2 === 1;
+          p.note.classList.toggle('sn-left', p.left);
+        });
         var frame = null, GAP = 18, TOP = 90, BOTTOM = 24;
         function place() {
           frame = null;
@@ -2981,20 +2999,21 @@
             p.y = p.want;
             if (p.on) shown.push(p);
           });
-          var bottom = -Infinity;
-          shown.forEach(function (p) {
-            p.y = Math.max(p.want, bottom + GAP);
-            bottom = p.y + p.note.offsetHeight;
-          });
-          if (shown.length) {
+          [true, false].forEach(function (left) {
+            var side = shown.filter(function (p) { return p.left === left; });
+            var bottom = -Infinity;
+            side.forEach(function (p) {
+              p.y = Math.max(p.want, bottom + GAP);
+              bottom = p.y + p.note.offsetHeight;
+            });
+            if (!side.length) return;
             var over = bottom - (vh - base - BOTTOM);
             // not above the window's top, nor above the notes' own section
-            var section = shown[0].ref.closest('section');
+            var section = side[0].ref.closest('section');
             var floor = Math.max(TOP - base, section ? section.getBoundingClientRect().top - base : -Infinity);
-            var room = shown[0].y - floor;
-            var lift = Math.min(over, room);
-            if (lift > 0) shown.forEach(function (p) { p.y -= lift; });
-          }
+            var lift = Math.min(over, side[0].y - floor);
+            if (lift > 0) side.forEach(function (p) { p.y -= lift; });
+          });
           pairs.forEach(function (p) {
             p.note.style.top = Math.round(p.y) + 'px';
             p.note.classList.toggle('note-in-view', p.on);
