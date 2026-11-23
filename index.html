@@ -1463,6 +1463,34 @@
       text-underline-offset: 2px;
     }
 
+    /* the Read more toggle on longer notes */
+    .sidenote .sn-toggle {
+      display: block;
+      margin: 6px 0 0;
+      padding: 0;
+      border: 0;
+      background: none;
+      font-family: 'IBM Plex Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--canvas-accent);
+      cursor: pointer;
+    }
+    .sidenote .sn-toggle::after {
+      content: ' \25BE';
+    }
+    .sidenote .sn-toggle[aria-expanded="true"]::after {
+      content: ' \25B4';
+    }
+    .sidenote .sn-toggle:hover,
+    .sidenote .sn-toggle:focus-visible {
+      color: var(--canvas-ink);
+      outline: none;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
     /* quotations and second paragraphs inside a note */
     .sidenote .sn-q { display: block; margin: 6px 0; font-style: italic; }
     .sidenote .sn-q em { font-style: normal; }
@@ -2885,6 +2913,46 @@
       setEndnotesMode(endnotesQuery.matches);
       endnotesQuery.addEventListener('change', function (e) {
         setEndnotesMode(e.matches);
+      });
+
+      // A note with a quotation or a second paragraph shows its opening, with
+      // a Read more toggle for the rest (a note that opens with a quotation
+      // shows the quotation). Without the script, every note shows in full.
+      Array.prototype.forEach.call(document.querySelectorAll('.sidenote'), function (note) {
+        if (!note.querySelector('.sn-q, .sn-p')) return;
+        var nodes = Array.prototype.filter.call(note.childNodes, function (n) {
+          return !(n.nodeType === 1 && n.classList.contains('sidenote-label'));
+        });
+        var split = -1, seen = false;
+        for (var i = 0; i < nodes.length; i++) {
+          var n = nodes[i];
+          var block = n.nodeType === 1 && (n.classList.contains('sn-q') || n.classList.contains('sn-p'));
+          if (block) { split = seen ? i : i + 1; break; }
+          if ((n.textContent || '').trim()) seen = true;
+        }
+        var rest = split < 0 ? [] : nodes.slice(split);
+        if (!rest.some(function (n) { return (n.textContent || '').trim(); })) return;
+        var more = document.createElement('span');
+        more.className = 'sn-more';
+        more.id = note.id + '-more';
+        more.hidden = true;
+        note.insertBefore(more, rest[0]);
+        rest.forEach(function (n) { more.appendChild(n); });
+        var toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'sn-toggle';
+        toggle.textContent = 'Read more';
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-controls', more.id);
+        note.appendChild(toggle);
+        toggle.addEventListener('click', function () {
+          var open = more.hidden;
+          more.hidden = !open;
+          toggle.textContent = open ? 'Read less' : 'Read more';
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+          // the notes below make room
+          window.dispatchEvent(new Event('resize'));
+        });
       });
 
       // Wide windows: each note sits level with its reference. The notes whose
