@@ -553,7 +553,23 @@
       opacity: 1;
     }
 
-    .loader.loader-theme .loader-gif-orange {
+    .loader.loader-theme .loader-gif-orange,
+    .loader.loader-theme .loader-gif-dark {
+      opacity: 0;
+    }
+
+    /* the dark theme opens black-on-orange */
+    .loader-gif-dark {
+      position: absolute;
+      inset: 0;
+      display: none !important;
+    }
+
+    html[data-theme="dark"] .loader-gif-dark {
+      display: block !important;
+    }
+
+    html[data-theme="dark"] .loader:not(.loader-theme) .loader-gif-orange {
       opacity: 0;
     }
 
@@ -2477,6 +2493,7 @@
     <div class="loader-stack">
       <img class="loader-gif loader-gif-orange" src="Hex%20Grid%20Circular%20Orange%20White.gif" alt="">
       <img class="loader-gif loader-gif-theme" src="Hex%20Grid%20Circular.gif" alt="">
+      <img class="loader-gif loader-gif-dark" src="Hex%20Grid%20Circular%20Orange%20Black.gif" alt="">
     </div>
   </div>
   <noscript><style>.loader { display: none; }</style></noscript>
