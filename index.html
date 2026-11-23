@@ -582,6 +582,7 @@
     html.hero-wait .frame-header,
     html.hero-wait .top-nav,
     html.hero-wait .left-controls,
+    html.hero-wait .pv-progress,
     html.hero-wait .article-header .article-author,
     html.hero-wait .article-header .title-line,
     html.hero-wait .article-header .article-subtitle,
@@ -592,6 +593,7 @@
     html.hero-in .frame-header,
     html.hero-in .top-nav,
     html.hero-in .left-controls,
+    html.hero-in .pv-progress,
     html.hero-in .article-header > .next-screen {
       animation: hero-fade 1.2s ease-out backwards;
     }
@@ -609,7 +611,8 @@
     html.hero-in .article-header .article-subtitle { animation-delay: 0.85s; }
     html.hero-in .frame-header,
     html.hero-in .top-nav,
-    html.hero-in .left-controls { animation-delay: 1s; }
+    html.hero-in .left-controls,
+    html.hero-in .pv-progress { animation-delay: 1s; }
     html.hero-in .article-header > .next-screen { animation-delay: 1.3s; }
 
     @keyframes hero-fade {
@@ -730,6 +733,47 @@
 
     html::-webkit-scrollbar {
       display: none;
+    }
+
+    /* the progress bar down the right-hand edge, in the accent (as in the
+       PDF viewer); wider to the touch than it looks */
+    .pv-progress {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 18px;
+      z-index: 9000;
+      cursor: pointer;
+      touch-action: none;
+    }
+
+    .pv-progress::before,
+    .pv-progress-fill {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 6px;
+      transition: width 0.15s ease;
+    }
+
+    .pv-progress::before {
+      background: color-mix(in srgb, var(--link-blue) 14%, transparent);
+    }
+
+    .pv-progress-fill {
+      background: var(--link-blue);
+      transform: scaleY(0);
+      transform-origin: top;
+    }
+
+    .pv-progress:hover::before,
+    .pv-progress:hover .pv-progress-fill,
+    .pv-progress.pv-dragging::before,
+    .pv-progress.pv-dragging .pv-progress-fill {
+      width: 10px;
     }
 
     .progress-ring {
@@ -2668,6 +2712,30 @@
   </div>
 
   <a class="corner-title" href="./" aria-hidden="true" tabindex="-1">Mechanics of<br>Meta-Utopia</a>
+  <!-- the progress through the article: a bar down the right-hand edge of
+       the window in the accent, in place of the browser's scrollbar (which
+       the page hides); it can be clicked or dragged to move through it -->
+  <div class="pv-progress" aria-hidden="true"><div class="pv-progress-fill"></div></div>
+  <script>
+    (function () {
+      var bar = document.querySelector('.pv-progress'), fill = bar.firstElementChild, dragging = false;
+      function update() {
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        fill.style.transform = 'scaleY(' + (max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0) + ')';
+      }
+      function seek(y) {
+        var r = bar.getBoundingClientRect(), max = document.documentElement.scrollHeight - window.innerHeight;
+        window.scrollTo(0, Math.min(1, Math.max(0, (y - r.top) / r.height)) * max);
+      }
+      bar.addEventListener('pointerdown', function (e) { dragging = true; bar.setPointerCapture(e.pointerId); bar.classList.add('pv-dragging'); seek(e.clientY); });
+      bar.addEventListener('pointermove', function (e) { if (dragging) seek(e.clientY); });
+      ['pointerup', 'pointercancel'].forEach(function (t) { bar.addEventListener(t, function () { dragging = false; bar.classList.remove('pv-dragging'); }); });
+      window.addEventListener('scroll', update, { passive: true });
+      window.addEventListener('resize', update);
+      if (window.ResizeObserver) new ResizeObserver(update).observe(document.body);
+      update();
+    })();
+  </script>
   <svg class="progress-ring" viewBox="0 0 30 30" aria-hidden="true">
     <circle class="progress-ring-track" cx="15" cy="15" r="13"/>
     <circle class="progress-ring-fill" cx="15" cy="15" r="13"/>
