@@ -1341,6 +1341,16 @@
       border-bottom: 3px solid var(--col);
     }
 
+    /* the Cultural Paradigm row in its stages' own colours: Orange
+       (Modernism), Green (Post-Modernism) and Teal (Metamodernism) */
+    .asi-table tr.asi-stages > :nth-child(2) { --col: #f08a24; }
+    .asi-table tr.asi-stages > :nth-child(3) { --col: #5fae4e; }
+    .asi-table tr.asi-stages > :nth-child(4) { --col: #1b9e9e; }
+
+    .asi-table tr.asi-stages td {
+      border-color: var(--col);
+    }
+
     .asi-table td .asi-alt {
       display: block;
       margin-top: 10px;
@@ -2425,7 +2435,7 @@
                 <td>Coherent <em>Aggregated</em> Volition (CAV)<span class="asi-alt">Pluralistic Alignment</span></td>
                 <td>Coherent <em>Blended</em> Volition (CBV)<span class="asi-alt">Synthetic Alignment</span></td>
               </tr>
-              <tr>
+              <tr class="asi-stages">
                 <th scope="row">Cultural Paradigm</th>
                 <td>Modernism / Orange</td>
                 <td>Post-Modernism / Green</td>
